@@ -33,6 +33,9 @@ export function convertPoem(poem: Poem, mode: ScriptMode): Poem {
     dynasty: convertText(poem.dynasty, mode),
     content: convertLines(poem.content, mode),
     motifs: convertLines(poem.motifs, mode),
+    rhythmic: poem.rhythmic
+      ? convertText(poem.rhythmic, mode)
+      : poem.rhythmic,
   };
 }
 

@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "data:build": "npx tsx scripts/build-data.ts",
+    "data:build:local": "npx tsx scripts/build-data.ts --skip-fetch",
     "enrich:motifs": "npx tsx scripts/enrich-poems.ts"
   },
   "dependencies": {
@@ -28,6 +30,7 @@
     "@types/three": "^0.185.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
+    "pinyin-pro": "^3.28.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

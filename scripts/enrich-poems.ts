@@ -1,19 +1,19 @@
 /**
- * 离线批量为诗词补全关联词（motifs）与 theme。
+ * 离线批量为 generated 诗词补全关联词（motifs）与 theme，并写回 JSON。
  *
  * 用法：
  *   npm run enrich:motifs
- *   npx tsx scripts/enrich-poems.ts --force   # 强制重算（仍跳过 locked）
+ *   npx tsx scripts/enrich-poems.ts --force
  *   npx tsx scripts/enrich-poems.ts --force --include-locked
+ *   npx tsx scripts/enrich-poems.ts --dry-run
  *
- * 数据量大时推荐：
- * 1. 原始数据 ingest → JSON/DB
- * 2. 本脚本规则兜底，或在 generateWithLlm 接入 API 批跑
- * 3. 结果写回存储；网站运行时只读
- * 4. 人工精修后设 motifsLocked: true
+ * 推荐主路径：npm run data:build（已含规则 enrich）。
+ * 本脚本用于对已有 generated 产物再跑一轮。
  */
 
-import { poems } from "../data/poems";
+import { readFileSync, writeFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   generateMotifsRule,
   generateTagsRule,
@@ -23,10 +23,15 @@ import { getTagLabel } from "../lib/imagery-taxonomy";
 import { formatMotifs } from "../lib/types";
 import type { Poem } from "../lib/types";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const poemsPath = join(__dirname, "..", "data", "generated", "poems.json");
+
 const force = process.argv.includes("--force");
 const includeLocked = process.argv.includes("--include-locked");
+const dryRun = process.argv.includes("--dry-run");
 
 function enrichOne(poem: Poem): { poem: Poem; skipped: boolean; reason?: string } {
+  // 与 build-data overrides 一致：人工锁定的名篇不重算
   if (poem.motifsLocked && !includeLocked) {
     return { poem, skipped: true, reason: "locked" };
   }
@@ -34,9 +39,10 @@ function enrichOne(poem: Poem): { poem: Poem; skipped: boolean; reason?: string 
     return { poem, skipped: true, reason: "already-has-motifs" };
   }
 
-  const tags = poem.tags?.length && !force
-    ? poem.tags
-    : generateTagsRule(poem.title, poem.content);
+  const tags =
+    poem.tags?.length && !force
+      ? poem.tags
+      : generateTagsRule(poem.title, poem.content);
   const theme =
     poem.theme && !force
       ? poem.theme
@@ -69,31 +75,43 @@ export async function generateWithLlm(_poem: Poem): Promise<{
 }
 
 function main() {
+  const poems = JSON.parse(readFileSync(poemsPath, "utf-8")) as Poem[];
   let generated = 0;
   let skipped = 0;
+  const next: Poem[] = [];
 
   console.log(`共 ${poems.length} 首\n`);
 
   for (const raw of poems) {
     const { poem, skipped: wasSkipped, reason } = enrichOne(raw);
+    next.push(poem);
     const tagStr = (poem.tags ?? []).map(getTagLabel).join(" ");
     if (wasSkipped) {
       skipped += 1;
-      console.log(
-        `⏭  [${reason}] ${poem.title}  →  ${formatMotifs(poem.motifs)}  [${tagStr}]`,
-      );
+      if (poems.length <= 50) {
+        console.log(
+          `⏭  [${reason}] ${poem.title}  →  ${formatMotifs(poem.motifs)}  [${tagStr}]`,
+        );
+      }
     } else {
       generated += 1;
-      console.log(
-        `✨ [rule] ${poem.title}  →  ${formatMotifs(poem.motifs)}  (${poem.theme})  [${tagStr}]`,
-      );
+      if (generated <= 30 || poems.length <= 50) {
+        console.log(
+          `✨ [rule] ${poem.title}  →  ${formatMotifs(poem.motifs)}  (${poem.theme})  [${tagStr}]`,
+        );
+      }
     }
   }
 
   console.log(`\n生成 ${generated} · 跳过 ${skipped}`);
-  console.log(
-    "（dry-run）未写回文件。接入 JSON/DB 后，在此脚本中打开写入逻辑即可。",
-  );
+
+  if (dryRun) {
+    console.log("（dry-run）未写回文件。");
+    return;
+  }
+
+  writeFileSync(poemsPath, `${JSON.stringify(next, null, 2)}\n`, "utf-8");
+  console.log(`已写回 ${poemsPath}`);
 }
 
 main();

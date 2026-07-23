@@ -30,7 +30,27 @@ npm run dev
 
 ## 数据
 
-第一阶段使用 mock 数据（20 首经典），见 `data/poems.ts`、`data/authors.ts`。
+真实数据来自 [chinese-poetry/chinese-poetry](https://github.com/chinese-poetry/chinese-poetry)（MIT）：
+
+| 文集 | 规模 | 产物 |
+|------|------|------|
+| 唐诗三百首 | 366 | `data/generated/poems.json` |
+| 宋词三百首 | 280 | 同上 |
+| 作者简介 | 与作品关联 | `data/generated/authors.json` |
+
+```bash
+# 拉取源库子集 → 繁转简 → 规则 enrich → 写出 generated
+npm run data:build
+
+# 仅用已缓存的 data/raw 重建
+npm run data:build:local
+```
+
+运行时只读 generated JSON（`data/poems.ts` / `data/authors.ts` 提供查询 API）。源库钉死 commit，见 `scripts/build-data.ts` 中 `CORPUS_SHA`。
+
+名篇人工修正见 `data/overrides/poems.json`（theme / 通行本正文 / motifs，`motifsLocked: true`），在 `data:build` 末尾合并。
+
+**不要**在用户打开详情页时实时调模型；意境字段由离线流水线生成。
 
 ### 意境三层模型
 
@@ -52,12 +72,9 @@ motifs[3]  展示关联词「春晓 · 啼鸟 · 风雨」
 - 华灯 = 仅灯笼 · 寒江 = 江线+雪粒子（无 CSS 雪点）
 
 ```bash
-# 规则模式 dry-run
+# 对已有 generated 再跑规则 enrich（默认写回；可加 --dry-run）
 npm run enrich:motifs
 ```
-
-**不要**在用户打开详情页时实时调模型生成关联词。
-
 ## 设计色
 
 - 深墨 `#0D0D0D`

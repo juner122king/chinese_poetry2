@@ -345,6 +345,23 @@ export function getTagLabel(tag: PoemTag): string {
   return taxonomyById[tag]?.label ?? tag;
 }
 
+/** 单字「月」勿命中「三月/正月」等月份 */
+function keywordHits(text: string, kw: string): boolean {
+  if (kw.length >= 2) return text.includes(kw);
+  if (kw === "月") {
+    // 要求「月」且前一字不是数字/正/腊（月份），或已有多字月意象
+    if (
+      /明|月下|月夜|月光|月色|明月|山月|江月|霜月|晓月|夜月|对月|望月|秋月|花月/.test(
+        text,
+      )
+    ) {
+      return true;
+    }
+    return /(?<![正一二三四五六七八九十仲孟季腊闰])月/.test(text);
+  }
+  return text.includes(kw);
+}
+
 export function inferTagsSafe(title: string, content: string[]): PoemTag[] {
   const text = `${title}${content.join("")}`;
   const hits: { id: PoemTag; score: number }[] = [];
@@ -352,7 +369,7 @@ export function inferTagsSafe(title: string, content: string[]): PoemTag[] {
   for (const meta of imageryTaxonomy) {
     let score = 0;
     for (const kw of meta.keywords) {
-      if (text.includes(kw)) score += kw.length >= 2 ? 2 : 1;
+      if (keywordHits(text, kw)) score += kw.length >= 2 ? 2 : 1;
     }
     if (score > 0) hits.push({ id: meta.id, score: score * meta.weight });
   }
@@ -361,18 +378,17 @@ export function inferTagsSafe(title: string, content: string[]): PoemTag[] {
   return hits.slice(0, 6).map((h) => h.id);
 }
 
+/**
+ * 按 tags 顺序取主视觉。inferTagsSafe 已按「命中强度×权重」排序，
+ * 不可再仅用 defaultTheme.weight 重排（否则 wine 会被 moon 等压过）。
+ */
 export function pickThemeFromTags(tags: PoemTag[]): PoemTheme {
   if (!tags.length) return "landscape";
-  let best: PoemTheme = "landscape";
-  let bestW = -1;
   for (const id of tags) {
     const meta = taxonomyById[id];
-    if (meta && meta.weight > bestW) {
-      bestW = meta.weight;
-      best = meta.defaultTheme;
-    }
+    if (meta) return meta.defaultTheme;
   }
-  return best;
+  return "landscape";
 }
 
 /** 展开所有标签 motif 池（去重） */

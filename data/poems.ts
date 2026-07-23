@@ -1,397 +1,98 @@
 import type { Poem } from "@/lib/types";
+import poemsJson from "./generated/poems.json";
 
-export const poems: Poem[] = [
-  {
-    id: "jing-ye-si",
-    title: "静夜思",
-    author: "李白",
-    dynasty: "唐",
-    content: ["床前明月光", "疑是地上霜", "举头望明月", "低头思故乡"],
-    theme: "night-moon",
-    tags: ["night", "moon", "homesickness", "courtyard"],
-    motifs: ["夜空", "明月", "庭院"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "yue-xia-du-zhuo",
-    title: "月下独酌",
-    author: "李白",
-    dynasty: "唐",
-    content: [
-      "花间一壶酒",
-      "独酌无相亲",
-      "举杯邀明月",
-      "对影成三人",
-      "月既不解饮",
-      "影徒随我身",
-      "暂伴月将影",
-      "行乐须及春",
-    ],
-    theme: "wine",
-    tags: ["wine", "moon", "night", "flowers", "spring"],
-    motifs: ["花间", "月下", "独酌"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "wang-lu-shan-pu-bu",
-    title: "望庐山瀑布",
-    author: "李白",
-    dynasty: "唐",
-    content: [
-      "日照香炉生紫烟",
-      "遥看瀑布挂前川",
-      "飞流直下三千尺",
-      "疑是银河落九天",
-    ],
-    theme: "mountain",
-    tags: ["mountain", "river-lake", "wind-cloud", "dawn-dusk"],
-    motifs: ["香炉峰", "飞瀑", "紫烟"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "zao-fa-bai-di-cheng",
-    title: "早发白帝城",
-    author: "李白",
-    dynasty: "唐",
-    content: [
-      "朝辞白帝彩云间",
-      "千里江陵一日还",
-      "两岸猿声啼不住",
-      "轻舟已过万重山",
-    ],
-    theme: "river-lake",
-    tags: ["boat-travel", "river-lake", "mountain", "birds", "dawn-dusk"],
-    motifs: ["白帝", "江陵", "轻舟"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "chun-wang",
-    title: "春望",
-    author: "杜甫",
-    dynasty: "唐",
-    content: [
-      "国破山河在",
-      "城春草木深",
-      "感时花溅泪",
-      "恨别鸟惊心",
-      "烽火连三月",
-      "家书抵万金",
-      "白头搔更短",
-      "浑欲不胜簪",
-    ],
-    theme: "spring",
-    tags: ["spring", "war", "homesickness", "flowers", "birds", "city-ruins"],
-    motifs: ["城春", "山河", "烽火"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "deng-gao",
-    title: "登高",
-    author: "杜甫",
-    dynasty: "唐",
-    content: [
-      "风急天高猿啸哀",
-      "渚清沙白鸟飞回",
-      "无边落木萧萧下",
-      "不尽长江滚滚来",
-      "万里悲秋常作客",
-      "百年多病独登台",
-      "艰难苦恨繁霜鬓",
-      "潦倒新停浊酒杯",
-    ],
-    theme: "autumn",
-    tags: ["autumn", "river-lake", "birds", "homesickness", "wine", "wind-cloud"],
-    motifs: ["高台", "落木", "长江"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "jue-ju",
-    title: "绝句",
-    author: "杜甫",
-    dynasty: "唐",
-    content: [
-      "两个黄鹂鸣翠柳",
-      "一行白鹭上青天",
-      "窗含西岭千秋雪",
-      "门泊东吴万里船",
-    ],
-    theme: "birds",
-    tags: ["birds", "spring", "trees-bamboo", "snow", "boat-travel", "mountain"],
-    motifs: ["翠柳", "青天", "西岭雪"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "shui-diao-ge-tou",
-    title: "水调歌头·明月几时有",
-    author: "苏轼",
-    dynasty: "宋",
-    content: [
-      "明月几时有",
-      "把酒问青天",
-      "不知天上宫阙",
-      "今夕是何年",
-      "我欲乘风归去",
-      "又恐琼楼玉宇",
-      "高处不胜寒",
-      "起舞弄清影",
-      "何似在人间",
-      "转朱阁",
-      "低绮户",
-      "照无眠",
-      "不应有恨",
-      "何事长向别时圆",
-      "人有悲欢离合",
-      "月有阴晴圆缺",
-      "此事古难全",
-      "但愿人长久",
-      "千里共婵娟",
-    ],
-    theme: "night-moon",
-    tags: ["moon", "night", "wine", "festival", "parting", "palace-court"],
-    motifs: ["中秋", "明月", "把酒"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "ti-xi-lin-bi",
-    title: "题西林壁",
-    author: "苏轼",
-    dynasty: "宋",
-    content: [
-      "横看成岭侧成峰",
-      "远近高低各不同",
-      "不识庐山真面目",
-      "只缘身在此山中",
-    ],
-    theme: "mountain",
-    tags: ["mountain", "reclusion"],
-    motifs: ["庐山", "岭峰", "远近"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "yin-hu-shang",
-    title: "饮湖上初晴后雨",
-    author: "苏轼",
-    dynasty: "宋",
-    content: [
-      "水光潋滟晴方好",
-      "山色空蒙雨亦奇",
-      "欲把西湖比西子",
-      "淡妆浓抹总相宜",
-    ],
-    theme: "rain",
-    tags: ["rain", "river-lake", "mountain", "dawn-dusk"],
-    motifs: ["西湖", "晴雨", "山色"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "qing-yu-an",
-    title: "青玉案·元夕",
-    author: "辛弃疾",
-    dynasty: "宋",
-    content: [
-      "东风夜放花千树",
-      "更吹落、星如雨",
-      "宝马雕车香满路",
-      "凤箫声动",
-      "玉壶光转",
-      "一夜鱼龙舞",
-      "蛾儿雪柳黄金缕",
-      "笑语盈盈暗香去",
-      "众里寻他千百度",
-      "蓦然回首",
-      "那人却在",
-      "灯火阑珊处",
-    ],
-    theme: "festival",
-    tags: ["festival", "night", "flowers", "love-longing", "lamplight", "stars", "music"],
-    motifs: ["元夕", "花灯", "阑珊"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "xi-jiang-yue",
-    title: "西江月·夜行黄沙道中",
-    author: "辛弃疾",
-    dynasty: "宋",
-    content: [
-      "明月别枝惊鹊",
-      "清风半夜鸣蝉",
-      "稻花香里说丰年",
-      "听取蛙声一片",
-      "七八个星天外",
-      "两三点雨山前",
-      "旧时茅店社林边",
-      "路转溪桥忽见",
-    ],
-    theme: "pastoral",
-    tags: ["pastoral", "night", "moon", "insects", "rain", "birds", "stars"],
-    motifs: ["黄沙道", "稻香", "蛙声"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "shan-ju-qiu-ming",
-    title: "山居秋暝",
-    author: "王维",
-    dynasty: "唐",
-    content: [
-      "空山新雨后",
-      "天气晚来秋",
-      "明月松间照",
-      "清泉石上流",
-      "竹喧归浣女",
-      "莲动下渔舟",
-      "随意春芳歇",
-      "王孙自可留",
-    ],
-    theme: "reclusion",
-    tags: ["autumn", "mountain", "rain", "moon", "reclusion", "trees-bamboo", "boat-travel", "flowers"],
-    motifs: ["空山", "新雨", "松月"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "xiang-si",
-    title: "相思",
-    author: "王维",
-    dynasty: "唐",
-    content: ["红豆生南国", "春来发几枝", "愿君多采撷", "此物最相思"],
-    theme: "flowers",
-    tags: ["flowers", "spring", "love-longing"],
-    motifs: ["南国", "红豆", "春来"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "fu-de-gu-yuan-cao",
-    title: "赋得古原草送别",
-    author: "白居易",
-    dynasty: "唐",
-    content: [
-      "离离原上草",
-      "一岁一枯荣",
-      "野火烧不尽",
-      "春风吹又生",
-      "远芳侵古道",
-      "晴翠接荒城",
-      "又送王孙去",
-      "萋萋满别情",
-    ],
-    theme: "pastoral",
-    tags: ["spring", "pastoral", "parting", "city-ruins"],
-    motifs: ["古原", "野草", "春风"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "ru-meng-ling",
-    title: "如梦令·常记溪亭日暮",
-    author: "李清照",
-    dynasty: "宋",
-    content: [
-      "常记溪亭日暮",
-      "沉醉不知归路",
-      "兴尽晚回舟",
-      "误入藕花深处",
-      "争渡",
-      "争渡",
-      "惊起一滩鸥鹭",
-    ],
-    theme: "fish-aquatic",
-    tags: ["river-lake", "boat-travel", "flowers", "birds", "dawn-dusk", "wine"],
-    motifs: ["溪亭", "藕花", "鸥鹭"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "jiang-xue",
-    title: "江雪",
-    author: "柳宗元",
-    dynasty: "唐",
-    content: ["千山鸟飞绝", "万径人踪灭", "孤舟蓑笠翁", "独钓寒江雪"],
-    theme: "snow-river",
-    tags: ["winter", "snow", "river-lake", "boat-travel", "fish-aquatic", "reclusion", "mountain"],
-    motifs: ["雪山", "孤舟", "寒江"],
-    motifsSource: "manual",
-    motifsLocked: true,
-    featured: true,
-  },
-  {
-    id: "chun-xiao",
-    title: "春晓",
-    author: "孟浩然",
-    dynasty: "唐",
-    content: ["春眠不觉晓", "处处闻啼鸟", "夜来风雨声", "花落知多少"],
-    theme: "spring",
-    tags: ["spring", "birds", "rain", "flowers", "dawn-dusk"],
-    motifs: ["春晓", "啼鸟", "风雨"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "deng-guan-que-lou",
-    title: "登鹳雀楼",
-    author: "王之涣",
-    dynasty: "唐",
-    content: ["白日依山尽", "黄河入海流", "欲穷千里目", "更上一层楼"],
-    theme: "dawn-dusk",
-    tags: ["dawn-dusk", "mountain", "river-lake", "sea"],
-    motifs: ["鹳雀楼", "白日", "黄河"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-  {
-    id: "feng-qiao-ye-bo",
-    title: "枫桥夜泊",
-    author: "张继",
-    dynasty: "唐",
-    content: [
-      "月落乌啼霜满天",
-      "江枫渔火对愁眠",
-      "姑苏城外寒山寺",
-      "夜半钟声到客船",
-    ],
-    theme: "homesickness",
-    tags: [
-      "night",
-      "moon",
-      "boat-travel",
-      "temple-bell",
-      "homesickness",
-      "lamplight",
-      "birds",
-      "trees-bamboo",
-    ],
-    motifs: ["枫桥", "渔火", "钟声"],
-    motifsSource: "manual",
-    motifsLocked: true,
-  },
-];
+export const poems: Poem[] = poemsJson as Poem[];
 
 export function getPoemById(id: string): Poem | undefined {
   return poems.find((p) => p.id === id);
 }
 
+/**
+ * 首页推荐：在 featured 池内按朝代交错（唐/宋/唐/宋…），
+ * 避免前 N 首全是唐诗边塞、宋词挤在后面。
+ */
 export function getFeaturedPoems(limit = 6): Poem[] {
   const featured = poems.filter((p) => p.featured);
-  if (featured.length >= limit) return featured.slice(0, limit);
-  return [...featured, ...poems.filter((p) => !p.featured)].slice(0, limit);
+  const pool =
+    featured.length > 0 ? featured : poems.filter((p) => !p.featured);
+
+  if (pool.length <= limit) {
+    if (featured.length >= limit) return featured.slice(0, limit);
+    return [...featured, ...poems.filter((p) => !p.featured)].slice(0, limit);
+  }
+
+  const tang = pool.filter((p) => p.dynasty === "唐");
+  const song = pool.filter((p) => p.dynasty === "宋");
+  const other = pool.filter((p) => p.dynasty !== "唐" && p.dynasty !== "宋");
+
+  /** 首页宋词脸优先级（未命中则靠后） */
+  const songTitleRank = (title: string): number => {
+    const order = [
+      "水调歌头",
+      "声声慢",
+      "青玉案",
+      "念奴娇",
+      "雨霖铃",
+      "满江红",
+      "永遇乐",
+      "定风波",
+      "江城子",
+      "如梦令",
+      "一剪梅",
+      "破阵子",
+      "鹊桥仙",
+      "扬州慢",
+    ];
+    const i = order.indexOf(title);
+    return i >= 0 ? i : 100;
+  };
+
+  // 组内：锁定名篇 > 词牌优先级 > 原序
+  const rank = (list: Poem[]) =>
+    [...list].sort((a, b) => {
+      const la = a.motifsLocked ? 1 : 0;
+      const lb = b.motifsLocked ? 1 : 0;
+      if (lb !== la) return lb - la;
+      if (a.dynasty === "宋" || b.dynasty === "宋") {
+        const ra = songTitleRank(a.title);
+        const rb = songTitleRank(b.title);
+        if (ra !== rb) return ra - rb;
+      }
+      return 0;
+    });
+
+  const queues = [rank(tang), rank(song), rank(other)].filter((q) => q.length);
+  if (queues.length <= 1) {
+    return rank(pool).slice(0, limit);
+  }
+
+  const cursors = queues.map(() => 0);
+  const out: Poem[] = [];
+  let guard = 0;
+  while (out.length < limit && guard < limit * queues.length + 4) {
+    guard += 1;
+    let progressed = false;
+    for (let q = 0; q < queues.length && out.length < limit; q++) {
+      const list = queues[q];
+      const i = cursors[q];
+      if (i < list.length) {
+        out.push(list[i]);
+        cursors[q] = i + 1;
+        progressed = true;
+      }
+    }
+    if (!progressed) break;
+  }
+
+  if (out.length < limit) {
+    const seen = new Set(out.map((p) => p.id));
+    for (const p of pool) {
+      if (out.length >= limit) break;
+      if (!seen.has(p.id)) out.push(p);
+    }
+  }
+
+  return out;
 }
 
 /** 每次请求随机一首 featured，避免主页长期固定同一首 */

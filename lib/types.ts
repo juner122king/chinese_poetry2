@@ -69,6 +69,11 @@ export type PoemTag =
 
 export type MotifsSource = "manual" | "llm" | "rule";
 
+/** 数据来源文集 */
+export type PoemSource = "tang300" | "ci300";
+
+export type PoemForm = "shi" | "ci";
+
 export type Poem = {
   id: string;
   title: string;
@@ -84,6 +89,14 @@ export type Poem = {
   motifsSource?: MotifsSource;
   motifsLocked?: boolean;
   featured?: boolean;
+  /** 诗 / 词 */
+  form?: PoemForm;
+  /** 词牌（词） */
+  rhythmic?: string;
+  /** 源文集 */
+  source?: PoemSource;
+  /** 源库 uuid（若有） */
+  sourceId?: string;
 };
 
 export type Author = {

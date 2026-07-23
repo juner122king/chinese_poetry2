@@ -1,0 +1,87 @@
+[
+  {
+    "match": { "title": "将进酒", "author": "李白" },
+    "note": "P0：豪饮主视觉，勿被「对月/成雪」带成 night-moon",
+    "patch": {
+      "theme": "wine",
+      "tags": ["wine", "moon", "river-lake", "music"],
+      "motifs": ["黄河", "金樽", "对月"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "春望", "author": "杜甫" },
+    "note": "P0：春城烽火，主视觉 spring（tags 保留战乱/思乡）",
+    "patch": {
+      "theme": "spring",
+      "tags": ["spring", "war", "homesickness", "flowers", "birds", "city-ruins"],
+      "motifs": ["城春", "烽火", "家书"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "静夜思", "author": "李白" },
+    "note": "P0：通行本文本（源库为看月光/山月异文）",
+    "patch": {
+      "content": [
+        "床前明月光",
+        "疑是地上霜",
+        "举头望明月",
+        "低头思故乡"
+      ],
+      "theme": "night-moon",
+      "tags": ["night", "moon", "homesickness", "courtyard"],
+      "motifs": ["夜空", "明月", "故乡"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "枫桥夜泊", "author": "张继" },
+    "note": "P0：通行本「江枫渔火」（源库作渔父）",
+    "patch": {
+      "content": [
+        "月落乌啼霜满天",
+        "江枫渔火对愁眠",
+        "姑苏城外寒山寺",
+        "夜半钟声到客船"
+      ],
+      "theme": "night-moon",
+      "tags": ["night", "moon", "autumn", "temple-bell", "boat-travel", "homesickness"],
+      "motifs": ["枫桥", "渔火", "钟声"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "青玉案", "author": "辛弃疾" },
+    "note": "P1：元夕灯火主视觉 festival，勿被「星如雨」带成雪/春",
+    "patch": {
+      "theme": "festival",
+      "tags": [
+        "festival",
+        "spring",
+        "lamplight",
+        "flowers",
+        "love-longing",
+        "night"
+      ],
+      "motifs": ["花千树", "星如雨", "灯火阑珊"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "声声慢", "author": "李清照" },
+    "note": "P1 连带：秋愁细雨，勿被「酒」字抢成 wine",
+    "patch": {
+      "theme": "autumn",
+      "tags": ["autumn", "rain", "homesickness", "wine", "dawn-dusk"],
+      "motifs": ["寻寻觅觅", "黄昏", "细雨"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  }
+]
