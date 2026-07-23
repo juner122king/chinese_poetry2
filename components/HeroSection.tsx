@@ -43,7 +43,10 @@ export default function HeroSection({ poem }: Props) {
       >
         <InkBackground theme={poem.theme} />
         {visual.particles !== "none" && (
-          <ParticleBackground mode={visual.particles} />
+          <ParticleBackground
+            mode={visual.particles}
+            safeCenter={visual.particleSafeCenter}
+          />
         )}
       </motion.div>
 

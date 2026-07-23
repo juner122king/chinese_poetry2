@@ -241,11 +241,14 @@ function Particles({
 type Props = {
   mode?: ParticleMode;
   className?: string;
+  /** 降低画面中心粒子可见度，避免压诗句 */
+  safeCenter?: boolean;
 };
 
 export default function ParticleBackground({
   mode = "stars",
   className = "",
+  safeCenter = false,
 }: Props) {
   const [count, setCount] = useState(0);
   const [ready, setReady] = useState(false);
@@ -265,7 +268,7 @@ export default function ParticleBackground({
 
   return (
     <div
-      className={`pointer-events-none absolute inset-0 z-[2] ${cfg.clipClass ?? ""} ${className}`}
+      className={`pointer-events-none absolute inset-0 z-[2] ${cfg.clipClass ?? ""} ${safeCenter ? "particle-safe-center" : ""} ${className}`}
       aria-hidden
     >
       <Canvas

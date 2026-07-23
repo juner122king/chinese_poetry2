@@ -20,7 +20,10 @@ export default function ThemeScene({ theme }: Props) {
     <div className="noise-overlay pointer-events-none fixed inset-0 -z-10">
       <InkBackground theme={theme} />
       {visual.particles !== "none" && (
-        <ParticleBackground mode={visual.particles} />
+        <ParticleBackground
+          mode={visual.particles}
+          safeCenter={visual.particleSafeCenter}
+        />
       )}
     </div>
   );

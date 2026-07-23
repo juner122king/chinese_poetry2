@@ -25,8 +25,10 @@ export default function CelestialBodies({
   if (!showMoon && !showSun) return null;
 
   const moonWarm = theme === "wine";
+  const moonFar = theme === "homesickness";
   const sunLow = theme === "dawn-dusk";
   const sunHigh = theme === "summer";
+  const moonScale = moonFar ? 0.72 : moonWarm ? 0.95 : 1;
 
   return (
     <>
@@ -34,10 +36,11 @@ export default function CelestialBodies({
         <div
           className="celestial-moon absolute"
           style={{
-            top: "11%",
-            right: moonWarm ? "22%" : "15%",
-            width: 120 * scale,
-            height: 120 * scale,
+            top: moonFar ? "8%" : "11%",
+            right: moonWarm ? "22%" : moonFar ? "10%" : "15%",
+            width: 120 * scale * moonScale,
+            height: 120 * scale * moonScale,
+            opacity: moonFar ? 0.85 : 1,
           }}
         >
           {/* Outer halo — slow breathe only */}

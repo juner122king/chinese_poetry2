@@ -18,6 +18,12 @@ export default function InkBackground({
   const visual = getThemeVisual(theme);
   const mountains = visual.mountains ?? "soft";
   const size = intensity === "full" ? 1 : 0.7;
+  const mistLevel =
+    visual.mist === "soft"
+      ? "soft"
+      : visual.mist === "heavy"
+        ? "heavy"
+        : null;
 
   return (
     <div
@@ -127,23 +133,26 @@ export default function InkBackground({
         </svg>
       )}
 
-      {/* Mist */}
-      {visual.mist && (
+      {/* Mist — soft | heavy | off */}
+      {mistLevel && (
         <>
           <div
             className="mist-layer absolute -left-[10%] top-[30%] h-[40%] w-[120%] rounded-[100%] blur-3xl"
             style={{
               background: `radial-gradient(ellipse, ${visual.glow} 0%, transparent 70%)`,
-              opacity: 0.4,
+              opacity: mistLevel === "heavy" ? 0.55 : 0.32,
             }}
           />
-          <div
-            className="mist-layer-2 absolute -left-[5%] top-[55%] h-[30%] w-[110%] rounded-[100%] blur-3xl"
-            style={{
-              background:
-                "radial-gradient(ellipse, rgba(245,239,226,0.08) 0%, transparent 70%)",
-            }}
-          />
+          {(mistLevel === "heavy" || intensity === "full") && (
+            <div
+              className="mist-layer-2 absolute -left-[5%] top-[55%] h-[30%] w-[110%] rounded-[100%] blur-3xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse, rgba(245,239,226,0.08) 0%, transparent 70%)",
+                opacity: mistLevel === "heavy" ? 1 : 0.65,
+              }}
+            />
+          )}
         </>
       )}
 

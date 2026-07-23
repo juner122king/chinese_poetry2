@@ -133,6 +133,24 @@ body {
   -webkit-clip-path: inset(0 0 42% 0);
 }
 
+/* Soft-mask center so particles don't fight poem text */
+.particle-safe-center {
+  -webkit-mask-image: radial-gradient(
+    ellipse 48% 42% at 50% 48%,
+    transparent 0%,
+    transparent 35%,
+    #000 78%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 48% 42% at 50% 48%,
+    transparent 0%,
+    transparent 35%,
+    #000 78%,
+    #000 100%
+  );
+}
+
 /* Birds theme template motion */
 @keyframes birdsFlockDrift {
   0% {
