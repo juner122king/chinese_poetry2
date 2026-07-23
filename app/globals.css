@@ -1,26 +1,411 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0d0d0d;
+  --xuan: #f5efe2;
+  --cinnabar: #b23a48;
+  --qingdai: #34495e;
+  --xuan-muted: rgba(245, 239, 226, 0.55);
+  --xuan-faint: rgba(245, 239, 226, 0.12);
+  --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #0d0d0d;
+  --color-xuan: #f5efe2;
+  --color-cinnabar: #b23a48;
+  --color-qingdai: #34495e;
+  --color-xuan-muted: rgba(245, 239, 226, 0.55);
+  --color-xuan-faint: rgba(245, 239, 226, 0.12);
+  --font-serif-sc: var(--font-noto-serif-sc), "Noto Serif SC", "Songti SC",
+    "SimSun", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ink);
+  color: var(--xuan);
+  font-family: var(--font-serif-sc);
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(178, 58, 72, 0.35);
+  color: var(--xuan);
+}
+
+/* Subtle paper grain */
+.noise-overlay::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.float-slow {
+  animation: floatY 8s var(--ease-elegant) infinite;
+}
+
+.float-slower {
+  animation: floatY 12s var(--ease-elegant) infinite;
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes mistDrift {
+  0% {
+    transform: translate3d(-4%, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(4%, -2%, 0) scale(1.05);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(-4%, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+}
+
+.mist-layer {
+  animation: mistDrift 22s ease-in-out infinite;
+}
+
+.mist-layer-2 {
+  animation: mistDrift 32s ease-in-out infinite reverse;
+}
+
+/* Celestial: only halo opacity breathes — no flashy scale */
+@keyframes celestialBreathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.celestial-moon-halo {
+  animation: celestialBreathe 14s ease-in-out infinite;
+}
+
+.celestial-sun-halo {
+  animation: celestialBreathe 18s ease-in-out infinite;
+}
+
+.celestial-moon-core,
+.celestial-sun-core {
+  /* solid disc stays steady for readability */
+  opacity: 0.95;
+}
+
+/* Stars: only upper sky band */
+.particle-clip-sky {
+  clip-path: inset(0 0 42% 0);
+  -webkit-clip-path: inset(0 0 42% 0);
+}
+
+/* Birds theme template motion */
+@keyframes birdsFlockDrift {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(12px, -10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes birdsNearDrift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(6px, -4px);
+  }
+}
+
+@keyframes birdsBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.birds-flock-drift {
+  animation: birdsFlockDrift 26s ease-in-out infinite;
+}
+
+.birds-near-drift {
+  animation: birdsNearDrift 32s ease-in-out infinite;
+}
+
+.birds-bob {
+  animation: birdsBob 4.5s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/*
+ * Festival lanterns: slow rise + gentle X drift + very gradual extinguish.
+ * Opacity never jumps — last ~45% of timeline is continuous fade.
+ * Default opacity:0 + fill-mode:both → no static “waiting” dots during delay.
+ */
+@keyframes lanternRiseA {
+  0% {
+    transform: translate3d(0, 12px, 0) scale(0.72);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.55;
+  }
+  15% {
+    transform: translate3d(3px, -6vh, 0) scale(0.7);
+    opacity: 0.62;
+  }
+  30% {
+    transform: translate3d(7px, -16vh, 0) scale(0.66);
+    opacity: 0.6;
+  }
+  45% {
+    transform: translate3d(11px, -26vh, 0) scale(0.6);
+    opacity: 0.55;
+  }
+  58% {
+    transform: translate3d(14px, -34vh, 0) scale(0.56);
+    opacity: 0.42;
+  }
+  70% {
+    transform: translate3d(16px, -40vh, 0) scale(0.52);
+    opacity: 0.28;
+  }
+  82% {
+    transform: translate3d(18px, -46vh, 0) scale(0.48);
+    opacity: 0.14;
+  }
+  92% {
+    transform: translate3d(19px, -50vh, 0) scale(0.44);
+    opacity: 0.05;
+  }
+  100% {
+    transform: translate3d(20px, -54vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes lanternRiseB {
+  0% {
+    transform: translate3d(0, 10px, 0) scale(0.76);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.52;
+  }
+  15% {
+    transform: translate3d(-3px, -5vh, 0) scale(0.72);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translate3d(-7px, -15vh, 0) scale(0.68);
+    opacity: 0.58;
+  }
+  45% {
+    transform: translate3d(-11px, -25vh, 0) scale(0.62);
+    opacity: 0.52;
+  }
+  58% {
+    transform: translate3d(-13px, -33vh, 0) scale(0.56);
+    opacity: 0.4;
+  }
+  70% {
+    transform: translate3d(-15px, -40vh, 0) scale(0.52);
+    opacity: 0.26;
+  }
+  82% {
+    transform: translate3d(-16px, -45vh, 0) scale(0.48);
+    opacity: 0.13;
+  }
+  92% {
+    transform: translate3d(-17px, -49vh, 0) scale(0.44);
+    opacity: 0.05;
+  }
+  100% {
+    transform: translate3d(-18px, -52vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes lanternRiseC {
+  0% {
+    transform: translate3d(0, 12px, 0) scale(0.7);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.56;
+  }
+  15% {
+    transform: translate3d(-2px, -4vh, 0) scale(0.68);
+    opacity: 0.62;
+  }
+  28% {
+    transform: translate3d(2px, -12vh, 0) scale(0.66);
+    opacity: 0.58;
+  }
+  42% {
+    transform: translate3d(6px, -22vh, 0) scale(0.6);
+    opacity: 0.54;
+  }
+  55% {
+    transform: translate3d(4px, -30vh, 0) scale(0.56);
+    opacity: 0.44;
+  }
+  68% {
+    transform: translate3d(8px, -38vh, 0) scale(0.52);
+    opacity: 0.3;
+  }
+  80% {
+    transform: translate3d(11px, -45vh, 0) scale(0.48);
+    opacity: 0.16;
+  }
+  90% {
+    transform: translate3d(12px, -50vh, 0) scale(0.44);
+    opacity: 0.06;
+  }
+  100% {
+    transform: translate3d(14px, -56vh, 0) scale(0.38);
+    opacity: 0;
+  }
+}
+
+.lantern-rise {
+  opacity: 0; /* hidden until animation paints a frame */
+  border-radius: 45% 45% 40% 40%;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 40%,
+    rgba(255, 200, 120, 0.72) 0%,
+    rgba(200, 100, 50, 0.32) 45%,
+    rgba(178, 58, 72, 0.1) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px 2px rgba(200, 120, 40, 0.16);
+  animation-timing-function: linear; /* even opacity steps — no ease “pop” at ends */
+  animation-iteration-count: infinite;
+  animation-fill-mode: both; /* hold opacity:0 during delay */
+  will-change: transform, opacity;
+}
+
+.lantern-rise-a {
+  animation-name: lanternRiseA;
+}
+.lantern-rise-b {
+  animation-name: lanternRiseB;
+}
+.lantern-rise-c {
+  animation-name: lanternRiseC;
+}
+
+/* Rain streaks for 烟雨 theme */
+.rain-layer {
+  background-image: repeating-linear-gradient(
+    -12deg,
+    transparent,
+    transparent 8px,
+    rgba(180, 200, 220, 0.04) 8px,
+    rgba(180, 200, 220, 0.04) 9px
+  );
+  background-size: 24px 48px;
+  animation: rainFall 1.2s linear infinite;
+}
+
+@keyframes rainFall {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 12px 48px;
+  }
+}
+
+.ripple-ring {
+  animation: ripplePulse 3.2s ease-out infinite;
+}
+
+@keyframes ripplePulse {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: translateX(-50%) scaleX(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slow,
+  .float-slower,
+  .mist-layer,
+  .mist-layer-2,
+  .celestial-moon-halo,
+  .celestial-sun-halo,
+  .rain-layer,
+  .ripple-ring,
+  .birds-flock-drift,
+  .birds-near-drift,
+  .birds-bob,
+  .lantern-rise {
+    animation: none !important;
+    opacity: 0 !important; /* no static leftover dots */
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Custom scrollbar — restrained */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 239, 226, 0.15);
+  border-radius: 3px;
 }

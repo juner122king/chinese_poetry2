@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 墨韵 · 东方诗词视觉体验
 
-## Getting Started
+高品质、沉浸式、具有东方美学的诗词展示网站。  
+视觉优先：留白、水墨、月光、克制动画。
 
-First, run the development server:
+## 技术栈
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Three.js / React Three Fiber（星空粒子）
+
+## 开始
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+浏览器打开 [http://localhost:3000](http://localhost:3000)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 页面
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 路径 | 说明 |
+|------|------|
+| `/` | 首页 Hero + 推荐诗词 + 精选诗人 |
+| `/poems` | 诗词列表（朝代分组瀑布流） |
+| `/poem/[id]` | 沉浸式诗词详情 |
+| `/author/[name]` | 诗人简介与代表作 |
 
-## Learn More
+## 数据
 
-To learn more about Next.js, take a look at the following resources:
+第一阶段使用 mock 数据（20 首经典），见 `data/poems.ts`、`data/authors.ts`。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 意境三层模型
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+tags[]     意境归集（多选：春、田园、鸟、花…）  → lib/imagery-taxonomy.ts
+theme      主视觉背景（单选，约 22 套 UI）     → lib/theme-map.ts
+motifs[3]  展示关联词「春晓 · 啼鸟 · 风雨」
+```
 
-## Deploy on Vercel
+| 层级 | 规模 | 说明 |
+|------|------|------|
+| tags | 30+ | 四季 / 天象 / 山水 / 花木禽鱼 / 人事 / 行旅 |
+| theme | ~22 | 夜月、春、夏、秋、冬、烟雨、田园、边塞、花、鸟、鱼藻、竹木… |
+| motifs | 3 词 | 手写锁定，或规则/LLM 离线生成 |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# 规则模式 dry-run
+npm run enrich:motifs
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**不要**在用户打开详情页时实时调模型生成关联词。
+
+## 设计色
+
+- 深墨 `#0D0D0D`
+- 宣纸 `#F5EFE2`
+- 朱砂 `#B23A48`
+- 青黛 `#34495E`

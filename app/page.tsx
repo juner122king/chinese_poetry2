@@ -1,65 +1,80 @@
-import Image from "next/image";
+import Link from "next/link";
+import HeroSection from "@/components/HeroSection";
+import PoemCard from "@/components/PoemCard";
+import AuthorCard from "@/components/AuthorCard";
+import ScrollReveal from "@/components/ScrollReveal";
+import InkBackground from "@/components/InkBackground";
+import { getFeaturedPoems } from "@/data/poems";
+import { getFeaturedAuthors } from "@/data/authors";
 
-export default function Home() {
+export default function HomePage() {
+  const heroPoem = getFeaturedPoems(1)[0];
+  const gridPoems = getFeaturedPoems(6);
+  const authors = getFeaturedAuthors(6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      <HeroSection poem={heroPoem} />
+
+      {/* Featured poems */}
+      <section className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36">
+        <InkBackground theme="landscape" intensity="soft" />
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <ScrollReveal>
+            <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
+              <p className="text-[11px] tracking-[0.5em] text-xuan/35">
+                SELECTED
+              </p>
+              <h2 className="text-2xl tracking-[0.4em] text-xuan md:text-3xl">
+                推 荐 诗 词
+              </h2>
+              <span className="mt-2 h-px w-10 bg-cinnabar/50" />
+            </div>
+          </ScrollReveal>
+
+          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+            {gridPoems.map((poem, i) => (
+              <PoemCard key={poem.id} poem={poem} index={i} />
+            ))}
+          </div>
+
+          <ScrollReveal className="mt-16 text-center" delay={0.1}>
+            <Link
+              href="/poems"
+              className="inline-block text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              观 全 部 诗 词 →
+            </Link>
+          </ScrollReveal>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Featured authors */}
+      <section className="relative border-t border-xuan/5 px-6 py-28 md:px-10 md:py-36">
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <ScrollReveal>
+            <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
+              <p className="text-[11px] tracking-[0.5em] text-xuan/35">POETS</p>
+              <h2 className="text-2xl tracking-[0.4em] text-xuan md:text-3xl">
+                精 选 诗 人
+              </h2>
+              <span className="mt-2 h-px w-10 bg-cinnabar/50" />
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            {authors.map((author, i) => (
+              <AuthorCard key={author.slug} author={author} index={i} />
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <footer className="border-t border-xuan/5 px-6 py-12 text-center">
+        <p className="text-[11px] tracking-[0.35em] text-xuan/25">
+          墨韵 · 东方诗词视觉体验
+        </p>
+      </footer>
+    </>
   );
 }
