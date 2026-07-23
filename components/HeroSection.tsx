@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, type MouseEvent } from "react";
 import InkBackground from "./InkBackground";
 import { useScript } from "./ScriptProvider";
 import type { Poem } from "@/lib/types";
@@ -123,6 +123,20 @@ export default function HeroSection({ poem }: Props) {
   const cueDelay = scrollCueDelay(lines);
   const useBlur = !reduce && HERO_CHOREO.lines.blur > 0;
   const blurPx = HERO_CHOREO.lines.blur;
+
+  /** Scroll so the hero fully clears the viewport (avoids leftover strip at top). */
+  function handleScrollCue(e: MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    const el = ref.current;
+    const featured = document.getElementById("featured");
+    const y = el
+      ? el.offsetTop + el.offsetHeight
+      : (featured?.offsetTop ?? 0);
+    window.scrollTo({
+      top: y,
+      behavior: reduce ? "auto" : "smooth",
+    });
+  }
 
   return (
     <section ref={ref} className="hero-section noise-overlay">
@@ -258,6 +272,7 @@ export default function HeroSection({ poem }: Props) {
         className="scroll-cue"
         href="#featured"
         aria-label={t("向下浏览")}
+        onClick={handleScrollCue}
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{

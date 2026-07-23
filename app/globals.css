@@ -527,7 +527,8 @@ body {
 
 .hero-section {
   position: relative;
-  min-height: 92svh;
+  min-height: 100svh;
+  min-height: 100dvh;
   overflow: hidden;
   background: var(--ink);
   color: var(--xuan);
@@ -544,7 +545,8 @@ body {
   /* 主文组垂直居中；CTA 绝对定位不参与 */
   display: flex;
   width: min(1180px, 88vw);
-  min-height: 92svh;
+  min-height: 100svh;
+  min-height: 100dvh;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
@@ -747,7 +749,8 @@ body {
 @media (max-width: 700px) {
   .hero-section,
   .hero-content {
-    min-height: 91svh;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .hero-content {
