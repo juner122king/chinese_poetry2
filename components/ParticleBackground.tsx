@@ -5,6 +5,40 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { ParticleMode } from "@/lib/theme-map";
 
+/** Soft circular sprite — PointsMaterial is square without a map */
+function createCircleTexture(soft = true): THREE.CanvasTexture {
+  const size = 64;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+  const g = ctx.createRadialGradient(
+    size / 2,
+    size / 2,
+    0,
+    size / 2,
+    size / 2,
+    size / 2,
+  );
+  if (soft) {
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.25, "rgba(255,255,255,0.85)");
+    g.addColorStop(0.55, "rgba(255,255,255,0.25)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+  } else {
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.45, "rgba(255,255,255,0.9)");
+    g.addColorStop(0.7, "rgba(255,255,255,0.15)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+  }
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.needsUpdate = true;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 type ModeConfig = {
   countDesktop: number;
   countMobile: number;
@@ -37,15 +71,17 @@ const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
     clipClass: "particle-clip-sky",
   },
   firefly: {
-    countDesktop: 42,
-    countMobile: 24,
+    countDesktop: 58,
+    countMobile: 32,
     size: 0.055,
     rgb: [0.92, 0.78, 0.35],
-    yRange: [-3.2, 1.2],
+    // keep lower band (near fields / above ground), avoid mid-high text zone
+    yRange: [-4.2, -0.4],
     xSpread: 14,
     fall: 0,
     sway: 0,
-    wander: 0.22,
+    // slow drift — blink rate is separate
+    wander: 0.08,
     blink: "hard",
   },
   petals: {
@@ -129,6 +165,18 @@ function Particles({
 
   const colorAttr = useRef<THREE.BufferAttribute | null>(null);
 
+  const circleMap = useMemo(() => {
+    const soft = mode === "firefly" || mode === "stars" || mode === "snow";
+    const tex = createCircleTexture(soft);
+    return tex;
+  }, [mode]);
+
+  useEffect(() => {
+    return () => {
+      circleMap.dispose();
+    };
+  }, [circleMap]);
+
   useFrame((state, delta) => {
     const points = ref.current;
     if (!points) return;
@@ -157,9 +205,10 @@ function Particles({
           pos[ix] = (Math.random() - 0.5) * cfg.xSpread;
         }
       } else if (cfg.wander > 0) {
-        // firefly wander in band
-        pos[ix] += Math.sin(t * 0.7 * sp + ph) * delta * cfg.wander * 2.2;
-        pos[ix + 1] += Math.cos(t * 0.55 * sp + ph * 1.3) * delta * cfg.wander * 1.6;
+        // firefly: slow, soft drift (not darting)
+        pos[ix] += Math.sin(t * 0.28 * sp + ph) * delta * cfg.wander * 1.4;
+        pos[ix + 1] +=
+          Math.cos(t * 0.22 * sp + ph * 1.3) * delta * cfg.wander * 1.1;
         // soft clamp into y band
         if (pos[ix + 1] < y0) pos[ix + 1] = y0 + 0.1;
         if (pos[ix + 1] > y1) pos[ix + 1] = y1 - 0.1;
@@ -177,11 +226,11 @@ function Particles({
       // --- blink / twinkle via vertex color brightness ---
       let mul = 1;
       if (cfg.blink === "hard") {
-        // firefly: clear on/off with unique phase & speed
-        const wave = Math.sin(t * (1.1 + sp * 0.9) + ph);
-        // hold dark longer, brief glow
-        const shaped = Math.pow(Math.max(0, wave), 3);
-        mul = 0.06 + shaped * 0.94;
+        // firefly: faster blink, unique phase per particle
+        const wave = Math.sin(t * (2.8 + sp * 1.6) + ph);
+        // brief bright flash, still dark between
+        const shaped = Math.pow(Math.max(0, wave), 2.4);
+        mul = 0.05 + shaped * 0.95;
       } else if (cfg.blink === "soft") {
         // stars: gentle twinkle
         const wave = Math.sin(t * (0.4 + sp * 0.25) + ph) * 0.5 + 0.5;
@@ -215,11 +264,13 @@ function Particles({
       </bufferGeometry>
       <pointsMaterial
         size={cfg.size}
+        map={circleMap}
+        alphaMap={circleMap}
         vertexColors
         transparent
         opacity={
           mode === "firefly"
-            ? 0.9
+            ? 0.95
             : mode === "stars"
               ? 0.75
               : mode === "petals" || mode === "leaves"
@@ -228,6 +279,7 @@ function Particles({
         }
         sizeAttenuation
         depthWrite={false}
+        alphaTest={0.01}
         blending={
           mode === "firefly" || mode === "stars"
             ? THREE.AdditiveBlending

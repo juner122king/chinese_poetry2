@@ -2,7 +2,10 @@
 
 import type { CSSProperties } from "react";
 import type { PoemTheme } from "@/lib/types";
-import { getThemeVisual } from "@/lib/theme-map";
+import {
+  getThemeVisual,
+  type MountainForm,
+} from "@/lib/theme-map";
 import CelestialBodies from "./CelestialBodies";
 
 type Props = {
@@ -11,13 +14,92 @@ type Props = {
   intensity?: "soft" | "full";
 };
 
+type MountainPaths = {
+  far: string;
+  near: string;
+  heightClass: string;
+  opacity: number;
+  farFill: string;
+  nearFill: string;
+};
+
+/** Distinct silhouettes — not the same path scaled */
+const MOUNTAIN_FORMS: Record<Exclude<MountainForm, "none">, MountainPaths> = {
+  soft: {
+    far: "M0,400 L0,280 C120,240 200,180 320,200 C480,230 520,120 680,140 C840,160 900,80 1080,120 C1220,150 1320,200 1440,170 L1440,400 Z",
+    near: "M0,400 L0,320 C180,300 280,250 420,270 C600,300 700,220 860,250 C1020,280 1180,230 1440,260 L1440,400 Z",
+    heightClass: "h-[42%]",
+    opacity: 0.38,
+    farFill: "rgba(12,14,18,0.75)",
+    nearFill: "rgba(8,10,14,0.88)",
+  },
+  strong: {
+    far: "M0,400 L0,240 C80,200 160,100 280,130 C400,160 480,40 640,70 C800,100 900,20 1080,60 C1220,90 1340,140 1440,100 L1440,400 Z",
+    near: "M0,400 L0,300 C160,270 300,200 460,230 C620,260 760,170 960,200 C1140,230 1280,190 1440,220 L1440,400 Z",
+    heightClass: "h-[54%]",
+    opacity: 0.52,
+    farFill: "rgba(10,12,16,0.8)",
+    nearFill: "rgba(6,8,12,0.92)",
+  },
+  distant: {
+    far: "M0,400 L0,300 C200,280 360,250 520,265 C700,280 900,240 1100,255 C1260,268 1380,250 1440,260 L1440,400 Z",
+    near: "M0,400 L0,340 C240,325 480,310 720,320 C980,332 1200,315 1440,328 L1440,400 Z",
+    heightClass: "h-[34%]",
+    opacity: 0.28,
+    farFill: "rgba(18,22,28,0.55)",
+    nearFill: "rgba(12,16,22,0.72)",
+  },
+  rolling: {
+    far: "M0,400 L0,290 C180,250 300,270 450,255 C620,238 780,270 960,250 C1140,232 1280,260 1440,245 L1440,400 Z",
+    near: "M0,400 L0,330 C200,300 380,320 560,305 C780,288 980,315 1180,300 C1320,292 1400,310 1440,305 L1440,400 Z",
+    heightClass: "h-[40%]",
+    opacity: 0.36,
+    farFill: "rgba(14,18,14,0.7)",
+    nearFill: "rgba(8,12,10,0.88)",
+  },
+  peaks: {
+    far: "M0,400 L0,260 L120,200 L220,280 L360,90 L480,240 L600,140 L740,260 L900,60 L1040,220 L1180,120 L1320,240 L1440,160 L1440,400 Z",
+    near: "M0,400 L0,310 L100,250 L200,320 L340,180 L480,300 L620,220 L780,310 L920,200 L1080,300 L1240,240 L1440,280 L1440,400 Z",
+    heightClass: "h-[56%]",
+    opacity: 0.48,
+    farFill: "rgba(10,12,16,0.78)",
+    nearFill: "rgba(6,8,12,0.92)",
+  },
+  jagged: {
+    far: "M0,400 L0,250 L80,250 L140,160 L190,240 L280,100 L340,210 L420,70 L500,200 L580,90 L660,220 L760,50 L860,190 L960,80 L1080,200 L1180,110 L1280,230 L1360,140 L1440,210 L1440,400 Z",
+    near: "M0,400 L0,300 L90,300 L150,230 L230,300 L320,170 L400,280 L500,160 L600,290 L720,150 L840,280 L960,180 L1100,290 L1240,200 L1360,290 L1440,240 L1440,400 Z",
+    heightClass: "h-[52%]",
+    opacity: 0.5,
+    farFill: "rgba(12,16,22,0.8)",
+    nearFill: "rgba(6,10,14,0.94)",
+  },
+  range: {
+    far: "M0,400 L0,270 C100,250 180,200 280,210 C400,225 500,160 640,175 C800,190 920,130 1080,150 C1220,168 1340,200 1440,185 L1440,400 Z",
+    near: "M0,400 L0,315 C140,295 260,270 400,285 C560,300 700,255 860,275 C1020,295 1180,265 1440,280 L1440,400 Z",
+    heightClass: "h-[46%]",
+    opacity: 0.4,
+    farFill: "rgba(12,16,20,0.72)",
+    nearFill: "rgba(8,12,16,0.9)",
+  },
+};
+
+function resolveMountainForm(
+  form: MountainForm | undefined,
+): Exclude<MountainForm, "none"> | null {
+  if (!form || form === "none") return null;
+  if (form === "soft") return "rolling";
+  if (form === "strong") return "peaks";
+  return form;
+}
+
 export default function InkBackground({
   theme = "night-moon",
   className = "",
   intensity = "full",
 }: Props) {
   const visual = getThemeVisual(theme);
-  const mountains = visual.mountains ?? "soft";
+  const mountainForm = resolveMountainForm(visual.mountains ?? "rolling");
+  const mountainStyle = mountainForm ? MOUNTAIN_FORMS[mountainForm] : null;
   const size = intensity === "full" ? 1 : 0.7;
   const mistLevel =
     visual.mist === "soft"
@@ -45,23 +127,16 @@ export default function InkBackground({
         glow={visual.glow}
       />
 
-      {/* Mountains */}
-      {mountains !== "none" && (
+      {/* Mountains — distinct forms per theme */}
+      {mountainStyle && (
         <svg
-          className={`absolute bottom-0 left-0 w-full ${
-            mountains === "strong" ? "h-[52%] opacity-50" : "h-[42%] opacity-35"
-          }`}
+          className={`absolute bottom-0 left-0 w-full ${mountainStyle.heightClass}`}
+          style={{ opacity: mountainStyle.opacity * (intensity === "soft" ? 0.75 : 1) }}
           viewBox="0 0 1440 400"
           preserveAspectRatio="none"
         >
-          <path
-            d="M0,400 L0,280 C120,240 200,180 320,200 C480,230 520,120 680,140 C840,160 900,80 1080,120 C1220,150 1320,200 1440,170 L1440,400 Z"
-            fill="rgba(10,12,16,0.85)"
-          />
-          <path
-            d="M0,400 L0,320 C180,300 280,250 420,270 C600,300 700,220 860,250 C1020,280 1180,230 1440,260 L1440,400 Z"
-            fill="rgba(8,10,14,0.9)"
-          />
+          <path d={mountainStyle.far} fill={mountainStyle.farFill} />
+          <path d={mountainStyle.near} fill={mountainStyle.nearFill} />
         </svg>
       )}
 

@@ -10,6 +10,17 @@ export type ParticleMode =
 
 export type MistLevel = false | "soft" | "heavy";
 
+/** 山体造型（去同质化）；soft/strong 兼容旧配置 */
+export type MountainForm =
+  | "none"
+  | "soft"
+  | "strong"
+  | "distant"
+  | "rolling"
+  | "peaks"
+  | "jagged"
+  | "range";
+
 export type ThemeVisual = {
   label: string;
   gradient: string;
@@ -21,7 +32,7 @@ export type ThemeVisual = {
   /** 雾强度；false 关闭，避免主题同质化 */
   mist?: MistLevel;
   rain?: boolean;
-  mountains?: "none" | "soft" | "strong";
+  mountains?: MountainForm;
   horizon?: boolean;
   fields?: boolean;
   bamboo?: boolean;
@@ -46,7 +57,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(220,230,255,0.25)",
     moon: true,
     mist: "soft",
-    mountains: "soft",
+    mountains: "distant",
     particles: "stars",
     particleSafeCenter: true,
   },
@@ -58,7 +69,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(200,120,70,0.22)",
     sun: true,
     mist: "soft",
-    mountains: "soft",
+    mountains: "peaks",
     particles: "none",
   },
   spring: {
@@ -68,7 +79,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#c8d4b8",
     glow: "rgba(160,180,120,0.16)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "rolling",
     petals: false,
     particles: "petals",
     particleSafeCenter: true,
@@ -81,7 +92,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(180,160,80,0.15)",
     sun: true,
     mist: false,
-    mountains: "soft",
+    mountains: "rolling",
     particles: "firefly",
     particleSafeCenter: true,
   },
@@ -92,7 +103,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#d4b898",
     glow: "rgba(180,120,60,0.18)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "rolling",
     particles: "leaves",
     particleSafeCenter: true,
   },
@@ -103,7 +114,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#c0ccd8",
     glow: "rgba(160,180,200,0.15)",
     mist: "soft",
-    mountains: "strong",
+    mountains: "jagged",
     snow: false,
     particles: "snow",
     particleSafeCenter: true,
@@ -116,7 +127,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(180,200,220,0.2)",
     snow: false,
     mist: "soft",
-    mountains: "strong",
+    mountains: "jagged",
     horizon: true,
     particles: "snow",
     particleSafeCenter: true,
@@ -130,7 +141,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(100,120,140,0.16)",
     mist: "heavy",
     rain: true,
-    mountains: "soft",
+    mountains: "range",
     particles: "none",
   },
   mountain: {
@@ -140,7 +151,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#a8b4c0",
     glow: "rgba(80,100,120,0.2)",
     mist: false,
-    mountains: "strong",
+    mountains: "peaks",
     particles: "none",
   },
   "river-lake": {
@@ -150,20 +161,22 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#a0b8c8",
     glow: "rgba(70,110,140,0.18)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "range",
     horizon: true,
     ripples: true,
     particles: "none",
   },
   pastoral: {
     label: "田园",
+    // 夜田园：月华 + 田埂 + 流萤（西江月等）
     gradient:
-      "radial-gradient(ellipse 70% 40% at 50% 75%, rgba(70,100,50,0.18) 0%, transparent 50%), linear-gradient(180deg, #0c100c 0%, #121610 50%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 55% 45% at 72% 18%, rgba(190,205,230,0.2) 0%, transparent 55%), radial-gradient(ellipse 40% 35% at 68% 22%, rgba(220,230,245,0.1) 0%, transparent 50%), radial-gradient(ellipse 70% 40% at 50% 78%, rgba(70,100,50,0.2) 0%, transparent 50%), linear-gradient(180deg, #0a0e12 0%, #0e1410 48%, #0D0D0D 100%)",
     accent: "#c4d0b0",
-    glow: "rgba(140,160,90,0.14)",
+    glow: "rgba(180,200,230,0.2)",
+    moon: true,
     mist: "soft",
     fields: true,
-    mountains: "soft",
+    mountains: "rolling",
     particles: "firefly",
     particleSafeCenter: true,
   },
@@ -174,7 +187,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#d0b890",
     glow: "rgba(160,120,60,0.16)",
     mist: false,
-    mountains: "strong",
+    mountains: "jagged",
     horizon: true,
     particles: "none",
   },
@@ -195,7 +208,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#c8d6e0",
     glow: "rgba(150,175,200,0.12)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "distant",
     birds: true,
     particles: "none",
   },
@@ -251,7 +264,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(140,160,190,0.16)",
     moon: true,
     mist: "soft",
-    mountains: "soft",
+    mountains: "distant",
     particles: "stars",
     particleSafeCenter: true,
   },
@@ -262,7 +275,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#d0b8a8",
     glow: "rgba(140,100,80,0.16)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "range",
     horizon: true,
     particles: "none",
   },
@@ -273,7 +286,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#b0c0b0",
     glow: "rgba(80,100,85,0.12)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "range",
     bamboo: true,
     particles: "none",
   },
@@ -284,7 +297,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#b0bcc8",
     glow: "rgba(90,110,130,0.18)",
     mist: "soft",
-    mountains: "soft",
+    mountains: "distant",
     particles: "none",
   },
 };
