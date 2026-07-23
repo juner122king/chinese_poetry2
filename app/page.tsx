@@ -4,6 +4,7 @@ import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import InkBackground from "@/components/InkBackground";
+import T from "@/components/T";
 import { getFeaturedPoems, getRandomFeaturedPoem } from "@/data/poems";
 import { getFeaturedAuthors } from "@/data/authors";
 
@@ -28,12 +29,15 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="text-[11px] tracking-[0.5em] text-xuan/35">
+              <p className="font-sans text-[11px] tracking-[0.5em] text-xuan/35">
                 SELECTED
               </p>
-              <h2 className="text-2xl tracking-[0.4em] text-xuan md:text-3xl">
+              <T
+                as="h2"
+                className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
+              >
                 推 荐 诗 词
-              </h2>
+              </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
             </div>
           </ScrollReveal>
@@ -47,9 +51,9 @@ export default function HomePage() {
           <ScrollReveal className="mt-16 text-center" delay={0.1}>
             <Link
               href="/poems"
-              className="inline-block text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
+              className="inline-block font-sans text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
             >
-              观 全 部 诗 词 →
+              <T>观 全 部 诗 词 →</T>
             </Link>
           </ScrollReveal>
         </div>
@@ -60,10 +64,15 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="text-[11px] tracking-[0.5em] text-xuan/35">POETS</p>
-              <h2 className="text-2xl tracking-[0.4em] text-xuan md:text-3xl">
+              <p className="font-sans text-[11px] tracking-[0.5em] text-xuan/35">
+                POETS
+              </p>
+              <T
+                as="h2"
+                className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
+              >
                 精 选 诗 人
-              </h2>
+              </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
             </div>
           </ScrollReveal>
@@ -77,9 +86,12 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-xuan/5 px-6 py-12 text-center">
-        <p className="text-[11px] tracking-[0.35em] text-xuan/25">
+        <T
+          as="p"
+          className="font-sans text-[11px] tracking-[0.35em] text-xuan/25"
+        >
           墨韵 · 东方诗词视觉体验
-        </p>
+        </T>
       </footer>
     </>
   );

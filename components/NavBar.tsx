@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ScriptToggle from "./ScriptToggle";
+import { useScript } from "./ScriptProvider";
 
 const links = [
   { href: "/", label: "首页" },
@@ -13,50 +15,57 @@ const links = [
 export default function NavBar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { t } = useScript();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
         <Link
           href="/"
-          className="text-sm tracking-[0.35em] text-xuan transition-opacity hover:opacity-70"
+          className="font-sans text-sm tracking-[0.35em] text-xuan transition-opacity hover:opacity-70"
         >
-          墨韵
+          {t("墨韵")}
         </Link>
 
-        <ul className="hidden items-center gap-10 md:flex">
-          {links.map((link) => {
-            const active =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
-            return (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`relative text-sm tracking-[0.25em] transition-opacity ${
-                    active ? "text-xuan opacity-100" : "text-xuan opacity-50 hover:opacity-90"
-                  }`}
-                >
-                  {link.label}
-                  {active && (
-                    <span className="absolute -bottom-2 left-1/2 h-px w-3 -translate-x-1/2 bg-cinnabar" />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="flex items-center gap-8 md:gap-10">
+          <ul className="hidden items-center gap-10 md:flex">
+            {links.map((link) => {
+              const active =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`relative font-sans text-sm tracking-[0.25em] transition-opacity ${
+                      active
+                        ? "text-xuan opacity-100"
+                        : "text-xuan opacity-50 hover:opacity-90"
+                    }`}
+                  >
+                    {t(link.label)}
+                    {active && (
+                      <span className="absolute -bottom-2 left-1/2 h-px w-3 -translate-x-1/2 bg-cinnabar" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
-        <button
-          type="button"
-          className="text-xuan/80 md:hidden"
-          aria-label="菜单"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="block h-px w-5 bg-current" />
-          <span className="mt-1.5 block h-px w-5 bg-current" />
-        </button>
+          <ScriptToggle className="hidden md:inline-flex" />
+
+          <button
+            type="button"
+            className="text-xuan/80 md:hidden"
+            aria-label={t("菜单")}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="block h-px w-5 bg-current" />
+            <span className="mt-1.5 block h-px w-5 bg-current" />
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>
@@ -73,12 +82,15 @@ export default function NavBar() {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="text-sm tracking-[0.25em] text-xuan/80"
+                    className="font-sans text-sm tracking-[0.25em] text-xuan/80"
                   >
-                    {link.label}
+                    {t(link.label)}
                   </Link>
                 </li>
               ))}
+              <li className="pt-2">
+                <ScriptToggle />
+              </li>
             </ul>
           </motion.div>
         )}

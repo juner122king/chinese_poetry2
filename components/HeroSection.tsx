@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import InkBackground from "./InkBackground";
+import { useScript } from "./ScriptProvider";
 import type { Poem } from "@/lib/types";
 import { getThemeVisual } from "@/lib/theme-map";
 
@@ -107,6 +108,8 @@ function scrollCueDelay(lines: string[]): number {
 export default function HeroSection({ poem }: Props) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const { t, tPoem } = useScript();
+  const display = tPoem(poem);
   const visual = getThemeVisual(poem.theme);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -115,7 +118,7 @@ export default function HeroSection({ poem }: Props) {
   const sceneY = useTransform(scrollYProgress, [0, 1], [0, 50]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
-  const lines = poem.content.slice(0, 2);
+  const lines = display.content.slice(0, 2);
   const ctaDelay = actionsDelay(lines);
   const cueDelay = scrollCueDelay(lines);
   const useBlur = !reduce && HERO_CHOREO.lines.blur > 0;
@@ -151,7 +154,7 @@ export default function HeroSection({ poem }: Props) {
               ease: EASE,
             }}
           >
-            {poem.title}
+            {display.title}
           </motion.h1>
 
           <motion.div
@@ -164,14 +167,14 @@ export default function HeroSection({ poem }: Props) {
               ease: EASE,
             }}
           >
-            <span className="hero-dynasty">{poem.dynasty}</span>
+            <span className="hero-dynasty">{display.dynasty}</span>
             <span className="hero-kicker-rule" aria-hidden="true" />
-            <span className="hero-author">{poem.author}</span>
+            <span className="hero-author">{display.author}</span>
           </motion.div>
 
           <div className="hero-lines">
             {lines.map((line, lineIndex) => (
-              <p key={`${poem.id}-${lineIndex}`}>
+              <p key={`${display.id}-${lineIndex}-${line}`}>
                 {Array.from(line).map((character, characterIndex) => (
                   <motion.span
                     key={`${line}-${characterIndex}`}
@@ -230,7 +233,7 @@ export default function HeroSection({ poem }: Props) {
             }}
           >
             <Link href={`/poem/${poem.id}`} className="hero-action-primary">
-              <span>展开阅读</span>
+              <span>{t("展开阅读")}</span>
               <svg
                 width="14"
                 height="14"
@@ -247,23 +250,6 @@ export default function HeroSection({ poem }: Props) {
               </svg>
             </Link>
           </motion.div>
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 6 },
-              show: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: HERO_CHOREO.actions.duration,
-                  ease: EASE,
-                },
-              },
-            }}
-          >
-            <Link href="/poems" className="hero-action-secondary">
-              阅览诗卷
-            </Link>
-          </motion.div>
         </motion.div>
       </motion.div>
 
@@ -271,7 +257,7 @@ export default function HeroSection({ poem }: Props) {
       <motion.a
         className="scroll-cue"
         href="#featured"
-        aria-label="向下浏览"
+        aria-label={t("向下浏览")}
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{

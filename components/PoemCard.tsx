@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Poem } from "@/lib/types";
+import { useScript } from "./ScriptProvider";
 
 type Props = {
   poem: Poem;
@@ -11,6 +12,9 @@ type Props = {
 };
 
 export default function PoemCard({ poem, index = 0, className = "" }: Props) {
+  const { tPoem } = useScript();
+  const display = tPoem(poem);
+
   return (
     <motion.article
       className={`group break-inside-avoid mb-6 ${className}`}
@@ -28,16 +32,21 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
           className="float-slow relative overflow-hidden rounded-sm border border-xuan/10 bg-xuan/[0.03] px-7 py-9 backdrop-blur-[2px] transition-all duration-700 hover:border-cinnabar/30 hover:bg-xuan/[0.06]"
           style={{ animationDelay: `${(index % 5) * 0.4}s` }}
         >
-          <p className="mb-4 text-[11px] tracking-[0.35em] text-xuan/40">
-            {poem.dynasty}
+          <p className="mb-4 font-sans text-[11px] tracking-[0.35em] text-xuan/40">
+            {display.dynasty}
           </p>
-          <h3 className="mb-3 text-xl font-normal tracking-[0.15em] text-xuan md:text-2xl">
-            {poem.title}
+          <h3 className="mb-3 font-wenkai text-xl font-normal tracking-[0.15em] text-xuan md:text-2xl">
+            {display.title}
           </h3>
-          <p className="text-sm tracking-[0.2em] text-xuan/55">{poem.author}</p>
+          <p className="font-wenkai text-sm tracking-[0.2em] text-xuan/55">
+            {display.author}
+          </p>
           <div className="mt-6 space-y-1.5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            {poem.content.slice(0, 2).map((line) => (
-              <p key={line} className="text-xs tracking-widest text-xuan/35">
+            {display.content.slice(0, 2).map((line) => (
+              <p
+                key={line}
+                className="font-wenkai text-xs tracking-widest text-xuan/35"
+              >
                 {line}
               </p>
             ))}

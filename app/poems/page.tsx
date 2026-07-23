@@ -1,6 +1,8 @@
 import InkBackground from "@/components/InkBackground";
 import PoemCard from "@/components/PoemCard";
 import ScrollReveal from "@/components/ScrollReveal";
+import T from "@/components/T";
+import PoemsHeader from "@/components/PoemsHeader";
 import { poems } from "@/data/poems";
 
 export const metadata = {
@@ -16,18 +18,7 @@ export default function PoemsPage() {
       <InkBackground theme="landscape" />
       <div className="relative z-10 mx-auto max-w-6xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
         <ScrollReveal>
-          <header className="mb-20 flex flex-col items-center gap-4 text-center">
-            <p className="text-[11px] tracking-[0.5em] text-xuan/35">
-              COLLECTION
-            </p>
-            <h1 className="text-3xl tracking-[0.45em] text-xuan md:text-4xl">
-              诗 词
-            </h1>
-            <p className="mt-2 max-w-md text-xs leading-relaxed tracking-[0.2em] text-xuan/40">
-              卷轴展开，墨香与月光同在。共 {poems.length} 首经典。
-            </p>
-            <span className="mt-4 h-px w-12 bg-cinnabar/40" />
-          </header>
+          <PoemsHeader count={poems.length} />
         </ScrollReveal>
 
         {dynasties.map((dynasty) => {
@@ -36,9 +27,12 @@ export default function PoemsPage() {
             <section key={dynasty} className="mb-20">
               <ScrollReveal>
                 <div className="mb-10 flex items-center gap-6">
-                  <span className="text-sm tracking-[0.4em] text-cinnabar/80">
+                  <T
+                    as="span"
+                    className="font-sans text-sm tracking-[0.4em] text-cinnabar/80"
+                  >
                     {dynasty}
-                  </span>
+                  </T>
                   <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />
                 </div>
               </ScrollReveal>

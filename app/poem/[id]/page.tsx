@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import PoemAdjacentNav from "@/components/PoemAdjacentNav";
 import PoemDisplay from "@/components/PoemDisplay";
 import ThemeScene from "@/components/ThemeScene";
 import {
@@ -36,48 +36,10 @@ export default async function PoemDetailPage({ params }: Props) {
   return (
     <div className="relative min-h-screen">
       <ThemeScene theme={poem.theme} />
+      {/* Soft fade under nav: content under this band softens, full block stays opaque */}
+      <div className="poem-top-veil" aria-hidden="true" />
       <PoemDisplay poem={poem} />
-
-      <nav className="relative z-10 mx-auto flex max-w-3xl items-center justify-between px-6 pb-20 pt-4">
-        {prev ? (
-          <Link
-            href={`/poem/${prev.id}`}
-            className="group max-w-[40%] text-left"
-          >
-            <span className="block text-[10px] tracking-[0.3em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-              上一首
-            </span>
-            <span className="mt-1 block truncate text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
-              {prev.title}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-
-        <Link
-          href="/poems"
-          className="text-[10px] tracking-[0.35em] text-xuan/30 transition-colors hover:text-xuan/60"
-        >
-          返回目录
-        </Link>
-
-        {next ? (
-          <Link
-            href={`/poem/${next.id}`}
-            className="group max-w-[40%] text-right"
-          >
-            <span className="block text-[10px] tracking-[0.3em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-              下一首
-            </span>
-            <span className="mt-1 block truncate text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
-              {next.title}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
+      <PoemAdjacentNav prev={prev} next={next} />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Author } from "@/lib/types";
+import { useScript } from "./ScriptProvider";
 
 type Props = {
   author: Author;
@@ -10,7 +11,9 @@ type Props = {
 };
 
 export default function AuthorCard({ author, index = 0 }: Props) {
-  const seal = author.name.slice(0, 1);
+  const { tAuthor } = useScript();
+  const display = tAuthor(author);
+  const seal = display.name.slice(0, 1);
 
   return (
     <motion.article
@@ -32,18 +35,20 @@ export default function AuthorCard({ author, index = 0 }: Props) {
             className="absolute inset-0 rounded-full border border-cinnabar/50 transition-transform duration-700 group-hover:scale-105"
             style={{ borderRadius: "42% 58% 50% 50% / 48% 48% 52% 52%" }}
           />
-          <span className="text-2xl tracking-widest text-cinnabar">{seal}</span>
+          <span className="font-wenkai text-2xl tracking-widest text-cinnabar">
+            {seal}
+          </span>
         </div>
         <div className="text-center">
-          <h3 className="mb-1 text-lg tracking-[0.3em] text-xuan">
-            {author.name}
+          <h3 className="mb-1 font-wenkai text-lg tracking-[0.3em] text-xuan">
+            {display.name}
           </h3>
-          <p className="text-xs tracking-[0.35em] text-xuan/40">
-            {author.dynasty}
+          <p className="font-sans text-xs tracking-[0.35em] text-xuan/40">
+            {display.dynasty}
           </p>
         </div>
         <p className="line-clamp-2 max-w-[14rem] text-center text-xs leading-relaxed tracking-wider text-xuan/40">
-          {author.bio}
+          {display.bio}
         </p>
       </Link>
     </motion.article>

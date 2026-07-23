@@ -19,6 +19,22 @@
   --color-xuan-faint: rgba(245, 239, 226, 0.12);
   --font-serif-sc: var(--font-noto-serif-sc), "Noto Serif SC", "Songti SC",
     "SimSun", serif;
+  --font-serif-tc: var(--font-noto-serif-tc), "Noto Serif TC", "Songti TC",
+    "PMingLiU", serif;
+  --font-sans-sc: var(--font-noto-sans-sc), "Noto Sans SC", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  --font-sans-tc: var(--font-noto-sans-tc), "Noto Sans TC", "PingFang TC",
+    "Microsoft JhengHei", sans-serif;
+  --font-wenkai: var(--font-lxgw-wenkai-tc), "LXGW WenKai TC", "Kaiti TC",
+    "KaiTi", serif;
+  /* Active stacks — flipped by html.script-sc / html.script-tc */
+  --font-serif: var(--font-serif-sc);
+  --font-sans: var(--font-sans-sc);
+}
+
+html.script-tc {
+  --font-serif: var(--font-serif-tc);
+  --font-sans: var(--font-sans-tc);
 }
 
 * {
@@ -32,9 +48,26 @@ html {
 body {
   background: var(--ink);
   color: var(--xuan);
-  font-family: var(--font-serif-sc);
+  font-family: var(--font-serif);
   min-height: 100%;
   overflow-x: hidden;
+}
+
+/* Poem detail: soft top veil under fixed nav — only pixels under the band fade */
+.poem-top-veil {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  height: 6.5rem;
+  background: linear-gradient(
+    to bottom,
+    var(--ink) 0%,
+    var(--ink) 42%,
+    transparent 100%
+  );
 }
 
 ::selection {
@@ -528,6 +561,7 @@ body {
 .hero-poem h1 {
   margin: 0;
   color: rgba(245, 239, 226, 0.94);
+  font-family: var(--font-wenkai);
   font-size: clamp(48px, 6.2vw, 92px);
   font-weight: 400;
   line-height: 1.06;
@@ -550,6 +584,7 @@ body {
   margin: 0;
   flex-direction: column;
   color: rgba(245, 239, 226, 0.83);
+  font-family: var(--font-wenkai);
   font-size: clamp(22px, 2.25vw, 32px);
   font-weight: 300;
   line-height: 1.65;
@@ -575,6 +610,7 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   color: rgba(245, 239, 226, 0.42);
+  font-family: var(--font-sans);
   font-size: 12px;
   letter-spacing: 0.22em;
   line-height: 1;
@@ -596,6 +632,7 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   color: rgba(245, 239, 226, 0.92);
+  font-family: var(--font-wenkai);
   font-size: clamp(16px, 1.4vw, 20px);
   font-weight: 400;
   letter-spacing: 0.2em;
@@ -622,6 +659,7 @@ body {
   padding: 11px 22px;
   border: 1px solid rgba(245, 239, 226, 0.35);
   color: rgba(245, 239, 226, 0.9);
+  font-family: var(--font-sans);
   font-size: 13px;
   letter-spacing: 0.14em;
   background: transparent;
@@ -658,6 +696,7 @@ body {
   position: relative;
   padding-bottom: 4px;
   color: rgba(245, 239, 226, 0.48);
+  font-family: var(--font-sans);
   font-size: 12px;
   letter-spacing: 0.16em;
   transition: color 300ms ease;
