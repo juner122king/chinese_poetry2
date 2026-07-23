@@ -123,10 +123,11 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   rain: {
     label: "烟雨",
+    // 空蒙：青灰湿气，雨丝极淡，雾为主
     gradient:
-      "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(80,100,120,0.2) 0%, transparent 50%), linear-gradient(180deg, #0a0e12 0%, #101418 50%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 90% 55% at 50% 15%, rgba(100,120,145,0.14) 0%, transparent 55%), radial-gradient(ellipse 70% 45% at 40% 75%, rgba(60,75,90,0.18) 0%, transparent 50%), linear-gradient(180deg, #0a0e12 0%, #0e1318 50%, #0D0D0D 100%)",
     accent: "#a8b8c8",
-    glow: "rgba(100,120,140,0.2)",
+    glow: "rgba(100,120,140,0.16)",
     mist: "heavy",
     rain: true,
     mountains: "soft",
