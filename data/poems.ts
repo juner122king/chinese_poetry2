@@ -394,6 +394,17 @@ export function getFeaturedPoems(limit = 6): Poem[] {
   return [...featured, ...poems.filter((p) => !p.featured)].slice(0, limit);
 }
 
+/** 每次请求随机一首 featured，避免主页长期固定同一首 */
+export function getRandomFeaturedPoem(): Poem {
+  const featured = poems.filter((p) => p.featured);
+  const pool = featured.length > 0 ? featured : poems;
+  if (pool.length === 0) {
+    throw new Error("No poems available");
+  }
+  const index = Math.floor(Math.random() * pool.length);
+  return pool[index];
+}
+
 export function getPoemsByAuthor(author: string): Poem[] {
   return poems.filter((p) => p.author === author);
 }

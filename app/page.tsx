@@ -4,11 +4,14 @@ import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import InkBackground from "@/components/InkBackground";
-import { getFeaturedPoems } from "@/data/poems";
+import { getFeaturedPoems, getRandomFeaturedPoem } from "@/data/poems";
 import { getFeaturedAuthors } from "@/data/authors";
 
+/** 每次刷新随机 Hero 诗；静态预渲染会冻死随机结果 */
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
-  const heroPoem = getFeaturedPoems(1)[0];
+  const heroPoem = getRandomFeaturedPoem();
   const gridPoems = getFeaturedPoems(6);
   const authors = getFeaturedAuthors(6);
 
@@ -17,7 +20,10 @@ export default function HomePage() {
       <HeroSection poem={heroPoem} />
 
       {/* Featured poems */}
-      <section className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36">
+      <section
+        id="featured"
+        className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36"
+      >
         <InkBackground theme="landscape" intensity="soft" />
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>

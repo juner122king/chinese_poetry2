@@ -26,20 +26,16 @@ export default function HeroSection({ poem }: Props) {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
-  const opacityContent = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const sceneY = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
-  const lines = poem.content.slice(0, 4);
-  let charIndex = 0;
+  const lines = poem.content.slice(0, 2);
 
   return (
-    <section
-      ref={ref}
-      className="noise-overlay relative flex min-h-screen items-center justify-center overflow-hidden"
-    >
+    <section ref={ref} className="hero-section noise-overlay">
       <motion.div
-        className="absolute inset-0"
-        style={reduce ? undefined : { y: yBg }}
+        className="hero-scene"
+        style={reduce ? undefined : { y: sceneY }}
       >
         <InkBackground theme={poem.theme} />
         {visual.particles !== "none" && (
@@ -51,76 +47,84 @@ export default function HeroSection({ poem }: Props) {
       </motion.div>
 
       <motion.div
-        className="relative z-10 flex flex-col items-center px-6 text-center"
-        style={reduce ? undefined : { opacity: opacityContent }}
+        className="hero-content"
+        style={reduce ? undefined : { y: textY }}
       >
-        <motion.p
-          className="mb-10 text-[11px] tracking-[0.5em] text-xuan/40 md:text-xs"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.2, ease }}
+        <motion.div
+          className="hero-kicker"
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35, duration: 1, ease }}
         >
           {poem.dynasty} · {poem.author}
-        </motion.p>
+        </motion.div>
 
-        <motion.h1
-          className="mb-12 text-4xl font-normal tracking-[0.45em] text-xuan md:text-6xl md:tracking-[0.5em]"
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.45, ease }}
-        >
-          {poem.title}
-        </motion.h1>
-
-        {/* Character-by-character fade, line by line */}
-        <div className="mb-4 space-y-3 md:space-y-4">
-          {lines.map((line) => {
-            const start = charIndex;
-            charIndex += line.length;
-            return (
-              <p
-                key={line}
-                className="flex justify-center gap-[0.15em] text-lg tracking-[0.3em] text-xuan/85 md:text-2xl md:tracking-[0.35em]"
-              >
-                {line.split("").map((ch, i) => (
+        <div className="hero-poem">
+          <motion.h1
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 1.1, ease }}
+          >
+            {poem.title}
+          </motion.h1>
+          <div className="hero-lines">
+            {lines.map((line, lineIndex) => (
+              <p key={`${poem.id}-${lineIndex}`}>
+                {Array.from(line).map((character, characterIndex) => (
                   <motion.span
-                    key={`${line}-${i}`}
-                    initial={reduce ? false : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    key={`${line}-${characterIndex}`}
+                    initial={
+                      reduce ? false : { opacity: 0, filter: "blur(6px)" }
+                    }
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
                     transition={{
-                      duration: 0.55,
-                      delay: 0.8 + (start + i) * 0.06,
+                      delay: 0.75 + lineIndex * 0.45 + characterIndex * 0.11,
+                      duration: 0.9,
                       ease,
                     }}
                   >
-                    {ch}
+                    {character}
                   </motion.span>
                 ))}
               </p>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
         <motion.div
-          className="mt-16 flex flex-col items-center gap-8"
+          className="hero-actions"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.4, ease }}
+          transition={{ delay: 2.1, duration: 0.9, ease }}
         >
-          <Link
-            href={`/poem/${poem.id}`}
-            className="group text-xs tracking-[0.4em] text-xuan/50 transition-colors hover:text-cinnabar"
-          >
-            展 开 阅 读
-            <span className="mt-2 block h-px w-full origin-left scale-x-50 bg-xuan/30 transition-transform duration-500 group-hover:scale-x-100 group-hover:bg-cinnabar/60" />
-          </Link>
-
-          <div className="flex flex-col items-center gap-2 text-xuan/25">
-            <span className="text-[10px] tracking-[0.3em]">下滑探索</span>
-            <span className="block h-8 w-px bg-gradient-to-b from-xuan/30 to-transparent" />
-          </div>
+          <Link href={`/poem/${poem.id}`}>展开阅读</Link>
+          <span aria-hidden="true" />
+          <Link href="/poems">阅览诗卷</Link>
         </motion.div>
       </motion.div>
+
+      <motion.a
+        className="scroll-cue"
+        href="#featured"
+        aria-label="向下浏览"
+        animate={reduce ? undefined : { y: [0, 7, 0] }}
+        transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+      >
+        <svg
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14" />
+          <path d="m19 12-7 7-7-7" />
+        </svg>
+      </motion.a>
     </section>
   );
 }
