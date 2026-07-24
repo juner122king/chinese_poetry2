@@ -53,8 +53,8 @@ body {
   overflow-x: hidden;
 }
 
-/* Poem detail: soft top veil under fixed nav — only pixels under the band fade */
-.poem-top-veil {
+/* Site-wide soft top veil under fixed nav — only pixels under the band fade */
+.page-top-veil {
   pointer-events: none;
   position: fixed;
   top: 0;

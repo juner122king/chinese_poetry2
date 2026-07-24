@@ -36,8 +36,6 @@ export default async function PoemDetailPage({ params }: Props) {
   return (
     <div className="relative min-h-screen">
       <ThemeScene theme={poem.theme} />
-      {/* Soft fade under nav: content under this band softens, full block stays opaque */}
-      <div className="poem-top-veil" aria-hidden="true" />
       <PoemDisplay poem={poem} />
       <PoemAdjacentNav prev={prev} next={next} />
     </div>
