@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -30,7 +31,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
  * Hero text entrance timeline.
- * 诗题 → (+beat) → 作者区 → (+beat) → 诗句(按隔行段柔和浮现) → CTA → scroll-cue
+ * 诗题 → (+beat) → 作者区 → (+beat) → 诗句 → CTA → scroll-cue（最后呈现）
  * 「段」= 遇 stop（。！？）或文末收束的一组换行句；段内同时浮现，段间 0.7s。
  * 一字一 span 仅布局，不逐字动画。
  */
@@ -47,12 +48,15 @@ const HERO_CHOREO = {
     y: 10,
   },
   actions: {
-    /** 末段浮现结束后再出 CTA */
-    afterLastChar: 0.4,
+    /**
+     * CTA 对齐「超出区域 mask 渐隐」：
+     * 有溢出 → 可见区内末段入场 fade 结束；无溢出 → 全文末段 fade 结束。
+     */
     duration: 1.05,
     childStagger: 0.1,
   },
-  scrollCue: { afterActions: 0.2, duration: 0.85 },
+  /** 下箭头：CTA 入场完全结束后再出，作为整段入场的收束 */
+  scrollCue: { afterActions: 2.15, duration: 0.9 },
 } as const;
 
 const titleDelay = HERO_CHOREO.title.delay;
@@ -60,36 +64,70 @@ const kickerDelay = titleDelay + HERO_CHOREO.beat;
 const linesStart = titleDelay + HERO_CHOREO.beat * 2;
 
 /**
- * 按 stop 句读分组为隔行段；返回每行 delay（段内相同）与 contentEnd。
- * 例：两句一联以 。 收束 → 同 delay；下一联 + segmentStagger。
+ * 按 stop 句读分组为隔行段；返回每行 delay（段内相同）。
  */
 function buildStopSegmentTimeline(displayLines: DisplayLine[]) {
-  const { segmentStagger, duration } = HERO_CHOREO.lines;
+  const { segmentStagger } = HERO_CHOREO.lines;
   const n = displayLines.length;
   const delays = new Array<number>(n).fill(linesStart);
 
-  if (n === 0) {
-    return { delays, contentEnd: linesStart };
-  }
+  if (n === 0) return { delays };
 
   let segmentIndex = 0;
-  let lastSegDelay = linesStart;
 
   for (let i = 0; i < n; i++) {
     const isLast = i === n - 1;
-    const delay = linesStart + segmentIndex * segmentStagger;
-    delays[i] = delay;
-    lastSegDelay = delay;
+    delays[i] = linesStart + segmentIndex * segmentStagger;
 
     // stop 或文末：当前隔行段结束
     if (displayLines[i].break === "stop" || isLast) {
-      // 避免末行既是 stop 又 isLast 时双重进段：只在封段时 +1，供下一行用
       if (!isLast) segmentIndex++;
     }
   }
 
-  const contentEnd = lastSegDelay + duration;
-  return { delays, contentEnd };
+  return { delays };
+}
+
+/**
+ * 可见区内最后一行下标（与 clip 相交的最后一列/行）。
+ * 相对 lines 容器用 getBoundingClientRect，避免 offsetParent 偏差。
+ */
+function lastVisibleLineIndex(
+  linesEl: HTMLElement,
+  overflowing: boolean,
+  clipLimitPx: number | null,
+  mobile: boolean,
+): number {
+  const children = Array.from(linesEl.children) as HTMLElement[];
+  if (children.length === 0) return 0;
+  if (!overflowing || clipLimitPx == null) return children.length - 1;
+
+  const parentRect = linesEl.getBoundingClientRect();
+  let last = 0;
+  for (let i = 0; i < children.length; i++) {
+    const r = children[i]!.getBoundingClientRect();
+    if (mobile) {
+      const top = r.top - parentRect.top;
+      if (top < clipLimitPx) last = i;
+      else break;
+    } else {
+      const left = r.left - parentRect.left;
+      if (left < clipLimitPx) last = i;
+      else break;
+    }
+  }
+  return last;
+}
+
+/** 由可见末行 delay + 单段 duration 得到 CTA 绝对时刻（mount 起算，秒） */
+function ctaAtFromVisible(
+  delays: number[],
+  lastVisibleIdx: number,
+  duration: number,
+): number {
+  if (delays.length === 0) return linesStart + duration;
+  const idx = Math.min(Math.max(0, lastVisibleIdx), delays.length - 1);
+  return delays[idx]! + duration;
 }
 
 function heroColumnGapClass(breakType: DisplayLine["break"], isLast: boolean) {
@@ -254,12 +292,28 @@ export default function HeroSection({ poem }: Props) {
     fadeOutPx: null,
     fadeMidPx: null,
   });
+  /** CTA 绝对时刻（秒，mount 起算）；null = 尚未量完 clip */
+  const [ctaAtSec, setCtaAtSec] = useState<number | null>(null);
+  const [ctaShow, setCtaShow] = useState(false);
+  const [cueShow, setCueShow] = useState(false);
+  const mountAtRef = useRef(
+    typeof performance !== "undefined" ? performance.now() : 0,
+  );
+
+  useLayoutEffect(() => {
+    mountAtRef.current = performance.now();
+    setCtaShow(!!reduce);
+    setCueShow(!!reduce);
+    setCtaAtSec(null);
+  }, [contentKey, reduce]);
 
   useLayoutEffect(() => {
     const linesEl = linesRef.current;
     if (!linesEl) return;
 
     const lineCount = displayLines.length;
+    const delays = lineTimeline.delays;
+    const lineDuration = HERO_CHOREO.lines.duration;
 
     const applyClip = (next: ClipLayout) => {
       setClipLayout((prev) => (clipLayoutsEqual(prev, next) ? prev : next));
@@ -293,6 +347,13 @@ export default function HeroSection({ poem }: Props) {
           fadeOutPx: fade?.fadeOutPx ?? null,
           fadeMidPx: fade?.fadeMidPx ?? null,
         });
+        const lastVis = lastVisibleLineIndex(
+          linesEl,
+          overflowing,
+          roundedH,
+          true,
+        );
+        setCtaAtSec(ctaAtFromVisible(delays, lastVis, lineDuration));
         return;
       }
 
@@ -318,6 +379,13 @@ export default function HeroSection({ poem }: Props) {
         fadeOutPx: fade?.fadeOutPx ?? null,
         fadeMidPx: fade?.fadeMidPx ?? null,
       });
+      const lastVis = lastVisibleLineIndex(
+        linesEl,
+        overflowing,
+        widthPx,
+        false,
+      );
+      setCtaAtSec(ctaAtFromVisible(delays, lastVis, lineDuration));
     };
 
     measure();
@@ -331,7 +399,36 @@ export default function HeroSection({ poem }: Props) {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [contentKey, displayLines.length]);
+  }, [contentKey, displayLines.length, lineTimeline.delays]);
+
+  // CTA：与正文同一 mount 时钟，在 ctaAtSec（可见末段 fade 结束）呈现
+  useEffect(() => {
+    if (reduce) {
+      setCtaShow(true);
+      return;
+    }
+    if (ctaAtSec == null) return;
+    const wait = Math.max(
+      0,
+      ctaAtSec * 1000 - (performance.now() - mountAtRef.current),
+    );
+    const id = window.setTimeout(() => setCtaShow(true), wait);
+    return () => window.clearTimeout(id);
+  }, [ctaAtSec, reduce, contentKey]);
+
+  // scroll-cue：等 CTA 入场动画全部结束后再出（最后一拍）
+  useEffect(() => {
+    if (reduce) {
+      setCueShow(true);
+      return;
+    }
+    if (!ctaShow) return;
+    const wait =
+      (HERO_CHOREO.actions.duration + HERO_CHOREO.scrollCue.afterActions) *
+      1000;
+    const id = window.setTimeout(() => setCueShow(true), wait);
+    return () => window.clearTimeout(id);
+  }, [ctaShow, reduce, contentKey]);
 
   const layoutT = layoutTFrom(
     displayLines.length,
@@ -366,21 +463,6 @@ export default function HeroSection({ poem }: Props) {
     return style;
   }, [clipLayout]);
 
-  /** 布局测完前先 hidden，避免未测溢出时误用「全文 delay」 */
-  const layoutReady =
-    clipLayout.widthPx != null || clipLayout.maxHeightPx != null;
-
-  /** 末段浮现结束后再出 CTA */
-  const ctaDelay = !layoutReady
-    ? 0
-    : reduce
-      ? 0
-      : lineTimeline.contentEnd + HERO_CHOREO.actions.afterLastChar;
-
-  const cueDelay =
-    ctaDelay +
-    HERO_CHOREO.actions.duration * 0.45 +
-    HERO_CHOREO.scrollCue.afterActions;
   const useBlur = !reduce && HERO_CHOREO.lines.blur > 0;
   const blurPx = HERO_CHOREO.lines.blur;
   const lineY = HERO_CHOREO.lines.y;
@@ -495,32 +577,17 @@ export default function HeroSection({ poem }: Props) {
           </div>
         </div>
 
-        <motion.div
-          key={`hero-cta-${poem.id}`}
-          className="hero-actions"
-          initial={reduce ? false : "hidden"}
-          animate={layoutReady || reduce ? "show" : "hidden"}
-          variants={{
-            hidden: {},
-            show: {
-              transition: {
-                delayChildren: ctaDelay,
-                staggerChildren: HERO_CHOREO.actions.childStagger,
-              },
-            },
-          }}
-        >
+        <motion.div key={`hero-cta-${poem.id}`} className="hero-actions">
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 6 },
-              show: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: HERO_CHOREO.actions.duration,
-                  ease: EASE,
-                },
-              },
+            initial={reduce ? false : { opacity: 0, y: 6 }}
+            animate={
+              ctaShow || reduce
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 6 }
+            }
+            transition={{
+              duration: HERO_CHOREO.actions.duration,
+              ease: EASE,
             }}
           >
             <Link href={`/poem/${poem.id}`} className="hero-action-primary">
@@ -550,9 +617,8 @@ export default function HeroSection({ poem }: Props) {
         aria-label={t("继续浏览")}
         onClick={handleScrollCue}
         initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: cueShow || reduce ? 1 : 0 }}
         transition={{
-          delay: cueDelay,
           duration: HERO_CHOREO.scrollCue.duration,
           ease: EASE,
         }}
@@ -560,12 +626,13 @@ export default function HeroSection({ poem }: Props) {
         <motion.span
           aria-hidden="true"
           style={{ display: "grid", placeItems: "center" }}
-          animate={reduce ? undefined : { y: [0, 7, 0] }}
+          animate={
+            reduce || !cueShow ? undefined : { y: [0, 7, 0] }
+          }
           transition={
-            reduce
+            reduce || !cueShow
               ? undefined
               : {
-                  delay: cueDelay + HERO_CHOREO.scrollCue.duration,
                   repeat: Infinity,
                   duration: 2.2,
                   ease: "easeInOut",
