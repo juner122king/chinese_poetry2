@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { Poem } from "@/lib/types";
+import {
+  lineSpacingClass,
+  toDisplayLines,
+  verticalLineGapClass,
+} from "@/lib/poem-lines";
 import { getBackgroundLabel } from "@/lib/motifs";
 import ImageryTags from "./ImageryTags";
 import ScrollReveal from "./ScrollReveal";
@@ -27,6 +32,7 @@ export default function PoemDisplay({
   const reduce = useReducedMotion();
   const { tPoem } = useScript();
   const display = tPoem(poem);
+  const lines = toDisplayLines(display.content);
   // Lookup by simplified source name (data is always SC)
   const author = getAuthorByName(poem.author);
 
@@ -53,15 +59,16 @@ export default function PoemDisplay({
             <h1 className="font-wenkai text-3xl tracking-[0.4em] text-xuan md:text-4xl">
               {display.title}
             </h1>
-            <div className="flex gap-5 font-wenkai text-lg leading-[2.2] tracking-[0.25em] text-xuan/85 md:text-xl md:gap-7">
-              {display.content.map((line, i) => (
+            <div className="flex font-wenkai text-lg leading-[2.2] tracking-[0.25em] text-xuan/85 md:text-xl">
+              {lines.map((line, i) => (
                 <motion.p
-                  key={`${line}-${i}`}
+                  key={`${line.raw}-${i}`}
+                  className={verticalLineGapClass(line.break, i === lines.length - 1)}
                   initial={animateEntry && !reduce ? { opacity: 0 } : false}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.9, delay: 0.3 + i * 0.12, ease }}
                 >
-                  {line}
+                  {line.text}
                 </motion.p>
               ))}
             </div>
@@ -85,11 +92,13 @@ export default function PoemDisplay({
         </h1>
       </ScrollReveal>
 
-      <div className="space-y-5 md:space-y-7">
-        {display.content.map((line, i) => (
-          <ScrollReveal key={`${line}-${i}`} delay={0.08 * i} y={20}>
-            <p className="font-wenkai text-lg tracking-[0.35em] text-xuan/90 md:text-2xl md:tracking-[0.4em] md:leading-relaxed">
-              {line}
+      <div>
+        {lines.map((line, i) => (
+          <ScrollReveal key={`${line.raw}-${i}`} delay={0.08 * i} y={20}>
+            <p
+              className={`font-wenkai text-lg tracking-[0.35em] text-xuan/90 md:text-2xl md:tracking-[0.4em] md:leading-relaxed ${lineSpacingClass(line.break, i === lines.length - 1)}`}
+            >
+              {line.text}
             </p>
           </ScrollReveal>
         ))}

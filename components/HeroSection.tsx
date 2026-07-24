@@ -7,6 +7,7 @@ import { useRef, type MouseEvent } from "react";
 import InkBackground from "./InkBackground";
 import { useScript } from "./ScriptProvider";
 import type { Poem } from "@/lib/types";
+import { toDisplayLines } from "@/lib/poem-lines";
 import { getThemeVisual } from "@/lib/theme-map";
 
 const ParticleBackground = dynamic(() => import("./ParticleBackground"), {
@@ -118,7 +119,8 @@ export default function HeroSection({ poem }: Props) {
   const sceneY = useTransform(scrollYProgress, [0, 1], [0, 50]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
-  const lines = display.content.slice(0, 2);
+  /** 展示无标点字形；句读仅留在数据层 */
+  const lines = toDisplayLines(display.content.slice(0, 2)).map((l) => l.text);
   const ctaDelay = actionsDelay(lines);
   const cueDelay = scrollCueDelay(lines);
   const useBlur = !reduce && HERO_CHOREO.lines.blur > 0;

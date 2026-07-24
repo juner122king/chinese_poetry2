@@ -26,10 +26,10 @@
     "note": "P0：通行本文本（源库为看月光/山月异文）",
     "patch": {
       "content": [
-        "床前明月光",
-        "疑是地上霜",
-        "举头望明月",
-        "低头思故乡"
+        "床前明月光，",
+        "疑是地上霜。",
+        "举头望明月，",
+        "低头思故乡。"
       ],
       "theme": "night-moon",
       "tags": ["night", "moon", "homesickness", "courtyard"],
@@ -43,10 +43,10 @@
     "note": "P0：通行本「江枫渔火」（源库作渔父）",
     "patch": {
       "content": [
-        "月落乌啼霜满天",
-        "江枫渔火对愁眠",
-        "姑苏城外寒山寺",
-        "夜半钟声到客船"
+        "月落乌啼霜满天，",
+        "江枫渔火对愁眠。",
+        "姑苏城外寒山寺，",
+        "夜半钟声到客船。"
       ],
       "theme": "night-moon",
       "tags": ["night", "moon", "autumn", "temple-bell", "boat-travel", "homesickness"],

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props) {
   if (!poem) return { title: "诗词 · 墨韵" };
   return {
     title: `${poem.title} · ${poem.author} · 墨韵`,
-    description: poem.content.join("，"),
+    description: poem.content.join(""),
   };
 }
 

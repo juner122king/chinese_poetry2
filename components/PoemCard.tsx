@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Poem } from "@/lib/types";
+import { toDisplayLines } from "@/lib/poem-lines";
 import { useScript } from "./ScriptProvider";
 
 type Props = {
@@ -42,12 +43,12 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
             {display.author}
           </p>
           <div className="mt-6 space-y-1.5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            {display.content.slice(0, 2).map((line) => (
+            {toDisplayLines(display.content.slice(0, 2)).map((line) => (
               <p
-                key={line}
+                key={line.raw}
                 className="font-wenkai text-xs tracking-widest text-xuan/35"
               >
-                {line}
+                {line.text}
               </p>
             ))}
           </div>

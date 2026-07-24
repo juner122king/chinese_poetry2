@@ -321,15 +321,14 @@ function readJson<T>(file: string): T {
   return JSON.parse(readFileSync(file, "utf-8")) as T;
 }
 
-/** 将源库段落拆成展示用诗行（去标点、按句读切开） */
+/** 将源库段落按句读切成展示行，并保留源库标点 */
 function cleanParagraphs(paragraphs: string[]): string[] {
   const lines: string[] = [];
   for (const raw of paragraphs) {
     const s = toSimplified(raw).trim().replace(/\s+/g, "");
     if (!s) continue;
     const chunks = s
-      .split(/[。！？；]+/)
-      .flatMap((chunk) => chunk.split(/[，、]+/))
+      .split(/(?<=[。！？；，、])/u)
       .map((line) => line.replace(/^[：:\s]+|[：:\s]+$/g, "").trim())
       .filter((line) => line.length > 0);
     lines.push(...chunks);
