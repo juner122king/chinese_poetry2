@@ -23,6 +23,7 @@ export default function ThemeScene({ theme }: Props) {
         <ParticleBackground
           mode={visual.particles}
           safeCenter={visual.particleSafeCenter}
+          density={visual.particleDensity}
         />
       )}
     </div>

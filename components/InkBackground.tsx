@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type CSSProperties } from "react";
+import { useEffect, useId, useMemo, useState, type CSSProperties } from "react";
 import type { PoemTheme } from "@/lib/types";
 import {
   getThemeVisual,
@@ -9,6 +9,61 @@ import {
   type MountainForm,
 } from "@/lib/theme-map";
 import CelestialBodies from "./CelestialBodies";
+
+function rand(min: number, max: number) {
+  return min + Math.random() * (max - min);
+}
+
+type BirdLayout = {
+  farSide: "left" | "right";
+  farTop: number;
+  farInset: number;
+  nearSide: "left" | "right";
+  nearBottom: number;
+  nearInset: number;
+};
+
+type LanternSpot = {
+  left: number;
+  bottom: number;
+  w: number;
+  h: number;
+  dur: number;
+  delay: number;
+  path: "a" | "b" | "c";
+};
+
+function sampleBirdLayout(): BirdLayout {
+  return {
+    farSide: Math.random() < 0.42 ? "left" : "right",
+    farTop: rand(8, 20),
+    farInset: rand(2, 12),
+    nearSide: Math.random() < 0.5 ? "left" : "right",
+    nearBottom: rand(18, 34),
+    nearInset: rand(5, 16),
+  };
+}
+
+function sampleLanterns(): LanternSpot[] {
+  const paths: Array<"a" | "b" | "c"> = ["a", "b", "c"];
+  const n = 8 + Math.floor(Math.random() * 4);
+  const spots: LanternSpot[] = [];
+  for (let i = 0; i < n; i++) {
+    // Prefer lower thirds left/right — avoid center poem column
+    const leftBand = Math.random() < 0.5;
+    const left = leftBand ? rand(4, 32) : rand(68, 96);
+    spots.push({
+      left,
+      bottom: rand(3, 24),
+      w: rand(5, 10),
+      h: rand(7, 13),
+      dur: rand(40, 56),
+      delay: rand(0, 16),
+      path: paths[i % 3],
+    });
+  }
+  return spots;
+}
 
 type Props = {
   theme?: PoemTheme;
@@ -37,32 +92,6 @@ type MountainPaths = {
  * atmospheric layers — not zig-zag cartoon peaks.
  */
 const MOUNTAIN_FORMS: Record<Exclude<MountainForm, "none">, MountainPaths> = {
-  soft: {
-    far: "M0,400 L0,292 C160,268 280,248 420,258 C580,270 700,238 860,248 C1020,258 1180,228 1440,242 L1440,400 Z",
-    mid: "M0,400 L0,318 C180,300 320,288 480,298 C680,312 860,286 1040,298 C1200,308 1320,292 1440,300 L1440,400 Z",
-    near: "M0,400 L0,342 C200,328 380,336 580,330 C800,322 1020,338 1220,332 C1340,328 1400,336 1440,334 L1440,400 Z",
-    heightClass: "h-[42%]",
-    opacity: 0.4,
-    farFill: "rgba(22,28,36,0.42)",
-    midFill: "rgba(14,18,24,0.55)",
-    nearFill: "rgba(8,10,14,0.78)",
-    farBlur: 3.5,
-    midBlur: 1.2,
-    footHaze: true,
-  },
-  strong: {
-    far: "M0,400 L0,250 C140,220 240,168 380,188 C540,212 640,120 820,148 C980,172 1100,100 1260,128 C1360,144 1410,168 1440,158 L1440,400 Z",
-    mid: "M0,400 L0,292 C160,262 300,240 460,258 C640,280 800,228 980,252 C1140,272 1280,248 1440,262 L1440,400 Z",
-    near: "M0,400 L0,328 C180,308 340,292 520,308 C720,328 900,288 1100,308 C1260,322 1360,310 1440,316 L1440,400 Z",
-    heightClass: "h-[54%]",
-    opacity: 0.5,
-    farFill: "rgba(18,24,32,0.48)",
-    midFill: "rgba(12,16,22,0.62)",
-    nearFill: "rgba(6,8,12,0.86)",
-    farBlur: 3,
-    midBlur: 1,
-    footHaze: true,
-  },
   distant: {
     far: "M0,400 L0,308 C200,292 360,278 540,288 C740,300 920,268 1120,282 C1280,292 1380,278 1440,284 L1440,400 Z",
     mid: "M0,400 L0,332 C220,320 460,312 720,322 C980,332 1200,316 1440,324 L1440,400 Z",
@@ -136,8 +165,6 @@ function resolveMountainForm(
   form: MountainForm | undefined,
 ): Exclude<MountainForm, "none"> | null {
   if (!form || form === "none") return null;
-  if (form === "soft") return "rolling";
-  if (form === "strong") return "peaks";
   return form;
 }
 
@@ -316,6 +343,43 @@ export default function InkBackground({
   const horizonForm = resolveHorizonForm(visual.horizon);
   const atmScale = intensity === "soft" ? 0.72 : 1;
 
+  const [birdLayout, setBirdLayout] = useState<BirdLayout | null>(null);
+  const [lanterns, setLanterns] = useState<LanternSpot[] | null>(null);
+  const [boatLeft, setBoatLeft] = useState(30);
+
+  useEffect(() => {
+    if (visual.birds) setBirdLayout(sampleBirdLayout());
+    else setBirdLayout(null);
+  }, [theme, visual.birds]);
+
+  useEffect(() => {
+    if (visual.lanterns) setLanterns(sampleLanterns());
+    else setLanterns(null);
+  }, [theme, visual.lanterns]);
+
+  useEffect(() => {
+    if (!visual.boat) return;
+    setBoatLeft(rand(18, 48));
+  }, [theme, visual.boat]);
+
+  const birdPos = birdLayout ?? {
+    farSide: "right" as const,
+    farTop: 12,
+    farInset: 4,
+    nearSide: "left" as const,
+    nearBottom: 26,
+    nearInset: 7,
+  };
+
+  const lanternList = useMemo(
+    () =>
+      lanterns ?? [
+        { left: 10, bottom: 6, w: 6, h: 9, dur: 42, delay: 0, path: "a" as const },
+        { left: 80, bottom: 12, w: 8, h: 11, dur: 50, delay: 3, path: "b" as const },
+      ],
+    [lanterns],
+  );
+
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
@@ -329,8 +393,8 @@ export default function InkBackground({
       {/* Celestial behind mountain silhouettes (low sun / high moon) */}
       <CelestialBodies
         theme={theme}
-        showMoon={visual.moon}
-        showSun={visual.sun}
+        moon={visual.moon}
+        sun={visual.sun}
         scale={size}
         glow={visual.glow}
       />
@@ -454,60 +518,135 @@ export default function InkBackground({
         />
       )}
 
-      {/* Pastoral fields */}
+      {/* Pastoral fields — soft ink bands, no hard ridge strokes */}
       {visual.fields && (
-        <svg
-          className="absolute bottom-0 left-0 w-full h-[35%] opacity-25"
-          viewBox="0 0 1440 300"
-          preserveAspectRatio="none"
+        <div
+          className="absolute bottom-0 left-0 w-full h-[38%]"
+          style={{ opacity: 0.55 * atmScale }}
         >
-          <path
-            d="M0,180 Q360,140 720,170 T1440,150 L1440,300 L0,300 Z"
-            fill="rgba(60,90,40,0.35)"
+          <div
+            className="absolute inset-x-0 bottom-0 h-[70%]"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(40,60,28,0.35) 0%, rgba(50,75,35,0.12) 45%, transparent 100%)",
+            }}
           />
-          <path
-            d="M0,220 Q400,190 800,210 T1440,200"
-            stroke="rgba(245,239,226,0.12)"
-            strokeWidth="1"
-            fill="none"
+          <div
+            className="absolute -left-[5%] w-[110%]"
+            style={{
+              bottom: "42%",
+              height: "28%",
+              borderRadius: "100%",
+              filter: "blur(14px)",
+              opacity: 0.45,
+              background:
+                "radial-gradient(ellipse 90% 50% at 50% 60%, rgba(70,100,50,0.28) 0%, transparent 72%)",
+            }}
           />
-          <path
-            d="M0,250 Q500,230 900,245 T1440,235"
-            stroke="rgba(245,239,226,0.08)"
-            strokeWidth="1"
-            fill="none"
+          <div
+            className="absolute -left-[8%] w-[116%]"
+            style={{
+              bottom: "22%",
+              height: "22%",
+              borderRadius: "100%",
+              filter: "blur(18px)",
+              opacity: 0.35,
+              background:
+                "radial-gradient(ellipse 85% 45% at 48% 55%, rgba(55,85,40,0.22) 0%, transparent 70%)",
+            }}
           />
-        </svg>
+          {/* Soft terrace hints — thick blur, not 1px lines */}
+          <div
+            className="absolute inset-x-[5%]"
+            style={{
+              bottom: "28%",
+              height: "3%",
+              borderRadius: "100%",
+              filter: "blur(6px)",
+              opacity: 0.2,
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(245,239,226,0.08) 30%, rgba(245,239,226,0.1) 50%, rgba(245,239,226,0.06) 70%, transparent 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-x-[10%]"
+            style={{
+              bottom: "18%",
+              height: "2.5%",
+              borderRadius: "100%",
+              filter: "blur(5px)",
+              opacity: 0.14,
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(245,239,226,0.06) 40%, transparent 100%)",
+            }}
+          />
+        </div>
       )}
 
-      {/* Bamboo silhouettes */}
+      {/* Bamboo — soft ink stems + leaf washes (not line-art sticks) */}
       {visual.bamboo && (
-        <svg
-          className="absolute inset-y-0 left-0 w-[28%] opacity-20"
-          viewBox="0 0 200 600"
-          preserveAspectRatio="xMinYMid slice"
+        <div
+          className="absolute inset-y-0 left-0 w-[32%] max-w-[280px]"
+          style={{
+            opacity: (theme === "reclusion" ? 0.16 : 0.22) * atmScale,
+            filter: "blur(0.6px)",
+          }}
         >
-          {[30, 55, 85, 120, 150].map((x, i) => (
-            <g key={x}>
-              <line
-                x1={x}
-                y1={80 + i * 10}
-                x2={x + (i % 2 ? 4 : -3)}
-                y2={580}
-                stroke="rgba(160,200,160,0.5)"
-                strokeWidth={2 + (i % 3)}
+          <svg
+            className="h-full w-full"
+            viewBox="0 0 220 640"
+            preserveAspectRatio="xMinYMid slice"
+            aria-hidden
+          >
+            <defs>
+              <linearGradient id={`${uid}-bamboo`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(140,180,140,0.15)" />
+                <stop offset="40%" stopColor="rgba(120,160,120,0.45)" />
+                <stop offset="100%" stopColor="rgba(40,60,40,0.55)" />
+              </linearGradient>
+            </defs>
+            {/* Stems: slight curve, taper via stroke */}
+            {[
+              { d: "M36,40 C40,180 32,320 38,520 C40,580 42,620 44,640", w: 3.2 },
+              { d: "M62,70 C58,200 68,340 60,500 C58,560 56,610 55,640", w: 2.4 },
+              { d: "M92,30 C98,160 88,300 96,480 C100,560 102,610 104,640", w: 3.8 },
+              { d: "M128,90 C122,220 134,360 126,520 C124,580 122,620 120,640", w: 2.2 },
+              { d: "M158,50 C164,190 152,330 160,500 C162,570 164,615 166,640", w: 2.8 },
+            ].map((s, i) => (
+              <path
+                key={i}
+                d={s.d}
+                fill="none"
+                stroke={`url(#${uid}-bamboo)`}
+                strokeWidth={s.w}
+                strokeLinecap="round"
               />
+            ))}
+            {/* Leaf clusters as soft blots */}
+            {[
+              { cx: 48, cy: 140, rx: 22, ry: 9, rot: -28, o: 0.28 },
+              { cx: 78, cy: 200, rx: 18, ry: 7, rot: 18, o: 0.22 },
+              { cx: 108, cy: 120, rx: 26, ry: 10, rot: -12, o: 0.3 },
+              { cx: 140, cy: 240, rx: 20, ry: 8, rot: 25, o: 0.2 },
+              { cx: 52, cy: 320, rx: 16, ry: 6, rot: -35, o: 0.18 },
+              { cx: 118, cy: 300, rx: 24, ry: 9, rot: 8, o: 0.24 },
+              { cx: 168, cy: 180, rx: 18, ry: 7, rot: -20, o: 0.2 },
+              { cx: 98, cy: 400, rx: 20, ry: 8, rot: 15, o: 0.16 },
+            ].map((l, i) => (
               <ellipse
-                cx={x + 12}
-                cy={160 + i * 40}
-                rx={14}
-                ry={6}
-                fill="rgba(140,180,140,0.25)"
-                transform={`rotate(${-20 + i * 5} ${x + 12} ${160 + i * 40})`}
+                key={`lf-${i}`}
+                cx={l.cx}
+                cy={l.cy}
+                rx={l.rx}
+                ry={l.ry}
+                fill="rgba(130,175,130,0.55)"
+                opacity={l.o}
+                transform={`rotate(${l.rot} ${l.cx} ${l.cy})`}
+                style={{ filter: "blur(1.2px)" }}
               />
-            </g>
-          ))}
-        </svg>
+            ))}
+          </svg>
+        </div>
       )}
 
       {/* Mid / sea clouds — in front of ridges, still airy */}
@@ -684,78 +823,135 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Snow dots (static CSS) */}
+      {/* Soft ground snow wash — under falling particles */}
       {visual.snow && (
         <div
-          className="absolute inset-0 opacity-35"
-          style={{
-            backgroundImage:
-              "radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent 50%), radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.4) 50%, transparent 50%), radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.45) 50%, transparent 50%), radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.35) 50%, transparent 50%), radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.3) 50%, transparent 50%)",
-          }}
-        />
+          className="absolute inset-0 pointer-events-none"
+          style={{ opacity: 0.55 * atmScale }}
+        >
+          <div
+            className="absolute inset-x-0 bottom-0 h-[32%]"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(200,215,230,0.1) 0%, rgba(180,200,220,0.04) 40%, transparent 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage: [
+                "radial-gradient(1.2px 1.2px at 12% 22%, rgba(255,255,255,0.35) 50%, transparent 50%)",
+                "radial-gradient(1px 1px at 28% 48%, rgba(255,255,255,0.22) 50%, transparent 50%)",
+                "radial-gradient(1.4px 1.4px at 44% 18%, rgba(255,255,255,0.28) 50%, transparent 50%)",
+                "radial-gradient(1px 1px at 61% 62%, rgba(255,255,255,0.2) 50%, transparent 50%)",
+                "radial-gradient(1.2px 1.2px at 76% 30%, rgba(255,255,255,0.3) 50%, transparent 50%)",
+                "radial-gradient(1px 1px at 88% 55%, rgba(255,255,255,0.18) 50%, transparent 50%)",
+                "radial-gradient(1.3px 1.3px at 18% 72%, rgba(255,255,255,0.16) 50%, transparent 50%)",
+                "radial-gradient(1px 1px at 52% 80%, rgba(255,255,255,0.14) 50%, transparent 50%)",
+              ].join(", "),
+            }}
+          />
+        </div>
       )}
 
-      {/* Petal glow spots */}
+      {/* Lone boat silhouette — ink wash, not cartoon */}
+      {visual.boat && (
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            left: `${boatLeft}%`,
+            bottom: `${theme === "snow-river" ? 14 : 16}%`,
+            width: "min(18vw, 140px)",
+            opacity: 0.22 * atmScale,
+            filter: "blur(0.4px)",
+          }}
+        >
+          <svg viewBox="0 0 120 40" className="h-auto w-full" aria-hidden>
+            <path
+              d="M8,28 C22,22 40,20 58,21 C78,22 98,26 112,30 C100,32 78,34 58,33 C36,32 18,30 8,28 Z"
+              fill="rgba(180,200,215,0.35)"
+            />
+            <path
+              d="M52,21 L56,8 L58,21"
+              fill="none"
+              stroke="rgba(180,200,215,0.28)"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            {/* soft water smear under hull */}
+            <ellipse
+              cx="58"
+              cy="32"
+              rx="38"
+              ry="4"
+              fill="rgba(140,180,200,0.12)"
+              style={{ filter: "blur(2px)" }}
+            />
+          </svg>
+        </div>
+      )}
+
+      {/* Petal wash — soft multi-spot bloom (pairs with petal particles) */}
       {visual.petals && (
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 40%, rgba(200,120,140,0.25) 0%, transparent 12%), radial-gradient(circle at 70% 55%, rgba(180,100,120,0.18) 0%, transparent 10%), radial-gradient(circle at 45% 70%, rgba(220,160,160,0.12) 0%, transparent 14%)",
+            opacity: 0.38 * atmScale,
+            backgroundImage: [
+              "radial-gradient(ellipse 28% 22% at 18% 38%, rgba(210,130,150,0.2) 0%, transparent 70%)",
+              "radial-gradient(ellipse 22% 18% at 72% 52%, rgba(190,110,130,0.14) 0%, transparent 68%)",
+              "radial-gradient(ellipse 30% 24% at 48% 68%, rgba(220,160,165,0.1) 0%, transparent 72%)",
+              "radial-gradient(ellipse 18% 14% at 82% 28%, rgba(200,120,140,0.1) 0%, transparent 65%)",
+            ].join(", "),
           }}
         />
       )}
 
-      {/* Water ripples */}
+      {/* Water ripples — soft ink rings, no hard 1px border */}
       {visual.ripples && (
-        <div className="absolute bottom-[18%] left-1/2 w-[60%] -translate-x-1/2">
+        <div
+          className="absolute bottom-[14%] left-1/2 w-[min(70%,520px)] -translate-x-1/2"
+          style={{ opacity: atmScale }}
+        >
           {[0, 1, 2].map((i) => (
             <div
               key={i}
               className="ripple-ring absolute left-1/2 top-0 -translate-x-1/2 rounded-[100%]"
               style={{
-                width: `${40 + i * 25}%`,
-                height: 12 + i * 6,
-                border: "1px solid rgba(150,200,210,0.12)",
-                animationDelay: `${i * 0.8}s`,
+                width: `${48 + i * 28}%`,
+                height: 14 + i * 8,
+                border: "none",
+                background: `radial-gradient(ellipse 50% 50% at 50% 50%, transparent 42%, rgba(150,200,210,${0.07 - i * 0.015}) 58%, transparent 72%)`,
+                filter: "blur(1.2px)",
+                animationDelay: `${i * 0.9}s`,
               }}
             />
           ))}
         </div>
       )}
 
-      {/* Lanterns template — slow rise, varied paths, extinguish (festival) */}
+      {/* Lanterns — per-mount position sample, side bands only */}
       {visual.lanterns && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {[
-            { left: "10%", bottom: "6%", w: 6, h: 9, dur: "42s", delay: "0s", path: "a" },
-            { left: "18%", bottom: "12%", w: 9, h: 12, dur: "50s", delay: "3.5s", path: "b" },
-            { left: "26%", bottom: "4%", w: 5, h: 8, dur: "46s", delay: "7s", path: "c" },
-            { left: "72%", bottom: "8%", w: 8, h: 11, dur: "52s", delay: "1.5s", path: "a" },
-            { left: "80%", bottom: "15%", w: 7, h: 10, dur: "44s", delay: "5s", path: "c" },
-            { left: "88%", bottom: "5%", w: 10, h: 13, dur: "54s", delay: "9s", path: "b" },
-            { left: "6%", bottom: "18%", w: 5, h: 7, dur: "48s", delay: "12s", path: "c" },
-            { left: "94%", bottom: "20%", w: 6, h: 9, dur: "40s", delay: "4s", path: "a" },
-            { left: "14%", bottom: "22%", w: 8, h: 10, dur: "56s", delay: "15s", path: "b" },
-            { left: "84%", bottom: "11%", w: 5, h: 8, dur: "49s", delay: "11s", path: "c" },
-          ].map((p, i) => (
+          {lanternList.map((p, i) => (
             <div
               key={i}
               className={`lantern-rise lantern-rise-${p.path} absolute`}
               style={{
-                left: p.left,
-                bottom: p.bottom,
+                left: `${p.left}%`,
+                bottom: `${p.bottom}%`,
                 width: p.w,
                 height: p.h,
-                animationDuration: p.dur,
-                animationDelay: p.delay,
+                animationDuration: `${p.dur}s`,
+                animationDelay: `${p.delay}s`,
               }}
             />
           ))}
         </div>
       )}
 
-      {/* Birds theme template — shared by all poems with visual.birds */}
+      {/* Birds — flock placement sampled per mount */}
       {visual.birds && (
         <>
           <div
@@ -765,8 +961,14 @@ export default function InkBackground({
                 "radial-gradient(ellipse 70% 55% at 50% 0%, rgba(180,200,220,0.14) 0%, transparent 70%)",
             }}
           />
-          {/* Far flock: slow drift, staggered bob — off center-right */}
-          <div className="birds-flock-drift absolute right-[4%] top-[12%] w-[min(44vw,300px)] opacity-[0.4]">
+          <div
+            className="birds-flock-drift absolute w-[min(44vw,300px)] opacity-[0.4]"
+            style={
+              birdPos.farSide === "left"
+                ? { left: `${birdPos.farInset}%`, top: `${birdPos.farTop}%` }
+                : { right: `${birdPos.farInset}%`, top: `${birdPos.farTop}%` }
+            }
+          >
             <svg viewBox="0 0 280 100" fill="none" aria-hidden className="h-auto w-full">
               {[
                 { x: 20, y: 72, s: 1, o: 0.55, delay: "0s" },
@@ -787,19 +989,25 @@ export default function InkBackground({
                       d="M0,0 C-8,-6 -16,-4 -22,-1 C-12,-2 -6,1 0,2 C6,1 12,-2 22,-1 C16,-4 8,-6 0,0 Z"
                       fill="rgba(230,236,242,0.9)"
                     />
-                    <path
-                      d="M-1,1 L4,6"
-                      stroke="rgba(230,236,242,0.75)"
-                      strokeWidth="1"
-                      strokeLinecap="round"
-                    />
                   </g>
                 </g>
               ))}
             </svg>
           </div>
-          {/* Near pair: same cool silhouette language, slower */}
-          <div className="birds-near-drift absolute bottom-[26%] left-[7%] w-28 opacity-[0.28]">
+          <div
+            className="birds-near-drift absolute w-28 opacity-[0.28]"
+            style={
+              birdPos.nearSide === "left"
+                ? {
+                    left: `${birdPos.nearInset}%`,
+                    bottom: `${birdPos.nearBottom}%`,
+                  }
+                : {
+                    right: `${birdPos.nearInset}%`,
+                    bottom: `${birdPos.nearBottom}%`,
+                  }
+            }
+          >
             <svg viewBox="0 0 80 36" fill="none" aria-hidden className="h-auto w-full">
               <g transform="translate(12,18)">
                 <g className="birds-bob" style={{ animationDelay: "0.6s" }}>

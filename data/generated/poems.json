@@ -14,14 +14,12 @@
       "无人信高洁，",
       "谁为表予心。"
     ],
-    "theme": "homesickness",
+    "theme": "mountain",
     "tags": [
       "homesickness",
-      "summer",
       "mountain",
-      "insects",
-      "wind-cloud",
-      "flowers"
+      "summer",
+      "insects"
     ],
     "motifs": [
       "在岳咏蝉",
@@ -161,10 +159,9 @@
     "tags": [
       "frontier",
       "moon",
-      "war",
       "mountain",
-      "city-ruins",
-      "river-lake"
+      "war",
+      "city-ruins"
     ],
     "motifs": [
       "明月",
@@ -196,9 +193,7 @@
       "wind-cloud",
       "mountain",
       "trees-bamboo",
-      "city-ruins",
-      "river-lake",
-      "homesickness"
+      "city-ruins"
     ],
     "motifs": [
       "春风",
@@ -231,14 +226,13 @@
       "高楼当此夜，",
       "叹息未应闲。"
     ],
-    "theme": "frontier",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "frontier",
       "homesickness",
       "war",
       "moon",
-      "wind-cloud",
-      "reclusion",
       "mountain"
     ],
     "motifs": [
@@ -264,13 +258,11 @@
       "先遣小姑尝。"
     ],
     "theme": "landscape",
-    "tags": [
-      "love-longing"
-    ],
+    "tags": [],
     "motifs": [
-      "相思",
-      "红豆",
-      "伊人"
+      "长风",
+      "白云",
+      "彩云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -289,7 +281,7 @@
       "白头宫女在，",
       "闲坐说玄宗。"
     ],
-    "theme": "flowers",
+    "theme": "reclusion",
     "tags": [
       "flowers",
       "reclusion",
@@ -325,12 +317,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "pastoral",
+      "spring",
       "dawn-dusk",
       "sea",
-      "palace-court",
-      "love-longing"
+      "palace-court"
     ],
     "motifs": [
       "沧海",
@@ -364,8 +355,7 @@
       "summer",
       "trees-bamboo",
       "palace-court",
-      "insects",
-      "flowers"
+      "insects"
     ],
     "motifs": [
       "故园",
@@ -415,21 +405,19 @@
       "何当共剪西窗烛，",
       "却话巴山夜雨时。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
+      "rain",
       "autumn",
       "homesickness",
-      "rain",
       "mountain",
-      "lamplight",
       "night",
-      "river-lake",
-      "love-longing"
+      "palace-court"
     ],
     "motifs": [
       "夜雨",
       "夜雨寄北",
-      "秋色"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -500,8 +488,8 @@
     "tags": [
       "war",
       "palace-court",
-      "moon",
       "snow",
+      "moon",
       "parting",
       "mountain"
     ],
@@ -534,8 +522,7 @@
     "theme": "rain",
     "tags": [
       "rain",
-      "wine",
-      "wind-cloud"
+      "wine"
     ],
     "motifs": [
       "风雨",
@@ -559,21 +546,19 @@
       "休问梁园旧宾客，",
       "茂陵秋雨病相如。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
+      "rain",
       "autumn",
       "homesickness",
-      "rain",
       "parting",
       "trees-bamboo",
-      "fish-aquatic",
-      "mountain",
-      "river-lake"
+      "fish-aquatic"
     ],
     "motifs": [
-      "秋色",
-      "落木",
-      "霜叶"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -631,16 +616,16 @@
       "他年锦里经祠庙，",
       "梁父吟成恨有余。"
     ],
-    "theme": "birds",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "birds",
-      "frontier",
-      "wind-cloud"
+      "frontier"
     ],
     "motifs": [
       "筹笔驿",
-      "啼鸟",
-      "黄鹂"
+      "长风",
+      "白云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -666,12 +651,11 @@
     "theme": "parting",
     "tags": [
       "parting",
-      "spring",
-      "festival",
       "wine",
-      "lamplight",
+      "spring",
       "night",
-      "love-longing"
+      "lamplight",
+      "stars"
     ],
     "motifs": [
       "长亭",
@@ -703,10 +687,9 @@
     "tags": [
       "parting",
       "moon",
-      "birds",
       "mountain",
-      "temple-bell",
-      "love-longing"
+      "birds",
+      "temple-bell"
     ],
     "motifs": [
       "长亭",
@@ -734,19 +717,18 @@
       "春心莫共花争发，",
       "一寸相思一寸灰。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "love-longing",
       "moon",
-      "rain",
-      "flowers",
-      "wind-cloud"
+      "flowers"
     ],
     "motifs": [
       "细雨",
       "相思",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -770,8 +752,7 @@
       "spring",
       "boat-travel",
       "city-ruins",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "春风",
@@ -799,19 +780,19 @@
       "芳心向春尽，",
       "所得是沾衣。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
       "flowers",
+      "spring",
       "music"
     ],
     "motifs": [
       "落花",
-      "春风",
-      "春晓"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -830,13 +811,13 @@
       "无端嫁得金龟壻，",
       "辜负香衾事早朝。"
     ],
-    "theme": "spring",
+    "theme": "landscape",
     "tags": [
       "spring",
       "dawn-dusk",
+      "wind-cloud",
       "night",
-      "city-ruins",
-      "wind-cloud"
+      "city-ruins"
     ],
     "motifs": [
       "为有",
@@ -864,15 +845,14 @@
       "蓬山此去无多路，",
       "青鸟殷勤为探看。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
       "spring",
       "parting",
       "moon",
-      "wind-cloud",
+      "mountain",
       "flowers",
-      "birds",
-      "love-longing"
+      "birds"
     ],
     "motifs": [
       "无题",
@@ -928,20 +908,19 @@
       "玉珰缄札何由达，",
       "万里云罗一雁飞。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "autumn",
-      "festival",
-      "homesickness",
       "rain",
+      "autumn",
+      "homesickness",
       "birds",
-      "love-longing"
+      "spring",
+      "wind-cloud"
     ],
     "motifs": [
       "万里",
       "春雨",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -960,14 +939,14 @@
       "常娥应悔偷灵药，",
       "碧海青天夜夜心。"
     ],
-    "theme": "landscape",
+    "theme": "river-lake",
     "tags": [
-      "wind-cloud",
       "river-lake",
       "dawn-dusk",
       "sea",
-      "lamplight",
-      "night"
+      "wind-cloud",
+      "night",
+      "lamplight"
     ],
     "motifs": [
       "青天",
@@ -1029,8 +1008,7 @@
     "tags": [
       "love-longing",
       "moon",
-      "night",
-      "wind-cloud"
+      "night"
     ],
     "motifs": [
       "相思",
@@ -1084,19 +1062,18 @@
       "天涯占梦数，",
       "疑误有新知。"
     ],
-    "theme": "spring",
+    "theme": "summer",
     "tags": [
-      "spring",
-      "festival",
       "homesickness",
       "parting",
       "summer",
+      "spring",
       "insects"
     ],
     "motifs": [
       "凉思",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -1124,8 +1101,8 @@
       "temple-bell",
       "pastoral",
       "reclusion",
-      "night",
-      "wind-cloud"
+      "wind-cloud",
+      "night"
     ],
     "motifs": [
       "北青萝",
@@ -1152,10 +1129,7 @@
     "theme": "spring",
     "tags": [
       "spring",
-      "dawn-dusk",
-      "wind-cloud",
-      "war",
-      "frontier"
+      "dawn-dusk"
     ],
     "motifs": [
       "赤壁",
@@ -1183,14 +1157,14 @@
       "乡书不可寄，",
       "秋雁又南回。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
+      "rain",
       "autumn",
-      "moon",
       "spring",
-      "wind-cloud",
-      "festival",
-      "homesickness"
+      "moon",
+      "homesickness",
+      "birds"
     ],
     "motifs": [
       "月下",
@@ -1214,12 +1188,12 @@
       "君看六幅南朝事，",
       "老木寒云满故城。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "landscape",
     "tags": [
       "dawn-dusk",
+      "wind-cloud",
       "city-ruins",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "金陵图",
@@ -1246,12 +1220,11 @@
     "theme": "birds",
     "tags": [
       "birds",
-      "spring",
       "rain",
       "river-lake",
       "dawn-dusk",
       "trees-bamboo",
-      "mountain"
+      "city-ruins"
     ],
     "motifs": [
       "台城",
@@ -1283,8 +1256,8 @@
     "tags": [
       "palace-court",
       "dawn-dusk",
-      "city-ruins",
-      "wind-cloud"
+      "wind-cloud",
+      "city-ruins"
     ],
     "motifs": [
       "宫词",
@@ -1316,11 +1289,10 @@
     "tags": [
       "moon",
       "autumn",
-      "birds",
       "mountain",
+      "birds",
       "river-lake",
-      "dawn-dusk",
-      "city-ruins"
+      "dawn-dusk"
     ],
     "motifs": [
       "明月",
@@ -1348,19 +1320,19 @@
       "寄卧郊扉久，",
       "何门致此身。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
-      "autumn",
-      "festival",
-      "homesickness",
       "rain",
+      "autumn",
+      "homesickness",
       "trees-bamboo",
-      "temple-bell"
+      "temple-bell",
+      "night"
     ],
     "motifs": [
       "风雨",
       "灞上秋居",
-      "秋色"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -1379,13 +1351,13 @@
       "终是圣明天子事，",
       "景阳宫井又何人。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
       "moon",
       "rain",
+      "wind-cloud",
       "city-ruins",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "马嵬坡",
@@ -1446,8 +1418,7 @@
     "theme": "birds",
     "tags": [
       "birds",
-      "spring",
-      "love-longing"
+      "spring"
     ],
     "motifs": [
       "春怨",
@@ -1537,17 +1508,17 @@
       "唯将终夜长开眼，",
       "报荅平生未展眉。"
     ],
-    "theme": "reclusion",
+    "theme": "mountain",
     "tags": [
-      "reclusion",
       "mountain",
+      "reclusion",
       "night",
       "palace-court"
     ],
     "motifs": [
-      "幽居",
-      "采菊",
-      "空山"
+      "空山",
+      "远峰",
+      "青山"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -1566,7 +1537,7 @@
       "白头宫女在，",
       "闲坐说玄宗。"
     ],
-    "theme": "flowers",
+    "theme": "reclusion",
     "tags": [
       "flowers",
       "reclusion",
@@ -1623,19 +1594,17 @@
       "早是有家归未得，",
       "杜鹃休向耳边啼。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "homesickness",
       "rain",
+      "homesickness",
       "birds",
-      "trees-bamboo",
-      "wind-cloud"
+      "trees-bamboo"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -1662,8 +1631,8 @@
     "tags": [
       "frontier",
       "moon",
-      "spring",
       "war",
+      "spring",
       "night",
       "city-ruins"
     ],
@@ -1693,15 +1662,14 @@
       "谁谓含愁独不见，",
       "更教明月照流黄。"
     ],
-    "theme": "parting",
+    "theme": "frontier",
     "tags": [
       "city-ruins",
       "frontier",
       "moon",
-      "spring",
       "autumn",
       "war",
-      "love-longing"
+      "river-lake"
     ],
     "motifs": [
       "明月",
@@ -1734,8 +1702,8 @@
       "homesickness",
       "boat-travel",
       "sea",
-      "spring",
       "autumn",
+      "mountain",
       "birds"
     ],
     "motifs": [
@@ -1766,8 +1734,7 @@
       "reclusion",
       "river-lake",
       "fish-aquatic",
-      "boat-travel",
-      "mountain"
+      "boat-travel"
     ],
     "motifs": [
       "桃花",
@@ -1796,12 +1763,11 @@
     "theme": "parting",
     "tags": [
       "parting",
+      "wind-cloud",
       "homesickness",
       "wine",
       "mountain",
-      "palace-court",
-      "wind-cloud",
-      "river-lake"
+      "palace-court"
     ],
     "motifs": [
       "白云",
@@ -1840,10 +1806,10 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
-      "spring",
       "pastoral",
       "parting",
       "wine",
+      "mountain",
       "reclusion"
     ],
     "motifs": [
@@ -1879,9 +1845,9 @@
     "theme": "river-lake",
     "tags": [
       "river-lake",
+      "mountain",
       "flowers",
       "reclusion",
-      "mountain",
       "trees-bamboo",
       "fish-aquatic"
     ],
@@ -2013,11 +1979,11 @@
     "theme": "frontier",
     "tags": [
       "war",
-      "spring",
       "river-lake",
       "frontier",
       "snow",
-      "festival"
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "老将行",
@@ -2074,8 +2040,8 @@
       "trees-bamboo",
       "homesickness",
       "parting",
-      "flowers",
       "mountain",
+      "flowers",
       "river-lake"
     ],
     "motifs": [
@@ -2116,20 +2082,19 @@
       "谁怜越女颜如玉，",
       "贫贱江头自浣纱。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
       "fish-aquatic",
       "homesickness",
       "parting",
-      "river-lake",
-      "love-longing"
+      "spring",
+      "river-lake"
     ],
     "motifs": [
       "绿柳",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -2152,14 +2117,13 @@
       "复值接舆醉，",
       "狂歌五柳前。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "autumn",
       "wine",
+      "mountain",
       "summer",
       "reclusion",
-      "mountain",
       "river-lake"
     ],
     "motifs": [
@@ -2195,8 +2159,7 @@
       "frontier",
       "moon",
       "mountain",
-      "river-lake",
-      "parting"
+      "river-lake"
     ],
     "motifs": [
       "酬张少府",
@@ -2224,10 +2187,10 @@
       "文翁翻教授，",
       "不敢倚先贤。"
     ],
-    "theme": "pastoral",
+    "theme": "rain",
     "tags": [
-      "pastoral",
       "rain",
+      "pastoral",
       "parting",
       "mountain",
       "trees-bamboo",
@@ -2236,7 +2199,7 @@
     "motifs": [
       "夜雨",
       "千山",
-      "稻香"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -2259,8 +2222,7 @@
     "tags": [
       "homesickness",
       "dawn-dusk",
-      "night",
-      "love-longing"
+      "night"
     ],
     "motifs": [
       "故乡",
@@ -2300,15 +2262,14 @@
       "嗟哉吾党二三子，",
       "安得至老不更归。"
     ],
-    "theme": "mountain",
+    "theme": "rain",
     "tags": [
+      "rain",
       "mountain",
       "dawn-dusk",
       "temple-bell",
       "moon",
-      "homesickness",
-      "rain",
-      "river-lake"
+      "homesickness"
     ],
     "motifs": [
       "新雨",
@@ -2354,15 +2315,14 @@
       "君歌且休听我歌，",
       "我歌今与君殊科。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
       "moon",
-      "wind-cloud",
       "rain",
       "parting",
       "reclusion",
       "river-lake",
-      "wine"
+      "dawn-dusk"
     ],
     "motifs": [
       "万里",
@@ -2418,10 +2378,10 @@
     "tags": [
       "mountain",
       "trees-bamboo",
-      "wind-cloud",
       "temple-bell",
+      "wind-cloud",
       "moon",
-      "autumn"
+      "rain"
     ],
     "motifs": [
       "空山",
@@ -2447,11 +2407,7 @@
     ],
     "theme": "night-moon",
     "tags": [
-      "courtyard",
-      "wind-cloud",
-      "love-longing",
-      "mountain",
-      "river-lake"
+      "courtyard"
     ],
     "motifs": [
       "阑干",
@@ -2482,14 +2438,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "flowers",
       "birds",
+      "spring",
       "river-lake",
-      "city-ruins",
-      "palace-court",
-      "mountain",
-      "love-longing"
+      "city-ruins"
     ],
     "motifs": [
       "婵娟",
@@ -2513,11 +2466,11 @@
       "[妆]罢低声问夫壻，",
       "画眉深浅入时无。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "night-moon",
     "tags": [
       "dawn-dusk",
-      "lamplight",
-      "night"
+      "night",
+      "lamplight"
     ],
     "motifs": [
       "日暮",
@@ -2541,15 +2494,14 @@
       "欲把一麾江海去，",
       "乐游原上望昭陵。"
     ],
-    "theme": "parting",
+    "theme": "river-lake",
     "tags": [
       "parting",
       "reclusion",
       "river-lake",
       "sea",
       "temple-bell",
-      "wind-cloud",
-      "war"
+      "wind-cloud"
     ],
     "motifs": [
       "长亭",
@@ -2576,10 +2528,7 @@
     "theme": "spring",
     "tags": [
       "spring",
-      "dawn-dusk",
-      "wind-cloud",
-      "war",
-      "frontier"
+      "dawn-dusk"
     ],
     "motifs": [
       "赤壁",
@@ -2610,9 +2559,7 @@
       "flowers",
       "river-lake",
       "night",
-      "courtyard",
-      "war",
-      "mountain"
+      "courtyard"
     ],
     "motifs": [
       "夜泊",
@@ -2639,8 +2586,7 @@
     "theme": "spring",
     "tags": [
       "spring",
-      "parting",
-      "wind-cloud"
+      "parting"
     ],
     "motifs": [
       "春风",
@@ -2719,13 +2665,13 @@
       "天阶夜色凉如水，",
       "坐看牵牛织女星。"
     ],
-    "theme": "autumn",
+    "theme": "summer",
     "tags": [
       "autumn",
       "summer",
       "dawn-dusk",
-      "lamplight",
       "night",
+      "lamplight",
       "stars"
     ],
     "motifs": [
@@ -2755,9 +2701,7 @@
       "spring",
       "birds",
       "dawn-dusk",
-      "flowers",
-      "wind-cloud",
-      "city-ruins"
+      "flowers"
     ],
     "motifs": [
       "啼鸟",
@@ -2790,7 +2734,6 @@
       "homesickness",
       "fish-aquatic",
       "moon",
-      "festival",
       "river-lake",
       "dawn-dusk",
       "boat-travel"
@@ -2825,8 +2768,8 @@
     "tags": [
       "stars",
       "autumn",
-      "summer",
       "mountain",
+      "summer",
       "river-lake",
       "dawn-dusk"
     ],
@@ -2863,10 +2806,7 @@
       "palace-court",
       "frontier",
       "moon",
-      "rain",
-      "mountain",
-      "river-lake",
-      "parting"
+      "rain"
     ],
     "motifs": [
       "长亭",
@@ -2895,11 +2835,9 @@
       "parting",
       "courtyard",
       "moon",
-      "spring",
       "flowers",
-      "music",
-      "night",
-      "love-longing"
+      "spring",
+      "music"
     ],
     "motifs": [
       "落花",
@@ -2928,8 +2866,7 @@
       "frontier",
       "spring",
       "river-lake",
-      "courtyard",
-      "war"
+      "courtyard"
     ],
     "motifs": [
       "关塞",
@@ -2955,8 +2892,7 @@
     ],
     "theme": "birds",
     "tags": [
-      "birds",
-      "love-longing"
+      "birds"
     ],
     "motifs": [
       "啼鸟",
@@ -3049,8 +2985,7 @@
     "tags": [
       "river-lake",
       "dawn-dusk",
-      "sea",
-      "love-longing"
+      "sea"
     ],
     "motifs": [
       "江南词",
@@ -3074,22 +3009,19 @@
       "不知何处吹芦管，",
       "一夜征人尽望乡。"
     ],
-    "theme": "night-moon",
+    "theme": "snow-river",
     "tags": [
-      "moon",
       "snow",
+      "moon",
       "autumn",
       "homesickness",
-      "war",
       "mountain",
-      "frontier",
-      "winter",
-      "night"
+      "war"
     ],
     "motifs": [
       "征人",
-      "明月",
-      "清影"
+      "飞雪",
+      "寒雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3171,14 +3103,14 @@
       "更有明朝恨，",
       "离杯惜共传。"
     ],
-    "theme": "parting",
+    "theme": "river-lake",
     "tags": [
       "parting",
       "river-lake",
       "moon",
-      "festival",
       "rain",
-      "wine"
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "长亭",
@@ -3206,19 +3138,18 @@
       "平生自有分，",
       "况是蔡家亲。"
     ],
-    "theme": "festival",
+    "theme": "rain",
     "tags": [
-      "festival",
       "rain",
       "trees-bamboo",
-      "lamplight",
       "night",
-      "palace-court"
+      "palace-court",
+      "lamplight"
     ],
     "motifs": [
-      "元夕",
-      "花灯",
-      "中秋"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3240,8 +3171,7 @@
     "theme": "trees-bamboo",
     "tags": [
       "trees-bamboo",
-      "music",
-      "wind-cloud"
+      "music"
     ],
     "motifs": [
       "听弹琴",
@@ -3265,7 +3195,7 @@
       "莫买沃洲山，",
       "时人已知处。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
@@ -3293,16 +3223,14 @@
       "荷笠带夕阳，",
       "青山独归远。"
     ],
-    "theme": "trees-bamboo",
+    "theme": "homesickness",
     "tags": [
       "trees-bamboo",
       "temple-bell",
       "homesickness",
       "parting",
-      "flowers",
-      "summer",
       "mountain",
-      "river-lake"
+      "flowers"
     ],
     "motifs": [
       "钟声",
@@ -3333,11 +3261,10 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
-      "spring",
       "mountain",
+      "spring",
       "river-lake",
-      "trees-bamboo",
-      "wind-cloud"
+      "trees-bamboo"
     ],
     "motifs": [
       "新年作",
@@ -3365,16 +3292,14 @@
       "惆怅南朝事，",
       "长江独至今。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "homesickness",
     "tags": [
       "dawn-dusk",
       "temple-bell",
       "moon",
       "autumn",
       "homesickness",
-      "war",
-      "river-lake",
-      "city-ruins"
+      "mountain"
     ],
     "motifs": [
       "长江",
@@ -3402,19 +3327,19 @@
       "溪花与禅意，",
       "相对亦忘言。"
     ],
-    "theme": "reclusion",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "reclusion",
-      "spring",
       "rain",
-      "flowers",
       "mountain",
-      "river-lake"
+      "flowers",
+      "spring"
     ],
     "motifs": [
       "白云",
-      "幽居",
-      "采菊"
+      "长风",
+      "彩云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3441,10 +3366,10 @@
     "tags": [
       "river-lake",
       "love-longing",
-      "spring",
       "parting",
+      "mountain",
       "birds",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "长江",
@@ -3476,10 +3401,10 @@
     "tags": [
       "frontier",
       "moon",
-      "spring",
       "parting",
       "wine",
-      "mountain"
+      "mountain",
+      "river-lake"
     ],
     "motifs": [
       "关塞",
@@ -3507,15 +3432,14 @@
       "寂寂江山摇落处，",
       "怜君何事到天涯。"
     ],
-    "theme": "autumn",
+    "theme": "mountain",
     "tags": [
       "autumn",
       "homesickness",
       "parting",
       "mountain",
       "river-lake",
-      "trees-bamboo",
-      "city-ruins"
+      "trees-bamboo"
     ],
     "motifs": [
       "秋色",
@@ -3583,10 +3507,9 @@
       "birds",
       "frontier",
       "moon",
-      "spring",
       "flowers",
       "war",
-      "love-longing"
+      "city-ruins"
     ],
     "motifs": [
       "明月",
@@ -3614,21 +3537,19 @@
       "且欲近寻彭泽宰，",
       "陶然共醉菊花杯。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
+      "rain",
       "wine",
       "flowers",
       "frontier",
       "moon",
-      "autumn",
-      "wind-cloud",
-      "mountain",
-      "river-lake"
+      "autumn"
     ],
     "motifs": [
       "风雨",
       "菊花",
-      "把酒"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3653,8 +3574,7 @@
       "war",
       "music",
       "night",
-      "palace-court",
-      "frontier"
+      "palace-court"
     ],
     "motifs": [
       "沙场",
@@ -3686,20 +3606,19 @@
       "何当载酒来，",
       "共醉重阳节。"
     ],
-    "theme": "wine",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "wine",
       "boat-travel",
       "moon",
       "autumn",
-      "pastoral",
-      "festival",
-      "mountain"
+      "pastoral"
     ],
     "motifs": [
       "白云",
       "渡头",
-      "把酒"
+      "长风"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3729,9 +3648,9 @@
       "summer",
       "moon",
       "parting",
+      "mountain",
       "flowers",
-      "reclusion",
-      "mountain"
+      "reclusion"
     ],
     "motifs": [
       "夏荷",
@@ -3766,8 +3685,7 @@
       "homesickness",
       "birds",
       "reclusion",
-      "dawn-dusk",
-      "river-lake"
+      "dawn-dusk"
     ],
     "motifs": [
       "松月",
@@ -3795,20 +3713,19 @@
       "岩扉松径长寂寥，",
       "惟有幽人夜来去。"
     ],
-    "theme": "reclusion",
+    "theme": "mountain",
     "tags": [
-      "reclusion",
       "mountain",
+      "reclusion",
       "trees-bamboo",
       "boat-travel",
       "temple-bell",
-      "moon",
-      "river-lake"
+      "moon"
     ],
     "motifs": [
       "渡头",
-      "幽居",
-      "采菊"
+      "空山",
+      "远峰"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -3838,7 +3755,7 @@
       "mountain",
       "river-lake",
       "boat-travel",
-      "city-ruins"
+      "wind-cloud"
     ],
     "motifs": [
       "垂钓",
@@ -3866,14 +3783,13 @@
       "日夕凉风至，",
       "闻蝉但益悲。"
     ],
-    "theme": "autumn",
+    "theme": "summer",
     "tags": [
       "autumn",
       "summer",
       "dawn-dusk",
       "trees-bamboo",
-      "insects",
-      "wind-cloud"
+      "insects"
     ],
     "motifs": [
       "秋色",
@@ -3901,11 +3817,11 @@
       "还将两行泪，",
       "遥寄海西头。"
     ],
-    "theme": "night-moon",
+    "theme": "river-lake",
     "tags": [
       "moon",
-      "birds",
       "mountain",
+      "birds",
       "river-lake",
       "trees-bamboo",
       "boat-travel"
@@ -3936,14 +3852,14 @@
       "迷津欲有问，",
       "平海夕漫漫。"
     ],
-    "theme": "homesickness",
+    "theme": "river-lake",
     "tags": [
       "homesickness",
       "river-lake",
       "autumn",
-      "wind-cloud",
       "birds",
-      "dawn-dusk"
+      "dawn-dusk",
+      "boat-travel"
     ],
     "motifs": [
       "寒江",
@@ -4010,9 +3926,9 @@
       "flowers",
       "trees-bamboo",
       "moon",
-      "spring",
       "wine",
-      "winter"
+      "birds",
+      "spring"
     ],
     "motifs": [
       "落花",
@@ -4079,8 +3995,7 @@
       "autumn",
       "wine",
       "mountain",
-      "trees-bamboo",
-      "parting"
+      "trees-bamboo"
     ],
     "motifs": [
       "青山",
@@ -4143,20 +4058,19 @@
       "那堪正飘泊，",
       "来日岁华新。"
     ],
-    "theme": "winter",
+    "theme": "snow-river",
     "tags": [
-      "winter",
       "snow",
-      "festival",
+      "winter",
       "homesickness",
       "mountain",
-      "lamplight",
-      "boat-travel"
+      "night",
+      "lamplight"
     ],
     "motifs": [
       "残雪",
       "万里",
-      "冬岭"
+      "飞雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -4175,16 +4089,14 @@
       "夜来风雨声，",
       "花落知多少。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
       "spring",
-      "birds",
       "rain",
+      "birds",
       "flowers",
       "dawn-dusk",
-      "night",
-      "mountain",
-      "river-lake"
+      "night"
     ],
     "motifs": [
       "春晓",
@@ -4216,9 +4128,7 @@
       "homesickness",
       "river-lake",
       "trees-bamboo",
-      "boat-travel",
-      "mountain",
-      "night"
+      "boat-travel"
     ],
     "motifs": [
       "日暮",
@@ -4284,15 +4194,14 @@
       "蜀道之难难于上青天，",
       "侧身西望长咨嗟。"
     ],
-    "theme": "frontier",
+    "theme": "mountain",
     "tags": [
-      "frontier",
       "mountain",
+      "frontier",
       "birds",
       "dawn-dusk",
       "trees-bamboo",
-      "moon",
-      "river-lake"
+      "moon"
     ],
     "motifs": [
       "青天",
@@ -4376,14 +4285,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "flowers",
       "birds",
+      "spring",
       "river-lake",
-      "city-ruins",
-      "palace-court",
-      "mountain",
-      "love-longing"
+      "city-ruins"
     ],
     "motifs": [
       "婵娟",
@@ -4418,10 +4324,7 @@
       "autumn",
       "homesickness",
       "wine",
-      "birds",
-      "parting",
-      "mountain",
-      "river-lake"
+      "birds"
     ],
     "motifs": [
       "古城",
@@ -4448,7 +4351,6 @@
     "theme": "frontier",
     "tags": [
       "frontier",
-      "spring",
       "music"
     ],
     "motifs": [
@@ -4510,8 +4412,7 @@
       "snow",
       "war",
       "night",
-      "music",
-      "winter"
+      "music"
     ],
     "motifs": [
       "关塞",
@@ -4569,16 +4470,14 @@
       "旧业已随征战尽，",
       "更堪江上鼓鼙声。"
     ],
-    "theme": "homesickness",
+    "theme": "river-lake",
     "tags": [
       "homesickness",
       "war",
       "boat-travel",
       "moon",
       "autumn",
-      "river-lake",
-      "frontier",
-      "mountain"
+      "river-lake"
     ],
     "motifs": [
       "秋色",
@@ -4613,8 +4512,7 @@
       "frontier",
       "snow",
       "wind-cloud",
-      "palace-court",
-      "winter"
+      "palace-court"
     ],
     "motifs": [
       "李端公",
@@ -4642,14 +4540,13 @@
       "薄暮空潭曲，",
       "安禅制毒龙。"
     ],
-    "theme": "homesickness",
+    "theme": "mountain",
     "tags": [
       "temple-bell",
       "mountain",
       "trees-bamboo",
-      "music",
       "wind-cloud",
-      "river-lake"
+      "music"
     ],
     "motifs": [
       "青松",
@@ -4677,16 +4574,14 @@
       "随意春芳歇，",
       "王孙自可留。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
+      "mountain",
       "reclusion",
       "trees-bamboo",
       "moon",
-      "autumn",
-      "homesickness",
-      "mountain",
-      "river-lake"
+      "autumn"
     ],
     "motifs": [
       "空山",
@@ -4714,13 +4609,12 @@
       "偶然值林叟，",
       "谈笑无还期。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
       "trees-bamboo",
-      "wind-cloud",
-      "pastoral"
+      "wind-cloud"
     ],
     "motifs": [
       "终南别业",
@@ -4748,15 +4642,14 @@
       "迢递嵩高下，",
       "归来且闭关。"
     ],
-    "theme": "frontier",
+    "theme": "river-lake",
     "tags": [
       "frontier",
       "autumn",
       "homesickness",
       "parting",
-      "reclusion",
       "mountain",
-      "river-lake"
+      "reclusion"
     ],
     "motifs": [
       "荒城",
@@ -4784,17 +4677,17 @@
       "欲投人处宿，",
       "隔水问樵夫。"
     ],
-    "theme": "mountain",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "mountain",
       "reclusion",
-      "sea",
-      "wind-cloud"
+      "sea"
     ],
     "motifs": [
       "白云",
       "终南山",
-      "空山"
+      "长风"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -4822,8 +4715,7 @@
       "river-lake",
       "frontier",
       "wine",
-      "mountain",
-      "wind-cloud"
+      "mountain"
     ],
     "motifs": [
       "汉江临泛",
@@ -4855,10 +4747,10 @@
     "tags": [
       "city-ruins",
       "palace-court",
-      "spring",
       "trees-bamboo",
       "frontier",
-      "rain"
+      "rain",
+      "mountain"
     ],
     "motifs": [
       "古城",
@@ -4893,7 +4785,7 @@
       "moon",
       "homesickness",
       "parting",
-      "city-ruins"
+      "wind-cloud"
     ],
     "motifs": [
       "日暮",
@@ -4921,14 +4813,14 @@
       "强欲从君无那老，",
       "将因卧病解朝衣。"
     ],
-    "theme": "birds",
+    "theme": "dawn-dusk",
     "tags": [
       "birds",
       "dawn-dusk",
       "palace-court",
-      "spring",
       "flowers",
-      "trees-bamboo"
+      "trees-bamboo",
+      "temple-bell"
     ],
     "motifs": [
       "啼鸟",
@@ -4961,9 +4853,9 @@
       "birds",
       "trees-bamboo",
       "frontier",
-      "pastoral",
       "rain",
-      "summer"
+      "pastoral",
+      "mountain"
     ],
     "motifs": [
       "黄鹂",
@@ -5021,8 +4913,7 @@
       "moon",
       "reclusion",
       "river-lake",
-      "music",
-      "night"
+      "music"
     ],
     "motifs": [
       "明月",
@@ -5051,9 +4942,9 @@
       "parting",
       "dawn-dusk",
       "moon",
-      "spring",
       "homesickness",
-      "mountain"
+      "mountain",
+      "spring"
     ],
     "motifs": [
       "日暮",
@@ -5080,12 +4971,10 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
-      "flowers",
       "winter",
+      "flowers",
       "palace-court",
-      "courtyard",
-      "mountain",
-      "river-lake"
+      "courtyard"
     ],
     "motifs": [
       "故乡",
@@ -5142,7 +5031,6 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
-      "festival",
       "mountain"
     ],
     "motifs": [
@@ -5167,20 +5055,19 @@
       "劝君更尽一杯酒，",
       "西出阳关无故人。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "frontier",
-      "homesickness",
       "rain",
-      "dawn-dusk",
-      "parting"
+      "homesickness",
+      "spring",
+      "dawn-dusk"
     ],
     "motifs": [
       "渭城曲",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -5203,8 +5090,8 @@
     "tags": [
       "parting",
       "homesickness",
-      "flowers",
-      "mountain"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "长亭",
@@ -5240,20 +5127,19 @@
       "兴尽方下山，",
       "何必待之子。"
     ],
-    "theme": "reclusion",
+    "theme": "rain",
     "tags": [
+      "rain",
       "reclusion",
       "frontier",
       "autumn",
       "pastoral",
-      "rain",
-      "mountain",
-      "parting"
+      "mountain"
     ],
     "motifs": [
       "新雨",
       "秋水",
-      "幽居"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -5276,16 +5162,14 @@
       "日暮乡关何处是，",
       "烟波江上使人愁。"
     ],
-    "theme": "river-lake",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "river-lake",
       "dawn-dusk",
       "frontier",
-      "spring",
       "homesickness",
-      "parting",
-      "mountain",
-      "city-ruins"
+      "parting"
     ],
     "motifs": [
       "日暮",
@@ -5318,11 +5202,10 @@
     "tags": [
       "mountain",
       "frontier",
-      "homesickness",
       "rain",
+      "homesickness",
       "river-lake",
-      "trees-bamboo",
-      "city-ruins"
+      "trees-bamboo"
     ],
     "motifs": [
       "行经华阴",
@@ -5351,8 +5234,7 @@
       "homesickness",
       "boat-travel",
       "palace-court",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "故乡",
@@ -5380,8 +5262,7 @@
     "tags": [
       "parting",
       "river-lake",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "长亭",
@@ -5409,15 +5290,14 @@
       "少小虽非投笔吏，",
       "论功还欲请长缨。"
     ],
-    "theme": "frontier",
+    "theme": "snow-river",
     "tags": [
       "frontier",
-      "moon",
       "snow",
-      "spring",
+      "moon",
       "homesickness",
-      "war",
-      "winter"
+      "mountain",
+      "war"
     ],
     "motifs": [
       "烽火",
@@ -5441,21 +5321,19 @@
       "林表明霁色，",
       "城中增暮寒。"
     ],
-    "theme": "night-moon",
+    "theme": "snow-river",
     "tags": [
-      "moon",
       "snow",
+      "moon",
       "mountain",
       "trees-bamboo",
-      "city-ruins",
       "wind-cloud",
-      "winter",
-      "river-lake"
+      "city-ruins"
     ],
     "motifs": [
-      "明月",
-      "清影",
-      "婵娟"
+      "飞雪",
+      "寒雪",
+      "千山雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -5482,15 +5360,14 @@
       "年年战骨埋荒外，",
       "空见蒲桃入汉家。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "frontier",
     "tags": [
       "dawn-dusk",
       "war",
       "frontier",
       "music",
       "snow",
-      "wind-cloud",
-      "winter"
+      "rain"
     ],
     "motifs": [
       "烽火",
@@ -5525,9 +5402,9 @@
       "music",
       "moon",
       "autumn",
-      "wind-cloud",
       "homesickness",
-      "wine"
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "琴歌",
@@ -5613,11 +5490,11 @@
     "theme": "trees-bamboo",
     "tags": [
       "trees-bamboo",
-      "spring",
       "homesickness",
       "wine",
       "dawn-dusk",
-      "music"
+      "music",
+      "frontier"
     ],
     "motifs": [
       "白日",
@@ -5656,7 +5533,7 @@
       "war",
       "frontier",
       "snow",
-      "spring"
+      "rain"
     ],
     "motifs": [
       "琵琶",
@@ -5705,14 +5582,14 @@
       "高才脱略名与利，",
       "日夕望君抱琴至。"
     ],
-    "theme": "homesickness",
+    "theme": "snow-river",
     "tags": [
-      "homesickness",
-      "frontier",
-      "moon",
       "snow",
-      "autumn",
-      "wind-cloud"
+      "homesickness",
+      "mountain",
+      "frontier",
+      "wind-cloud",
+      "moon"
     ],
     "motifs": [
       "烽火",
@@ -5747,9 +5624,7 @@
       "frontier",
       "moon",
       "autumn",
-      "homesickness",
-      "mountain",
-      "river-lake"
+      "homesickness"
     ],
     "motifs": [
       "长亭",
@@ -5782,11 +5657,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "parting",
+      "mountain",
       "flowers",
       "reclusion",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "明月",
@@ -5821,9 +5696,7 @@
       "homesickness",
       "summer",
       "reclusion",
-      "trees-bamboo",
-      "mountain",
-      "river-lake"
+      "trees-bamboo"
     ],
     "motifs": [
       "蝉鸣",
@@ -5894,8 +5767,7 @@
       "moon",
       "mountain",
       "river-lake",
-      "night",
-      "wind-cloud"
+      "night"
     ],
     "motifs": [
       "庭院",
@@ -5923,10 +5795,9 @@
     "tags": [
       "frontier",
       "moon",
-      "war",
       "mountain",
-      "city-ruins",
-      "river-lake"
+      "war",
+      "city-ruins"
     ],
     "motifs": [
       "明月",
@@ -5956,10 +5827,9 @@
       "palace-court",
       "music",
       "moon",
-      "spring",
       "flowers",
-      "night",
-      "love-longing"
+      "spring",
+      "night"
     ],
     "motifs": [
       "春宫曲",
@@ -5983,12 +5853,11 @@
       "忽见陌头杨柳色，",
       "悔教夫壻觅封侯。"
     ],
-    "theme": "spring",
+    "theme": "trees-bamboo",
     "tags": [
       "spring",
       "trees-bamboo",
-      "courtyard",
-      "love-longing"
+      "courtyard"
     ],
     "motifs": [
       "闺怨",
@@ -6012,11 +5881,11 @@
       "洛阳亲友如相问，",
       "一片冰心在玉壶。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
       "moon",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
       "winter",
       "mountain"
@@ -6052,10 +5921,9 @@
       "moon",
       "pastoral",
       "parting",
-      "flowers",
-      "reclusion",
       "mountain",
-      "river-lake"
+      "flowers",
+      "reclusion"
     ],
     "motifs": [
       "明月",
@@ -6079,19 +5947,18 @@
       "若非群玉山头见，",
       "会向瑶台月下逢。"
     ],
-    "theme": "night-moon",
+    "theme": "spring",
     "tags": [
-      "moon",
       "spring",
-      "wind-cloud",
-      "flowers",
+      "moon",
       "mountain",
-      "love-longing"
+      "flowers",
+      "wind-cloud"
     ],
     "motifs": [
       "月下",
       "春风",
-      "明月"
+      "春晓"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -6110,20 +5977,18 @@
       "借问汉宫谁得似，",
       "可怜飞燕倚新妆。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "rain",
       "mountain",
-      "city-ruins",
-      "palace-court",
       "wind-cloud",
-      "love-longing"
+      "city-ruins",
+      "palace-court"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -6147,8 +6012,7 @@
       "spring",
       "flowers",
       "palace-court",
-      "courtyard",
-      "wind-cloud"
+      "courtyard"
     ],
     "motifs": [
       "春风",
@@ -6315,15 +6179,14 @@
       "天长地久有时尽，",
       "此恨緜緜无绝期。"
     ],
-    "theme": "festival",
+    "theme": "rain",
     "tags": [
-      "palace-court",
       "rain",
+      "palace-court",
+      "spring",
       "trees-bamboo",
       "city-ruins",
-      "spring",
-      "autumn",
-      "love-longing"
+      "autumn"
     ],
     "motifs": [
       "春风",
@@ -6436,7 +6299,7 @@
       "parting",
       "moon",
       "music",
-      "festival",
+      "spring",
       "homesickness",
       "wine"
     ],
@@ -6470,10 +6333,7 @@
     "tags": [
       "parting",
       "spring",
-      "lamplight",
-      "city-ruins",
-      "wind-cloud",
-      "flowers"
+      "city-ruins"
     ],
     "motifs": [
       "春风",
@@ -6536,9 +6396,7 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "snow",
-      "lamplight",
-      "parting"
+      "snow"
     ],
     "motifs": [
       "问刘十九",
@@ -6562,11 +6420,11 @@
       "只在此山中，",
       "云深不知处。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
-      "reclusion",
       "mountain",
+      "reclusion",
       "trees-bamboo",
       "wind-cloud"
     ],
@@ -6601,10 +6459,9 @@
       "boat-travel",
       "birds",
       "river-lake",
-      "spring",
       "pastoral",
       "homesickness",
-      "mountain"
+      "parting"
     ],
     "motifs": [
       "利州南渡",
@@ -6635,8 +6492,7 @@
       "parting",
       "winter",
       "birds",
-      "night",
-      "love-longing"
+      "wind-cloud"
     ],
     "motifs": [
       "瑶瑟怨",
@@ -6671,8 +6527,7 @@
       "wine",
       "mountain",
       "river-lake",
-      "boat-travel",
-      "autumn"
+      "boat-travel"
     ],
     "motifs": [
       "送人东游",
@@ -6731,18 +6586,18 @@
       "近乡情更怯，",
       "不敢问来人。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "homesickness",
       "mountain",
+      "spring",
       "river-lake",
       "boat-travel"
     ],
     "motifs": [
       "渡汉江",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -6766,10 +6621,7 @@
       "为他人作嫁衣裳。"
     ],
     "theme": "landscape",
-    "tags": [
-      "wind-cloud",
-      "love-longing"
-    ],
+    "tags": [],
     "motifs": [
       "贫女",
       "长风",
@@ -6799,14 +6651,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "flowers",
       "birds",
+      "spring",
       "river-lake",
-      "city-ruins",
-      "palace-court",
-      "mountain",
-      "love-longing"
+      "city-ruins"
     ],
     "motifs": [
       "婵娟",
@@ -6834,16 +6683,14 @@
       "未必逢矰缴，",
       "孤飞自可疑。"
     ],
-    "theme": "frontier",
+    "theme": "rain",
     "tags": [
       "frontier",
       "moon",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
-      "wind-cloud",
-      "boat-travel",
-      "birds"
+      "wind-cloud"
     ],
     "motifs": [
       "孤鴈 二",
@@ -6871,20 +6718,19 @@
       "那堪正漂泊，",
       "明日岁华新。"
     ],
-    "theme": "winter",
+    "theme": "snow-river",
     "tags": [
+      "snow",
       "winter",
       "moon",
-      "snow",
-      "spring",
       "homesickness",
       "mountain",
-      "boat-travel"
+      "spring"
     ],
     "motifs": [
       "残雪",
       "万里",
-      "冬岭"
+      "飞雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -6931,21 +6777,18 @@
       "斜拔玉钗灯影畔，",
       "剔开红焰救飞蛾。"
     ],
-    "theme": "festival",
+    "theme": "night-moon",
     "tags": [
-      "lamplight",
       "moon",
-      "spring",
-      "festival",
       "trees-bamboo",
       "city-ruins",
       "palace-court",
-      "love-longing"
+      "lamplight"
     ],
     "motifs": [
       "赠内人",
-      "灯火",
-      "渔火"
+      "明月",
+      "清影"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -6964,7 +6807,7 @@
       "昨夜上皇新授箓，",
       "太真含笑入帘来。"
     ],
-    "theme": "flowers",
+    "theme": "dawn-dusk",
     "tags": [
       "flowers",
       "dawn-dusk",
@@ -7030,7 +6873,7 @@
       "mountain",
       "boat-travel",
       "sea",
-      "lamplight"
+      "night"
     ],
     "motifs": [
       "题金陵渡",
@@ -7059,9 +6902,7 @@
       "flowers",
       "city-ruins",
       "palace-court",
-      "courtyard",
-      "mountain",
-      "river-lake"
+      "courtyard"
     ],
     "motifs": [
       "宫词",
@@ -7152,9 +6993,9 @@
       "war",
       "dawn-dusk",
       "moon",
-      "festival",
       "rain",
-      "parting"
+      "parting",
+      "wine"
     ],
     "motifs": [
       "万里",
@@ -7183,8 +7024,7 @@
       "autumn",
       "homesickness",
       "night",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "秋夜曲",
@@ -7256,11 +7096,11 @@
     "theme": "trees-bamboo",
     "tags": [
       "trees-bamboo",
-      "spring",
-      "homesickness",
       "rain",
+      "homesickness",
       "mountain",
-      "river-lake"
+      "river-lake",
+      "sea"
     ],
     "motifs": [
       "海天",
@@ -7288,12 +7128,12 @@
       "来往不逢人，",
       "长歌楚天碧。"
     ],
-    "theme": "pastoral",
+    "theme": "mountain",
     "tags": [
       "pastoral",
       "homesickness",
-      "reclusion",
       "mountain",
+      "reclusion",
       "river-lake",
       "dawn-dusk"
     ],
@@ -7322,12 +7162,11 @@
     "theme": "snow-river",
     "tags": [
       "snow",
-      "birds",
       "mountain",
+      "birds",
       "river-lake",
       "fish-aquatic",
-      "boat-travel",
-      "winter"
+      "boat-travel"
     ],
     "motifs": [
       "孤舟",
@@ -7359,9 +7198,8 @@
       "dawn-dusk",
       "trees-bamboo",
       "fish-aquatic",
-      "night",
       "wind-cloud",
-      "river-lake"
+      "night"
     ],
     "motifs": [
       "渔翁",
@@ -7389,9 +7227,10 @@
       "凄凉蜀故妓，",
       "来舞魏宫前。"
     ],
-    "theme": "autumn",
+    "theme": "winter",
     "tags": [
       "autumn",
+      "winter",
       "city-ruins",
       "palace-court"
     ],
@@ -7421,18 +7260,17 @@
       "何时倚虚幌，",
       "双照泪痕干。"
     ],
-    "theme": "night-moon",
+    "theme": "landscape",
     "tags": [
-      "moon",
       "wind-cloud",
+      "moon",
       "night",
-      "courtyard",
-      "love-longing"
+      "courtyard"
     ],
     "motifs": [
       "月夜",
-      "明月",
-      "清影"
+      "长风",
+      "白云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -7494,14 +7332,11 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "flowers",
       "birds",
       "reclusion",
-      "dawn-dusk",
-      "war",
-      "mountain",
-      "river-lake"
+      "spring",
+      "dawn-dusk"
     ],
     "motifs": [
       "春宿左省",
@@ -7569,8 +7404,7 @@
       "frontier",
       "moon",
       "war",
-      "birds",
-      "night"
+      "birds"
     ],
     "motifs": [
       "故乡",
@@ -7602,9 +7436,9 @@
     "tags": [
       "autumn",
       "river-lake",
+      "wind-cloud",
       "birds",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "风起",
@@ -7669,14 +7503,11 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "spring",
       "homesickness",
       "flowers",
       "birds",
-      "palace-court",
-      "mountain",
-      "river-lake",
-      "parting"
+      "spring",
+      "palace-court"
     ],
     "motifs": [
       "客至",
@@ -7777,10 +7608,10 @@
     "theme": "dawn-dusk",
     "tags": [
       "dawn-dusk",
-      "spring",
       "homesickness",
       "wine",
       "war",
+      "spring",
       "river-lake"
     ],
     "motifs": [
@@ -7815,9 +7646,7 @@
       "homesickness",
       "wine",
       "birds",
-      "river-lake",
-      "wind-cloud",
-      "mountain"
+      "river-lake"
     ],
     "motifs": [
       "长江",
@@ -7846,19 +7675,19 @@
       "唯见林花落，",
       "鸎啼送客闻。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
       "homesickness",
       "parting",
+      "spring",
       "flowers",
       "birds",
       "trees-bamboo"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "故乡",
+      "乡愁",
+      "客心"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -7883,13 +7712,12 @@
     ],
     "theme": "dawn-dusk",
     "tags": [
-      "dawn-dusk",
       "spring",
+      "dawn-dusk",
       "homesickness",
-      "flowers",
       "mountain",
-      "river-lake",
-      "city-ruins"
+      "flowers",
+      "river-lake"
     ],
     "motifs": [
       "日暮",
@@ -7959,8 +7787,7 @@
       "river-lake",
       "boat-travel",
       "night",
-      "stars",
-      "mountain"
+      "stars"
     ],
     "motifs": [
       "旅夜书怀",
@@ -8021,8 +7848,7 @@
     ],
     "theme": "river-lake",
     "tags": [
-      "river-lake",
-      "city-ruins"
+      "river-lake"
     ],
     "motifs": [
       "八阵图",
@@ -8055,10 +7881,9 @@
       "frontier",
       "river-lake",
       "moon",
-      "wind-cloud",
       "homesickness",
       "parting",
-      "city-ruins"
+      "mountain"
     ],
     "motifs": [
       "关塞",
@@ -8086,20 +7911,19 @@
       "最是楚宫俱泯灭，",
       "舟人指点到今疑。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
-      "autumn",
-      "wind-cloud",
       "rain",
+      "autumn",
       "mountain",
       "river-lake",
       "boat-travel",
-      "city-ruins"
+      "wind-cloud"
     ],
     "motifs": [
-      "秋色",
-      "落木",
-      "霜叶"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8124,14 +7948,12 @@
     ],
     "theme": "frontier",
     "tags": [
+      "spring",
       "frontier",
       "music",
       "dawn-dusk",
       "moon",
-      "spring",
-      "pastoral",
-      "city-ruins",
-      "homesickness"
+      "pastoral"
     ],
     "motifs": [
       "春风",
@@ -8159,19 +7981,19 @@
       "武侯祠屋常邻近，",
       "一体君臣祭祀同。"
     ],
-    "theme": "festival",
+    "theme": "mountain",
     "tags": [
+      "mountain",
       "palace-court",
       "pastoral",
-      "mountain",
       "trees-bamboo",
       "temple-bell",
       "city-ruins"
     ],
     "motifs": [
       "空山",
-      "金殿",
-      "御沟"
+      "远峰",
+      "青山"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8197,8 +8019,7 @@
     "theme": "frontier",
     "tags": [
       "war",
-      "wind-cloud",
-      "city-ruins"
+      "wind-cloud"
     ],
     "motifs": [
       "烽火",
@@ -8222,18 +8043,16 @@
       "正是江南好风景，",
       "落花时节又逢君。"
     ],
-    "theme": "festival",
+    "theme": "river-lake",
     "tags": [
-      "festival",
       "flowers",
       "river-lake",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "落花",
-      "元夕",
-      "花灯"
+      "红豆",
+      "藕花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8262,8 +8081,7 @@
       "frontier",
       "boat-travel",
       "night",
-      "courtyard",
-      "river-lake"
+      "courtyard"
     ],
     "motifs": [
       "孤舟",
@@ -8326,9 +8144,8 @@
       "moon",
       "dawn-dusk",
       "sea",
-      "lamplight",
       "night",
-      "homesickness"
+      "lamplight"
     ],
     "motifs": [
       "明月",
@@ -8361,8 +8178,8 @@
       "homesickness",
       "moon",
       "autumn",
+      "mountain",
       "flowers",
-      "winter",
       "birds"
     ],
     "motifs": [
@@ -8387,19 +8204,19 @@
       "近乡情更怯，",
       "不敢问来人。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "homesickness",
       "winter",
       "mountain",
+      "spring",
       "river-lake",
       "boat-travel"
     ],
     "motifs": [
       "渡汉江",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8425,11 +8242,10 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
-      "spring",
       "mountain",
+      "spring",
       "river-lake",
-      "trees-bamboo",
-      "wind-cloud"
+      "trees-bamboo"
     ],
     "motifs": [
       "新年作",
@@ -8463,8 +8279,7 @@
       "city-ruins",
       "palace-court",
       "river-lake",
-      "sea",
-      "wind-cloud"
+      "sea"
     ],
     "motifs": [
       "长亭",
@@ -8492,19 +8307,19 @@
       "忽闻歌古调，",
       "归思欲沾巾。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "homesickness",
       "flowers",
-      "winter",
       "birds",
-      "river-lake"
+      "spring",
+      "river-lake",
+      "trees-bamboo"
     ],
     "motifs": [
       "归思",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8562,9 +8377,8 @@
       "autumn",
       "parting",
       "palace-court",
-      "homesickness",
       "rain",
-      "frontier"
+      "homesickness"
     ],
     "motifs": [
       "归雁",
@@ -8599,8 +8413,7 @@
       "birds",
       "dawn-dusk",
       "temple-bell",
-      "wind-cloud",
-      "river-lake"
+      "wind-cloud"
     ],
     "motifs": [
       "望岳",
@@ -8662,7 +8475,7 @@
       "pastoral",
       "parting",
       "war",
-      "homesickness"
+      "rain"
     ],
     "motifs": [
       "兵车行",
@@ -8706,20 +8519,19 @@
       "明日隔山岳，",
       "世事两茫茫。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
+      "rain",
       "wine",
       "mountain",
       "lamplight",
       "moon",
-      "spring",
-      "festival",
       "parting"
     ],
     "motifs": [
       "夜雨",
-      "把酒",
-      "独酌"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -8764,10 +8576,10 @@
     "tags": [
       "parting",
       "snow",
-      "spring",
+      "mountain",
       "flowers",
       "birds",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "丽人行",
@@ -8810,12 +8622,11 @@
     "theme": "festival",
     "tags": [
       "palace-court",
-      "spring",
       "dawn-dusk",
       "city-ruins",
       "frontier",
       "moon",
-      "war"
+      "homesickness"
     ],
     "motifs": [
       "黄昏",
@@ -8869,9 +8680,8 @@
       "spring",
       "snow",
       "autumn",
-      "flowers",
       "winter",
-      "birds"
+      "flowers"
     ],
     "motifs": [
       "哀王孙",
@@ -8921,9 +8731,8 @@
       "trees-bamboo",
       "frontier",
       "pastoral",
-      "flowers",
-      "reclusion",
-      "love-longing"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "日暮",
@@ -9006,9 +8815,9 @@
     "tags": [
       "river-lake",
       "autumn",
-      "wind-cloud",
       "homesickness",
       "boat-travel",
+      "wind-cloud",
       "night"
     ],
     "motifs": [
@@ -9132,10 +8941,10 @@
     "theme": "frontier",
     "tags": [
       "war",
-      "palace-court",
       "wind-cloud",
-      "flowers",
+      "palace-court",
       "mountain",
+      "flowers",
       "courtyard"
     ],
     "motifs": [
@@ -9234,10 +9043,9 @@
       "parting",
       "trees-bamboo",
       "palace-court",
-      "moon",
       "snow",
-      "autumn",
-      "flowers"
+      "moon",
+      "rain"
     ],
     "motifs": [
       "古柏",
@@ -9283,14 +9091,14 @@
       "老夫不知其所往，",
       "足茧荒山转愁疾。"
     ],
-    "theme": "night-moon",
+    "theme": "river-lake",
     "tags": [
       "moon",
-      "spring",
       "mountain",
       "river-lake",
       "sea",
-      "city-ruins"
+      "city-ruins",
+      "palace-court"
     ],
     "motifs": [
       "明月",
@@ -9319,11 +9127,9 @@
       "parting",
       "courtyard",
       "moon",
-      "spring",
       "flowers",
-      "music",
-      "night",
-      "love-longing"
+      "spring",
+      "music"
     ],
     "motifs": [
       "落花",
@@ -9351,11 +9157,10 @@
     "tags": [
       "frontier",
       "moon",
-      "war",
       "mountain",
+      "war",
       "boat-travel",
-      "courtyard",
-      "river-lake"
+      "courtyard"
     ],
     "motifs": [
       "明月",
@@ -9379,22 +9184,19 @@
       "不知何处吹芦管？",
       "一夜征人尽望乡。"
     ],
-    "theme": "night-moon",
+    "theme": "snow-river",
     "tags": [
-      "moon",
       "snow",
+      "moon",
       "autumn",
       "homesickness",
-      "war",
       "mountain",
-      "frontier",
-      "winter",
-      "night"
+      "war"
     ],
     "motifs": [
       "征人",
       "婆罗门",
-      "明月"
+      "飞雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9413,19 +9215,18 @@
       "若非群玉山头见，",
       "会向瑶台月下逢。"
     ],
-    "theme": "night-moon",
+    "theme": "spring",
     "tags": [
-      "moon",
       "spring",
-      "wind-cloud",
-      "flowers",
+      "moon",
       "mountain",
-      "love-longing"
+      "flowers",
+      "wind-cloud"
     ],
     "motifs": [
       "月下",
       "春风",
-      "明月"
+      "春晓"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9444,20 +9245,18 @@
       "借问汉宫谁得似，",
       "可怜飞燕倚新妆。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "rain",
       "mountain",
-      "city-ruins",
-      "palace-court",
       "wind-cloud",
-      "love-longing"
+      "city-ruins",
+      "palace-court"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9481,8 +9280,7 @@
       "spring",
       "flowers",
       "palace-court",
-      "courtyard",
-      "wind-cloud"
+      "courtyard"
     ],
     "motifs": [
       "春风",
@@ -9506,20 +9304,19 @@
       "劝君更尽一杯酒，",
       "西出阳关无故人。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "frontier",
-      "homesickness",
       "rain",
-      "dawn-dusk",
-      "parting"
+      "homesickness",
+      "spring",
+      "dawn-dusk"
     ],
     "motifs": [
       "渭城曲",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9569,18 +9366,16 @@
       "草木有本心，",
       "何求美人折。"
     ],
-    "theme": "spring",
+    "theme": "autumn",
     "tags": [
-      "spring",
       "autumn",
-      "festival",
-      "trees-bamboo",
-      "wind-cloud"
+      "spring",
+      "trees-bamboo"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "秋色",
+      "落木",
+      "霜叶"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9678,8 +9473,8 @@
     "tags": [
       "trees-bamboo",
       "homesickness",
-      "flowers",
       "winter",
+      "flowers",
       "river-lake"
     ],
     "motifs": [
@@ -9774,17 +9569,16 @@
       "旧时王谢堂前燕，",
       "飞入寻常百姓家。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
-      "spring",
       "flowers",
       "dawn-dusk",
       "city-ruins"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "落花",
+      "红豆",
+      "藕花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9806,9 +9600,8 @@
     "theme": "night-moon",
     "tags": [
       "courtyard",
-      "spring",
       "flowers",
-      "love-longing"
+      "spring"
     ],
     "motifs": [
       "庭院",
@@ -9862,15 +9655,15 @@
       "谁言寸草心，",
       "报得三春晖。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
-      "homesickness"
+      "homesickness",
+      "spring"
     ],
     "motifs": [
       "游子吟",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9895,8 +9688,7 @@
       "flowers",
       "river-lake",
       "fish-aquatic",
-      "boat-travel",
-      "mountain"
+      "boat-travel"
     ],
     "motifs": [
       "桃花",
@@ -9924,21 +9716,19 @@
       "家童扫萝径，",
       "昨与故人期。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "autumn",
       "pastoral",
-      "rain",
-      "flowers",
-      "birds",
       "mountain",
-      "river-lake"
+      "flowers"
     ],
     "motifs": [
       "新雨",
-      "春风",
-      "春晓"
+      "烟雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -9996,19 +9786,19 @@
       "献赋十年犹未遇，",
       "羞将白发对华簪。"
     ],
-    "theme": "spring",
+    "theme": "trees-bamboo",
     "tags": [
-      "spring",
       "trees-bamboo",
       "city-ruins",
       "rain",
       "flowers",
-      "birds"
+      "birds",
+      "spring"
     ],
     "motifs": [
       "钟声",
-      "春风",
-      "春晓"
+      "翠竹",
+      "青松"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -10030,12 +9820,11 @@
     "theme": "frontier",
     "tags": [
       "frontier",
-      "moon",
       "snow",
+      "moon",
       "autumn",
       "war",
-      "birds",
-      "winter"
+      "birds"
     ],
     "motifs": [
       "关塞",
@@ -10083,10 +9872,10 @@
     "tags": [
       "river-lake",
       "courtyard",
-      "festival",
       "homesickness",
       "mountain",
-      "trees-bamboo"
+      "trees-bamboo",
+      "fish-aquatic"
     ],
     "motifs": [
       "长江",
@@ -10119,11 +9908,11 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "summer",
+      "wind-cloud",
       "mountain",
+      "summer",
       "river-lake",
-      "fish-aquatic",
-      "palace-court"
+      "fish-aquatic"
     ],
     "motifs": [
       "长风",
@@ -10187,11 +9976,10 @@
     "tags": [
       "autumn",
       "moon",
-      "festival",
       "birds",
       "river-lake",
       "night",
-      "mountain"
+      "city-ruins"
     ],
     "motifs": [
       "星河",
@@ -10225,8 +10013,8 @@
       "reclusion",
       "trees-bamboo",
       "city-ruins",
-      "autumn",
-      "rain"
+      "rain",
+      "autumn"
     ],
     "motifs": [
       "长亭",
@@ -10289,9 +10077,9 @@
     "tags": [
       "parting",
       "moon",
-      "spring",
       "pastoral",
       "flowers",
+      "spring",
       "palace-court"
     ],
     "motifs": [
@@ -10320,19 +10108,18 @@
       "落叶满空山，",
       "何处寻行迹。"
     ],
-    "theme": "homesickness",
+    "theme": "rain",
     "tags": [
+      "rain",
+      "mountain",
       "homesickness",
       "dawn-dusk",
-      "rain",
-      "wine",
-      "mountain",
-      "wind-cloud"
+      "wine"
     ],
     "motifs": [
       "空山",
       "风雨",
-      "故乡"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -10351,11 +10138,11 @@
       "山空松子落，",
       "幽人应未眠。"
     ],
-    "theme": "autumn",
+    "theme": "mountain",
     "tags": [
       "autumn",
-      "reclusion",
       "mountain",
+      "reclusion",
       "trees-bamboo",
       "night",
       "palace-court"
@@ -10386,7 +10173,7 @@
       "相送情无限，",
       "沾襟比散丝。"
     ],
-    "theme": "parting",
+    "theme": "river-lake",
     "tags": [
       "parting",
       "river-lake",
@@ -10472,19 +10259,19 @@
       "昨别今已春，",
       "鬓丝生几缕。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
+      "mountain",
       "flowers",
-      "mountain"
+      "spring"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -10510,12 +10297,11 @@
     "theme": "homesickness",
     "tags": [
       "homesickness",
+      "wind-cloud",
       "frontier",
       "autumn",
-      "birds",
       "mountain",
-      "dawn-dusk",
-      "river-lake"
+      "birds"
     ],
     "motifs": [
       "风起",
@@ -10547,19 +10333,19 @@
       "终罢斯结庐，",
       "慕陶真可庶。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "rain",
       "parting",
-      "reclusion",
       "mountain",
+      "reclusion",
+      "spring",
       "trees-bamboo"
     ],
     "motifs": [
       "青山",
       "东郊",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -10581,13 +10367,11 @@
     "theme": "river-lake",
     "tags": [
       "boat-travel",
-      "spring",
       "rain",
       "birds",
       "reclusion",
-      "trees-bamboo",
-      "mountain",
-      "river-lake"
+      "spring",
+      "trees-bamboo"
     ],
     "motifs": [
       "黄鹂",
@@ -10615,19 +10399,19 @@
       "忽闻歌苦调，",
       "归思欲沾巾。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "homesickness",
       "flowers",
-      "winter",
       "birds",
-      "river-lake"
+      "spring",
+      "river-lake",
+      "trees-bamboo"
     ],
     "motifs": [
       "归思",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -10670,9 +10454,8 @@
       "frontier",
       "autumn",
       "parting",
-      "birds",
       "mountain",
-      "river-lake"
+      "birds"
     ],
     "motifs": [
       "白日",
@@ -10710,17 +10493,14 @@
       "山回路转不见君，",
       "雪上空留马行处。"
     ],
-    "theme": "wine",
+    "theme": "snow-river",
     "tags": [
+      "snow",
       "music",
+      "spring",
       "frontier",
       "homesickness",
-      "parting",
-      "snow",
-      "spring",
-      "flowers",
-      "winter",
-      "mountain"
+      "parting"
     ],
     "motifs": [
       "春风",
@@ -10763,9 +10543,9 @@
       "frontier",
       "war",
       "music",
-      "moon",
       "snow",
-      "wind-cloud"
+      "moon",
+      "parting"
     ],
     "motifs": [
       "戍楼",
@@ -10808,9 +10588,8 @@
       "night",
       "snow",
       "parting",
-      "flowers",
       "winter",
-      "frontier"
+      "mountain"
     ],
     "motifs": [
       "烽火",
@@ -10838,7 +10617,7 @@
       "圣朝无阙事，",
       "自觉谏书稀。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
       "spring",
       "dawn-dusk",
@@ -10909,8 +10688,7 @@
       "homesickness",
       "temple-bell",
       "city-ruins",
-      "palace-court",
-      "frontier"
+      "palace-court"
     ],
     "motifs": [
       "故园",
@@ -10934,7 +10712,7 @@
       "只在此山中，",
       "云深不知处。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
@@ -10969,10 +10747,10 @@
     ],
     "theme": "frontier",
     "tags": [
+      "spring",
       "war",
       "dawn-dusk",
       "frontier",
-      "spring",
       "autumn",
       "homesickness"
     ],
@@ -11008,15 +10786,14 @@
       "长风破浪会有时，",
       "直挂云帆济沧海。"
     ],
-    "theme": "wine",
+    "theme": "river-lake",
     "tags": [
       "wine",
       "river-lake",
       "boat-travel",
+      "wind-cloud",
       "moon",
-      "frontier",
-      "snow",
-      "parting"
+      "frontier"
     ],
     "motifs": [
       "黄河",
@@ -11052,19 +10829,18 @@
       "行路难，",
       "归去来。"
     ],
-    "theme": "festival",
+    "theme": "homesickness",
     "tags": [
-      "festival",
-      "spring",
       "homesickness",
       "parting",
       "dawn-dusk",
-      "palace-court"
+      "palace-court",
+      "music"
     ],
     "motifs": [
       "青天",
-      "元夕",
-      "花灯"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -11141,7 +10917,7 @@
       "love-longing",
       "frontier",
       "moon",
-      "festival",
+      "mountain",
       "flowers"
     ],
     "motifs": [
@@ -11174,14 +10950,13 @@
       "高楼当此夜，",
       "叹息未应闲。"
     ],
-    "theme": "frontier",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "frontier",
       "homesickness",
       "war",
       "moon",
-      "wind-cloud",
-      "reclusion",
       "mountain"
     ],
     "motifs": [
@@ -11210,8 +10985,7 @@
     "tags": [
       "moon",
       "autumn",
-      "night",
-      "palace-court"
+      "night"
     ],
     "motifs": [
       "玉阶",
@@ -11235,19 +11009,18 @@
       "若非群玉山头见，",
       "会向瑶台月下逢。"
     ],
-    "theme": "night-moon",
+    "theme": "spring",
     "tags": [
-      "moon",
       "spring",
-      "wind-cloud",
-      "flowers",
+      "moon",
       "mountain",
-      "love-longing"
+      "flowers",
+      "wind-cloud"
     ],
     "motifs": [
       "月下",
       "春风",
-      "明月"
+      "春晓"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -11266,20 +11039,18 @@
       "借问汉宫谁得似，",
       "可怜飞燕倚新妆。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "rain",
       "mountain",
-      "city-ruins",
-      "palace-court",
       "wind-cloud",
-      "love-longing"
+      "city-ruins",
+      "palace-court"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "烟雨",
+      "新雨",
+      "风雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -11335,8 +11106,7 @@
       "spring",
       "pastoral",
       "homesickness",
-      "palace-court",
-      "wind-cloud"
+      "palace-court"
     ],
     "motifs": [
       "春风",
@@ -11366,11 +11136,10 @@
     "tags": [
       "night",
       "dawn-dusk",
-      "spring",
       "pastoral",
       "parting",
-      "music",
-      "love-longing"
+      "spring",
+      "music"
     ],
     "motifs": [
       "白日",
@@ -11436,8 +11205,7 @@
       "moon",
       "autumn",
       "war",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "子夜",
@@ -11498,14 +11266,14 @@
       "高山安可仰，",
       "徒此揖清芬。"
     ],
-    "theme": "night-moon",
+    "theme": "mountain",
     "tags": [
       "moon",
-      "wind-cloud",
       "wine",
-      "flowers",
       "mountain",
-      "trees-bamboo"
+      "flowers",
+      "trees-bamboo",
+      "wind-cloud"
     ],
     "motifs": [
       "赠孟浩然",
@@ -11554,7 +11322,7 @@
       "先期汗漫九垓上，",
       "愿接卢敖游太清。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
@@ -11626,13 +11394,13 @@
       "安能摧眉折腰事权贵？",
       "使我不得开心颜。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
       "river-lake",
       "moon",
-      "wind-cloud",
+      "rain",
       "pastoral"
     ],
     "motifs": [
@@ -11663,10 +11431,10 @@
     "tags": [
       "parting",
       "wine",
-      "spring",
       "homesickness",
       "flowers",
-      "trees-bamboo"
+      "trees-bamboo",
+      "palace-court"
     ],
     "motifs": [
       "长亭",
@@ -11694,8 +11462,8 @@
     "tags": [
       "parting",
       "moon",
-      "flowers",
       "mountain",
+      "flowers",
       "river-lake",
       "boat-travel"
     ],
@@ -11764,11 +11532,10 @@
     "tags": [
       "parting",
       "autumn",
-      "war",
       "mountain",
-      "city-ruins",
+      "war",
       "wind-cloud",
-      "river-lake"
+      "city-ruins"
     ],
     "motifs": [
       "青山",
@@ -11803,12 +11570,11 @@
     "theme": "parting",
     "tags": [
       "parting",
+      "wind-cloud",
       "autumn",
       "moon",
-      "wind-cloud",
       "wine",
-      "birds",
-      "river-lake"
+      "birds"
     ],
     "motifs": [
       "青天",
@@ -11849,9 +11615,7 @@
       "music",
       "moon",
       "pastoral",
-      "homesickness",
-      "mountain",
-      "river-lake"
+      "homesickness"
     ],
     "motifs": [
       "把酒",
@@ -11882,10 +11646,10 @@
     "theme": "parting",
     "tags": [
       "parting",
+      "mountain",
       "flowers",
       "birds",
       "reclusion",
-      "mountain",
       "river-lake"
     ],
     "motifs": [
@@ -11910,11 +11674,11 @@
       "两岸猨声啼不尽，",
       "轻舟已过万重山。"
     ],
-    "theme": "parting",
+    "theme": "river-lake",
     "tags": [
       "parting",
-      "birds",
       "mountain",
+      "birds",
       "river-lake",
       "dawn-dusk",
       "boat-travel"
@@ -11952,9 +11716,7 @@
       "autumn",
       "war",
       "river-lake",
-      "dawn-dusk",
-      "city-ruins",
-      "night"
+      "dawn-dusk"
     ],
     "motifs": [
       "青天",
@@ -11992,10 +11754,10 @@
     "tags": [
       "wine",
       "moon",
-      "spring",
       "flowers",
-      "music",
-      "wind-cloud"
+      "spring",
+      "wind-cloud",
+      "music"
     ],
     "motifs": [
       "独酌",
@@ -12023,14 +11785,14 @@
       "不觉碧山暮，",
       "秋云暗几重。"
     ],
-    "theme": "autumn",
+    "theme": "mountain",
     "tags": [
       "autumn",
       "mountain",
       "temple-bell",
       "homesickness",
       "trees-bamboo",
-      "music"
+      "wind-cloud"
     ],
     "motifs": [
       "挥手",
@@ -12055,13 +11817,11 @@
       "不知心恨谁。"
     ],
     "theme": "landscape",
-    "tags": [
-      "love-longing"
-    ],
+    "tags": [],
     "motifs": [
       "怨情",
-      "相思",
-      "红豆"
+      "长风",
+      "白云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -12131,19 +11891,17 @@
       "方知大藩地，",
       "岂曰财赋疆。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
-      "wine",
-      "spring",
       "rain",
+      "wine",
       "war",
-      "sea",
-      "wind-cloud"
+      "sea"
     ],
     "motifs": [
       "风雨",
-      "把酒",
-      "独酌"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -12202,8 +11960,7 @@
       "river-lake",
       "dawn-dusk",
       "sea",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "江南曲",
@@ -12255,10 +12012,10 @@
     "tags": [
       "frontier",
       "war",
+      "rain",
       "parting",
-      "spring",
       "autumn",
-      "wind-cloud"
+      "mountain"
     ],
     "motifs": [
       "风雨",
@@ -12297,8 +12054,7 @@
       "dawn-dusk",
       "music",
       "snow",
-      "autumn",
-      "winter"
+      "rain"
     ],
     "motifs": [
       "烽火",
@@ -12364,15 +12120,14 @@
       "蜀道之难难于上青天，",
       "侧身西望长咨嗟。"
     ],
-    "theme": "frontier",
+    "theme": "mountain",
     "tags": [
-      "frontier",
       "mountain",
+      "frontier",
       "birds",
       "dawn-dusk",
       "trees-bamboo",
-      "moon",
-      "river-lake"
+      "moon"
     ],
     "motifs": [
       "青天",
@@ -12427,8 +12182,7 @@
     "tags": [
       "moon",
       "autumn",
-      "night",
-      "palace-court"
+      "night"
     ],
     "motifs": [
       "玉阶",
@@ -12458,11 +12212,10 @@
     "tags": [
       "night",
       "dawn-dusk",
-      "spring",
       "pastoral",
       "parting",
-      "music",
-      "love-longing"
+      "spring",
+      "music"
     ],
     "motifs": [
       "白日",
@@ -12528,8 +12281,7 @@
       "moon",
       "autumn",
       "war",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "子夜",
@@ -12616,15 +12368,15 @@
       "谁言寸草心，",
       "报得三春晖。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
-      "homesickness"
+      "homesickness",
+      "spring"
     ],
     "motifs": [
       "游子吟",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -12669,10 +12421,10 @@
     "tags": [
       "parting",
       "snow",
-      "spring",
+      "mountain",
       "flowers",
       "birds",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "丽人行",
@@ -12711,7 +12463,7 @@
       "love-longing",
       "frontier",
       "moon",
-      "festival",
+      "mountain",
       "flowers"
     ],
     "motifs": [
@@ -12743,7 +12495,7 @@
       "不信妾肠断，",
       "归来看取明镜前。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
       "spring",
       "love-longing",
@@ -12788,11 +12540,10 @@
     "tags": [
       "river-lake",
       "boat-travel",
+      "wind-cloud",
       "moon",
       "wine",
-      "frontier",
-      "snow",
-      "parting"
+      "frontier"
     ],
     "motifs": [
       "黄河",
@@ -12828,19 +12579,18 @@
       "行路难，",
       "归去来。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
-      "festival",
       "homesickness",
       "parting",
       "dawn-dusk",
-      "palace-court"
+      "palace-court",
+      "music"
     ],
     "motifs": [
       "青天",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -12907,8 +12657,7 @@
       "homesickness",
       "boat-travel",
       "palace-court",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "故乡",
@@ -12936,8 +12685,7 @@
     "tags": [
       "parting",
       "river-lake",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "长亭",
@@ -12987,11 +12735,11 @@
       "相迎不道远，",
       "直至长风沙。"
     ],
-    "theme": "flowers",
+    "theme": "landscape",
     "tags": [
       "flowers",
+      "wind-cloud",
       "autumn",
-      "winter",
       "war",
       "trees-bamboo",
       "palace-court"
@@ -13026,11 +12774,10 @@
     "tags": [
       "frontier",
       "moon",
-      "spring",
       "autumn",
       "war",
       "river-lake",
-      "love-longing"
+      "sea"
     ],
     "motifs": [
       "明月",
@@ -13059,8 +12806,7 @@
       "autumn",
       "homesickness",
       "night",
-      "music",
-      "love-longing"
+      "music"
     ],
     "motifs": [
       "秋夜曲",
@@ -13088,15 +12834,14 @@
       "为问元戎窦车骑，",
       "何时反斾勒燕然。"
     ],
-    "theme": "spring",
+    "theme": "birds",
     "tags": [
-      "spring",
       "birds",
       "frontier",
       "moon",
       "flowers",
       "war",
-      "love-longing"
+      "spring"
     ],
     "motifs": [
       "明月",
@@ -13126,8 +12871,7 @@
       "moon",
       "spring",
       "night",
-      "insects",
-      "pastoral"
+      "insects"
     ],
     "motifs": [
       "阑干",
@@ -13155,9 +12899,8 @@
     "tags": [
       "dawn-dusk",
       "courtyard",
-      "spring",
       "flowers",
-      "palace-court"
+      "spring"
     ],
     "motifs": [
       "黄昏",
@@ -13211,15 +12954,14 @@
       "羌笛何须怨杨柳，",
       "春光不度玉门关。"
     ],
-    "theme": "frontier",
+    "theme": "landscape",
     "tags": [
       "frontier",
-      "spring",
+      "wind-cloud",
       "mountain",
+      "spring",
       "river-lake",
-      "trees-bamboo",
-      "city-ruins",
-      "homesickness"
+      "trees-bamboo"
     ],
     "motifs": [
       "黄河",
@@ -13247,14 +12989,14 @@
       "幽映每白日，",
       "清辉照衣裳。"
     ],
-    "theme": "spring",
+    "theme": "landscape",
     "tags": [
-      "spring",
+      "wind-cloud",
       "reclusion",
       "dawn-dusk",
-      "flowers",
       "mountain",
-      "river-lake"
+      "flowers",
+      "spring"
     ],
     "motifs": [
       "白日",
@@ -13278,15 +13020,14 @@
       "三春白雪归青冢，",
       "万里黄河绕黑山。"
     ],
-    "theme": "frontier",
+    "theme": "snow-river",
     "tags": [
       "frontier",
       "snow",
-      "spring",
       "homesickness",
-      "war",
       "mountain",
-      "river-lake"
+      "war",
+      "spring"
     ],
     "motifs": [
       "黄河",
@@ -13321,8 +13062,7 @@
       "frontier",
       "snow",
       "wind-cloud",
-      "palace-court",
-      "winter"
+      "palace-court"
     ],
     "motifs": [
       "送李端",
@@ -13346,7 +13086,7 @@
       "月殿影开闻夜漏，",
       "水精帘卷近银河。"
     ],
-    "theme": "festival",
+    "theme": "night-moon",
     "tags": [
       "palace-court",
       "stars",
@@ -13396,14 +13136,14 @@
       "算人间没个并刀，",
       "翦断心上愁痕。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
-      "spring",
       "flowers",
       "dawn-dusk",
       "moon",
       "homesickness",
-      "parting"
+      "parting",
+      "wine"
     ],
     "motifs": [
       "黄昏",
@@ -13448,14 +13188,14 @@
       "与说相思，",
       "看谁瘦损。"
     ],
-    "theme": "birds",
+    "theme": "flowers",
     "tags": [
       "birds",
       "love-longing",
-      "spring",
       "autumn",
       "homesickness",
-      "parting"
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "相思",
@@ -13499,19 +13239,19 @@
       "山黛暝，",
       "尘波澹绿无痕。"
     ],
-    "theme": "river-lake",
+    "theme": "rain",
     "tags": [
+      "rain",
       "river-lake",
-      "spring",
       "boat-travel",
       "moon",
-      "wind-cloud",
-      "rain"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "风雨",
-      "长江",
-      "寒江"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -13550,14 +13290,14 @@
       "但约明年，",
       "翠微高处。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
+      "rain",
       "moon",
       "autumn",
       "parting",
       "wine",
-      "dawn-dusk",
-      "insects"
+      "dawn-dusk"
     ],
     "motifs": [
       "霜叶",
@@ -13602,19 +13342,19 @@
       "剩雨蓬莱，",
       "也应梦见。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "river-lake",
       "love-longing",
       "moon",
-      "wind-cloud",
-      "festival"
+      "rain",
+      "wine",
+      "flowers"
     ],
     "motifs": [
       "相思",
       "瑞鹤仙",
-      "春风"
+      "长江"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -13658,9 +13398,9 @@
       "spring",
       "moon",
       "autumn",
-      "wind-cloud",
-      "festival",
-      "flowers"
+      "flowers",
+      "reclusion",
+      "dawn-dusk"
     ],
     "motifs": [
       "宴清都",
@@ -13701,19 +13441,19 @@
       "可惜秋宵，",
       "乱蛩疏雨里。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
-      "spring",
       "parting",
       "flowers",
       "snow",
+      "rain",
       "autumn",
       "homesickness"
     ],
     "motifs": [
       "烟波",
       "齐天乐",
-      "春风"
+      "长亭"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -13745,11 +13485,11 @@
     "theme": "trees-bamboo",
     "tags": [
       "trees-bamboo",
-      "spring",
       "birds",
       "moon",
+      "rain",
       "autumn",
-      "rain"
+      "wine"
     ],
     "motifs": [
       "啼莺",
@@ -13824,10 +13564,10 @@
       "怨曲重招，",
       "断魂在否。"
     ],
-    "theme": "birds",
+    "theme": "rain",
     "tags": [
       "birds",
-      "spring",
+      "rain",
       "river-lake",
       "homesickness",
       "parting",
@@ -13882,8 +13622,8 @@
       "autumn",
       "trees-bamboo",
       "music",
-      "spring",
-      "homesickness"
+      "homesickness",
+      "wine"
     ],
     "motifs": [
       "小窗",
@@ -13928,11 +13668,11 @@
       "小阁幽窗，",
       "有时梦去。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
-      "flowers",
       "mountain",
+      "flowers",
       "dawn-dusk",
       "rain",
       "reclusion"
@@ -14024,14 +13764,14 @@
       "唤觉来厌厌，",
       "残照依然花坞。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "birds",
-      "wind-cloud",
-      "rain",
       "parting",
-      "flowers"
+      "flowers",
+      "reclusion"
     ],
     "motifs": [
       "黄鹂",
@@ -14059,17 +13799,16 @@
       "零落成泥碾作尘，",
       "只有香如故。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
-      "spring",
       "dawn-dusk",
       "rain",
-      "wind-cloud"
+      "spring"
     ],
     "motifs": [
       "黄昏",
       "卜算子",
-      "春风"
+      "日暮"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -14115,7 +13854,7 @@
       "wine",
       "flowers",
       "war",
-      "music"
+      "wind-cloud"
     ],
     "motifs": [
       "芳草",
@@ -14162,10 +13901,10 @@
     "tags": [
       "boat-travel",
       "parting",
-      "river-lake",
       "spring",
+      "river-lake",
       "autumn",
-      "wind-cloud"
+      "homesickness"
     ],
     "motifs": [
       "芳草",
@@ -14193,11 +13932,11 @@
       "不肯画堂朱户，",
       "春风自在杨花。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
-      "music",
-      "spring",
       "rain",
+      "spring",
+      "music",
       "flowers",
       "birds",
       "dawn-dusk"
@@ -14236,14 +13975,14 @@
       "酒醒后，",
       "思量著。"
     ],
-    "theme": "autumn",
+    "theme": "parting",
     "tags": [
       "autumn",
       "parting",
       "moon",
-      "spring",
       "homesickness",
-      "wine"
+      "wine",
+      "birds"
     ],
     "motifs": [
       "寒砧",
@@ -14271,11 +14010,11 @@
       "不肯画堂朱户，",
       "春风自在梨花。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
-      "music",
-      "spring",
       "rain",
+      "spring",
+      "music",
       "flowers",
       "birds",
       "dawn-dusk"
@@ -14308,14 +14047,14 @@
       "当时明月在，",
       "曾照彩云归。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "love-longing",
       "music",
       "moon",
+      "rain",
       "homesickness",
-      "rain"
+      "parting"
     ],
     "motifs": [
       "明月",
@@ -14348,11 +14087,11 @@
     "theme": "dawn-dusk",
     "tags": [
       "dawn-dusk",
-      "spring",
       "parting",
       "wine",
       "flowers",
-      "birds"
+      "birds",
+      "spring"
     ],
     "motifs": [
       "斜阳",
@@ -14386,9 +14125,9 @@
     "tags": [
       "wine",
       "moon",
-      "spring",
       "autumn",
       "parting",
+      "mountain",
       "flowers"
     ],
     "motifs": [
@@ -14459,10 +14198,10 @@
     "tags": [
       "flowers",
       "moon",
-      "spring",
       "parting",
       "wine",
-      "trees-bamboo"
+      "trees-bamboo",
+      "night"
     ],
     "motifs": [
       "桃花",
@@ -14497,7 +14236,7 @@
       "frontier",
       "autumn",
       "homesickness",
-      "birds"
+      "mountain"
     ],
     "motifs": [
       "相思",
@@ -14528,11 +14267,11 @@
     "theme": "river-lake",
     "tags": [
       "boat-travel",
-      "spring",
       "parting",
       "birds",
       "rain",
-      "wine"
+      "wine",
+      "spring"
     ],
     "motifs": [
       "渡头",
@@ -14560,14 +14299,14 @@
       "紫骝认得旧游踪，",
       "嘶过画桥东畔路。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
       "courtyard",
-      "spring",
-      "autumn",
-      "wind-cloud",
       "rain",
-      "parting"
+      "autumn",
+      "parting",
+      "flowers",
+      "reclusion"
     ],
     "motifs": [
       "庭院",
@@ -14598,10 +14337,10 @@
     "theme": "autumn",
     "tags": [
       "autumn",
-      "spring",
+      "mountain",
       "birds",
       "reclusion",
-      "mountain",
+      "spring",
       "river-lake"
     ],
     "motifs": [
@@ -14635,8 +14374,7 @@
       "spring",
       "parting",
       "wine",
-      "flowers",
-      "wind-cloud"
+      "flowers"
     ],
     "motifs": [
       "落花",
@@ -14665,17 +14403,17 @@
       "梦魂纵有也成虚。",
       "那堪和梦无。"
     ],
-    "theme": "spring",
+    "theme": "autumn",
     "tags": [
-      "spring",
       "autumn",
       "homesickness",
-      "wine"
+      "wine",
+      "spring"
     ],
     "motifs": [
       "阮郎归",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -14706,7 +14444,7 @@
       "wine",
       "flowers",
       "birds",
-      "music"
+      "wind-cloud"
     ],
     "motifs": [
       "故乡",
@@ -14750,8 +14488,8 @@
       "music",
       "courtyard",
       "moon",
-      "spring",
-      "homesickness"
+      "homesickness",
+      "mountain"
     ],
     "motifs": [
       "绿阴",
@@ -14790,9 +14528,9 @@
       "dawn-dusk",
       "courtyard",
       "snow",
-      "spring",
       "rain",
-      "parting"
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "落花",
@@ -14825,10 +14563,10 @@
     "theme": "night-moon",
     "tags": [
       "moon",
-      "spring",
       "homesickness",
       "parting",
       "reclusion",
+      "spring",
       "night"
     ],
     "motifs": [
@@ -14863,8 +14601,8 @@
     "theme": "river-lake",
     "tags": [
       "river-lake",
-      "spring",
       "parting",
+      "spring",
       "wind-cloud"
     ],
     "motifs": [
@@ -14901,8 +14639,8 @@
       "autumn",
       "parting",
       "flowers",
-      "courtyard",
-      "wind-cloud"
+      "wind-cloud",
+      "courtyard"
     ],
     "motifs": [
       "思远人",
@@ -14937,7 +14675,7 @@
       "love-longing",
       "autumn",
       "homesickness",
-      "birds"
+      "mountain"
     ],
     "motifs": [
       "相思",
@@ -14983,8 +14721,8 @@
     ],
     "theme": "parting",
     "tags": [
-      "parting",
       "spring",
+      "parting",
       "rain",
       "flowers",
       "birds",
@@ -14993,7 +14731,7 @@
     "motifs": [
       "万里",
       "水龙吟",
-      "长亭"
+      "春风"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15065,7 +14803,7 @@
       "小舟从此逝，",
       "江海寄馀生。"
     ],
-    "theme": "homesickness",
+    "theme": "river-lake",
     "tags": [
       "homesickness",
       "wine",
@@ -15103,12 +14841,12 @@
       "归去。",
       "也无风雨也无晴。"
     ],
-    "theme": "trees-bamboo",
+    "theme": "rain",
     "tags": [
-      "trees-bamboo",
-      "spring",
-      "homesickness",
       "rain",
+      "spring",
+      "trees-bamboo",
+      "homesickness",
       "parting",
       "wine"
     ],
@@ -15189,19 +14927,19 @@
       "共粉泪，",
       "两蔌蔌。"
     ],
-    "theme": "spring",
+    "theme": "trees-bamboo",
     "tags": [
-      "spring",
       "trees-bamboo",
       "autumn",
       "wine",
       "flowers",
-      "summer"
+      "summer",
+      "reclusion"
     ],
     "motifs": [
       "贺新郎",
-      "春风",
-      "春晓"
+      "翠竹",
+      "青松"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15332,10 +15070,10 @@
     "tags": [
       "homesickness",
       "moon",
-      "spring",
       "autumn",
-      "wind-cloud",
-      "flowers"
+      "mountain",
+      "flowers",
+      "summer"
     ],
     "motifs": [
       "明月",
@@ -15372,10 +15110,10 @@
     "tags": [
       "river-lake",
       "birds",
-      "spring",
-      "homesickness",
       "rain",
-      "parting"
+      "homesickness",
+      "parting",
+      "spring"
     ],
     "motifs": [
       "鸥鹭",
@@ -15417,19 +15155,19 @@
       "且将此恨，",
       "分付庭前柳。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "courtyard",
       "moon",
       "rain",
       "wine",
-      "flowers"
+      "flowers",
+      "spring"
     ],
     "motifs": [
       "谢池春",
-      "春风",
-      "春晓"
+      "庭院",
+      "阑干"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15492,8 +15230,8 @@
       "dawn-dusk",
       "snow",
       "flowers",
-      "winter",
-      "river-lake"
+      "river-lake",
+      "wind-cloud"
     ],
     "motifs": [
       "日暮",
@@ -15535,7 +15273,7 @@
       "残雪楼台，",
       "迟日园林。"
     ],
-    "theme": "spring",
+    "theme": "winter",
     "tags": [
       "spring",
       "winter",
@@ -15572,12 +15310,12 @@
     ],
     "theme": "flowers",
     "tags": [
+      "spring",
       "love-longing",
       "frontier",
       "moon",
-      "spring",
       "homesickness",
-      "flowers"
+      "winter"
     ],
     "motifs": [
       "明月",
@@ -15605,17 +15343,16 @@
       "人散市声收，",
       "渐入愁时节。"
     ],
-    "theme": "festival",
+    "theme": "night-moon",
     "tags": [
-      "festival",
       "moon",
       "parting",
       "lamplight"
     ],
     "motifs": [
       "生查子",
-      "元夕",
-      "花灯"
+      "明月",
+      "清影"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15652,10 +15389,10 @@
       "怕见飞花，",
       "怕听啼鹃。"
     ],
-    "theme": "spring",
+    "theme": "birds",
     "tags": [
-      "spring",
       "birds",
+      "spring",
       "music",
       "moon",
       "homesickness",
@@ -15663,8 +15400,8 @@
     ],
     "motifs": [
       "高阳台",
-      "春风",
-      "春晓"
+      "啼鸟",
+      "黄鹂"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15758,14 +15495,14 @@
       "鸿北去，",
       "日西匿。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "autumn",
-      "wind-cloud",
-      "homesickness",
       "rain",
-      "parting"
+      "autumn",
+      "homesickness",
+      "parting",
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "秋色",
@@ -15793,18 +15530,18 @@
       "男儿西北有神州，",
       "莫滴水西桥畔泪。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
       "homesickness",
       "wine",
-      "lamplight",
-      "night"
+      "spring",
+      "night",
+      "lamplight"
     ],
     "motifs": [
       "玉楼春",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15827,16 +15564,16 @@
       "惟有御沟声断，",
       "似知人呜咽。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
+      "spring",
       "palace-court"
     ],
     "motifs": [
       "御沟",
       "好事近",
-      "春风"
+      "落花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15890,19 +15627,19 @@
       "目断武陵溪。",
       "往事难追。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "flowers",
       "wind-cloud",
-      "rain",
       "wine",
       "reclusion"
     ],
     "motifs": [
       "烟雨",
       "六州歌头",
-      "春风"
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -15940,11 +15677,11 @@
     "theme": "autumn",
     "tags": [
       "autumn",
-      "lamplight",
       "night",
       "palace-court",
-      "spring",
-      "festival"
+      "lamplight",
+      "homesickness",
+      "parting"
     ],
     "motifs": [
       "归雁",
@@ -15992,10 +15729,10 @@
     "tags": [
       "war",
       "dawn-dusk",
-      "festival",
       "rain",
       "parting",
-      "mountain"
+      "mountain",
+      "river-lake"
     ],
     "motifs": [
       "烽火",
@@ -16039,19 +15776,19 @@
       "匹练秋光，",
       "倒泻半湖明月。"
     ],
-    "theme": "night-moon",
+    "theme": "snow-river",
     "tags": [
-      "moon",
       "snow",
+      "moon",
       "autumn",
-      "wind-cloud",
       "parting",
-      "flowers"
+      "flowers",
+      "summer"
     ],
     "motifs": [
       "明月",
-      "清影",
-      "婵娟"
+      "飞雪",
+      "寒雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16104,8 +15841,8 @@
     "tags": [
       "love-longing",
       "frontier",
-      "wind-cloud",
       "parting",
+      "winter",
       "flowers",
       "birds"
     ],
@@ -16148,10 +15885,10 @@
     "tags": [
       "spring",
       "flowers",
-      "moon",
       "snow",
-      "wind-cloud",
-      "wine"
+      "moon",
+      "wine",
+      "dawn-dusk"
     ],
     "motifs": [
       "春风",
@@ -16181,19 +15918,19 @@
       "拼一醉。",
       "而今乐事他年泪。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "trees-bamboo",
       "rain",
       "flowers",
+      "spring",
       "fish-aquatic"
     ],
     "motifs": [
       "渔家傲",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16285,10 +16022,10 @@
     "tags": [
       "spring",
       "flowers",
-      "winter",
       "sea",
       "moon",
-      "festival"
+      "homesickness",
+      "wine"
     ],
     "motifs": [
       "海潮",
@@ -16336,9 +16073,9 @@
       "dawn-dusk",
       "parting",
       "lamplight",
-      "spring",
       "pastoral",
-      "festival"
+      "mountain",
+      "war"
     ],
     "motifs": [
       "斜阳",
@@ -16368,8 +16105,8 @@
     "tags": [
       "reclusion",
       "frontier",
-      "autumn",
       "rain",
+      "autumn",
       "flowers",
       "river-lake"
     ],
@@ -16400,13 +16137,13 @@
       "衡阳犹有雁传书。",
       "郴阳和雁无。"
     ],
-    "theme": "frontier",
+    "theme": "rain",
     "tags": [
+      "rain",
       "frontier",
       "homesickness",
       "courtyard",
       "autumn",
-      "rain",
       "birds"
     ],
     "motifs": [
@@ -16454,10 +16191,10 @@
     "tags": [
       "spring",
       "courtyard",
-      "autumn",
-      "wind-cloud",
       "rain",
-      "wine"
+      "autumn",
+      "wine",
+      "flowers"
     ],
     "motifs": [
       "满庭芳",
@@ -16508,7 +16245,7 @@
       "homesickness",
       "fish-aquatic",
       "sea",
-      "city-ruins"
+      "wind-cloud"
     ],
     "motifs": [
       "芳草",
@@ -16538,19 +16275,19 @@
       "飞燕又将归信误。",
       "小屏风上西江路。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "moon",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
-      "wine"
+      "wine",
+      "flowers"
     ],
     "motifs": [
       "蝶恋花",
-      "春风",
-      "春晓"
+      "明月",
+      "清影"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16571,19 +16308,19 @@
       "恼花颠酒拼君嗔。",
       "物情惟有醉中真。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "parting",
       "wine",
       "homesickness",
       "flowers",
+      "spring",
       "river-lake"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "长亭",
+      "送别",
+      "杨柳岸"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16614,19 +16351,19 @@
       "断魂分付与。",
       "春将去。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
       "rain",
       "parting",
-      "winter",
-      "mountain"
+      "mountain",
+      "spring",
+      "trees-bamboo"
     ],
     "motifs": [
       "朱户",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16664,19 +16401,19 @@
       "厌厌睡起，",
       "犹有花梢日在。"
     ],
-    "theme": "spring",
+    "theme": "night-moon",
     "tags": [
-      "spring",
       "moon",
-      "festival",
       "wine",
       "flowers",
-      "reclusion"
+      "reclusion",
+      "spring",
+      "lamplight"
     ],
     "motifs": [
       "薄幸",
-      "春风",
-      "春晓"
+      "明月",
+      "清影"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16715,10 +16452,10 @@
     "tags": [
       "dawn-dusk",
       "moon",
-      "spring",
       "autumn",
-      "wind-cloud",
-      "homesickness"
+      "homesickness",
+      "parting",
+      "wine"
     ],
     "motifs": [
       "明月",
@@ -16751,7 +16488,7 @@
       "梦魂无据，",
       "惟有归来是。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
       "spring",
       "homesickness",
@@ -16804,11 +16541,10 @@
     "tags": [
       "spring",
       "dawn-dusk",
-      "autumn",
-      "festival",
       "rain",
+      "autumn",
       "parting",
-      "river-lake"
+      "wine"
     ],
     "motifs": [
       "西湖",
@@ -16850,14 +16586,14 @@
       "啼鸟晴明，",
       "叶底青圆。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "rain",
     "tags": [
+      "rain",
       "dawn-dusk",
       "birds",
       "courtyard",
       "frontier",
-      "moon",
-      "spring"
+      "moon"
     ],
     "motifs": [
       "啼鸟",
@@ -16900,19 +16636,19 @@
       "伫久河桥欲去，",
       "斜阳泪满。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "river-lake",
       "dawn-dusk",
       "music",
-      "homesickness"
+      "homesickness",
+      "parting"
     ],
     "motifs": [
       "斜阳",
       "三姝媚",
-      "春风"
+      "把酒"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -16956,7 +16692,7 @@
       "fish-aquatic",
       "city-ruins",
       "autumn",
-      "wind-cloud"
+      "homesickness"
     ],
     "motifs": [
       "青天",
@@ -17000,14 +16736,14 @@
       "凭谁指与，",
       "芳草斜阳。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
       "spring",
       "river-lake",
       "wine",
       "dawn-dusk",
-      "homesickness",
-      "rain"
+      "rain",
+      "homesickness"
     ],
     "motifs": [
       "西湖",
@@ -17037,19 +16773,19 @@
       "隔江人在雨声中，",
       "晚风菰叶生秋怨。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
-      "autumn",
       "rain",
-      "summer",
+      "autumn",
       "mountain",
+      "summer",
       "river-lake",
       "courtyard"
     ],
     "motifs": [
       "千山",
-      "秋色",
-      "落木"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17083,9 +16819,9 @@
       "autumn",
       "parting",
       "birds",
-      "festival",
       "rain",
-      "mountain"
+      "mountain",
+      "river-lake"
     ],
     "motifs": [
       "夜游宫",
@@ -17120,7 +16856,7 @@
       "trees-bamboo",
       "courtyard",
       "moon",
-      "spring",
+      "rain",
       "autumn"
     ],
     "motifs": [
@@ -17155,19 +16891,19 @@
       "漫长是、",
       "系行舟。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
       "homesickness",
       "parting",
       "moon",
+      "rain",
       "autumn",
-      "rain"
+      "flowers"
     ],
     "motifs": [
       "明月",
       "唐多令",
-      "春风"
+      "故乡"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17208,7 +16944,7 @@
       "怀此恨，",
       "寄残醉。"
     ],
-    "theme": "spring",
+    "theme": "reclusion",
     "tags": [
       "spring",
       "flowers",
@@ -17258,19 +16994,19 @@
       "故国莼鲈，",
       "霜前雁后。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
+      "rain",
       "autumn",
       "flowers",
-      "spring",
       "homesickness",
-      "rain",
-      "wine"
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "风雨",
       "大有",
-      "秋色"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17314,13 +17050,13 @@
       "顾孺子，",
       "共夜雨。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
       "parting",
+      "spring",
       "autumn",
       "river-lake",
-      "festival",
       "homesickness"
     ],
     "motifs": [
@@ -17381,9 +17117,9 @@
       "flowers",
       "music",
       "moon",
-      "spring",
-      "festival",
-      "homesickness"
+      "homesickness",
+      "parting",
+      "wine"
     ],
     "motifs": [
       "宝鼎现",
@@ -17427,19 +17163,19 @@
       "残无寐，",
       "满村社鼓。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "festival",
+      "rain",
       "parting",
       "river-lake",
       "moon",
-      "wind-cloud"
+      "pastoral",
+      "spring"
     ],
     "motifs": [
       "风雨",
       "永遇乐",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17478,15 +17214,14 @@
       "清狂顾曲，",
       "此会几时又。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "wine",
       "flowers",
       "music",
-      "homesickness",
-      "rain",
-      "river-lake"
+      "homesickness"
     ],
     "motifs": [
       "西湖",
@@ -17535,9 +17270,9 @@
       "spring",
       "moon",
       "autumn",
-      "wind-cloud",
-      "festival",
-      "flowers"
+      "winter",
+      "flowers",
+      "reclusion"
     ],
     "motifs": [
       "明月",
@@ -17581,14 +17316,14 @@
       "一梦扬州，",
       "二十四桥明月。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
       "spring",
       "parting",
       "flowers",
       "frontier",
-      "moon",
-      "snow"
+      "snow",
+      "moon"
     ],
     "motifs": [
       "明月",
@@ -17635,8 +17370,8 @@
       "reclusion",
       "trees-bamboo",
       "music",
-      "moon",
       "snow",
+      "moon",
       "autumn"
     ],
     "motifs": [
@@ -17688,8 +17423,8 @@
       "music",
       "frontier",
       "moon",
-      "wind-cloud",
-      "parting"
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "曲游春",
@@ -17731,12 +17466,12 @@
       "折尽梅花，",
       "难寄相思。"
     ],
-    "theme": "spring",
+    "theme": "winter",
     "tags": [
-      "spring",
+      "winter",
       "river-lake",
       "flowers",
-      "winter",
+      "spring",
       "dawn-dusk",
       "love-longing"
     ],
@@ -17782,19 +17517,19 @@
       "暮天修竹，",
       "头白倚寒翠。"
     ],
-    "theme": "night-moon",
+    "theme": "spring",
     "tags": [
-      "moon",
       "spring",
-      "wind-cloud",
+      "moon",
       "rain",
       "wine",
-      "flowers"
+      "flowers",
+      "trees-bamboo"
     ],
     "motifs": [
       "春风",
       "摸鱼儿",
-      "明月"
+      "春晓"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17832,14 +17567,14 @@
       "微波寄语，",
       "逍遥容与。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
-      "autumn",
       "rain",
+      "autumn",
+      "spring",
       "river-lake",
-      "moon",
       "snow",
-      "spring"
+      "moon"
     ],
     "motifs": [
       "春风",
@@ -17891,14 +17626,14 @@
       "雪绵松润，",
       "为君泪。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
       "spring",
       "river-lake",
       "snow",
+      "rain",
       "autumn",
-      "homesickness",
-      "rain"
+      "homesickness"
     ],
     "motifs": [
       "六丑",
@@ -17943,19 +17678,19 @@
       "过了青春，",
       "怎生意稳。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "love-longing",
       "moon",
-      "wind-cloud",
-      "festival",
-      "homesickness"
+      "rain",
+      "homesickness",
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "相思",
       "瑞鹤仙",
-      "春风"
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -17976,19 +17711,19 @@
       "更垂帘幕护窗纱。",
       "东风寒似夜来些。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
+      "spring",
       "courtyard",
       "moon",
       "homesickness",
-      "winter"
+      "river-lake"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "落花",
+      "红豆",
+      "藕花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18017,9 +17752,9 @@
     "tags": [
       "frontier",
       "moon",
-      "wind-cloud",
       "reclusion",
-      "sea"
+      "sea",
+      "wind-cloud"
     ],
     "motifs": [
       "天门谣",
@@ -18060,14 +17795,14 @@
       "枉望断天涯，",
       "两厌厌风月。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
       "spring",
       "homesickness",
       "frontier",
-      "moon",
       "snow",
-      "festival"
+      "moon",
+      "rain"
     ],
     "motifs": [
       "长亭",
@@ -18110,19 +17845,19 @@
       "一字相思，",
       "幸有归来双燕。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "love-longing",
       "moon",
-      "wind-cloud",
       "homesickness",
-      "wine"
+      "wine",
+      "flowers",
+      "birds"
     ],
     "motifs": [
       "相思",
       "望湘人",
-      "春风"
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18147,19 +17882,19 @@
       "数点雨声风约住。",
       "朦胧淡月云来去。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
       "frontier",
       "moon",
-      "wind-cloud",
-      "festival"
+      "rain",
+      "parting",
+      "mountain"
     ],
     "motifs": [
       "蝶恋花",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18202,19 +17937,19 @@
       "东风不住，",
       "也则眼前愁闷。"
     ],
-    "theme": "spring",
+    "theme": "reclusion",
     "tags": [
-      "spring",
       "reclusion",
+      "spring",
       "moon",
-      "wind-cloud",
+      "mountain",
       "flowers",
       "summer"
     ],
     "motifs": [
       "夏云峰",
-      "春风",
-      "春晓"
+      "幽居",
+      "采菊"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18251,19 +17986,19 @@
       "清香未减，",
       "风流不在人知。"
     ],
-    "theme": "spring",
+    "theme": "autumn",
     "tags": [
-      "spring",
       "autumn",
       "flowers",
       "river-lake",
       "palace-court",
-      "frontier"
+      "frontier",
+      "snow"
     ],
     "motifs": [
       "汉宫春",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18336,7 +18071,7 @@
       "欲黄昏。",
       "雨打梨花深闭门。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
       "spring",
       "dawn-dusk",
@@ -18388,7 +18123,7 @@
       "谁伴我，",
       "对鸾镜。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
       "spring",
       "wine",
@@ -18428,11 +18163,11 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "festival",
       "parting",
       "flowers",
       "summer",
-      "river-lake"
+      "river-lake",
+      "dawn-dusk"
     ],
     "motifs": [
       "酒杯",
@@ -18525,7 +18260,7 @@
       "trees-bamboo",
       "love-longing",
       "moon",
-      "festival"
+      "rain"
     ],
     "motifs": [
       "芳草",
@@ -18566,14 +18301,14 @@
       "到得却相逢，",
       "恰经年离别。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
       "spring",
       "parting",
       "flowers",
-      "moon",
       "snow",
-      "wind-cloud"
+      "moon",
+      "rain"
     ],
     "motifs": [
       "长亭",
@@ -18624,7 +18359,7 @@
       "wine",
       "courtyard",
       "moon",
-      "spring",
+      "rain",
       "autumn"
     ],
     "motifs": [
@@ -18671,10 +18406,10 @@
     "tags": [
       "river-lake",
       "frontier",
-      "moon",
       "snow",
+      "moon",
       "rain",
-      "reclusion"
+      "mountain"
     ],
     "motifs": [
       "满江红",
@@ -18719,19 +18454,19 @@
       "又是疏烟淡月，",
       "子规声断。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
+      "spring",
       "birds",
       "moon",
-      "autumn",
-      "wind-cloud"
+      "rain",
+      "autumn"
     ],
     "motifs": [
       "归雁",
       "水龙吟",
-      "春风"
+      "落花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18770,19 +18505,19 @@
       "直到老、",
       "不教归去。"
     ],
-    "theme": "spring",
+    "theme": "landscape",
     "tags": [
-      "spring",
-      "autumn",
       "wind-cloud",
-      "homesickness",
       "rain",
-      "parting"
+      "autumn",
+      "homesickness",
+      "parting",
+      "mountain"
     ],
     "motifs": [
       "朱户",
-      "春风",
-      "春晓"
+      "长风",
+      "白云"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18811,19 +18546,19 @@
       "终不似、",
       "少年游。"
     ],
-    "theme": "frontier",
+    "theme": "festival",
     "tags": [
+      "festival",
       "frontier",
-      "spring",
       "autumn",
       "wine",
-      "flowers",
-      "mountain"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "中秋",
       "唐多令",
-      "关塞"
+      "元夕"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18847,19 +18582,19 @@
       "凭栏怀古。",
       "残柳参差舞。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
-      "spring",
       "dawn-dusk",
-      "autumn",
       "rain",
+      "autumn",
       "parting",
+      "mountain",
       "birds"
     ],
     "motifs": [
       "黄昏",
       "点绛唇",
-      "春风"
+      "日暮"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -18883,14 +18618,14 @@
       "谁教岁岁红莲夜，",
       "两处沉吟各自知。"
     ],
-    "theme": "birds",
+    "theme": "flowers",
     "tags": [
       "birds",
       "love-longing",
-      "spring",
       "parting",
+      "mountain",
       "flowers",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "相思",
@@ -18965,10 +18700,10 @@
     "theme": "parting",
     "tags": [
       "parting",
-      "spring",
       "love-longing",
       "moon",
       "homesickness",
+      "mountain",
       "birds"
     ],
     "motifs": [
@@ -19013,19 +18748,19 @@
       "而今何意，",
       "醉卧酒垆侧。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "homesickness",
       "wine",
       "frontier",
       "moon",
+      "mountain",
       "flowers"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "故乡",
+      "乡愁",
+      "客心"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -19064,19 +18799,19 @@
       "唯有阑干，",
       "伴人一霎。"
     ],
-    "theme": "night-moon",
+    "theme": "rain",
     "tags": [
-      "moon",
       "snow",
-      "spring",
-      "homesickness",
+      "moon",
       "rain",
-      "parting"
+      "homesickness",
+      "parting",
+      "wine"
     ],
     "motifs": [
       "孤舟",
       "阑干",
-      "明月"
+      "飞雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -19117,9 +18852,9 @@
       "parting",
       "music",
       "moon",
+      "rain",
       "autumn",
-      "festival",
-      "rain"
+      "mountain"
     ],
     "motifs": [
       "齐天乐",
@@ -19164,14 +18899,14 @@
       "待得归鞍到时，",
       "只怕春深。"
     ],
-    "theme": "spring",
+    "theme": "trees-bamboo",
     "tags": [
-      "spring",
-      "winter",
       "trees-bamboo",
       "snow",
       "homesickness",
-      "parting"
+      "parting",
+      "winter",
+      "flowers"
     ],
     "motifs": [
       "野老",
@@ -19215,11 +18950,11 @@
     "theme": "dawn-dusk",
     "tags": [
       "dawn-dusk",
-      "spring",
+      "rain",
       "pastoral",
       "homesickness",
-      "rain",
-      "parting"
+      "parting",
+      "wine"
     ],
     "motifs": [
       "花间",
@@ -19263,19 +18998,19 @@
       "想见西出阳关，",
       "故人初别。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "music",
       "flowers",
       "frontier",
       "snow",
-      "festival"
+      "parting",
+      "birds"
     ],
     "motifs": [
       "琵琶",
-      "春风",
-      "春晓"
+      "琴音",
+      "笛声"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -19363,12 +19098,12 @@
       "念桥边红药，",
       "年年知为谁生。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "spring",
     "tags": [
+      "spring",
       "dawn-dusk",
       "frontier",
       "moon",
-      "spring",
       "parting",
       "war"
     ],
@@ -19505,14 +19240,14 @@
       "吹尽也，",
       "几时见得。"
     ],
-    "theme": "flowers",
+    "theme": "river-lake",
     "tags": [
+      "spring",
       "flowers",
       "river-lake",
       "trees-bamboo",
-      "moon",
       "snow",
-      "spring"
+      "moon"
     ],
     "motifs": [
       "西湖",
@@ -19558,12 +19293,12 @@
     ],
     "theme": "homesickness",
     "tags": [
+      "spring",
       "homesickness",
       "dawn-dusk",
       "palace-court",
       "frontier",
-      "moon",
-      "spring"
+      "moon"
     ],
     "motifs": [
       "春风",
@@ -19610,12 +19345,12 @@
     ],
     "theme": "wine",
     "tags": [
+      "spring",
       "music",
       "frontier",
       "moon",
-      "spring",
       "autumn",
-      "wind-cloud"
+      "wine"
     ],
     "motifs": [
       "芳草",
@@ -19648,8 +19383,7 @@
       "spring",
       "flowers",
       "birds",
-      "city-ruins",
-      "wind-cloud"
+      "city-ruins"
     ],
     "motifs": [
       "芳草",
@@ -19685,10 +19419,10 @@
     ],
     "theme": "dawn-dusk",
     "tags": [
+      "spring",
       "dawn-dusk",
       "love-longing",
       "moon",
-      "spring",
       "autumn",
       "homesickness"
     ],
@@ -19726,14 +19460,14 @@
       "眉间心上，",
       "无计相回避。"
     ],
-    "theme": "wine",
+    "theme": "night-moon",
     "tags": [
       "wine",
       "stars",
       "moon",
-      "festival",
       "river-lake",
-      "lamplight"
+      "night",
+      "palace-court"
     ],
     "motifs": [
       "御街行",
@@ -19783,7 +19517,7 @@
       "frontier",
       "rain",
       "parting",
-      "birds"
+      "mountain"
     ],
     "motifs": [
       "烟波",
@@ -19826,14 +19560,14 @@
       "千种风情，",
       "更与何人说。"
     ],
-    "theme": "parting",
+    "theme": "rain",
     "tags": [
       "parting",
       "rain",
       "moon",
-      "spring",
       "autumn",
-      "festival"
+      "wine",
+      "summer"
     ],
     "motifs": [
       "杨柳岸",
@@ -19915,8 +19649,8 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "spring",
       "flowers",
+      "spring",
       "insects",
       "music",
       "courtyard"
@@ -19971,19 +19705,19 @@
       "江乡夜夜，",
       "数寒更思忆。"
     ],
-    "theme": "homesickness",
+    "theme": "rain",
     "tags": [
+      "rain",
       "homesickness",
       "courtyard",
-      "wind-cloud",
-      "festival",
-      "rain",
-      "wine"
+      "wine",
+      "river-lake",
+      "wind-cloud"
     ],
     "motifs": [
       "夜雨",
       "浪淘沙",
-      "故乡"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20022,19 +19756,19 @@
       "免使年少，",
       "光阴虚过。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
-      "spring",
-      "wind-cloud",
       "parting",
       "flowers",
       "birds",
-      "reclusion"
+      "reclusion",
+      "spring",
+      "trees-bamboo"
     ],
     "motifs": [
       "定风波",
-      "春风",
-      "春晓"
+      "长亭",
+      "送别"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20059,19 +19793,19 @@
       "酒徒萧索，",
       "不似去年时。"
     ],
-    "theme": "spring",
+    "theme": "summer",
     "tags": [
-      "spring",
       "autumn",
-      "wind-cloud",
       "homesickness",
       "parting",
-      "wine"
+      "wine",
+      "summer",
+      "dawn-dusk"
     ],
     "motifs": [
       "少年游",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20249,9 +19983,9 @@
       "autumn",
       "dawn-dusk",
       "moon",
-      "spring",
-      "wind-cloud",
-      "homesickness"
+      "rain",
+      "homesickness",
+      "parting"
     ],
     "motifs": [
       "斜阳",
@@ -20346,10 +20080,10 @@
     "tags": [
       "parting",
       "city-ruins",
-      "autumn",
-      "wind-cloud",
       "rain",
-      "summer"
+      "autumn",
+      "summer",
+      "river-lake"
     ],
     "motifs": [
       "长亭",
@@ -20394,14 +20128,14 @@
       "佳人无消息，",
       "断云远。"
     ],
-    "theme": "homesickness",
+    "theme": "river-lake",
     "tags": [
       "homesickness",
+      "spring",
       "boat-travel",
       "frontier",
-      "spring",
       "autumn",
-      "wind-cloud"
+      "mountain"
     ],
     "motifs": [
       "芳草",
@@ -20431,19 +20165,19 @@
       "昨日乱山昏。",
       "来时衣上云。"
     ],
-    "theme": "spring",
+    "theme": "mountain",
     "tags": [
-      "spring",
       "wine",
+      "mountain",
       "flowers",
       "reclusion",
-      "mountain",
+      "spring",
       "trees-bamboo"
     ],
     "motifs": [
       "醉垂鞭",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20474,19 +20208,19 @@
       "不如桃杏，",
       "犹解嫁东风。"
     ],
-    "theme": "spring",
+    "theme": "frontier",
     "tags": [
-      "spring",
       "flowers",
       "war",
+      "spring",
       "dawn-dusk",
       "moon",
       "parting"
     ],
     "motifs": [
       "黄昏",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20518,9 +20252,9 @@
       "parting",
       "wine",
       "moon",
+      "flowers",
       "spring",
-      "wind-cloud",
-      "festival"
+      "wind-cloud"
     ],
     "motifs": [
       "天仙子",
@@ -20558,11 +20292,11 @@
     "theme": "flowers",
     "tags": [
       "flowers",
-      "spring",
-      "moon",
       "snow",
+      "moon",
+      "rain",
       "autumn",
-      "festival"
+      "spring"
     ],
     "motifs": [
       "千秋岁",
@@ -20591,19 +20325,19 @@
       "那堪更被明月，",
       "隔墙送过秋千影。"
     ],
-    "theme": "parting",
+    "theme": "rain",
     "tags": [
+      "rain",
       "parting",
       "moon",
       "autumn",
-      "rain",
       "wine",
       "flowers"
     ],
     "motifs": [
       "明月",
       "风雨",
-      "长亭"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20624,10 +20358,10 @@
       "似曾相识燕归来。",
       "小园香径独徘徊。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
+      "spring",
       "homesickness",
       "parting",
       "flowers",
@@ -20635,8 +20369,8 @@
     ],
     "motifs": [
       "浣溪沙",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20657,13 +20391,13 @@
       "落花风雨更伤春。",
       "不如怜取眼前人。"
     ],
-    "theme": "parting",
+    "theme": "rain",
     "tags": [
+      "rain",
       "parting",
       "river-lake",
-      "spring",
-      "rain",
       "wine",
+      "mountain",
       "flowers"
     ],
     "motifs": [
@@ -20697,9 +20431,9 @@
       "wine",
       "dawn-dusk",
       "courtyard",
-      "spring",
-      "festival",
-      "homesickness"
+      "homesickness",
+      "flowers",
+      "trees-bamboo"
     ],
     "motifs": [
       "斜阳",
@@ -20731,8 +20465,8 @@
     "tags": [
       "dawn-dusk",
       "autumn",
-      "birds",
       "mountain",
+      "birds",
       "fish-aquatic",
       "wind-cloud"
     ],
@@ -20762,19 +20496,19 @@
       "劝君莫作独醒人，",
       "烂醉花间应有数。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "autumn",
       "homesickness",
       "parting",
       "wine",
-      "flowers"
+      "flowers",
+      "birds"
     ],
     "motifs": [
       "花间",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20797,19 +20531,18 @@
       "当时共我赏花人，",
       "点检如今无一半。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "flowers",
+      "spring",
       "music",
-      "courtyard",
-      "wind-cloud"
+      "courtyard"
     ],
     "motifs": [
-      "春风",
-      "春晓",
-      "绿柳"
+      "把酒",
+      "独酌",
+      "浊酒"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -20905,7 +20638,7 @@
       "天涯地角有穷时，",
       "只有相思无尽处。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
       "spring",
       "parting",
@@ -20943,10 +20676,10 @@
     "theme": "dawn-dusk",
     "tags": [
       "dawn-dusk",
-      "spring",
       "homesickness",
       "wine",
       "flowers",
+      "spring",
       "boat-travel"
     ],
     "motifs": [
@@ -20975,13 +20708,13 @@
       "垂下帘栊。",
       "双燕归来细雨中。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
       "pastoral",
       "homesickness",
-      "rain",
       "parting",
+      "spring",
       "river-lake"
     ],
     "motifs": [
@@ -21012,19 +20745,18 @@
       "欲笑还颦，",
       "最断人肠。"
     ],
-    "theme": "spring",
+    "theme": "mountain",
     "tags": [
-      "spring",
       "autumn",
       "parting",
+      "mountain",
       "flowers",
-      "winter",
-      "mountain"
+      "music"
     ],
     "motifs": [
       "诉衷情",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21049,19 +20781,19 @@
       "平芜尽处是春山，",
       "行人更在春山外。"
     ],
-    "theme": "spring",
+    "theme": "mountain",
     "tags": [
-      "spring",
       "parting",
+      "mountain",
       "flowers",
-      "winter",
       "war",
-      "mountain"
+      "spring",
+      "river-lake"
     ],
     "motifs": [
       "踏莎行",
-      "春风",
-      "春晓"
+      "长亭",
+      "送别"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21090,8 +20822,8 @@
     "tags": [
       "wine",
       "parting",
-      "flowers",
       "mountain",
+      "flowers",
       "insects",
       "music"
     ],
@@ -21122,17 +20854,17 @@
       "当时共我赏花人，",
       "点检如今无一半。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "flowers",
+      "spring",
       "music"
     ],
     "motifs": [
       "玉楼春",
-      "春风",
-      "春晓"
+      "把酒",
+      "独酌"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21155,19 +20887,19 @@
       "劝君莫作独醒人，",
       "烂醉花间应有数。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "homesickness",
       "parting",
       "wine",
       "flowers",
+      "spring",
       "dawn-dusk"
     ],
     "motifs": [
       "花间",
       "玉楼春",
-      "春风"
+      "故乡"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21190,19 +20922,19 @@
       "故欹单枕梦中寻，",
       "梦又不成灯又尽。"
     ],
-    "theme": "spring",
+    "theme": "autumn",
     "tags": [
-      "spring",
       "autumn",
-      "festival",
       "parting",
+      "spring",
       "trees-bamboo",
-      "fish-aquatic"
+      "fish-aquatic",
+      "night"
     ],
     "motifs": [
       "玉楼春",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21272,11 +21004,10 @@
     "tags": [
       "wine",
       "moon",
-      "spring",
       "autumn",
-      "wind-cloud",
       "homesickness",
-      "river-lake"
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "西湖",
@@ -21320,19 +21051,19 @@
       "门掩梨花，",
       "翦灯深夜语。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "night",
       "river-lake",
-      "festival",
       "homesickness",
-      "flowers"
+      "mountain",
+      "flowers",
+      "reclusion"
     ],
     "motifs": [
       "深夜",
       "绮罗香",
-      "春风"
+      "夜色"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21368,19 +21099,19 @@
       "愁损翠黛双蛾，",
       "日日画阑独凭。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "festival",
-      "homesickness",
       "rain",
+      "homesickness",
       "parting",
-      "flowers"
+      "flowers",
+      "spring",
+      "trees-bamboo"
     ],
     "motifs": [
       "双双燕",
-      "春风",
-      "春晓"
+      "烟雨",
+      "新雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21417,18 +21148,17 @@
       "挑菜归来，",
       "万一灞桥相见。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
-      "spring",
       "homesickness",
+      "spring",
       "trees-bamboo",
-      "mountain",
-      "wind-cloud"
+      "mountain"
     ],
     "motifs": [
       "故园",
-      "春风",
-      "春晓"
+      "故乡",
+      "乡愁"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21472,10 +21202,10 @@
     "tags": [
       "spring",
       "flowers",
-      "winter",
       "lamplight",
+      "snow",
       "moon",
-      "snow"
+      "homesickness"
     ],
     "motifs": [
       "喜迁莺",
@@ -21518,14 +21248,14 @@
       "记取崔徽模样，",
       "归来暗写。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
       "spring",
       "love-longing",
-      "festival",
       "homesickness",
       "flowers",
-      "reclusion"
+      "reclusion",
+      "trees-bamboo"
     ],
     "motifs": [
       "相思",
@@ -21569,19 +21299,19 @@
       "花房夜久，",
       "各自思量。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
       "moon",
       "rain",
       "wine",
-      "winter"
+      "birds",
+      "reclusion"
     ],
     "motifs": [
       "夜合花",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21626,7 +21356,7 @@
       "birds",
       "reclusion",
       "love-longing",
-      "wind-cloud",
+      "rain",
       "pastoral"
     ],
     "motifs": [
@@ -21728,8 +21458,8 @@
       "autumn",
       "flowers",
       "river-lake",
-      "spring",
-      "festival"
+      "mountain",
+      "summer"
     ],
     "motifs": [
       "秋色",
@@ -21772,11 +21502,11 @@
       "芳草连天，",
       "飞梅弄晚。"
     ],
-    "theme": "birds",
+    "theme": "rain",
     "tags": [
+      "rain",
       "birds",
       "spring",
-      "winter",
       "courtyard",
       "moon",
       "autumn"
@@ -21818,10 +21548,10 @@
     "theme": "river-lake",
     "tags": [
       "river-lake",
-      "spring",
       "wine",
       "flowers",
       "reclusion",
+      "spring",
       "dawn-dusk"
     ],
     "motifs": [
@@ -21854,19 +21584,19 @@
       "无寻处，",
       "惟有少年心。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
       "moon",
       "rain",
+      "mountain",
       "flowers",
       "reclusion",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "小重山",
-      "春风",
-      "春晓"
+      "明月",
+      "清影"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21904,19 +21634,19 @@
       "从渠床下，",
       "凉夜伴孤吟。"
     ],
-    "theme": "festival",
+    "theme": "night-moon",
     "tags": [
-      "lamplight",
       "moon",
-      "spring",
       "autumn",
-      "festival",
-      "flowers"
+      "flowers",
+      "summer",
+      "reclusion",
+      "dawn-dusk"
     ],
     "motifs": [
       "萤火",
       "满庭芳",
-      "灯火"
+      "明月"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -21959,10 +21689,10 @@
     "tags": [
       "flowers",
       "moon",
-      "spring",
-      "wind-cloud",
       "parting",
-      "wine"
+      "wine",
+      "reclusion",
+      "dawn-dusk"
     ],
     "motifs": [
       "月下",
@@ -21993,9 +21723,9 @@
       "spring",
       "moon",
       "autumn",
-      "wind-cloud",
       "homesickness",
-      "flowers"
+      "flowers",
+      "river-lake"
     ],
     "motifs": [
       "浣溪沙",
@@ -22021,19 +21751,19 @@
       "水花红减似春休。",
       "西风梧井叶先愁。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "river-lake",
       "moon",
       "autumn",
       "homesickness",
-      "parting"
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "垂钓",
       "浣溪沙",
-      "春风"
+      "长江"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -22057,14 +21787,13 @@
       "小楼熏被。",
       "春梦笙歌里。"
     ],
-    "theme": "spring",
+    "theme": "landscape",
     "tags": [
       "spring",
-      "festival",
-      "lamplight",
+      "wind-cloud",
       "night",
-      "music",
-      "wind-cloud"
+      "lamplight",
+      "music"
     ],
     "motifs": [
       "点绛唇",
@@ -22102,14 +21831,14 @@
       "解留我、",
       "霎时凝伫。"
     ],
-    "theme": "flowers",
+    "theme": "reclusion",
     "tags": [
       "flowers",
       "reclusion",
-      "spring",
+      "rain",
       "autumn",
-      "wind-cloud",
-      "homesickness"
+      "homesickness",
+      "mountain"
     ],
     "motifs": [
       "阑干",
@@ -22147,19 +21876,19 @@
       "又相对、",
       "落梅如雨。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
+      "spring",
+      "rain",
       "autumn",
       "homesickness",
-      "rain",
       "parting"
     ],
     "motifs": [
       "祝英台近",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -22201,10 +21930,10 @@
     "tags": [
       "river-lake",
       "moon",
-      "spring",
-      "wind-cloud",
+      "rain",
       "homesickness",
-      "rain"
+      "wine",
+      "flowers"
     ],
     "motifs": [
       "彩云",
@@ -22248,14 +21977,14 @@
       "和梦也、",
       "有时不做。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "parting",
       "rain",
+      "parting",
       "winter",
+      "mountain",
       "reclusion",
-      "mountain"
+      "spring"
     ],
     "motifs": [
       "风雨",
@@ -22295,7 +22024,7 @@
       "芳草天涯，",
       "参差烟树。"
     ],
-    "theme": "spring",
+    "theme": "frontier",
     "tags": [
       "spring",
       "frontier",
@@ -22349,10 +22078,10 @@
     "tags": [
       "frontier",
       "moon",
-      "spring",
       "autumn",
       "parting",
-      "wine"
+      "wine",
+      "reclusion"
     ],
     "motifs": [
       "关塞",
@@ -22387,7 +22116,6 @@
       "night",
       "dawn-dusk",
       "wind-cloud",
-      "festival",
       "wine",
       "flowers"
     ],
@@ -22429,14 +22157,14 @@
       "日高烟敛，",
       "更看今日晴未。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
       "trees-bamboo",
       "courtyard",
-      "rain",
       "parting",
-      "wine"
+      "wine",
+      "flowers"
     ],
     "motifs": [
       "庭院",
@@ -22480,19 +22208,19 @@
       "帘儿底下，",
       "听人笑语。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
+      "festival",
       "night",
       "snow",
       "autumn",
-      "wind-cloud",
-      "festival"
+      "parting"
     ],
     "motifs": [
       "风雨",
       "永遇乐",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -22588,8 +22316,8 @@
       "flowers",
       "reclusion",
       "dawn-dusk",
-      "spring",
-      "wind-cloud"
+      "homesickness",
+      "parting"
     ],
     "motifs": [
       "黄昏",
@@ -22624,11 +22352,11 @@
     "theme": "spring",
     "tags": [
       "spring",
-      "moon",
       "snow",
-      "festival",
+      "moon",
       "homesickness",
-      "flowers"
+      "flowers",
+      "trees-bamboo"
     ],
     "motifs": [
       "柳梢青",
@@ -22672,12 +22400,12 @@
       "斜阳正在，",
       "烟柳断肠处。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
+      "rain",
       "spring",
       "dawn-dusk",
       "homesickness",
-      "rain",
       "parting",
       "flowers"
     ],
@@ -22723,19 +22451,19 @@
       "唤取盈盈翠袖，",
       "英雄泪。"
     ],
-    "theme": "autumn",
+    "theme": "rain",
     "tags": [
+      "rain",
       "autumn",
       "pastoral",
       "homesickness",
-      "rain",
       "parting",
       "river-lake"
     ],
     "motifs": [
       "风雨",
       "水龙吟",
-      "秋色"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -22775,9 +22503,9 @@
       "spring",
       "parting",
       "moon",
-      "wind-cloud",
-      "festival",
-      "homesickness"
+      "homesickness",
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "念奴娇",
@@ -22810,11 +22538,11 @@
     "theme": "autumn",
     "tags": [
       "autumn",
-      "wind-cloud",
       "wine",
       "flowers",
       "birds",
-      "river-lake"
+      "river-lake",
+      "wind-cloud"
     ],
     "motifs": [
       "鹧鸪天",
@@ -22842,7 +22570,7 @@
       "江晚正愁予。",
       "山深闻鹧鸪。"
     ],
-    "theme": "parting",
+    "theme": "mountain",
     "tags": [
       "parting",
       "mountain",
@@ -22893,9 +22621,9 @@
     "tags": [
       "parting",
       "autumn",
+      "festival",
       "wine",
       "moon",
-      "festival",
       "homesickness"
     ],
     "motifs": [
@@ -22934,19 +22662,19 @@
       "却不解、",
       "将愁归去。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
-      "flowers",
-      "festival",
-      "homesickness",
       "rain",
-      "parting"
+      "flowers",
+      "homesickness",
+      "parting",
+      "birds",
+      "spring"
     ],
     "motifs": [
       "风雨",
       "祝英台令",
-      "春风"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -23027,14 +22755,14 @@
       "弹到此，",
       "为呜咽。"
     ],
-    "theme": "festival",
+    "theme": "snow-river",
     "tags": [
       "palace-court",
       "frontier",
-      "moon",
       "snow",
-      "wind-cloud",
-      "homesickness"
+      "moon",
+      "homesickness",
+      "parting"
     ],
     "motifs": [
       "万里",
@@ -23082,11 +22810,11 @@
     "theme": "parting",
     "tags": [
       "parting",
-      "spring",
       "frontier",
       "autumn",
       "flowers",
-      "war"
+      "war",
+      "music"
     ],
     "motifs": [
       "啼鸟",
@@ -23128,14 +22856,14 @@
       "花开花落，",
       "朝来塞雁先还。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
       "spring",
+      "rain",
       "flowers",
       "frontier",
       "autumn",
-      "homesickness",
-      "rain"
+      "homesickness"
     ],
     "motifs": [
       "风雨",
@@ -23179,14 +22907,14 @@
       "留云借月，",
       "也须拼醉。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
       "homesickness",
       "flowers",
       "moon",
-      "wind-cloud",
-      "rain"
+      "wine",
+      "reclusion"
     ],
     "motifs": [
       "风雨",
@@ -23240,14 +22968,14 @@
       "祗凭芳草，",
       "寻访郎君。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
       "spring",
       "flowers",
       "music",
       "river-lake",
       "moon",
-      "wind-cloud"
+      "parting"
     ],
     "motifs": [
       "芳草",
@@ -23291,19 +23019,19 @@
       "狂歌似旧，",
       "情难依旧。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
-      "homesickness",
       "rain",
+      "homesickness",
       "wine",
-      "reclusion"
+      "reclusion",
+      "spring"
     ],
     "motifs": [
       "桃花",
       "水龙吟",
-      "春风"
+      "落花"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -23328,14 +23056,14 @@
       "刘郎鬓如此，",
       "况桃花颜色。"
     ],
-    "theme": "flowers",
+    "theme": "trees-bamboo",
     "tags": [
       "flowers",
       "trees-bamboo",
-      "spring",
       "homesickness",
       "parting",
-      "mountain"
+      "mountain",
+      "river-lake"
     ],
     "motifs": [
       "桃花",
@@ -23373,7 +23101,7 @@
       "看玉做人间，",
       "素秋千倾。"
     ],
-    "theme": "frontier",
+    "theme": "night-moon",
     "tags": [
       "frontier",
       "moon",
@@ -23430,19 +23158,19 @@
       "断肠院落，",
       "一帘风絮。"
     ],
-    "theme": "spring",
+    "theme": "flowers",
     "tags": [
-      "spring",
       "flowers",
       "parting",
       "trees-bamboo",
       "city-ruins",
-      "courtyard"
+      "courtyard",
+      "rain"
     ],
     "motifs": [
       "瑞龙吟",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -23483,11 +23211,11 @@
     "theme": "night-moon",
     "tags": [
       "courtyard",
-      "spring",
       "homesickness",
       "flowers",
       "trees-bamboo",
-      "lamplight"
+      "lamplight",
+      "rain"
     ],
     "motifs": [
       "朱户",
@@ -23531,14 +23259,14 @@
       "天便教人，",
       "霎时厮见何妨。"
     ],
-    "theme": "spring",
+    "theme": "dawn-dusk",
     "tags": [
-      "spring",
       "dawn-dusk",
       "moon",
       "parting",
       "wine",
-      "flowers"
+      "flowers",
+      "night"
     ],
     "motifs": [
       "斜阳",
@@ -23586,10 +23314,10 @@
     "tags": [
       "spring",
       "moon",
-      "wind-cloud",
-      "festival",
       "homesickness",
-      "wine"
+      "wine",
+      "flowers",
+      "trees-bamboo"
     ],
     "motifs": [
       "应天长",
@@ -23635,19 +23363,19 @@
       "对花对酒，",
       "为伊落泪。"
     ],
-    "theme": "spring",
+    "theme": "landscape",
     "tags": [
-      "spring",
       "flowers",
       "wind-cloud",
       "rain",
       "wine",
-      "winter"
+      "reclusion",
+      "spring"
     ],
     "motifs": [
       "解连环",
-      "春风",
-      "春晓"
+      "落花",
+      "红豆"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -23685,7 +23413,7 @@
       "任流光过却。",
       "犹喜洞天自乐。"
     ],
-    "theme": "spring",
+    "theme": "homesickness",
     "tags": [
       "spring",
       "homesickness",
@@ -23745,10 +23473,10 @@
     "tags": [
       "parting",
       "wind-cloud",
-      "moon",
       "snow",
-      "spring",
-      "autumn"
+      "moon",
+      "autumn",
+      "flowers"
     ],
     "motifs": [
       "夜色",
@@ -23791,19 +23519,19 @@
       "先安簟枕，",
       "容我醉时眠。"
     ],
-    "theme": "spring",
+    "theme": "trees-bamboo",
     "tags": [
-      "spring",
       "trees-bamboo",
-      "festival",
-      "homesickness",
       "rain",
-      "wine"
+      "homesickness",
+      "wine",
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "满庭芳",
-      "春风",
-      "春晓"
+      "翠竹",
+      "青松"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -23846,8 +23574,8 @@
     "tags": [
       "moon",
       "river-lake",
-      "homesickness",
       "rain",
+      "homesickness",
       "flowers",
       "summer"
     ],
@@ -23887,10 +23615,10 @@
     "tags": [
       "dawn-dusk",
       "lamplight",
-      "festival",
       "trees-bamboo",
       "night",
-      "city-ruins"
+      "city-ruins",
+      "palace-court"
     ],
     "motifs": [
       "斜阳",
@@ -23937,11 +23665,11 @@
     "theme": "wine",
     "tags": [
       "music",
-      "wind-cloud",
       "homesickness",
       "flowers",
-      "lamplight",
-      "night"
+      "wind-cloud",
+      "night",
+      "city-ruins"
     ],
     "motifs": [
       "解语花",
@@ -23997,9 +23725,9 @@
       "homesickness",
       "music",
       "reclusion",
-      "spring",
+      "rain",
       "autumn",
-      "rain"
+      "flowers"
     ],
     "motifs": [
       "故乡",
@@ -24043,14 +23771,14 @@
       "一枝潇洒，",
       "黄昏斜照水。"
     ],
-    "theme": "flowers",
+    "theme": "dawn-dusk",
     "tags": [
       "flowers",
-      "winter",
       "dawn-dusk",
       "snow",
       "parting",
-      "wine"
+      "wine",
+      "winter"
     ],
     "motifs": [
       "黄昏",
@@ -24102,14 +23830,14 @@
       "尚有相思字，",
       "何由见得。"
     ],
-    "theme": "spring",
+    "theme": "rain",
     "tags": [
-      "spring",
+      "rain",
       "homesickness",
       "parting",
       "flowers",
       "love-longing",
-      "rain"
+      "wine"
     ],
     "motifs": [
       "风雨",
@@ -24161,11 +23889,11 @@
     "theme": "parting",
     "tags": [
       "parting",
-      "spring",
       "river-lake",
       "dawn-dusk",
-      "lamplight",
-      "moon"
+      "moon",
+      "homesickness",
+      "wine"
     ],
     "motifs": [
       "斜阳",
@@ -24212,8 +23940,8 @@
       "river-lake",
       "city-ruins",
       "moon",
-      "spring",
-      "wind-cloud"
+      "wine",
+      "mountain"
     ],
     "motifs": [
       "斜阳",
@@ -24308,14 +24036,14 @@
       "一缕相思，",
       "隔溪山不断。"
     ],
-    "theme": "trees-bamboo",
+    "theme": "night-moon",
     "tags": [
+      "spring",
       "trees-bamboo",
       "love-longing",
       "courtyard",
       "moon",
-      "spring",
-      "autumn"
+      "rain"
     ],
     "motifs": [
       "庭院",
@@ -24359,7 +24087,7 @@
       "念我无，",
       "梦魂凝想鸳侣。"
     ],
-    "theme": "homesickness",
+    "theme": "river-lake",
     "tags": [
       "homesickness",
       "parting",
@@ -24397,10 +24125,10 @@
       "楼上阑干横斗柄。",
       "露寒人远鸡相应。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
-      "spring",
       "parting",
+      "spring",
       "moon",
       "autumn",
       "flowers",
@@ -24409,7 +24137,7 @@
     "motifs": [
       "阑干",
       "蝶恋花",
-      "春风"
+      "长亭"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -24453,8 +24181,8 @@
       "parting",
       "river-lake",
       "moon",
-      "spring",
-      "homesickness"
+      "homesickness",
+      "wine"
     ],
     "motifs": [
       "烟雨",
@@ -24487,10 +24215,10 @@
     "tags": [
       "autumn",
       "frontier",
-      "festival",
       "parting",
       "wine",
-      "birds"
+      "birds",
+      "river-lake"
     ],
     "motifs": [
       "秋色",
@@ -24531,14 +24259,14 @@
       "算翠屏应是，",
       "两眉馀恨倚黄昏。"
     ],
-    "theme": "frontier",
+    "theme": "snow-river",
     "tags": [
+      "snow",
       "frontier",
       "parting",
+      "lamplight",
       "flowers",
-      "war",
-      "birds",
-      "river-lake"
+      "war"
     ],
     "motifs": [
       "黄昏",
@@ -24574,8 +24302,8 @@
       "river-lake",
       "love-longing",
       "moon",
-      "spring",
-      "flowers"
+      "flowers",
+      "spring"
     ],
     "motifs": [
       "落花",
@@ -24653,14 +24381,14 @@
       "谩惜馀熏，",
       "空篝素被。"
     ],
-    "theme": "wine",
+    "theme": "snow-river",
     "tags": [
-      "wine",
-      "lamplight",
-      "moon",
       "snow",
-      "spring",
-      "wind-cloud"
+      "wine",
+      "moon",
+      "winter",
+      "flowers",
+      "spring"
     ],
     "motifs": [
       "飞雪",
@@ -24704,19 +24432,19 @@
       "还老尽、",
       "桂花影。"
     ],
-    "theme": "spring",
+    "theme": "mountain",
     "tags": [
-      "spring",
       "autumn",
       "parting",
-      "flowers",
       "mountain",
-      "river-lake"
+      "flowers",
+      "river-lake",
+      "trees-bamboo"
     ],
     "motifs": [
       "眉妩",
-      "春风",
-      "春晓"
+      "秋色",
+      "落木"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -24758,7 +24486,7 @@
       "dawn-dusk",
       "trees-bamboo",
       "courtyard",
-      "spring",
+      "rain",
       "autumn"
     ],
     "motifs": [
@@ -24904,9 +24632,9 @@
     "tags": [
       "dawn-dusk",
       "autumn",
-      "wind-cloud",
       "parting",
       "wine",
+      "mountain",
       "flowers"
     ],
     "motifs": [
@@ -24955,19 +24683,19 @@
       "华发如此星星。",
       "歌罢涕零。"
     ],
-    "theme": "wine",
+    "theme": "rain",
     "tags": [
+      "rain",
       "wine",
       "moon",
-      "spring",
       "autumn",
       "homesickness",
-      "rain"
+      "parting"
     ],
     "motifs": [
       "风雨",
       "紫萸香慢",
-      "把酒"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -25008,14 +24736,14 @@
       "空掩袖，",
       "倚寒竹。"
     ],
-    "theme": "festival",
+    "theme": "rain",
     "tags": [
       "palace-court",
       "moon",
-      "spring",
-      "homesickness",
       "rain",
-      "parting"
+      "homesickness",
+      "parting",
+      "flowers"
     ],
     "motifs": [
       "贺新郎",
@@ -25061,12 +24789,12 @@
     ],
     "theme": "reclusion",
     "tags": [
-      "reclusion",
-      "moon",
-      "snow",
       "spring",
-      "festival",
-      "flowers"
+      "reclusion",
+      "snow",
+      "moon",
+      "flowers",
+      "river-lake"
     ],
     "motifs": [
       "明月",
@@ -25111,14 +24839,14 @@
       "换谱伊凉，",
       "素娥未识。"
     ],
-    "theme": "autumn",
+    "theme": "homesickness",
     "tags": [
       "autumn",
       "homesickness",
       "flowers",
       "courtyard",
       "frontier",
-      "spring"
+      "wine"
     ],
     "motifs": [
       "瑞鹤仙",
@@ -25159,14 +24887,14 @@
       "有斜阳处，",
       "却怕登楼。"
     ],
-    "theme": "river-lake",
+    "theme": "landscape",
     "tags": [
+      "wind-cloud",
       "river-lake",
       "dawn-dusk",
       "frontier",
       "snow",
-      "autumn",
-      "homesickness"
+      "autumn"
     ],
     "motifs": [
       "斜阳",
@@ -25210,14 +24938,14 @@
       "书纵远，",
       "如何也都无。"
     ],
-    "theme": "spring",
+    "theme": "river-lake",
     "tags": [
-      "spring",
       "flowers",
       "reclusion",
       "river-lake",
       "sea",
-      "wind-cloud"
+      "rain",
+      "pastoral"
     ],
     "motifs": [
       "西湖",
@@ -25263,13 +24991,13 @@
       "双燕归来，",
       "画帘半卷。"
     ],
-    "theme": "spring",
+    "theme": "parting",
     "tags": [
-      "spring",
       "parting",
       "love-longing",
       "frontier",
       "snow",
+      "rain",
       "homesickness"
     ],
     "motifs": [
@@ -25313,14 +25041,14 @@
       "正天寒，",
       "犹倚梅花那树。"
     ],
-    "theme": "flowers",
+    "theme": "rain",
     "tags": [
+      "rain",
       "flowers",
       "birds",
       "trees-bamboo",
       "music",
-      "moon",
-      "spring"
+      "moon"
     ],
     "motifs": [
       "鸥鹭",
@@ -25355,8 +25083,8 @@
       "moon",
       "autumn",
       "homesickness",
-      "flowers",
-      "winter"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "寒江",
@@ -25402,14 +25130,14 @@
       "谁为我，",
       "唱金缕。"
     ],
-    "theme": "birds",
+    "theme": "rain",
     "tags": [
+      "rain",
       "birds",
       "boat-travel",
       "moon",
-      "rain",
       "parting",
-      "flowers"
+      "mountain"
     ],
     "motifs": [
       "明月",
@@ -25531,8 +25259,8 @@
       "moon",
       "autumn",
       "homesickness",
-      "flowers",
-      "winter"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "寒江",
@@ -25572,14 +25300,14 @@
       "东阳也，",
       "试问花知否。"
     ],
-    "theme": "dawn-dusk",
+    "theme": "rain",
     "tags": [
       "dawn-dusk",
+      "rain",
       "river-lake",
-      "moon",
       "snow",
-      "spring",
-      "rain"
+      "moon",
+      "mountain"
     ],
     "motifs": [
       "日暮",
@@ -25641,7 +25369,7 @@
       "住传宣、",
       "又还休务。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
       "spring",
       "palace-court",
@@ -25697,9 +25425,9 @@
       "flowers",
       "moon",
       "parting",
-      "winter",
       "dawn-dusk",
-      "snow"
+      "snow",
+      "rain"
     ],
     "motifs": [
       "黄昏",
@@ -25727,9 +25455,8 @@
       "醉眼不逢人。",
       "午香吹暗尘。"
     ],
-    "theme": "spring",
+    "theme": "wine",
     "tags": [
-      "spring",
       "wine",
       "flowers",
       "trees-bamboo",
@@ -25738,7 +25465,7 @@
     "motifs": [
       "醉眼",
       "菩萨蛮",
-      "春风"
+      "把酒"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -25761,17 +25488,17 @@
       "几处簸钱声。",
       "绿窗春睡轻。"
     ],
-    "theme": "spring",
+    "theme": "night-moon",
     "tags": [
-      "spring",
       "courtyard",
       "flowers",
+      "spring",
       "insects"
     ],
     "motifs": [
       "菩萨蛮",
-      "春风",
-      "春晓"
+      "庭院",
+      "阑干"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -25795,11 +25522,11 @@
       "如今风雨西楼夜，",
       "不听清歌也泪垂。"
     ],
-    "theme": "parting",
+    "theme": "rain",
     "tags": [
+      "rain",
       "parting",
       "autumn",
-      "rain",
       "trees-bamboo",
       "night",
       "music"
@@ -25807,7 +25534,7 @@
     "motifs": [
       "风雨",
       "鹧鸪天",
-      "长亭"
+      "烟雨"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -25836,10 +25563,10 @@
     "tags": [
       "dawn-dusk",
       "moon",
-      "spring",
       "autumn",
       "parting",
-      "birds"
+      "birds",
+      "river-lake"
     ],
     "motifs": [
       "斜阳",
@@ -25872,14 +25599,14 @@
       "酒无人劝，",
       "醉也无人管。"
     ],
-    "theme": "spring",
+    "theme": "festival",
     "tags": [
       "spring",
+      "festival",
       "wine",
       "river-lake",
-      "festival",
-      "flowers",
-      "mountain"
+      "mountain",
+      "flowers"
     ],
     "motifs": [
       "芳草",
@@ -25909,19 +25636,19 @@
       "片时春梦，",
       "江南天阔。"
     ],
-    "theme": "night-moon",
+    "theme": "snow-river",
     "tags": [
-      "moon",
       "snow",
-      "spring",
-      "festival",
+      "moon",
       "flowers",
-      "river-lake"
+      "spring",
+      "river-lake",
+      "lamplight"
     ],
     "motifs": [
       "阑干",
-      "明月",
-      "清影"
+      "飞雪",
+      "寒雪"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,
@@ -25950,11 +25677,11 @@
     "theme": "autumn",
     "tags": [
       "autumn",
-      "moon",
       "snow",
-      "spring",
-      "wind-cloud",
-      "parting"
+      "moon",
+      "parting",
+      "flowers",
+      "birds"
     ],
     "motifs": [
       "霜天晓角",
@@ -25988,8 +25715,7 @@
     "tags": [
       "spring",
       "wine",
-      "flowers",
-      "wind-cloud"
+      "flowers"
     ],
     "motifs": [
       "紫烟",
@@ -26097,17 +25823,17 @@
     ],
     "theme": "river-lake",
     "tags": [
+      "festival",
       "river-lake",
-      "moon",
       "snow",
+      "moon",
       "autumn",
-      "pastoral",
-      "homesickness"
+      "pastoral"
     ],
     "motifs": [
       "中秋",
       "念奴娇",
-      "长江"
+      "元夕"
     ],
     "motifsSource": "rule",
     "motifsLocked": false,

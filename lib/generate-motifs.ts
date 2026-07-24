@@ -1,8 +1,10 @@
 import type { Poem, PoemTag, PoemTheme } from "./types";
 import {
   imageryTaxonomy,
+  inferTagHits,
   inferTagsSafe,
   motifPoolForTags,
+  pickThemeFromHits,
   pickThemeFromTags,
 } from "./imagery-taxonomy";
 
@@ -114,8 +116,8 @@ export function inferThemeFromText(
   title: string,
   content: string[],
 ): PoemTheme {
-  const tags = inferTagsSafe(title, content);
-  return pickThemeFromTags(tags);
+  // 用完整命中分聚合，避免「只取第一标签」把春盖过雨雪
+  return pickThemeFromHits(inferTagHits(title, content));
 }
 
 export function generateTagsRule(

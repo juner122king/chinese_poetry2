@@ -491,6 +491,7 @@ export default function HeroSection({ poem }: Props) {
           <ParticleBackground
             mode={visual.particles}
             safeCenter={visual.particleSafeCenter}
+            density={visual.particleDensity}
           />
         )}
       </motion.div>

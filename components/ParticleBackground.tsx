@@ -54,21 +54,45 @@ type ModeConfig = {
   /** per-particle twinkle strength 0–1 (stars soft, firefly hard blink) */
   blink: "none" | "soft" | "hard";
   clipClass?: string;
+  /** stars-frontier: first fraction are bright main stars */
+  mainStarRatio?: number;
+  materialOpacity?: number;
 };
+
+function isStarMode(mode: Exclude<ParticleMode, "none">) {
+  return mode === "stars" || mode === "stars-frontier";
+}
 
 const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
   stars: {
-    countDesktop: 200,
-    countMobile: 100,
-    size: 0.016,
-    rgb: [0.85, 0.9, 0.97],
+    countDesktop: 280,
+    countMobile: 140,
+    size: 0.028,
+    rgb: [0.98, 0.99, 1.0],
     yRange: [1.2, 5.2],
     xSpread: 16,
     fall: 0,
-    sway: 0.008,
+    sway: 0.008, // motion unchanged
     wander: 0,
     blink: "soft",
     clipClass: "particle-clip-sky",
+    materialOpacity: 0.96,
+  },
+  /** 边塞：少量高亮主星 + 更少散星 */
+  "stars-frontier": {
+    countDesktop: 32,
+    countMobile: 18,
+    size: 0.04,
+    rgb: [0.98, 0.94, 0.86],
+    yRange: [1.4, 5.0],
+    xSpread: 15,
+    fall: 0,
+    sway: 0.004, // motion unchanged
+    wander: 0,
+    blink: "soft",
+    clipClass: "particle-clip-sky",
+    mainStarRatio: 0.22,
+    materialOpacity: 0.98,
   },
   firefly: {
     countDesktop: 58,
@@ -85,26 +109,28 @@ const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
     blink: "hard",
   },
   petals: {
-    countDesktop: 55,
-    countMobile: 32,
-    size: 0.026,
-    rgb: [0.84, 0.68, 0.64],
+    // 春：嫩粉、略慢飘落、轻摆
+    countDesktop: 48,
+    countMobile: 28,
+    size: 0.022,
+    rgb: [0.9, 0.72, 0.76],
     yRange: [-5, 5.5],
     xSpread: 16,
-    fall: 0.22,
-    sway: 0.08,
+    fall: 0.16,
+    sway: 0.11,
     wander: 0,
     blink: "none",
   },
   leaves: {
-    countDesktop: 36,
-    countMobile: 22,
-    size: 0.03,
-    rgb: [0.72, 0.55, 0.32],
+    // 秋：暖褐、更慢、侧向翻滚感
+    countDesktop: 40,
+    countMobile: 24,
+    size: 0.034,
+    rgb: [0.78, 0.52, 0.28],
     yRange: [-5, 5.5],
     xSpread: 16,
-    fall: 0.14,
-    sway: 0.12,
+    fall: 0.11,
+    sway: 0.16,
     wander: 0,
     blink: "none",
   },
@@ -131,13 +157,20 @@ function Particles({
 }) {
   const ref = useRef<THREE.Points>(null);
   const cfg = MODE_CONFIG[mode];
+  const mainCount = Math.max(
+    1,
+    Math.round(count * (cfg.mainStarRatio ?? 0)),
+  );
 
-  const { positions, speeds, phases, drifts } = useMemo(() => {
+  const { positions, speeds, phases, drifts, baseColors, roles } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const speeds = new Float32Array(count);
     const phases = new Float32Array(count);
     const drifts = new Float32Array(count);
+    const baseColors = new Float32Array(count * 3);
+    const roles = new Uint8Array(count); // 1 = main star
     const [y0, y1] = cfg.yRange;
+    const [r, g, b] = cfg.rgb;
 
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * cfg.xSpread;
@@ -146,27 +179,37 @@ function Particles({
       speeds[i] = 0.5 + Math.random() * 1.2;
       phases[i] = Math.random() * Math.PI * 2;
       drifts[i] = 0.6 + Math.random() * 0.8;
-    }
-    return { positions, speeds, phases, drifts };
-  }, [count, cfg]);
 
-  const colors = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    const [r, g, b] = cfg.rgb;
-    for (let i = 0; i < count; i++) {
-      // slight per-particle color variance
-      const v = 0.88 + Math.random() * 0.14;
-      arr[i * 3] = r * v;
-      arr[i * 3 + 1] = g * v;
-      arr[i * 3 + 2] = b * v;
+      const isMain = mode === "stars-frontier" && i < mainCount;
+      roles[i] = isMain ? 1 : 0;
+      if (isMain) {
+        // 高亮主星（更亮底色，运动参数不变）
+        const v = 0.98 + Math.random() * 0.02;
+        baseColors[i * 3] = Math.min(1, r * v * 1.1);
+        baseColors[i * 3 + 1] = Math.min(1, g * v * 1.06);
+        baseColors[i * 3 + 2] = Math.min(1, b * v * 1.02);
+      } else if (mode === "stars-frontier") {
+        // 散星仍弱于主星，但整体略抬亮
+        const v = 0.42 + Math.random() * 0.18;
+        baseColors[i * 3] = r * v;
+        baseColors[i * 3 + 1] = g * v;
+        baseColors[i * 3 + 2] = b * v;
+      } else {
+        const v = 0.94 + Math.random() * 0.08;
+        baseColors[i * 3] = r * v;
+        baseColors[i * 3 + 1] = g * v;
+        baseColors[i * 3 + 2] = b * v;
+      }
     }
-    return arr;
-  }, [count, cfg]);
+    return { positions, speeds, phases, drifts, baseColors, roles };
+  }, [count, cfg, mode, mainCount]);
+
+  const colors = useMemo(() => baseColors.slice(), [baseColors]);
 
   const colorAttr = useRef<THREE.BufferAttribute | null>(null);
 
   const circleMap = useMemo(() => {
-    const soft = mode === "firefly" || mode === "stars" || mode === "snow";
+    const soft = mode === "firefly" || isStarMode(mode) || mode === "snow";
     const tex = createCircleTexture(soft);
     return tex;
   }, [mode]);
@@ -184,32 +227,35 @@ function Particles({
     const col = points.geometry.attributes.color.array as Float32Array;
     const t = state.clock.elapsedTime;
     const [y0, y1] = cfg.yRange;
-    const [br, bg, bb] = cfg.rgb;
 
     for (let i = 0; i < count; i++) {
       const ix = i * 3;
       const sp = speeds[i];
       const ph = phases[i];
       const dr = drifts[i];
+      const br = baseColors[ix];
+      const bg = baseColors[ix + 1];
+      const bb = baseColors[ix + 2];
+      const isMain = roles[i] === 1;
 
       // --- motion ---
       if (cfg.fall > 0) {
         pos[ix + 1] -= sp * delta * cfg.fall;
         pos[ix] += Math.sin(t * (0.4 + sp * 0.3) + ph) * delta * cfg.sway * dr * 8;
         if (mode === "leaves") {
-          // gentle tumble — kept subtle
-          pos[ix] += Math.cos(t * 0.28 + ph) * delta * 0.06;
+          pos[ix] += Math.cos(t * 0.28 + ph) * delta * 0.1;
+          pos[ix + 2] += Math.sin(t * 0.35 + ph) * delta * 0.04;
+        } else if (mode === "petals") {
+          pos[ix] += Math.sin(t * 0.5 + ph) * delta * 0.05;
         }
         if (pos[ix + 1] < y0) {
           pos[ix + 1] = y1;
           pos[ix] = (Math.random() - 0.5) * cfg.xSpread;
         }
       } else if (cfg.wander > 0) {
-        // firefly: slow, soft drift (not darting)
         pos[ix] += Math.sin(t * 0.28 * sp + ph) * delta * cfg.wander * 1.4;
         pos[ix + 1] +=
           Math.cos(t * 0.22 * sp + ph * 1.3) * delta * cfg.wander * 1.1;
-        // soft clamp into y band
         if (pos[ix + 1] < y0) pos[ix + 1] = y0 + 0.1;
         if (pos[ix + 1] > y1) pos[ix + 1] = y1 - 0.1;
         if (Math.abs(pos[ix]) > cfg.xSpread * 0.55) {
@@ -218,7 +264,6 @@ function Particles({
       } else {
         // stars: almost still + tiny sway
         pos[ix + 1] += Math.sin(t * 0.15 + ph) * delta * cfg.sway;
-        // keep in sky band
         if (pos[ix + 1] < y0) pos[ix + 1] = y0 + Math.random() * 0.2;
         if (pos[ix + 1] > y1) pos[ix + 1] = y1 - Math.random() * 0.2;
       }
@@ -226,15 +271,17 @@ function Particles({
       // --- blink / twinkle via vertex color brightness ---
       let mul = 1;
       if (cfg.blink === "hard") {
-        // firefly: faster blink, unique phase per particle
         const wave = Math.sin(t * (2.8 + sp * 1.6) + ph);
-        // brief bright flash, still dark between
         const shaped = Math.pow(Math.max(0, wave), 2.4);
         mul = 0.05 + shaped * 0.95;
       } else if (cfg.blink === "soft") {
-        // stars: gentle twinkle
+        // 更高底亮 + 更小闪幅 → 更醒目且不加重「抖」
         const wave = Math.sin(t * (0.4 + sp * 0.25) + ph) * 0.5 + 0.5;
-        mul = 0.45 + wave * 0.55;
+        if (mode === "stars-frontier") {
+          mul = isMain ? 0.85 + wave * 0.2 : 0.48 + wave * 0.2;
+        } else {
+          mul = 0.7 + wave * 0.35;
+        }
       }
 
       col[ix] = br * mul;
@@ -245,10 +292,20 @@ function Particles({
     points.geometry.attributes.position.needsUpdate = true;
     points.geometry.attributes.color.needsUpdate = true;
 
-    if (mode === "stars") {
+    if (isStarMode(mode) && mode !== "stars-frontier") {
       points.rotation.y += delta * 0.004;
     }
   });
+
+  const matOpacity =
+    cfg.materialOpacity ??
+    (mode === "firefly"
+      ? 0.95
+      : mode === "petals"
+        ? 0.42
+        : mode === "leaves"
+          ? 0.52
+          : 0.7);
 
   return (
     <points ref={ref}>
@@ -268,20 +325,12 @@ function Particles({
         alphaMap={circleMap}
         vertexColors
         transparent
-        opacity={
-          mode === "firefly"
-            ? 0.95
-            : mode === "stars"
-              ? 0.75
-              : mode === "petals" || mode === "leaves"
-                ? 0.48
-                : 0.7
-        }
+        opacity={matOpacity}
         sizeAttenuation
         depthWrite={false}
         alphaTest={0.01}
         blending={
-          mode === "firefly" || mode === "stars"
+          mode === "firefly" || isStarMode(mode)
             ? THREE.AdditiveBlending
             : THREE.NormalBlending
         }
@@ -295,12 +344,15 @@ type Props = {
   className?: string;
   /** 降低画面中心粒子可见度，避免压诗句 */
   safeCenter?: boolean;
+  /** 数量倍率（思乡稀星 / 夜月繁星） */
+  density?: number;
 };
 
 export default function ParticleBackground({
   mode = "stars",
   className = "",
   safeCenter = false,
+  density = 1,
 }: Props) {
   const [count, setCount] = useState(0);
   const [ready, setReady] = useState(false);
@@ -310,9 +362,11 @@ export default function ParticleBackground({
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
     const cfg = MODE_CONFIG[mode];
-    setCount(window.innerWidth < 768 ? cfg.countMobile : cfg.countDesktop);
+    const base = window.innerWidth < 768 ? cfg.countMobile : cfg.countDesktop;
+    const d = Number.isFinite(density) && density > 0 ? density : 1;
+    setCount(Math.max(8, Math.round(base * d)));
     setReady(true);
-  }, [mode]);
+  }, [mode, density]);
 
   if (mode === "none" || !ready || count <= 0) return null;
 

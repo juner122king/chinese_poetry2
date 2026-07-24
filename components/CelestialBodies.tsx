@@ -1,179 +1,630 @@
 "use client";
 
+import {
+  useEffect,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import type { PoemTheme } from "@/lib/types";
+import type { MoonForm, SunForm } from "@/lib/theme-map";
 
 type Props = {
   theme: PoemTheme;
-  showMoon?: boolean;
-  showSun?: boolean;
+  /** Explicit moon form; false/undefined = no moon */
+  moon?: MoonForm;
+  /** Explicit sun form; false/undefined = no sun */
+  sun?: SunForm;
   /** 1 = full hero, 0.7 = soft section */
   scale?: number;
   glow?: string;
 };
 
+function resolveSunForm(form: SunForm | undefined): "low" | "high" | "pale" | null {
+  if (form === undefined || form === false) return null;
+  return form;
+}
+
+type SunPlacement = {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+  size: number;
+};
+
+function sampleSunPlacement(form: "low" | "high" | "pale"): SunPlacement {
+  if (form === "low") {
+    return {
+      left: rand(8, 22),
+      bottom: rand(12, 24),
+      size: rand(155, 180),
+    };
+  }
+  if (form === "high") {
+    return {
+      top: rand(6, 16),
+      right: rand(6, 18),
+      size: rand(115, 140),
+    };
+  }
+  // pale — far, small, high
+  return {
+    top: rand(8, 18),
+    left: rand(10, 30),
+    size: rand(90, 115),
+  };
+}
+
+export type MoonVariant =
+  | "default"
+  | "warm"
+  | "far"
+  | "pastoral"
+  | "mountain"
+  | "river"
+  | "crescent";
+
+type MoonBase = {
+  size: number;
+  opacity: number;
+  halo: number;
+  haloH: number;
+  blur: number;
+  bloom: number;
+  core: number;
+  discHx: number;
+  discHy: number;
+  termX: number;
+  termY: number;
+  termOp: number;
+  warm: boolean;
+  riverTint: boolean;
+  ellipseHalo: boolean;
+  reflection: boolean;
+  scaleX: number;
+};
+
+/** Absolute sky slot — sampled in a wide safe band per variant */
+type MoonPlacement = {
+  top: number;
+  side: "left" | "right";
+  /** % inset from left or right edge */
+  inset: number;
+};
+
+type MoonJitter = {
+  placement: MoonPlacement;
+  scaleMul: number;
+  opacityMul: number;
+  haloMul: number;
+  blurAdd: number;
+  bloomMul: number;
+  coreAdd: number;
+  termX: number;
+  termY: number;
+  termOp: number;
+  discHx: number;
+  discHy: number;
+};
+
+/** SSR / first paint: mid of each variant's sky band */
+function midPlacement(v: MoonVariant): MoonPlacement {
+  switch (v) {
+    case "warm":
+      return { top: 11, side: "right", inset: 22 };
+    case "far":
+      return { top: 9, side: "right", inset: 12 };
+    case "pastoral":
+      return { top: 10, side: "right", inset: 16 };
+    case "mountain":
+      return { top: 20, side: "right", inset: 14 };
+    case "river":
+      return { top: 42, side: "right", inset: 14 };
+    case "crescent":
+      return { top: 10, side: "right", inset: 18 };
+    default:
+      return { top: 11, side: "right", inset: 15 };
+  }
+}
+
+/**
+ * Wide sky region per form — avoid center column so vertical text stays clear.
+ * leftChance: probability of left-side sky (warm stays right).
+ */
+function sampleMoonPlacement(v: MoonVariant): MoonPlacement {
+  const roll = Math.random();
+  switch (v) {
+    case "warm":
+      return {
+        top: rand(6, 16),
+        side: "right",
+        inset: rand(12, 32),
+      };
+    case "far":
+      return {
+        top: rand(4, 14),
+        side: roll < 0.38 ? "left" : "right",
+        inset: roll < 0.38 ? rand(4, 16) : rand(4, 20),
+      };
+    case "pastoral":
+      return {
+        top: rand(5, 16),
+        side: roll < 0.35 ? "left" : "right",
+        inset: roll < 0.35 ? rand(8, 20) : rand(6, 26),
+      };
+    case "mountain":
+      return {
+        top: rand(12, 28),
+        side: roll < 0.4 ? "left" : "right",
+        inset: roll < 0.4 ? rand(6, 18) : rand(6, 24),
+      };
+    case "river":
+      return {
+        top: rand(32, 52),
+        side: roll < 0.42 ? "left" : "right",
+        inset: roll < 0.42 ? rand(6, 20) : rand(6, 24),
+      };
+    case "crescent":
+      return {
+        top: rand(5, 16),
+        side: roll < 0.36 ? "left" : "right",
+        inset: roll < 0.36 ? rand(8, 22) : rand(8, 28),
+      };
+    default:
+      return {
+        top: rand(5, 18),
+        side: roll < 0.35 ? "left" : "right",
+        inset: roll < 0.35 ? rand(6, 22) : rand(6, 28),
+      };
+  }
+}
+
+function defaultJitter(v: MoonVariant): MoonJitter {
+  return {
+    placement: midPlacement(v),
+    scaleMul: 1,
+    opacityMul: 1,
+    haloMul: 1,
+    blurAdd: 0,
+    bloomMul: 1,
+    coreAdd: 0,
+    termX: 0,
+    termY: 0,
+    termOp: 0,
+    discHx: 0,
+    discHy: 0,
+  };
+}
+
+function rand(min: number, max: number) {
+  return min + Math.random() * (max - min);
+}
+
+function resolveMoonVariant(form: MoonForm | undefined): MoonVariant | null {
+  if (form === undefined || form === false) return null;
+  return form;
+}
+
+function moonBase(v: MoonVariant): MoonBase {
+  switch (v) {
+    case "warm":
+      return {
+        size: 0.95,
+        opacity: 1,
+        halo: 220,
+        haloH: 220,
+        blur: 8,
+        bloom: 130,
+        core: 42,
+        discHx: 35,
+        discHy: 32,
+        termX: 70,
+        termY: 60,
+        termOp: 0.45,
+        warm: true,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 1,
+      };
+    case "far":
+      return {
+        size: 0.72,
+        opacity: 0.85,
+        halo: 200,
+        haloH: 200,
+        blur: 9,
+        bloom: 125,
+        core: 42,
+        discHx: 35,
+        discHy: 32,
+        termX: 70,
+        termY: 60,
+        termOp: 0.42,
+        warm: false,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 1,
+      };
+    case "pastoral":
+      return {
+        size: 0.88,
+        opacity: 0.92,
+        halo: 280,
+        haloH: 280,
+        blur: 12,
+        bloom: 160,
+        core: 38,
+        discHx: 35,
+        discHy: 32,
+        termX: 70,
+        termY: 60,
+        termOp: 0.4,
+        warm: false,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 1,
+      };
+    case "mountain":
+      return {
+        size: 0.82,
+        opacity: 0.9,
+        halo: 195,
+        haloH: 195,
+        blur: 7,
+        bloom: 118,
+        core: 40,
+        discHx: 34,
+        discHy: 30,
+        termX: 68,
+        termY: 58,
+        termOp: 0.48,
+        warm: false,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 1,
+      };
+    case "river":
+      return {
+        size: 0.78,
+        opacity: 0.88,
+        halo: 240,
+        haloH: 160,
+        blur: 11,
+        bloom: 135,
+        core: 40,
+        discHx: 36,
+        discHy: 34,
+        termX: 65,
+        termY: 55,
+        termOp: 0.4,
+        warm: false,
+        riverTint: true,
+        ellipseHalo: true,
+        reflection: true,
+        scaleX: 1,
+      };
+    case "crescent":
+      return {
+        size: 0.85,
+        opacity: 0.9,
+        halo: 200,
+        haloH: 200,
+        blur: 9,
+        bloom: 120,
+        core: 40,
+        discHx: 28,
+        discHy: 30,
+        termX: 78,
+        termY: 48,
+        termOp: 0.72,
+        warm: false,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 0.96,
+      };
+    default:
+      return {
+        size: 1,
+        opacity: 1,
+        halo: 220,
+        haloH: 220,
+        blur: 8,
+        bloom: 130,
+        core: 42,
+        discHx: 35,
+        discHy: 32,
+        termX: 70,
+        termY: 60,
+        termOp: 0.45,
+        warm: false,
+        riverTint: false,
+        ellipseHalo: false,
+        reflection: false,
+        scaleX: 1,
+      };
+  }
+}
+
+/** Placement from wide sky band + light visual jitter */
+function sampleMoonJitter(v: MoonVariant): MoonJitter {
+  return {
+    placement: sampleMoonPlacement(v),
+    scaleMul: rand(0.96, 1.05),
+    opacityMul: rand(0.96, 1.04),
+    haloMul: rand(0.92, 1.1),
+    blurAdd: rand(-1.5, 2),
+    bloomMul: rand(0.94, 1.08),
+    coreAdd: rand(-2, 2.2),
+    termX: rand(v === "crescent" ? -6 : -4, v === "crescent" ? 5 : 4),
+    termY: rand(-4, 4),
+    termOp: rand(-0.04, 0.05),
+    discHx: rand(-3, 3),
+    discHy: rand(-3, 3),
+  };
+}
+
 /**
  * Layered moon / sun for Eastern ink scenes.
- * Core disc + bloom + outer halo; theme-aware placement & temperature.
+ * Seven moon forms + SunForm (low/high/pale) with light per-mount placement.
  */
 export default function CelestialBodies({
-  theme,
-  showMoon,
-  showSun,
+  theme: _theme,
+  moon,
+  sun,
   scale = 1,
   glow = "rgba(220,230,255,0.25)",
 }: Props) {
-  if (!showMoon && !showSun) return null;
+  void _theme; // reserved for future theme-coupled tweaks
+  const variant = resolveMoonVariant(moon);
+  const sunForm = resolveSunForm(sun);
+  const [jitter, setJitter] = useState<MoonJitter | null>(null);
+  const [sunPlace, setSunPlace] = useState<SunPlacement | null>(null);
 
-  const moonWarm = theme === "wine";
-  const moonFar = theme === "homesickness";
-  const moonPastoral = theme === "pastoral";
-  const sunLow = theme === "dawn-dusk";
-  const sunHigh = theme === "summer";
-  const moonScale = moonFar ? 0.72 : moonPastoral ? 0.88 : moonWarm ? 0.95 : 1;
+  useEffect(() => {
+    if (!variant) {
+      setJitter(null);
+      return;
+    }
+    setJitter(sampleMoonJitter(variant));
+  }, [variant]);
+
+  useEffect(() => {
+    if (!sunForm) {
+      setSunPlace(null);
+      return;
+    }
+    setSunPlace(sampleSunPlacement(sunForm));
+  }, [sunForm]);
+
+  if (!variant && !sunForm) return null;
+
+  const sunLow = sunForm === "low";
+  const sunHigh = sunForm === "high";
+  const sunPale = sunForm === "pale";
+
+  let moonNode: ReactNode = null;
+  if (variant) {
+    const base = moonBase(variant);
+    const j = jitter ?? defaultJitter(variant);
+    const sizePx = 120 * scale * base.size * j.scaleMul;
+    const opacity = Math.min(1, Math.max(0.72, base.opacity * j.opacityMul));
+    const halo = base.halo * j.haloMul;
+    const haloH = base.haloH * j.haloMul;
+    const blur = Math.max(5, base.blur + j.blurAdd);
+    const bloom = base.bloom * j.bloomMul;
+    const core = Math.max(34, Math.min(46, base.core + j.coreAdd));
+    const discHx = base.discHx + j.discHx;
+    const discHy = base.discHy + j.discHy;
+    const termX = base.termX + j.termX;
+    const termY = base.termY + j.termY;
+    const termOp = Math.min(0.85, Math.max(0.28, base.termOp + j.termOp));
+
+    const place = j.placement;
+    const pos: CSSProperties = {
+      top: `${place.top}%`,
+      ...(place.side === "left"
+        ? { left: `${place.inset}%` }
+        : { right: `${place.inset}%` }),
+    };
+
+    const outerGlow = base.warm
+      ? `radial-gradient(circle, rgba(220,160,160,0.2) 0%, ${glow} 25%, transparent 68%)`
+      : base.riverTint
+        ? `radial-gradient(ellipse 70% 55% at 50% 50%, rgba(160,200,220,0.2) 0%, ${glow} 30%, transparent 72%)`
+        : variant === "pastoral"
+          ? `radial-gradient(circle, rgba(230,238,255,0.28) 0%, ${glow} 32%, transparent 72%)`
+          : `radial-gradient(circle, rgba(230,235,255,0.22) 0%, ${glow} 28%, transparent 70%)`;
+
+    const midBloom = base.warm
+      ? "radial-gradient(circle, rgba(255,230,230,0.28) 0%, rgba(200,140,140,0.08) 50%, transparent 72%)"
+      : base.riverTint
+        ? "radial-gradient(circle, rgba(220,240,250,0.3) 0%, rgba(140,180,200,0.1) 48%, transparent 75%)"
+        : variant === "pastoral"
+          ? "radial-gradient(circle, rgba(245,250,255,0.38) 0%, rgba(180,200,230,0.14) 48%, transparent 75%)"
+          : "radial-gradient(circle, rgba(245,248,255,0.32) 0%, rgba(180,195,220,0.1) 48%, transparent 72%)";
+
+    const disc = base.warm
+      ? `radial-gradient(circle at ${discHx}% ${discHy}%, #f8ece8 0%, #e8d0c8 42%, #c8a898 78%, #a88880 100%)`
+      : base.riverTint
+        ? `radial-gradient(circle at ${discHx}% ${discHy}%, #eef4f8 0%, #d8e6ee 40%, #b0c8d4 75%, #8aa8b8 100%)`
+        : `radial-gradient(circle at ${discHx}% ${discHy}%, #f4f6fa 0%, #e4eaf2 40%, #c5cedd 75%, #9aabc0 100%)`;
+
+    const discShadow = base.warm
+      ? "0 0 24px 6px rgba(220,160,150,0.25), inset 0 0 12px rgba(255,255,255,0.35)"
+      : variant === "pastoral"
+        ? "0 0 36px 14px rgba(190,210,240,0.28), inset 0 0 14px rgba(255,255,255,0.4)"
+        : base.riverTint
+          ? "0 0 26px 8px rgba(140,180,200,0.2), inset 0 0 12px rgba(255,255,255,0.35)"
+          : "0 0 28px 8px rgba(200,215,240,0.22), inset 0 0 14px rgba(255,255,255,0.4)";
+
+    // Crescent: soft dark veil; full: light rim only
+    const termBg =
+      variant === "crescent"
+        ? `radial-gradient(circle at ${termX}% ${termY}%, transparent 18%, rgba(0,0,0,0.22) 38%, rgba(0,0,0,0.55) 62%, rgba(0,0,0,0.72) 100%)`
+        : `radial-gradient(circle at ${termX}% ${termY}%, transparent 45%, rgba(0,0,0,0.12) 100%)`;
+
+    moonNode = (
+      <div
+        className="celestial-moon absolute"
+        style={{
+          ...pos,
+          width: sizePx,
+          height: sizePx,
+          opacity,
+          transform: base.scaleX !== 1 ? `scaleX(${base.scaleX})` : undefined,
+        }}
+      >
+        {/* Outer halo */}
+        <div
+          className="celestial-moon-halo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: `${halo}%`,
+            height: `${haloH}%`,
+            background: outerGlow,
+            filter: `blur(${blur}px)`,
+          }}
+        />
+        {/* Mid bloom */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: `${bloom}%`,
+            height: `${bloom}%`,
+            background: midBloom,
+            filter: "blur(2px)",
+          }}
+        />
+        {/* Solid disc */}
+        <div
+          className="celestial-moon-core absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: `${core}%`,
+            height: `${core}%`,
+            background: disc,
+            boxShadow: discShadow,
+          }}
+        />
+        {/* Terminator / soft dark limb */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: `${core}%`,
+            height: `${core}%`,
+            background: termBg,
+            mixBlendMode: "multiply",
+            opacity: termOp,
+          }}
+        />
+        {/* River: faint water reflection under moon */}
+        {base.reflection && (
+          <div
+            className="absolute left-1/2 top-full -translate-x-1/2 rounded-full"
+            style={{
+              width: "70%",
+              height: "55%",
+              marginTop: "18%",
+              opacity: 0.1,
+              filter: "blur(10px)",
+              background: `radial-gradient(ellipse 70% 50% at 50% 30%, ${glow} 0%, rgba(160,200,220,0.15) 40%, transparent 72%)`,
+              transform: "scaleY(0.45)",
+            }}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
-      {showMoon && (
-        <div
-          className="celestial-moon absolute"
-          style={{
-            top: moonFar ? "8%" : moonPastoral ? "10%" : "11%",
-            right: moonWarm ? "22%" : moonFar ? "10%" : moonPastoral ? "14%" : "15%",
-            width: 120 * scale * moonScale,
-            height: 120 * scale * moonScale,
-            opacity: moonFar ? 0.85 : moonPastoral ? 0.92 : 1,
-          }}
-        >
-          {/* Outer halo — pastoral: larger soft moon-glow */}
-          <div
-            className="celestial-moon-halo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: moonPastoral ? "280%" : "220%",
-              height: moonPastoral ? "280%" : "220%",
-              background: moonWarm
-                ? `radial-gradient(circle, rgba(220,160,160,0.2) 0%, ${glow} 25%, transparent 68%)`
-                : moonPastoral
-                  ? `radial-gradient(circle, rgba(230,238,255,0.28) 0%, ${glow} 32%, transparent 72%)`
-                  : `radial-gradient(circle, rgba(230,235,255,0.22) 0%, ${glow} 28%, transparent 70%)`,
-              filter: moonPastoral ? "blur(12px)" : "blur(8px)",
-            }}
-          />
-          {/* Mid bloom */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: moonPastoral ? "160%" : "130%",
-              height: moonPastoral ? "160%" : "130%",
-              background: moonWarm
-                ? "radial-gradient(circle, rgba(255,230,230,0.28) 0%, rgba(200,140,140,0.08) 50%, transparent 72%)"
-                : moonPastoral
-                  ? "radial-gradient(circle, rgba(245,250,255,0.38) 0%, rgba(180,200,230,0.14) 48%, transparent 75%)"
-                  : "radial-gradient(circle, rgba(245,248,255,0.32) 0%, rgba(180,195,220,0.1) 48%, transparent 72%)",
-              filter: "blur(2px)",
-            }}
-          />
-          {/* Solid disc */}
-          <div
-            className="celestial-moon-core absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: moonPastoral ? "38%" : "42%",
-              height: moonPastoral ? "38%" : "42%",
-              background: moonWarm
-                ? "radial-gradient(circle at 35% 32%, #f8ece8 0%, #e8d0c8 42%, #c8a898 78%, #a88880 100%)"
-                : "radial-gradient(circle at 35% 32%, #f4f6fa 0%, #e4eaf2 40%, #c5cedd 75%, #9aabc0 100%)",
-              boxShadow: moonWarm
-                ? "0 0 24px 6px rgba(220,160,150,0.25), inset 0 0 12px rgba(255,255,255,0.35)"
-                : moonPastoral
-                  ? "0 0 36px 14px rgba(190,210,240,0.28), inset 0 0 14px rgba(255,255,255,0.4)"
-                  : "0 0 28px 8px rgba(200,215,240,0.22), inset 0 0 14px rgba(255,255,255,0.4)",
-            }}
-          />
-          {/* Soft terminator / rim (not a hard white ring) */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: moonPastoral ? "38%" : "42%",
-              height: moonPastoral ? "38%" : "42%",
-              background:
-                "radial-gradient(circle at 70% 60%, transparent 45%, rgba(0,0,0,0.12) 100%)",
-              mixBlendMode: "multiply",
-              opacity: 0.45,
-            }}
-          />
-        </div>
-      )}
+      {moonNode}
 
-      {showSun && (
-        <div
-          className="celestial-sun absolute"
-          style={
-            sunLow
-              ? {
-                  /* Off-center low-left: avoid poem text in vertical center */
-                  left: "14%",
-                  bottom: "16%",
-                  width: 168 * scale,
-                  height: 168 * scale,
-                }
-              : sunHigh
-                ? {
-                    top: "10%",
-                    right: "10%",
-                    width: 128 * scale,
-                    height: 128 * scale,
-                  }
-                : {
-                    left: "12%",
-                    bottom: "18%",
-                    width: 148 * scale,
-                    height: 148 * scale,
-                  }
-          }
-        >
-          {/* Soft sky tint — dusk only, muted */}
-          {sunLow && (
+      {sunForm && (() => {
+        const place =
+          sunPlace ??
+          (sunLow
+            ? { left: 14, bottom: 16, size: 168 }
+            : sunHigh
+              ? { top: 10, right: 10, size: 128 }
+              : { top: 12, left: 18, size: 100 });
+        const dim = place.size * scale;
+        const pos: CSSProperties = {
+          width: dim,
+          height: dim,
+          opacity: sunPale ? 0.72 : 1,
+        };
+        if (place.top != null) pos.top = `${place.top}%`;
+        if (place.bottom != null) pos.bottom = `${place.bottom}%`;
+        if (place.left != null) pos.left = `${place.left}%`;
+        if (place.right != null) pos.right = `${place.right}%`;
+
+        return (
+          <div className="celestial-sun absolute" style={pos}>
+            {sunLow && (
+              <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "300%",
+                  height: "170%",
+                  background:
+                    "radial-gradient(ellipse at 50% 50%, rgba(180,100,50,0.12) 0%, rgba(160,80,60,0.05) 40%, transparent 68%)",
+                  filter: "blur(20px)",
+                }}
+              />
+            )}
+            {sunHigh && (
+              <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "240%",
+                  height: "240%",
+                  background:
+                    "radial-gradient(circle, rgba(220,190,100,0.1) 0%, transparent 65%)",
+                  filter: "blur(16px)",
+                }}
+              />
+            )}
+
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              className="celestial-sun-halo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
-                width: "280%",
-                height: "160%",
-                background:
-                  "radial-gradient(ellipse at 50% 50%, rgba(160,120,70,0.08) 0%, transparent 65%)",
-                filter: "blur(18px)",
+                width: sunPale ? "200%" : sunLow ? "175%" : "165%",
+                height: sunPale ? "200%" : sunLow ? "175%" : "165%",
+                background: sunLow
+                  ? "radial-gradient(circle, rgba(200,140,80,0.28) 0%, rgba(150,90,50,0.1) 42%, transparent 70%)"
+                  : sunHigh
+                    ? "radial-gradient(circle, rgba(230,200,100,0.26) 0%, rgba(180,140,50,0.08) 45%, transparent 70%)"
+                    : "radial-gradient(circle, rgba(210,200,160,0.14) 0%, rgba(160,150,120,0.05) 48%, transparent 72%)",
+                filter: `blur(${sunPale ? 8 : 5}px)`,
               }}
             />
-          )}
 
-          {/* Dim halo — no screen blend (was too bright) */}
-          <div
-            className="celestial-sun-halo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: "165%",
-              height: "165%",
-              background: sunLow
-                ? "radial-gradient(circle, rgba(200,160,100,0.22) 0%, rgba(150,110,60,0.08) 42%, transparent 70%)"
-                : "radial-gradient(circle, rgba(210,180,100,0.2) 0%, rgba(160,130,60,0.07) 45%, transparent 70%)",
-              filter: "blur(5px)",
-            }}
-          />
-
-          {/* Larger, matte ink-gold disc */}
-          <div
-            className="celestial-sun-core absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: "68%",
-              height: "68%",
-              background: sunLow
-                ? "radial-gradient(circle at 38% 34%, #e8d8b8 0%, #c9a66a 42%, #9a7340 78%, #7a5a34 100%)"
-                : sunHigh
-                  ? "radial-gradient(circle at 36% 32%, #ecdcb0 0%, #cbb06a 50%, #a08040 92%)"
-                  : "radial-gradient(circle at 36% 32%, #e6d4a8 0%, #c4a060 50%, #967840 90%)",
-              boxShadow: "0 0 20px 6px rgba(140,100,50,0.12)",
-              opacity: 0.82,
-            }}
-          />
-        </div>
-      )}
+            <div
+              className="celestial-sun-core absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+              style={{
+                width: sunPale ? "58%" : "68%",
+                height: sunPale ? "58%" : "68%",
+                background: sunLow
+                  ? "radial-gradient(circle at 38% 34%, #f0d4a8 0%, #d4a060 40%, #a06838 76%, #704828 100%)"
+                  : sunHigh
+                    ? "radial-gradient(circle at 36% 32%, #f2e4a8 0%, #e0c060 45%, #c49840 88%)"
+                    : "radial-gradient(circle at 36% 32%, #e8e0c8 0%, #d0c8a8 50%, #a8a080 92%)",
+                boxShadow: sunLow
+                  ? "0 0 28px 8px rgba(180,100,40,0.18)"
+                  : sunHigh
+                    ? "0 0 24px 8px rgba(200,160,50,0.16)"
+                    : "0 0 18px 4px rgba(160,150,120,0.1)",
+                opacity: sunPale ? 0.55 : sunLow ? 0.88 : 0.85,
+              }}
+            />
+          </div>
+        );
+      })()}
     </>
   );
 }
