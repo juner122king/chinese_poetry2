@@ -14,11 +14,8 @@ export default function NotFound() {
       <T as="p" className="mb-10 text-sm tracking-[0.2em] text-xuan/40">
         此卷已佚，或尚待编纂。
       </T>
-      <Link
-        href="/"
-        className="font-sans text-xs tracking-[0.35em] text-cinnabar/80 transition-opacity hover:opacity-70"
-      >
-        <T>返回首页</T>
+      <Link href="/" className="text-link-elegant">
+        <T>归卷首</T>
       </Link>
     </div>
   );

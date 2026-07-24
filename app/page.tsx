@@ -36,7 +36,7 @@ export default function HomePage() {
                 as="h2"
                 className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
               >
-                推 荐 诗 词
+                精 选 诗 卷
               </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
             </div>
@@ -49,11 +49,8 @@ export default function HomePage() {
           </div>
 
           <ScrollReveal className="mt-16 text-center" delay={0.1}>
-            <Link
-              href="/poems"
-              className="inline-block font-sans text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
-            >
-              <T>观 全 部 诗 词 →</T>
+            <Link href="/poems" className="text-link-elegant">
+              <T>遍览诗卷</T>
             </Link>
           </ScrollReveal>
         </div>
@@ -71,7 +68,7 @@ export default function HomePage() {
                 as="h2"
                 className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
               >
-                精 选 诗 人
+                精 选 名 家
               </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
             </div>
@@ -84,11 +81,8 @@ export default function HomePage() {
           </div>
 
           <ScrollReveal className="mt-16 text-center" delay={0.1}>
-            <Link
-              href="/authors"
-              className="inline-block font-sans text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
-            >
-              <T>观 全 部 诗 人 →</T>
+            <Link href="/authors" className="text-link-elegant">
+              <T>遍览名家</T>
             </Link>
           </ScrollReveal>
         </div>

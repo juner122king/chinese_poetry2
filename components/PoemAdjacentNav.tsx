@@ -21,8 +21,8 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
           href={`/poem/${prev.id}`}
           className="group max-w-[40%] text-left"
         >
-          <span className="block font-sans text-[10px] tracking-[0.3em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-            {t("上一首")}
+          <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+            {t("前篇")}
           </span>
           <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
             {prevDisplay.title}
@@ -32,11 +32,8 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
         <span />
       )}
 
-      <Link
-        href="/poems"
-        className="font-sans text-[10px] tracking-[0.35em] text-xuan/30 transition-colors hover:text-xuan/60"
-      >
-        {t("返回目录")}
+      <Link href="/poems" className="text-link-elegant">
+        {t("回诗卷")}
       </Link>
 
       {next && nextDisplay ? (
@@ -44,8 +41,8 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
           href={`/poem/${next.id}`}
           className="group max-w-[40%] text-right"
         >
-          <span className="block font-sans text-[10px] tracking-[0.3em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-            {t("下一首")}
+          <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+            {t("后篇")}
           </span>
           <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
             {nextDisplay.title}

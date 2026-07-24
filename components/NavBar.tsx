@@ -8,9 +8,12 @@ import ScriptToggle from "./ScriptToggle";
 import { useScript } from "./ScriptProvider";
 
 const links = [
-  { href: "/", label: "首页" },
-  { href: "/poems", label: "诗词" },
-  { href: "/authors", label: "诗人" },
+  { href: "/poems", label: "诗卷", match: (path: string) => path.startsWith("/poem") },
+  {
+    href: "/authors",
+    label: "名家",
+    match: (path: string) => path.startsWith("/author"),
+  },
 ];
 
 export default function NavBar() {
@@ -31,18 +34,15 @@ export default function NavBar() {
         <div className="flex items-center gap-8 md:gap-10">
           <ul className="hidden items-center gap-10 md:flex">
             {links.map((link) => {
-              const active =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(link.href);
+              const active = link.match(pathname);
               return (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`relative font-sans text-sm tracking-[0.25em] transition-opacity ${
+                    className={`relative font-sans text-sm tracking-[0.3em] transition-opacity ${
                       active
                         ? "text-xuan opacity-100"
-                        : "text-xuan opacity-50 hover:opacity-90"
+                        : "text-xuan opacity-45 hover:opacity-90"
                     }`}
                   >
                     {t(link.label)}
@@ -77,18 +77,28 @@ export default function NavBar() {
             exit={{ opacity: 0, y: -8 }}
             className="border-t border-xuan/10 bg-ink/95 backdrop-blur-md md:hidden"
           >
-            <ul className="flex flex-col gap-4 px-6 py-6">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="font-sans text-sm tracking-[0.25em] text-xuan/80"
-                  >
-                    {t(link.label)}
-                  </Link>
-                </li>
-              ))}
+            <ul className="flex flex-col gap-5 px-6 py-6">
+              {links.map((link) => {
+                const active = link.match(pathname);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`relative inline-block font-sans text-sm tracking-[0.3em] transition-opacity ${
+                        active
+                          ? "text-xuan opacity-100"
+                          : "text-xuan opacity-50 hover:opacity-90"
+                      }`}
+                    >
+                      {t(link.label)}
+                      {active && (
+                        <span className="absolute -bottom-1.5 left-0 h-px w-3 bg-cinnabar" />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
               <li className="pt-2">
                 <ScriptToggle />
               </li>

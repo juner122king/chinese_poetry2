@@ -542,9 +542,9 @@ body {
 .hero-content {
   position: relative;
   z-index: 12;
-  /* 主文组垂直居中；CTA 绝对定位不参与 */
+  /* 主文组垂直居中；CTA 绝对定位不参与；槽够宽以容纳正文至 ~85vw */
   display: flex;
-  width: min(1180px, 88vw);
+  width: min(1600px, 94vw);
   min-height: 100svh;
   min-height: 100dvh;
   margin: 0 auto;
@@ -552,12 +552,12 @@ body {
   justify-content: center;
 }
 
-/* 题 | 作者 | 文 — 再偏左（右侧留白更大） */
+/* 题 | 作者 | 文 — 组内垂直中线对齐；gap/右距由 JS 按正文密度注入 */
 .hero-poem {
   display: flex;
-  align-items: flex-start;
-  gap: clamp(36px, 4.5vw, 72px);
-  margin-right: clamp(72px, 14vw, 160px);
+  align-items: center;
+  gap: var(--hero-poem-gap, clamp(40px, 4.5vw, 64px));
+  margin-right: var(--hero-poem-margin-end, clamp(72px, 12vw, 130px));
 }
 
 .hero-poem h1 {
@@ -566,25 +566,65 @@ body {
   font-family: var(--font-wenkai);
   font-size: clamp(48px, 6.2vw, 92px);
   font-weight: 400;
-  line-height: 1.06;
+  line-height: 1.08;
   letter-spacing: normal;
   writing-mode: vertical-rl;
   flex-shrink: 0;
+  /* 单列高度上限；更长题向左换列，避免无限拔高绑架整组 */
+  max-height: min(52vh, 9.5em);
+  overflow: visible;
+}
+
+/*
+ * 正文 clip：宽 = min(实宽, 上限)，由 --hero-clip-w 注入。
+ * 短诗贴合列宽（无假空壳）；长诗顶满上限 + .is-overflowing 右缘渐隐。
+ * 不平移题/作者。
+ */
+.hero-lines-clip {
+  width: var(--hero-clip-w, max-content);
+  max-width: min(var(--hero-clip-max, 960px), 100%);
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding-top: clamp(16px, 2.5vh, 36px);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* 渐隐长度由 JS 按 clip 尺寸注入 --hero-fade-out / --hero-fade-mid（与容量同步） */
+.hero-lines-clip.is-overflowing {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--hero-fade-out, 28%)),
+    rgba(0, 0, 0, 0.45) calc(100% - var(--hero-fade-mid, 12%)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--hero-fade-out, 28%)),
+    rgba(0, 0, 0, 0.45) calc(100% - var(--hero-fade-mid, 12%)),
+    transparent 100%
+  );
 }
 
 .hero-lines {
   display: flex;
-  /* 列距加大，正文块向右舒展 */
-  gap: clamp(32px, 3.2vw, 48px);
-  /* 文略下沉 */
-  padding-top: clamp(16px, 2.5vh, 36px);
-  padding-right: clamp(8px, 1.5vw, 24px);
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  width: max-content;
+  /* 列距由 .hero-line-* 控制（句读节奏） */
+  gap: 0;
 }
 
-.hero-lines p {
+.hero-lines p,
+.hero-lines .hero-line {
   display: flex;
   margin: 0;
   flex-direction: column;
+  flex-shrink: 0;
   color: rgba(245, 239, 226, 0.83);
   font-family: var(--font-wenkai);
   font-size: clamp(22px, 2.25vw, 32px);
@@ -593,11 +633,28 @@ body {
   letter-spacing: 0.12em;
 }
 
+/* 桌面竖排列：句读 → 列距（段距从容，stop 明显疏于 pause） */
+.hero-lines .hero-line-pause {
+  margin-inline-end: clamp(16px, 1.5vw, 24px);
+}
+
+.hero-lines .hero-line-stop {
+  margin-inline-end: clamp(44px, 4.2vw, 72px);
+}
+
+.hero-lines .hero-line-none {
+  margin-inline-end: clamp(24px, 2.2vw, 36px);
+}
+
+.hero-lines .hero-line-last {
+  margin-inline-end: 0;
+}
+
 .hero-lines span {
   display: block;
 }
 
-/* 作者区：夹在题与文之间，略上移 */
+/* 作者区：夹在题与文之间（组已垂直居中，不再额外上移以免与长题错位） */
 .hero-kicker {
   display: flex;
   flex-direction: column;
@@ -605,7 +662,6 @@ body {
   align-self: center;
   gap: 12px;
   flex-shrink: 0;
-  transform: translateY(clamp(-40px, -4.5vh, -24px));
 }
 
 .hero-dynasty {
@@ -644,8 +700,9 @@ body {
 /* CTA：钉在内容区右下，不参与居中 */
 .hero-actions {
   position: absolute;
-  right: clamp(0px, 1vw, 12px);
-  bottom: 10vh;
+  /* 略离右缘，避免贴边 */
+  right: clamp(20px, 3.5vw, 40px);
+  bottom: 12vh;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -656,14 +713,14 @@ body {
 .hero-action-primary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-height: 44px;
-  padding: 11px 22px;
-  border: 1px solid rgba(245, 239, 226, 0.35);
-  color: rgba(245, 239, 226, 0.9);
+  padding: 11px 24px;
+  border: 1px solid rgba(245, 239, 226, 0.22);
+  color: rgba(245, 239, 226, 0.88);
   font-family: var(--font-sans);
   font-size: 13px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.28em;
   background: transparent;
   transition:
     color 300ms ease,
@@ -674,9 +731,52 @@ body {
 
 .hero-action-primary:hover {
   color: var(--xuan);
-  border-color: rgba(178, 58, 72, 0.7);
-  background: rgba(245, 239, 226, 0.04);
+  border-color: rgba(178, 58, 72, 0.55);
+  background: rgba(245, 239, 226, 0.035);
   transform: translateY(-1px);
+}
+
+/* 次级文字链：遍览 / 归卷首 / 回诗卷 */
+.text-link-elegant {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  color: rgba(245, 239, 226, 0.45);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.35em;
+  transition: color 300ms ease;
+}
+
+.text-link-elegant::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0.35);
+  transform-origin: left center;
+  transition:
+    transform 400ms var(--ease-elegant),
+    background-color 300ms ease;
+  opacity: 0.55;
+}
+
+.text-link-elegant:hover {
+  color: var(--cinnabar);
+}
+
+.text-link-elegant:hover::after {
+  transform: scaleX(1);
+  background: var(--cinnabar);
+  opacity: 0.75;
+}
+
+.text-link-elegant:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline-offset: 3px;
 }
 
 .hero-action-primary:focus-visible {
@@ -773,6 +873,8 @@ body {
     font-size: clamp(48px, 14vw, 68px);
     writing-mode: horizontal-tb;
     text-align: center;
+    max-height: none;
+    line-height: 1.15;
   }
 
   .hero-kicker {
@@ -806,18 +908,66 @@ body {
     letter-spacing: 0.2em;
   }
 
-  .hero-lines {
+  .hero-lines-clip {
     order: 3;
-    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: var(--hero-clip-max-h, min(50vh, 420px));
     margin-top: 28px;
     padding-top: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .hero-lines-clip.is-overflowing {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 calc(100% - var(--hero-fade-out, 28%)),
+      rgba(0, 0, 0, 0.45) calc(100% - var(--hero-fade-mid, 12%)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 calc(100% - var(--hero-fade-out, 28%)),
+      rgba(0, 0, 0, 0.45) calc(100% - var(--hero-fade-mid, 12%)),
+      transparent 100%
+    );
+  }
+
+  .hero-lines {
+    display: block;
+    width: 100%;
     text-align: center;
   }
 
-  .hero-lines p {
+  .hero-lines p,
+  .hero-lines .hero-line {
     display: block;
-    margin: 8px 0;
+    margin-inline-end: 0;
     font-size: 22px;
+  }
+
+  /* 移动横排：段距用 margin-bottom（Hero 专用，不牵连详情页） */
+  .hero-lines .hero-line-pause {
+    margin-inline-end: 0;
+    margin-bottom: 1rem;
+  }
+
+  .hero-lines .hero-line-stop {
+    margin-inline-end: 0;
+    margin-bottom: 2.75rem;
+  }
+
+  .hero-lines .hero-line-none {
+    margin-inline-end: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-lines .hero-line-last {
+    margin-inline-end: 0;
+    margin-bottom: 0;
   }
 
   .hero-lines span {

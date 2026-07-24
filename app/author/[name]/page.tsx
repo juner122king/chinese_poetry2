@@ -63,13 +63,13 @@ export default async function AuthorPage({ params }: Props) {
             href="/authors"
             className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"
           >
-            <T>返回诗人目录</T>
+            <T>返回名家目录</T>
           </Link>
           <Link
             href="/poems"
             className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"
           >
-            <T>返回诗词目录</T>
+            <T>返回诗卷目录</T>
           </Link>
         </div>
       </div>
