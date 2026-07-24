@@ -526,12 +526,12 @@ export default function HeroSection({ poem }: Props) {
             <Link href={`/poem/${poem.id}`} className="hero-action-primary">
               <span>{t("展卷细读")}</span>
               <svg
-                width="14"
-                height="14"
+                width="13"
+                height="13"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.4"
+                strokeWidth="1.15"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
