@@ -58,7 +58,13 @@ export default async function AuthorPage({ params }: Props) {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div className="mt-16 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-10">
+          <Link
+            href="/authors"
+            className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"
+          >
+            <T>返回诗人目录</T>
+          </Link>
           <Link
             href="/poems"
             className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"

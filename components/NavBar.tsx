@@ -10,6 +10,7 @@ import { useScript } from "./ScriptProvider";
 const links = [
   { href: "/", label: "首页" },
   { href: "/poems", label: "诗词" },
+  { href: "/authors", label: "诗人" },
 ];
 
 export default function NavBar() {

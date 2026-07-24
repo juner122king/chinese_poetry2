@@ -82,6 +82,15 @@ export default function HomePage() {
               <AuthorCard key={author.slug} author={author} index={i} />
             ))}
           </div>
+
+          <ScrollReveal className="mt-16 text-center" delay={0.1}>
+            <Link
+              href="/authors"
+              className="inline-block font-sans text-xs tracking-[0.4em] text-xuan/45 transition-colors hover:text-cinnabar"
+            >
+              <T>观 全 部 诗 人 →</T>
+            </Link>
+          </ScrollReveal>
         </div>
       </section>
 
