@@ -1,9 +1,11 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useId, type CSSProperties } from "react";
 import type { PoemTheme } from "@/lib/types";
 import {
   getThemeVisual,
+  type CloudForm,
+  type HorizonForm,
   type MountainForm,
 } from "@/lib/theme-map";
 import CelestialBodies from "./CelestialBodies";
@@ -16,70 +18,117 @@ type Props = {
 
 type MountainPaths = {
   far: string;
+  mid?: string;
   near: string;
   heightClass: string;
   opacity: number;
   farFill: string;
+  midFill?: string;
   nearFill: string;
+  /** CSS blur on far ridge (ink wash) */
+  farBlur?: number;
+  midBlur?: number;
+  /** Foot haze under near ridge — soft dissolve into ground */
+  footHaze?: boolean;
 };
 
-/** Distinct silhouettes — not the same path scaled */
+/**
+ * Ink-wash mountain silhouettes: long curves, sparse major rises,
+ * atmospheric layers — not zig-zag cartoon peaks.
+ */
 const MOUNTAIN_FORMS: Record<Exclude<MountainForm, "none">, MountainPaths> = {
   soft: {
-    far: "M0,400 L0,280 C120,240 200,180 320,200 C480,230 520,120 680,140 C840,160 900,80 1080,120 C1220,150 1320,200 1440,170 L1440,400 Z",
-    near: "M0,400 L0,320 C180,300 280,250 420,270 C600,300 700,220 860,250 C1020,280 1180,230 1440,260 L1440,400 Z",
+    far: "M0,400 L0,292 C160,268 280,248 420,258 C580,270 700,238 860,248 C1020,258 1180,228 1440,242 L1440,400 Z",
+    mid: "M0,400 L0,318 C180,300 320,288 480,298 C680,312 860,286 1040,298 C1200,308 1320,292 1440,300 L1440,400 Z",
+    near: "M0,400 L0,342 C200,328 380,336 580,330 C800,322 1020,338 1220,332 C1340,328 1400,336 1440,334 L1440,400 Z",
     heightClass: "h-[42%]",
-    opacity: 0.38,
-    farFill: "rgba(12,14,18,0.75)",
-    nearFill: "rgba(8,10,14,0.88)",
+    opacity: 0.4,
+    farFill: "rgba(22,28,36,0.42)",
+    midFill: "rgba(14,18,24,0.55)",
+    nearFill: "rgba(8,10,14,0.78)",
+    farBlur: 3.5,
+    midBlur: 1.2,
+    footHaze: true,
   },
   strong: {
-    far: "M0,400 L0,240 C80,200 160,100 280,130 C400,160 480,40 640,70 C800,100 900,20 1080,60 C1220,90 1340,140 1440,100 L1440,400 Z",
-    near: "M0,400 L0,300 C160,270 300,200 460,230 C620,260 760,170 960,200 C1140,230 1280,190 1440,220 L1440,400 Z",
+    far: "M0,400 L0,250 C140,220 240,168 380,188 C540,212 640,120 820,148 C980,172 1100,100 1260,128 C1360,144 1410,168 1440,158 L1440,400 Z",
+    mid: "M0,400 L0,292 C160,262 300,240 460,258 C640,280 800,228 980,252 C1140,272 1280,248 1440,262 L1440,400 Z",
+    near: "M0,400 L0,328 C180,308 340,292 520,308 C720,328 900,288 1100,308 C1260,322 1360,310 1440,316 L1440,400 Z",
     heightClass: "h-[54%]",
-    opacity: 0.52,
-    farFill: "rgba(10,12,16,0.8)",
-    nearFill: "rgba(6,8,12,0.92)",
+    opacity: 0.5,
+    farFill: "rgba(18,24,32,0.48)",
+    midFill: "rgba(12,16,22,0.62)",
+    nearFill: "rgba(6,8,12,0.86)",
+    farBlur: 3,
+    midBlur: 1,
+    footHaze: true,
   },
   distant: {
-    far: "M0,400 L0,300 C200,280 360,250 520,265 C700,280 900,240 1100,255 C1260,268 1380,250 1440,260 L1440,400 Z",
-    near: "M0,400 L0,340 C240,325 480,310 720,320 C980,332 1200,315 1440,328 L1440,400 Z",
-    heightClass: "h-[34%]",
-    opacity: 0.28,
-    farFill: "rgba(18,22,28,0.55)",
-    nearFill: "rgba(12,16,22,0.72)",
+    far: "M0,400 L0,308 C200,292 360,278 540,288 C740,300 920,268 1120,282 C1280,292 1380,278 1440,284 L1440,400 Z",
+    mid: "M0,400 L0,332 C220,320 460,312 720,322 C980,332 1200,316 1440,324 L1440,400 Z",
+    near: "M0,400 L0,354 C260,346 520,350 780,348 C1040,346 1260,352 1440,350 L1440,400 Z",
+    heightClass: "h-[36%]",
+    opacity: 0.32,
+    farFill: "rgba(28,36,48,0.32)",
+    midFill: "rgba(18,24,34,0.4)",
+    nearFill: "rgba(12,16,24,0.55)",
+    farBlur: 4,
+    midBlur: 1.5,
+    footHaze: true,
   },
   rolling: {
-    far: "M0,400 L0,290 C180,250 300,270 450,255 C620,238 780,270 960,250 C1140,232 1280,260 1440,245 L1440,400 Z",
-    near: "M0,400 L0,330 C200,300 380,320 560,305 C780,288 980,315 1180,300 C1320,292 1400,310 1440,305 L1440,400 Z",
+    far: "M0,400 L0,298 C180,268 300,282 460,268 C640,252 800,278 980,262 C1160,248 1300,270 1440,258 L1440,400 Z",
+    mid: "M0,400 L0,322 C200,302 380,316 560,304 C760,290 960,312 1160,300 C1300,292 1380,308 1440,302 L1440,400 Z",
+    near: "M0,400 L0,348 C220,334 420,344 640,336 C860,328 1060,346 1260,338 C1360,334 1410,342 1440,340 L1440,400 Z",
     heightClass: "h-[40%]",
-    opacity: 0.36,
-    farFill: "rgba(14,18,14,0.7)",
-    nearFill: "rgba(8,12,10,0.88)",
+    opacity: 0.38,
+    farFill: "rgba(20,28,22,0.4)",
+    midFill: "rgba(12,18,14,0.52)",
+    nearFill: "rgba(8,12,10,0.76)",
+    farBlur: 3.2,
+    midBlur: 1.1,
+    footHaze: true,
   },
+  /** Monumental ridges: few major rises, rounded shoulders — not sawtooth */
   peaks: {
-    far: "M0,400 L0,260 L120,200 L220,280 L360,90 L480,240 L600,140 L740,260 L900,60 L1040,220 L1180,120 L1320,240 L1440,160 L1440,400 Z",
-    near: "M0,400 L0,310 L100,250 L200,320 L340,180 L480,300 L620,220 L780,310 L920,200 L1080,300 L1240,240 L1440,280 L1440,400 Z",
-    heightClass: "h-[56%]",
-    opacity: 0.48,
-    farFill: "rgba(10,12,16,0.78)",
-    nearFill: "rgba(6,8,12,0.92)",
-  },
-  jagged: {
-    far: "M0,400 L0,250 L80,250 L140,160 L190,240 L280,100 L340,210 L420,70 L500,200 L580,90 L660,220 L760,50 L860,190 L960,80 L1080,200 L1180,110 L1280,230 L1360,140 L1440,210 L1440,400 Z",
-    near: "M0,400 L0,300 L90,300 L150,230 L230,300 L320,170 L400,280 L500,160 L600,290 L720,150 L840,280 L960,180 L1100,290 L1240,200 L1360,290 L1440,240 L1440,400 Z",
+    far: "M0,400 L0,268 C100,248 180,210 280,228 C400,252 480,160 620,178 C760,196 860,120 1000,148 C1140,176 1240,130 1340,158 C1400,172 1425,188 1440,180 L1440,400 Z",
+    mid: "M0,400 L0,298 C120,278 220,248 340,268 C480,292 580,220 740,242 C900,264 1020,210 1180,238 C1300,256 1380,242 1440,250 L1440,400 Z",
+    near: "M0,400 L0,332 C140,318 260,298 400,314 C560,334 700,292 860,312 C1020,332 1180,300 1320,318 C1390,326 1420,322 1440,324 L1440,400 Z",
     heightClass: "h-[52%]",
-    opacity: 0.5,
-    farFill: "rgba(12,16,22,0.8)",
-    nearFill: "rgba(6,10,14,0.94)",
+    opacity: 0.46,
+    farFill: "rgba(20,26,34,0.45)",
+    midFill: "rgba(12,16,22,0.58)",
+    nearFill: "rgba(6,8,12,0.84)",
+    farBlur: 3.2,
+    midBlur: 1,
+    footHaze: true,
+  },
+  /** Cold hardness with sparse structure — curves + few breaks, not dense teeth */
+  jagged: {
+    far: "M0,400 L0,262 C80,248 130,200 200,218 C280,240 340,168 430,188 C520,208 600,140 700,162 C800,184 900,128 1020,152 C1140,176 1240,148 1340,170 C1400,182 1425,198 1440,192 L1440,400 Z",
+    mid: "M0,400 L0,300 C100,286 170,248 260,268 C360,292 450,230 560,252 C680,278 800,228 920,254 C1060,282 1180,248 1300,268 C1380,280 1420,272 1440,276 L1440,400 Z",
+    near: "M0,400 L0,336 C120,322 210,300 320,318 C450,340 580,298 720,320 C880,346 1020,310 1180,328 C1300,340 1380,328 1440,334 L1440,400 Z",
+    heightClass: "h-[50%]",
+    opacity: 0.48,
+    farFill: "rgba(22,30,40,0.48)",
+    midFill: "rgba(12,18,26,0.6)",
+    nearFill: "rgba(6,10,14,0.86)",
+    farBlur: 2.8,
+    midBlur: 0.8,
+    footHaze: true,
   },
   range: {
-    far: "M0,400 L0,270 C100,250 180,200 280,210 C400,225 500,160 640,175 C800,190 920,130 1080,150 C1220,168 1340,200 1440,185 L1440,400 Z",
-    near: "M0,400 L0,315 C140,295 260,270 400,285 C560,300 700,255 860,275 C1020,295 1180,265 1440,280 L1440,400 Z",
+    far: "M0,400 L0,278 C120,258 200,218 320,228 C460,240 560,180 720,196 C880,212 1000,160 1160,180 C1280,194 1380,210 1440,198 L1440,400 Z",
+    mid: "M0,400 L0,308 C140,290 260,268 400,282 C560,298 700,258 860,278 C1020,298 1180,268 1340,284 C1400,290 1425,286 1440,288 L1440,400 Z",
+    near: "M0,400 L0,338 C160,322 300,312 460,324 C640,338 820,308 1000,324 C1160,336 1300,318 1440,328 L1440,400 Z",
     heightClass: "h-[46%]",
-    opacity: 0.4,
-    farFill: "rgba(12,16,20,0.72)",
-    nearFill: "rgba(8,12,16,0.9)",
+    opacity: 0.42,
+    farFill: "rgba(20,28,36,0.4)",
+    midFill: "rgba(12,18,24,0.54)",
+    nearFill: "rgba(8,12,16,0.8)",
+    farBlur: 3.5,
+    midBlur: 1.2,
+    footHaze: true,
   },
 };
 
@@ -92,21 +141,180 @@ function resolveMountainForm(
   return form;
 }
 
+function resolveCloudForm(
+  form: CloudForm | undefined,
+): "high" | "band" | "sea" | null {
+  if (form === undefined || form === false) return null;
+  return form;
+}
+
+/** Flat ink-wash bands — not puffy cartoon clouds */
+function CloudBand({
+  className,
+  style,
+  glow,
+  warm = false,
+}: {
+  className: string;
+  style: CSSProperties;
+  glow: string;
+  warm?: boolean;
+}) {
+  const soft = warm
+    ? "rgba(245,239,226,0.07)"
+    : "rgba(200,215,230,0.06)";
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        background: [
+          `radial-gradient(ellipse 72% 55% at 38% 48%, ${glow} 0%, transparent 68%)`,
+          `radial-gradient(ellipse 55% 50% at 68% 52%, ${soft} 0%, transparent 70%)`,
+          `linear-gradient(90deg, transparent 0%, ${soft} 28%, ${soft} 55%, transparent 100%)`,
+        ].join(", "),
+        borderRadius: "100%",
+        filter: style.filter ?? "blur(28px)",
+      }}
+    />
+  );
+}
+
+function resolveHorizonForm(
+  form: HorizonForm | undefined,
+): "plain" | "water" | "frost" | null {
+  if (form === undefined || form === false) return null;
+  return form;
+}
+
+/**
+ * Soft ground / water atmosphere — never a thin white stripe.
+ * plain = 关外尘岚, water = 水际, frost = 寒江.
+ */
+function HorizonAtmosphere({
+  form,
+  glow,
+  intensityScale,
+}: {
+  form: "plain" | "water" | "frost";
+  glow: string;
+  intensityScale: number;
+}) {
+  if (form === "plain") {
+    return (
+      <div className="absolute inset-0" style={{ opacity: intensityScale }}>
+        <div
+          className="absolute -left-[10%] w-[120%]"
+          style={{
+            bottom: "10%",
+            height: "26%",
+            borderRadius: "100%",
+            filter: "blur(28px)",
+            opacity: 0.55,
+            background: [
+              `radial-gradient(ellipse 90% 55% at 50% 70%, ${glow} 0%, transparent 72%)`,
+              "radial-gradient(ellipse 70% 45% at 40% 55%, rgba(140,100,50,0.1) 0%, transparent 70%)",
+              "linear-gradient(90deg, transparent 0%, rgba(120,90,50,0.06) 30%, rgba(120,90,50,0.08) 50%, rgba(120,90,50,0.05) 70%, transparent 100%)",
+            ].join(", "),
+          }}
+        />
+        <div
+          className="absolute inset-x-0"
+          style={{
+            bottom: 0,
+            height: "22%",
+            background:
+              "linear-gradient(to top, rgba(18,14,10,0.55) 0%, rgba(20,16,12,0.2) 45%, transparent 100%)",
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (form === "frost") {
+    return (
+      <div className="absolute inset-0" style={{ opacity: intensityScale * 0.9 }}>
+        <div
+          className="absolute -left-[12%] w-[124%]"
+          style={{
+            bottom: "12%",
+            height: "22%",
+            borderRadius: "100%",
+            filter: "blur(32px)",
+            opacity: 0.42,
+            background: [
+              `radial-gradient(ellipse 88% 50% at 50% 60%, ${glow} 0%, transparent 74%)`,
+              "radial-gradient(ellipse 60% 40% at 55% 50%, rgba(180,200,220,0.06) 0%, transparent 70%)",
+            ].join(", "),
+          }}
+        />
+        <div
+          className="absolute inset-x-0"
+          style={{
+            bottom: "6%",
+            height: "16%",
+            background:
+              "linear-gradient(to top, rgba(12,16,22,0.35) 0%, transparent 100%)",
+          }}
+        />
+      </div>
+    );
+  }
+
+  // water
+  return (
+    <div className="absolute inset-0" style={{ opacity: intensityScale }}>
+      <div
+        className="absolute -left-[10%] w-[120%]"
+        style={{
+          bottom: "8%",
+          height: "24%",
+          borderRadius: "100%",
+          filter: "blur(30px)",
+          opacity: 0.5,
+          background: [
+            `radial-gradient(ellipse 92% 48% at 50% 65%, ${glow} 0%, transparent 72%)`,
+            "radial-gradient(ellipse 70% 42% at 45% 55%, rgba(80,120,150,0.08) 0%, transparent 70%)",
+            "linear-gradient(180deg, transparent 0%, rgba(50,80,100,0.06) 55%, rgba(30,50,65,0.1) 100%)",
+          ].join(", "),
+        }}
+      />
+      <div
+        className="absolute inset-x-[8%]"
+        style={{
+          bottom: "14%",
+          height: "10%",
+          borderRadius: "100%",
+          filter: "blur(18px)",
+          opacity: 0.28,
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(140,180,200,0.06) 35%, rgba(140,180,200,0.08) 50%, rgba(140,180,200,0.05) 65%, transparent 100%)",
+        }}
+      />
+    </div>
+  );
+}
+
 export default function InkBackground({
   theme = "night-moon",
   className = "",
   intensity = "full",
 }: Props) {
+  const uid = useId().replace(/:/g, "");
   const visual = getThemeVisual(theme);
   const mountainForm = resolveMountainForm(visual.mountains ?? "rolling");
   const mountainStyle = mountainForm ? MOUNTAIN_FORMS[mountainForm] : null;
   const size = intensity === "full" ? 1 : 0.7;
+  const nearGradId = `ink-mtn-near-${uid}`;
   const mistLevel =
     visual.mist === "soft"
       ? "soft"
       : visual.mist === "heavy"
         ? "heavy"
         : null;
+  const cloudForm = resolveCloudForm(visual.clouds);
+  const horizonForm = resolveHorizonForm(visual.horizon);
+  const atmScale = intensity === "soft" ? 0.72 : 1;
 
   return (
     <div
@@ -127,29 +335,122 @@ export default function InkBackground({
         glow={visual.glow}
       />
 
-      {/* Mountains — distinct forms per theme */}
-      {mountainStyle && (
-        <svg
-          className={`absolute bottom-0 left-0 w-full ${mountainStyle.heightClass}`}
-          style={{ opacity: mountainStyle.opacity * (intensity === "soft" ? 0.75 : 1) }}
-          viewBox="0 0 1440 400"
-          preserveAspectRatio="none"
-        >
-          <path d={mountainStyle.far} fill={mountainStyle.farFill} />
-          <path d={mountainStyle.near} fill={mountainStyle.nearFill} />
-        </svg>
+      {/* High clouds — behind ridges (远山入云) */}
+      {cloudForm && (
+        <div className="absolute inset-0" style={{ opacity: atmScale }}>
+          {(cloudForm === "high" ||
+            cloudForm === "band" ||
+            cloudForm === "sea") && (
+            <>
+              <CloudBand
+                className="ink-cloud ink-cloud-a absolute -left-[12%] w-[85%]"
+                glow={visual.glow}
+                style={{
+                  top: "7%",
+                  height: "11%",
+                  opacity: cloudForm === "high" ? 0.2 : 0.16,
+                  filter: "blur(32px)",
+                }}
+              />
+              <CloudBand
+                className="ink-cloud ink-cloud-b absolute left-[25%] w-[90%]"
+                glow={visual.glow}
+                style={{
+                  top: cloudForm === "high" ? "14%" : "12%",
+                  height: "9%",
+                  opacity: 0.12,
+                  filter: "blur(36px)",
+                }}
+              />
+            </>
+          )}
+        </div>
       )}
 
-      {/* Soft horizon glow — never a hard 1px edge */}
-      {visual.horizon && (
+      {/* Mountains — layered ink wash (far soft → near solid) */}
+      {mountainStyle && (
         <div
-          className="absolute left-0 right-0 h-12 opacity-40"
+          className={`absolute bottom-0 left-0 w-full ${mountainStyle.heightClass}`}
           style={{
-            bottom: "24%",
-            background:
-              "linear-gradient(90deg, transparent 5%, rgba(245,239,226,0.08) 35%, rgba(245,239,226,0.12) 50%, rgba(245,239,226,0.08) 65%, transparent 95%), linear-gradient(180deg, transparent 0%, rgba(245,239,226,0.06) 45%, transparent 100%)",
-            filter: "blur(1.5px)",
+            opacity:
+              mountainStyle.opacity * (intensity === "soft" ? 0.75 : 1),
           }}
+        >
+          <svg
+            className="absolute inset-0 h-full w-full"
+            style={{
+              filter:
+                mountainStyle.farBlur != null
+                  ? `blur(${mountainStyle.farBlur}px)`
+                  : undefined,
+            }}
+            viewBox="0 0 1440 400"
+            preserveAspectRatio="none"
+          >
+            <path d={mountainStyle.far} fill={mountainStyle.farFill} />
+          </svg>
+          {mountainStyle.mid && (
+            <svg
+              className="absolute inset-0 h-full w-full"
+              style={{
+                filter:
+                  mountainStyle.midBlur != null
+                    ? `blur(${mountainStyle.midBlur}px)`
+                    : undefined,
+              }}
+              viewBox="0 0 1440 400"
+              preserveAspectRatio="none"
+            >
+              <path
+                d={mountainStyle.mid}
+                fill={mountainStyle.midFill ?? mountainStyle.farFill}
+              />
+            </svg>
+          )}
+          <svg
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 1440 400"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient
+                id={nearGradId}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                {/* Ridge softens into mass, then sinks into ink at the foot */}
+                <stop offset="0%" stopColor="rgb(16,20,28)" stopOpacity="0.72" />
+                <stop offset="38%" stopColor="rgb(10,13,18)" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="rgb(6,8,12)" stopOpacity="0.98" />
+              </linearGradient>
+            </defs>
+            <path d={mountainStyle.near} fill={mountainStyle.nearFill} />
+            <path
+              d={mountainStyle.near}
+              fill={`url(#${nearGradId})`}
+              style={{ opacity: 0.55 }}
+            />
+          </svg>
+          {mountainStyle.footHaze && (
+            <div
+              className="absolute bottom-0 left-0 right-0 h-[38%]"
+              style={{
+                background:
+                  "linear-gradient(to top, var(--ink) 0%, rgba(13,13,13,0.55) 35%, transparent 100%)",
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Horizon atmosphere — plain dust / water / frost (not a white bar) */}
+      {horizonForm && (
+        <HorizonAtmosphere
+          form={horizonForm}
+          glow={visual.glow}
+          intensityScale={atmScale}
         />
       )}
 
@@ -209,27 +510,93 @@ export default function InkBackground({
         </svg>
       )}
 
-      {/* Mist — soft | heavy | off */}
-      {mistLevel && (
-        <>
-          <div
-            className="mist-layer absolute -left-[10%] top-[30%] h-[40%] w-[120%] rounded-[100%] blur-3xl"
+      {/* Mid / sea clouds — in front of ridges, still airy */}
+      {cloudForm && (cloudForm === "band" || cloudForm === "sea") && (
+        <div className="absolute inset-0" style={{ opacity: atmScale }}>
+          <CloudBand
+            className="ink-cloud ink-cloud-a absolute -left-[8%] w-[110%]"
+            glow={visual.glow}
             style={{
-              background: `radial-gradient(ellipse, ${visual.glow} 0%, transparent 70%)`,
-              opacity: mistLevel === "heavy" ? 0.55 : 0.32,
+              top: "28%",
+              height: cloudForm === "sea" ? "16%" : "12%",
+              opacity: cloudForm === "sea" ? 0.18 : 0.14,
+              filter: "blur(30px)",
+            }}
+          />
+          {cloudForm === "sea" && (
+            <CloudBand
+              className="ink-cloud ink-cloud-b absolute left-[-5%] w-[120%]"
+              glow={visual.glow}
+              warm
+              style={{
+                top: "40%",
+                height: "14%",
+                opacity: 0.15,
+                filter: "blur(34px)",
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Mist — horizontal 岚气 bands (waist + valley), not glow blobs */}
+      {mistLevel && (
+        <div className="absolute inset-0" style={{ opacity: atmScale }}>
+          {mistLevel === "heavy" && (
+            <div
+              className="ink-mist-sheet absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(120,140,160,0.05) 0%, transparent 28%, transparent 48%, rgba(40,50,60,0.1) 100%)",
+                opacity: 0.85,
+              }}
+            />
+          )}
+          {/* Waist mist — 山腰 */}
+          <div
+            className="ink-mist ink-mist-a absolute -left-[15%] w-[130%]"
+            style={{
+              top: mistLevel === "heavy" ? "38%" : "44%",
+              height: mistLevel === "heavy" ? "22%" : "16%",
+              opacity: mistLevel === "heavy" ? 0.38 : 0.22,
+              borderRadius: "100%",
+              filter: "blur(36px)",
+              background: [
+                `radial-gradient(ellipse 80% 50% at 45% 50%, ${visual.glow} 0%, transparent 72%)`,
+                "linear-gradient(90deg, transparent 0%, rgba(245,239,226,0.06) 25%, rgba(245,239,226,0.08) 50%, rgba(245,239,226,0.05) 72%, transparent 100%)",
+              ].join(", "),
+            }}
+          />
+          {/* Valley fog — 谷底 */}
+          <div
+            className="ink-mist ink-mist-b absolute -left-[10%] w-[120%]"
+            style={{
+              bottom: "6%",
+              height: mistLevel === "heavy" ? "20%" : "14%",
+              opacity: mistLevel === "heavy" ? 0.32 : 0.18,
+              borderRadius: "100%",
+              filter: "blur(40px)",
+              background: [
+                "radial-gradient(ellipse 85% 55% at 50% 60%, rgba(245,239,226,0.07) 0%, transparent 70%)",
+                `radial-gradient(ellipse 60% 45% at 30% 50%, ${visual.glow} 0%, transparent 75%)`,
+              ].join(", "),
             }}
           />
           {(mistLevel === "heavy" || intensity === "full") && (
             <div
-              className="mist-layer-2 absolute -left-[5%] top-[55%] h-[30%] w-[110%] rounded-[100%] blur-3xl"
+              className="ink-mist ink-mist-a absolute left-[5%] w-[95%]"
               style={{
+                top: "52%",
+                height: "12%",
+                opacity: mistLevel === "heavy" ? 0.2 : 0.12,
+                borderRadius: "100%",
+                filter: "blur(42px)",
                 background:
-                  "radial-gradient(ellipse, rgba(245,239,226,0.08) 0%, transparent 70%)",
-                opacity: mistLevel === "heavy" ? 1 : 0.65,
+                  "linear-gradient(90deg, transparent 5%, rgba(180,200,220,0.07) 40%, rgba(180,200,220,0.06) 60%, transparent 95%)",
               }}
             />
           )}
-        </>
+        </div>
       )}
 
       {/* Rain — unified wind, depth layers, mild tilt jitter */}

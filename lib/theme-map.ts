@@ -10,6 +10,15 @@ export type ParticleMode =
 
 export type MistLevel = false | "soft" | "heavy";
 
+/** 云：关 | 高云一抹 | 中带 | 云海（厚、偏下与山接） */
+export type CloudForm = false | "high" | "band" | "sea";
+
+/**
+ * 地平/水际：关 | 边塞尘岚 | 水际微光 | 寒江淡雾
+ * （不再用白亮细条）
+ */
+export type HorizonForm = false | "plain" | "water" | "frost";
+
 /** 山体造型（去同质化）；soft/strong 兼容旧配置 */
 export type MountainForm =
   | "none"
@@ -31,9 +40,12 @@ export type ThemeVisual = {
   snow?: boolean;
   /** 雾强度；false 关闭，避免主题同质化 */
   mist?: MistLevel;
+  /** 独立云层；多数主题关闭以免同质 */
+  clouds?: CloudForm;
   rain?: boolean;
   mountains?: MountainForm;
-  horizon?: boolean;
+  /** 地平/水际形态；false/省略 = 无 */
+  horizon?: HorizonForm;
   fields?: boolean;
   bamboo?: boolean;
   petals?: boolean;
@@ -57,6 +69,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(220,230,255,0.25)",
     moon: true,
     mist: "soft",
+    clouds: "high",
     mountains: "distant",
     particles: "stars",
     particleSafeCenter: true,
@@ -69,6 +82,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(200,120,70,0.22)",
     sun: true,
     mist: "soft",
+    clouds: "band",
     mountains: "peaks",
     particles: "none",
   },
@@ -128,7 +142,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     snow: false,
     mist: "soft",
     mountains: "jagged",
-    horizon: true,
+    horizon: "frost",
     particles: "snow",
     particleSafeCenter: true,
   },
@@ -140,17 +154,20 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#a8b8c8",
     glow: "rgba(100,120,140,0.16)",
     mist: "heavy",
+    clouds: "band",
     rain: true,
     mountains: "range",
     particles: "none",
   },
   mountain: {
     label: "山岳",
+    // 空蒙远黛：天际冷灰、山脚沉墨，配合 ink 层峦而非硬剪影
     gradient:
-      "radial-gradient(ellipse 90% 40% at 50% 85%, rgba(40,50,60,0.55) 0%, transparent 45%), linear-gradient(180deg, #080a0e 0%, #0e1218 40%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 70% 35% at 50% 18%, rgba(70,90,120,0.1) 0%, transparent 55%), radial-gradient(ellipse 95% 42% at 50% 88%, rgba(30,40,52,0.5) 0%, transparent 48%), linear-gradient(180deg, #07090d 0%, #0c1016 42%, #0D0D0D 100%)",
     accent: "#a8b4c0",
-    glow: "rgba(80,100,120,0.2)",
-    mist: false,
+    glow: "rgba(90,110,135,0.16)",
+    mist: "soft",
+    clouds: "high",
     mountains: "peaks",
     particles: "none",
   },
@@ -162,7 +179,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(70,110,140,0.18)",
     mist: "soft",
     mountains: "range",
-    horizon: true,
+    horizon: "water",
     ripples: true,
     particles: "none",
   },
@@ -182,13 +199,15 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   frontier: {
     label: "边塞",
+    // 关外平沙：暖尘空蒙接远山，无白亮地平线
     gradient:
-      "radial-gradient(ellipse 80% 40% at 50% 70%, rgba(140,100,50,0.18) 0%, transparent 50%), linear-gradient(180deg, #120e08 0%, #16120c 45%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 90% 38% at 50% 72%, rgba(140,100,50,0.16) 0%, transparent 52%), radial-gradient(ellipse 50% 30% at 78% 18%, rgba(180,170,140,0.06) 0%, transparent 50%), linear-gradient(180deg, #100c08 0%, #14100c 48%, #0D0D0D 100%)",
     accent: "#d0b890",
     glow: "rgba(160,120,60,0.16)",
-    mist: false,
+    moon: true,
+    mist: "soft",
     mountains: "jagged",
-    horizon: true,
+    horizon: "plain",
     particles: "none",
   },
   flowers: {
@@ -220,7 +239,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(50,120,130,0.2)",
     mist: "soft",
     mountains: "none",
-    horizon: true,
+    horizon: "water",
     ripples: true,
     particles: "none",
   },
@@ -264,6 +283,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     glow: "rgba(140,160,190,0.16)",
     moon: true,
     mist: "soft",
+    clouds: "high",
     mountains: "distant",
     particles: "stars",
     particleSafeCenter: true,
@@ -275,8 +295,9 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#d0b8a8",
     glow: "rgba(140,100,80,0.16)",
     mist: "soft",
+    clouds: "band",
     mountains: "range",
-    horizon: true,
+    horizon: "plain",
     particles: "none",
   },
   reclusion: {
@@ -286,17 +307,20 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     accent: "#b0c0b0",
     glow: "rgba(80,100,85,0.12)",
     mist: "soft",
+    clouds: "band",
     mountains: "range",
     bamboo: true,
     particles: "none",
   },
   landscape: {
     label: "山水",
+    // 风云 tag 默认入此主题：云海 + 轻岚
     gradient:
       "radial-gradient(ellipse 100% 50% at 50% 90%, rgba(45,55,65,0.45) 0%, transparent 40%), linear-gradient(180deg, #090b0f 0%, #0f1318 45%, #0D0D0D 100%)",
     accent: "#b0bcc8",
     glow: "rgba(90,110,130,0.18)",
     mist: "soft",
+    clouds: "sea",
     mountains: "distant",
     particles: "none",
   },

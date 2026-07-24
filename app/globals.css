@@ -112,27 +112,49 @@ body {
   }
 }
 
+/* 云雾：极慢横移，几乎无 scale / opacity 脉冲 — 水墨空蒙，非呼吸灯 */
 @keyframes mistDrift {
-  0% {
-    transform: translate3d(-4%, 0, 0) scale(1);
-    opacity: 0.35;
+  0%,
+  100% {
+    transform: translate3d(-1.8%, 0, 0);
   }
   50% {
-    transform: translate3d(4%, -2%, 0) scale(1.05);
-    opacity: 0.55;
+    transform: translate3d(2%, -0.6%, 0);
   }
+}
+
+@keyframes cloudDrift {
+  0%,
   100% {
-    transform: translate3d(-4%, 0, 0) scale(1);
-    opacity: 0.35;
+    transform: translate3d(1.5%, 0, 0);
+  }
+  50% {
+    transform: translate3d(-2.2%, 0.4%, 0);
   }
 }
 
-.mist-layer {
-  animation: mistDrift 22s ease-in-out infinite;
+.ink-mist {
+  will-change: transform;
 }
 
-.mist-layer-2 {
-  animation: mistDrift 32s ease-in-out infinite reverse;
+.ink-mist-a {
+  animation: mistDrift 36s ease-in-out infinite;
+}
+
+.ink-mist-b {
+  animation: mistDrift 48s ease-in-out infinite reverse;
+}
+
+.ink-cloud {
+  will-change: transform;
+}
+
+.ink-cloud-a {
+  animation: cloudDrift 52s ease-in-out infinite;
+}
+
+.ink-cloud-b {
+  animation: cloudDrift 68s ease-in-out infinite reverse;
 }
 
 /* Celestial: only halo opacity breathes — no flashy scale */
@@ -492,18 +514,27 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .float-slow,
   .float-slower,
-  .mist-layer,
-  .mist-layer-2,
+  .ink-mist,
+  .ink-mist-a,
+  .ink-mist-b,
+  .ink-cloud,
+  .ink-cloud-a,
+  .ink-cloud-b,
   .celestial-moon-halo,
   .celestial-sun-halo,
+  .birds-flock-drift,
+  .birds-near-drift {
+    animation: none !important;
+    /* keep static atmosphere — do not zero opacity */
+  }
+
+  /* Moving dots / ornaments: hide static leftovers */
   .rain-drop,
   .ripple-ring,
-  .birds-flock-drift,
-  .birds-near-drift,
   .birds-bob,
   .lantern-rise {
     animation: none !important;
-    opacity: 0 !important; /* no static leftover dots */
+    opacity: 0 !important;
   }
 
   html {
