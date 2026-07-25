@@ -20,6 +20,7 @@ import {
 } from "@/lib/script/types";
 import "./globals.css";
 
+/** next/font 须在 module scope 声明；实际挂载按 cookie 只选 sc 或 tc 一套 */
 const notoSerifSC = Noto_Serif_SC({
   variable: "--font-noto-serif-sc",
   subsets: ["latin"],
@@ -32,6 +33,7 @@ const notoSerifTC = Noto_Serif_TC({
   subsets: ["latin"],
   weight: ["300", "400"],
   display: "swap",
+  // 默认用户为简体；繁体按需用，避免 sc 首屏 preload 两套
   preload: false,
 });
 
@@ -72,10 +74,16 @@ export default async function RootLayout({
   const jar = await cookies();
   const mode = parseScriptMode(jar.get(SCRIPT_COOKIE)?.value, DEFAULT_SCRIPT);
 
+  // 宋/黑只挂当前简繁；文楷（诗面）始终加载
+  const scriptFontVars =
+    mode === "tc"
+      ? `${notoSerifTC.variable} ${notoSansTC.variable}`
+      : `${notoSerifSC.variable} ${notoSansSC.variable}`;
+
   return (
     <html
       lang={scriptLang(mode)}
-      className={`${notoSerifSC.variable} ${notoSerifTC.variable} ${lxgwWenKaiTC.variable} ${notoSansSC.variable} ${notoSansTC.variable} ${scriptClass(mode)} h-full antialiased`}
+      className={`${scriptFontVars} ${lxgwWenKaiTC.variable} ${scriptClass(mode)} h-full antialiased`}
     >
       <body className="min-h-full bg-ink font-serif text-xuan">
         <ScriptProvider initialMode={mode}>

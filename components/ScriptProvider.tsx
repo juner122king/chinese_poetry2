@@ -77,10 +77,13 @@ export function ScriptProvider({
   }, []);
 
   const setMode = useCallback((next: ScriptMode) => {
-    setModeState(next);
-    applyDocumentScript(next);
+    if (next === mode) return;
+    // 先落盘再整页刷新，让 layout 按 cookie 只挂对应 sc/tc 字体
     persistMode(next);
-  }, []);
+    applyDocumentScript(next);
+    setModeState(next);
+    window.location.reload();
+  }, [mode]);
 
   const value = useMemo<ScriptContextValue>(
     () => ({

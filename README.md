@@ -84,3 +84,5 @@ npm run enrich:motifs
 - 青黛 `#34495E` — **辅色预留**，当前 UI 未启用（token 仍在 `globals.css`）
 
 文字语义 class 见 `globals.css`：`.type-eyebrow` / `.type-display` / `.type-meta` / `.type-nav` 等。
+
+简繁：`moyun-script` cookie 决定 SSR 挂载 Noto Serif/Sans 的 SC 或 TC；霞鹜文楷始终加载。切换简繁会刷新页面以换字体包。
