@@ -114,14 +114,45 @@ export function getPoemsByTag(tag: string): Poem[] {
   return poems.filter((p) => p.tags.includes(tag as Poem["tags"][number]));
 }
 
+function adjacentInPool(
+  pool: Poem[],
+  id: string,
+): { prev: Poem | null; next: Poem | null } | null {
+  const index = pool.findIndex((p) => p.id === id);
+  if (index < 0) return null;
+  return {
+    prev: index > 0 ? pool[index - 1]! : null,
+    next: index < pool.length - 1 ? pool[index + 1]! : null,
+  };
+}
+
+/**
+ * 语义邻篇：同作者优先 → 同 theme → 全局序保底。
+ * 池内保持 poems 原序；不环回。
+ */
 export function getAdjacentPoems(id: string): {
   prev: Poem | null;
   next: Poem | null;
 } {
-  const index = poems.findIndex((p) => p.id === id);
-  if (index < 0) return { prev: null, next: null };
-  return {
-    prev: index > 0 ? poems[index - 1] : null,
-    next: index < poems.length - 1 ? poems[index + 1] : null,
-  };
+  const current = getPoemById(id);
+  if (!current) return { prev: null, next: null };
+
+  const byAuthor = poems.filter((p) => p.author === current.author);
+  if (byAuthor.length > 1) {
+    const hit = adjacentInPool(byAuthor, id);
+    if (hit) return hit;
+  }
+
+  const byTheme = poems.filter((p) => p.theme === current.theme);
+  if (byTheme.length > 1) {
+    const hit = adjacentInPool(byTheme, id);
+    if (hit) return hit;
+  }
+
+  return (
+    adjacentInPool(poems, id) ?? {
+      prev: null,
+      next: null,
+    }
+  );
 }

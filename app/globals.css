@@ -94,6 +94,122 @@ body {
   text-orientation: mixed;
 }
 
+/*
+ * 详情竖阅读：组容器保持横排 flex（勿与 writing-mode 叠用），
+ * 每列自行竖排；row-reverse → 右起：题 | 作者 | 首句 …
+ */
+.poem-v-stage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.poem-v-group {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  gap: clamp(28px, 3.5vw, 48px);
+  width: max-content;
+  max-width: none;
+  margin-inline: auto;
+  padding-block: 0.5rem;
+}
+
+/* 题 | 作者：作者在标题视觉右侧，顶对齐 */
+.poem-v-meta {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(16px, 1.8vw, 28px);
+  flex-shrink: 0;
+}
+
+.poem-v-title {
+  margin: 0;
+  flex-shrink: 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: rgba(245, 239, 226, 0.94);
+  font-family: var(--font-wenkai);
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.12em;
+  max-height: min(72vh, 14em);
+}
+
+.poem-v-author {
+  flex-shrink: 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: rgba(245, 239, 226, 0.5);
+  font-family: var(--font-wenkai);
+  font-size: clamp(13px, 1.2vw, 15px);
+  letter-spacing: 0.22em;
+  line-height: 1.4;
+  max-height: min(72vh, 18em);
+}
+
+.poem-v-author a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 300ms ease;
+}
+
+.poem-v-author a:hover {
+  color: var(--cinnabar);
+}
+
+.poem-v-lines {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  width: max-content;
+  gap: 0;
+}
+
+.poem-v-line {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin: 0;
+  color: rgba(245, 239, 226, 0.86);
+  font-family: var(--font-wenkai);
+  font-size: clamp(18px, 1.85vw, 26px);
+  font-weight: 300;
+  line-height: 1.65;
+  letter-spacing: 0.1em;
+}
+
+.poem-v-line span {
+  display: block;
+}
+
+/*
+ * 句读 → 列距：row-reverse 时下一列在视觉左侧，
+ * 用 margin-inline-start（LTR 下为 left）隔开。
+ */
+.poem-v-line-pause {
+  margin-inline-start: clamp(14px, 1.4vw, 22px);
+}
+
+.poem-v-line-stop {
+  margin-inline-start: clamp(36px, 3.6vw, 60px);
+}
+
+.poem-v-line-none {
+  margin-inline-start: clamp(20px, 2vw, 32px);
+}
+
+.poem-v-line-last {
+  margin-inline-start: 0;
+}
+
 .float-slow {
   animation: floatY 8s var(--ease-elegant) infinite;
 }

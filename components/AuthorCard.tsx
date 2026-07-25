@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { Author } from "@/lib/types";
 import { useScript } from "./ScriptProvider";
 
@@ -14,21 +14,23 @@ export default function AuthorCard({ author, index = 0 }: Props) {
   const { tAuthor } = useScript();
   const display = tAuthor(author);
   const seal = display.name.slice(0, 1);
+  const reduce = useReducedMotion();
+  const enterDelay = Math.min(index, 8) * 0.05;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
+      initial={reduce ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
         duration: 0.8,
-        delay: index * 0.08,
+        delay: reduce ? 0 : enterDelay,
         ease: [0.22, 1, 0.36, 1],
       }}
     >
       <Link
         href={`/author/${author.slug}`}
-        className="group flex flex-col items-center gap-5 rounded-sm border border-transparent px-6 py-8 transition-all duration-500 hover:border-xuan/10 hover:bg-xuan/[0.03]"
+        className="group flex flex-col items-center gap-5 rounded-sm border border-transparent px-6 py-8 transition-all duration-500 hover:border-xuan/10 hover:bg-xuan/[0.03] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
       >
         <div className="relative flex h-16 w-16 items-center justify-center">
           <span

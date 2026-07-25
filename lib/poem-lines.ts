@@ -40,18 +40,21 @@ export function lineSpacingClass(
   }
 }
 
-/** 竖排：列间距（写在当前列上，用 margin-inline） */
+/**
+ * 竖排列间距 class（配合 .poem-v-lines 的 row-reverse：
+ * 下一列在视觉左侧，用 margin-inline-end 在逻辑上与「列后」一致）。
+ */
 export function verticalLineGapClass(
   breakType: LineBreak,
   isLast: boolean,
 ): string {
-  if (isLast) return "";
+  if (isLast) return "poem-v-line poem-v-line-last";
   switch (breakType) {
     case "pause":
-      return "mr-3 md:mr-4";
+      return "poem-v-line poem-v-line-pause";
     case "stop":
-      return "mr-8 md:mr-11";
+      return "poem-v-line poem-v-line-stop";
     default:
-      return "mr-5 md:mr-7";
+      return "poem-v-line poem-v-line-none";
   }
 }

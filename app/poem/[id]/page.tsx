@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import PoemAdjacentNav from "@/components/PoemAdjacentNav";
-import PoemDisplay from "@/components/PoemDisplay";
+import PoemReadingView from "@/components/PoemReadingView";
 import ThemeScene from "@/components/ThemeScene";
 import {
   getAdjacentPoems,
@@ -36,7 +36,7 @@ export default async function PoemDetailPage({ params }: Props) {
   return (
     <div className="relative min-h-screen">
       <ThemeScene theme={poem.theme} />
-      <PoemDisplay poem={poem} />
+      <PoemReadingView poem={poem} />
       <PoemAdjacentNav prev={prev} next={next} />
     </div>
   );

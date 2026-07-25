@@ -37,7 +37,7 @@ export default async function AuthorPage({ params }: Props) {
 
   return (
     <div className="relative min-h-screen">
-      <InkBackground theme="landscape" />
+      <InkBackground theme="landscape" intensity="soft" />
       <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
         <ScrollReveal>
           <AuthorPageHeader author={author} />

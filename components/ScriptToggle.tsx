@@ -17,7 +17,7 @@ export default function ScriptToggle({ className = "" }: Props) {
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] ${className}`}
+      className={`inline-flex items-center gap-1.5 font-sans text-sm tracking-[0.28em] ${className}`}
       role="group"
       aria-label="切换简繁体"
     >
