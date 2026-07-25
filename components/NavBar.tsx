@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import LogoMark from "./LogoMark";
 import { useScript } from "./ScriptProvider";
 
 const links = [
@@ -28,18 +29,22 @@ export default function NavBar() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:items-baseline md:px-10">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
+        {/* Logo 不走 difference，保证朱砂内框本色 */}
         <Link
           href="/"
           onClick={handleLogoClick}
-          className="font-sans text-sm tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
+          aria-label={t("墨韵")}
+          className="inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
         >
-          {t("墨韵")}
+          {/* +0.5px：光学对齐中文 em 盒，几何居中时 mark 易略偏上 */}
+          <LogoMark size={18} className="block shrink-0 translate-y-[0.5px]" />
+          <span className="leading-none">{t("墨韵")}</span>
         </Link>
 
-        <div className="flex items-center gap-8 md:items-baseline md:gap-10">
-          <ul className="hidden items-baseline gap-10 md:flex">
+        <div className="flex items-center gap-8 mix-blend-difference md:gap-10">
+          <ul className="hidden items-center gap-10 md:flex">
             {links.map((link) => {
               const active = link.match(pathname);
               return (

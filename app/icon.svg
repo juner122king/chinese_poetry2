@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="6" fill="#0d0d0d"/>
+  <!-- Outer — hard seal edge -->
+  <rect x="6.5" y="4.5" width="19" height="23" stroke="#f5efe2" stroke-width="2.1" stroke-linejoin="miter"/>
+  <!-- Inner — cinnabar -->
+  <rect x="10.6" y="9" width="10.8" height="14" rx="1" ry="1" stroke="#b23a48" stroke-width="0.8" stroke-linejoin="miter"/>
+</svg>
