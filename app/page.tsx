@@ -18,7 +18,7 @@ export default function HomePage() {
 
   return (
     <>
-      <HeroSection poem={heroPoem} />
+      <HeroSection key={heroPoem.id} poem={heroPoem} />
 
       {/* Featured poems */}
       <section

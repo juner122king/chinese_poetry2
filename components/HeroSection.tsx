@@ -502,6 +502,7 @@ export default function HeroSection({ poem }: Props) {
       >
         <div className="hero-poem" style={poemStyle}>
           <motion.h1
+            key={`hero-title-${contentKey}`}
             initial={reduce ? false : { opacity: 0, y: HERO_CHOREO.title.y }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -514,6 +515,7 @@ export default function HeroSection({ poem }: Props) {
           </motion.h1>
 
           <motion.div
+            key={`hero-kicker-${contentKey}`}
             className="hero-kicker"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ScriptToggle from "./ScriptToggle";
 import { useScript } from "./ScriptProvider";
@@ -21,11 +21,19 @@ export default function NavBar() {
   const [open, setOpen] = useState(false);
   const { t } = useScript();
 
+  /** 已在首页时点 Logo ≈ F5：硬刷新以重随机 Hero 诗并完整重播入场 */
+  function handleLogoClick(e: MouseEvent<HTMLAnchorElement>) {
+    if (pathname !== "/") return;
+    e.preventDefault();
+    window.location.assign("/");
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
         <Link
           href="/"
+          onClick={handleLogoClick}
           className="font-sans text-sm tracking-[0.35em] text-xuan transition-opacity hover:opacity-70"
         >
           {t("墨韵")}
