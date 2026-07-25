@@ -8,6 +8,7 @@ import {
   Noto_Serif_TC,
 } from "next/font/google";
 import NavBar from "@/components/NavBar";
+import ScriptToggle from "@/components/ScriptToggle";
 import TopVeil from "@/components/TopVeil";
 import { ScriptProvider } from "@/components/ScriptProvider";
 import {
@@ -81,6 +82,7 @@ export default async function RootLayout({
           <NavBar />
           <TopVeil />
           <main className="relative flex-1">{children}</main>
+          <ScriptToggle />
         </ScriptProvider>
       </body>
     </html>

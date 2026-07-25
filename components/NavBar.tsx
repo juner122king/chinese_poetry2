@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ScriptToggle from "./ScriptToggle";
 import { useScript } from "./ScriptProvider";
 
 const links = [
@@ -63,8 +62,6 @@ export default function NavBar() {
             })}
           </ul>
 
-          <ScriptToggle className="hidden md:inline-flex" />
-
           <button
             type="button"
             className="text-xuan/80 md:hidden"
@@ -107,9 +104,6 @@ export default function NavBar() {
                   </li>
                 );
               })}
-              <li className="pt-2">
-                <ScriptToggle />
-              </li>
             </ul>
           </motion.div>
         )}

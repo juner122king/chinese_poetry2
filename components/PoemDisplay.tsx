@@ -8,7 +8,6 @@ import {
   toDisplayLines,
   verticalLineGapClass,
 } from "@/lib/poem-lines";
-import { getBackgroundLabel } from "@/lib/motifs";
 import ImageryTags from "./ImageryTags";
 import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
@@ -23,6 +22,34 @@ type Props = {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+/** 阅读页标题按字数分档：短题大字仪式感，长题降权，极长题序体弱化。 */
+function titleLen(title: string): number {
+  return Array.from(title).length;
+}
+
+function poemTitleClass(len: number): string {
+  const base = "font-wenkai font-normal text-balance";
+  if (len <= 6) {
+    return `${base} mb-16 text-3xl tracking-[0.35em] text-xuan md:text-5xl md:tracking-[0.4em]`;
+  }
+  if (len <= 12) {
+    return `${base} mb-12 max-w-xl text-3xl tracking-[0.18em] text-xuan md:text-4xl md:tracking-[0.22em]`;
+  }
+  if (len <= 20) {
+    return `${base} mb-10 max-w-lg text-2xl leading-relaxed tracking-[0.1em] text-xuan md:text-3xl`;
+  }
+  // epic：题序体，明确让位于正文
+  return `${base} mb-8 max-w-md text-xl leading-[1.85] tracking-[0.06em] text-xuan/85 md:text-2xl`;
+}
+
+/** 竖排标题档位 class（配合 .poem-v-title） */
+function poemVerticalTitleTier(len: number): string {
+  if (len <= 6) return "poem-v-title-short";
+  if (len <= 12) return "poem-v-title-medium";
+  if (len <= 20) return "poem-v-title-long";
+  return "poem-v-title-epic";
+}
+
 export default function PoemDisplay({
   poem,
   vertical = false,
@@ -34,7 +61,7 @@ export default function PoemDisplay({
   const display = tPoem(poem);
   const lines = toDisplayLines(display.content);
   const author = getAuthorByName(poem.author);
-  const motifsLabel = getBackgroundLabel(display);
+  const titleChars = titleLen(display.title);
 
   const authorLabel = `${display.dynasty} · ${display.author}`;
 
@@ -68,7 +95,7 @@ export default function PoemDisplay({
           <div className="poem-v-group">
             <div className="poem-v-meta">
               <motion.h1
-                className="poem-v-title"
+                className={`poem-v-title ${poemVerticalTitleTier(titleChars)}`}
                 initial={animateEntry && !reduce ? { opacity: 0 } : false}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.9, delay: 0.15, ease }}
@@ -116,13 +143,8 @@ export default function PoemDisplay({
           </div>
         </div>
 
-        {(motifsLabel || (poem.tags?.length ?? 0) > 0) && (
-          <div className="mt-14 flex flex-col items-center gap-6 px-6 text-center">
-            {motifsLabel ? (
-              <p className="font-sans text-[11px] tracking-[0.4em] text-xuan/30">
-                {motifsLabel}
-              </p>
-            ) : null}
+        {(poem.tags?.length ?? 0) > 0 && (
+          <div className="mt-14 flex flex-col items-center px-6 text-center">
             <ImageryTags tags={poem.tags} />
           </div>
         )}
@@ -139,9 +161,7 @@ export default function PoemDisplay({
       </ScrollReveal>
 
       <ScrollReveal delay={0.2}>
-        <h1 className="mb-16 font-wenkai text-3xl font-normal tracking-[0.35em] text-xuan md:text-5xl md:tracking-[0.4em]">
-          {display.title}
-        </h1>
+        <h1 className={poemTitleClass(titleChars)}>{display.title}</h1>
       </ScrollReveal>
 
       <div>
@@ -161,12 +181,6 @@ export default function PoemDisplay({
       </div>
 
       <ScrollReveal delay={0.2} className="mt-16">
-        <p className="font-sans text-[11px] tracking-[0.4em] text-xuan/30">
-          {motifsLabel}
-        </p>
-      </ScrollReveal>
-
-      <ScrollReveal delay={0.28} className="mt-8">
         <ImageryTags tags={poem.tags} />
       </ScrollReveal>
     </div>

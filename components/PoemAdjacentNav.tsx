@@ -9,48 +9,61 @@ type Props = {
   next: Poem | null;
 };
 
+/** 前后篇导航标题最大显示字数（超出加省略号） */
+const ADJACENT_TITLE_MAX = 8;
+
+function clipTitle(title: string, max = ADJACENT_TITLE_MAX): string {
+  const chars = Array.from(title);
+  if (chars.length <= max) return title;
+  return `${chars.slice(0, max).join("")}…`;
+}
+
 export default function PoemAdjacentNav({ prev, next }: Props) {
   const { t, tPoem } = useScript();
   const prevDisplay = prev ? tPoem(prev) : null;
   const nextDisplay = next ? tPoem(next) : null;
 
   return (
-    <nav className="relative z-10 mx-auto flex max-w-3xl items-center justify-between px-6 pb-20 pt-4">
-      {prev && prevDisplay ? (
-        <Link
-          href={`/poem/${prev.id}`}
-          className="group max-w-[40%] text-left"
-        >
-          <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-            {t("前篇")}
-          </span>
-          <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
-            {prevDisplay.title}
-          </span>
-        </Link>
-      ) : (
-        <span />
-      )}
+    <nav className="relative z-10 mx-auto grid max-w-3xl grid-cols-3 items-center gap-3 px-6 pb-20 pt-4">
+      <div className="min-w-0 justify-self-start">
+        {prev && prevDisplay ? (
+          <Link
+            href={`/poem/${prev.id}`}
+            className="group block text-left"
+            title={prevDisplay.title}
+          >
+            <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+              {t("前篇")}
+            </span>
+            <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
+              {clipTitle(prevDisplay.title)}
+            </span>
+          </Link>
+        ) : null}
+      </div>
 
-      <Link href="/poems" className="text-link-elegant">
-        {t("回诗卷")}
-      </Link>
-
-      {next && nextDisplay ? (
-        <Link
-          href={`/poem/${next.id}`}
-          className="group max-w-[40%] text-right"
-        >
-          <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
-            {t("后篇")}
-          </span>
-          <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
-            {nextDisplay.title}
-          </span>
+      <div className="justify-self-center">
+        <Link href="/poems" className="text-link-elegant whitespace-nowrap">
+          {t("回诗卷")}
         </Link>
-      ) : (
-        <span />
-      )}
+      </div>
+
+      <div className="min-w-0 justify-self-end text-right">
+        {next && nextDisplay ? (
+          <Link
+            href={`/poem/${next.id}`}
+            className="group block text-right"
+            title={nextDisplay.title}
+          >
+            <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+              {t("后篇")}
+            </span>
+            <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
+              {clipTitle(nextDisplay.title)}
+            </span>
+          </Link>
+        ) : null}
+      </div>
     </nav>
   );
 }

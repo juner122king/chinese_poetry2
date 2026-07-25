@@ -19,11 +19,19 @@ export default function ImageryTags({ tags, className = "" }: Props) {
 
   return (
     <ul
-      className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 ${className}`}
+      className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-2 ${className}`}
       aria-label={t("意境")}
     >
-      {tags.map((tag) => (
-        <li key={tag}>
+      {tags.map((tag, i) => (
+        <li key={tag} className="inline-flex items-center gap-x-2">
+          {i > 0 && (
+            <span
+              className="select-none font-sans text-[11px] text-xuan/20"
+              aria-hidden
+            >
+              ·
+            </span>
+          )}
           <Link
             href={buildPoemsHref({ tag })}
             className="font-sans text-[11px] tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar/70 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"

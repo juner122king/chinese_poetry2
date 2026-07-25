@@ -142,6 +142,34 @@ body {
   max-height: min(72vh, 14em);
 }
 
+/* 竖排题：按字数分档（与横排 poemTitleClass 阈值一致） */
+.poem-v-title-short {
+  font-size: clamp(28px, 3.2vw, 40px);
+  letter-spacing: 0.12em;
+  max-height: min(72vh, 14em);
+}
+
+.poem-v-title-medium {
+  font-size: clamp(26px, 2.8vw, 36px);
+  letter-spacing: 0.1em;
+  max-height: min(72vh, 18em);
+}
+
+.poem-v-title-long {
+  font-size: clamp(22px, 2.3vw, 30px);
+  letter-spacing: 0.07em;
+  line-height: 1.3;
+  max-height: min(78vh, 22em);
+}
+
+.poem-v-title-epic {
+  font-size: clamp(18px, 1.85vw, 24px);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: rgba(245, 239, 226, 0.85);
+  max-height: min(80vh, 28em);
+}
+
 .poem-v-author {
   flex-shrink: 0;
   writing-mode: vertical-rl;
