@@ -2,51 +2,97 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
 import { getTagLabel } from "@/lib/imagery-taxonomy";
 import {
   buildPoemsHref,
   hasActivePoemFilters,
   type PoemListFilters,
 } from "@/lib/poems-filter";
-import { getThemeVisual } from "@/lib/theme-map";
-import type { PoemTag, PoemTheme } from "@/lib/types";
+import type { PoemTag } from "@/lib/types";
 import { useScript } from "./ScriptProvider";
 
 type Props = {
   filters: PoemListFilters;
   dynasties: string[];
   tagOptions: PoemTag[];
-  themeOptions: PoemTheme[];
   resultCount: number;
 };
 
+/** 与全站 --ease-elegant 一致 */
+const ease = [0.22, 1, 0.36, 1] as const;
+
 function chipClass(active: boolean) {
-  return `font-sans text-[11px] tracking-[0.28em] transition-opacity ${
+  return [
+    "poem-filter-chip relative inline-block pb-1 font-sans text-[11px] tracking-[0.3em] transition-colors duration-300",
     active
-      ? "text-xuan opacity-100"
-      : "text-xuan opacity-40 hover:opacity-80"
-  }`;
+      ? "poem-filter-chip--active text-cinnabar/90"
+      : "text-xuan/38 hover:text-xuan/75",
+  ].join(" ");
+}
+
+function FilterSection({
+  label,
+  children,
+  delay = 0,
+  reduce,
+}: {
+  label: string;
+  children: ReactNode;
+  delay?: number;
+  reduce: boolean | null;
+}) {
+  return (
+    <motion.div
+      className="flex max-w-3xl flex-col items-center gap-2.5"
+      initial={reduce ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, delay: reduce ? 0 : delay, ease }}
+    >
+      <p className="font-sans text-[10px] tracking-[0.45em] text-xuan/25">
+        {label}
+      </p>
+      {children}
+    </motion.div>
+  );
 }
 
 export default function PoemsToolbar({
   filters,
   dynasties,
   tagOptions,
-  themeOptions,
   resultCount,
 }: Props) {
   const { t } = useScript();
   const router = useRouter();
+  const reduce = useReducedMotion();
+  const searchPanelId = useId();
   const [query, setQuery] = useState(filters.q ?? "");
+  const [searchOpen, setSearchOpen] = useState(Boolean(filters.q));
   const active = hasActivePoemFilters(filters);
 
   const base = {
     dynasty: filters.dynasty,
     tag: filters.tag,
-    theme: filters.theme,
     q: filters.q,
   };
+
+  // 带检索进页或 URL q 变化时保持展开
+  useEffect(() => {
+    if (filters.q) setSearchOpen(true);
+    setQuery(filters.q ?? "");
+  }, [filters.q]);
 
   function submitSearch(e: FormEvent) {
     e.preventDefault();
@@ -61,17 +107,19 @@ export default function PoemsToolbar({
   }
 
   return (
-    <div className="mb-14 flex flex-col items-center gap-8">
+    <div className="mb-12 flex flex-col items-center gap-6">
       {/* 朝代 */}
-      <div
+      <motion.div
         className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
         role="group"
         aria-label={t("朝代")}
+        initial={reduce ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, delay: reduce ? 0 : 0, ease }}
       >
         <Link
           href={buildPoemsHref({
             tag: filters.tag,
-            theme: filters.theme,
             q: filters.q,
           })}
           className={chipClass(!filters.dynasty)}
@@ -93,13 +141,10 @@ export default function PoemsToolbar({
             {t(d)}
           </Link>
         ))}
-      </div>
+      </motion.div>
 
       {/* 意境 */}
-      <div className="flex max-w-3xl flex-col items-center gap-3">
-        <p className="font-sans text-[10px] tracking-[0.4em] text-xuan/30">
-          {t("意境")}
-        </p>
+      <FilterSection label={t("意境")} delay={0.06} reduce={reduce}>
         <div
           className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
           role="group"
@@ -123,62 +168,73 @@ export default function PoemsToolbar({
             );
           })}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* 主题（视觉） */}
-      <div className="flex max-w-3xl flex-col items-center gap-3">
-        <p className="font-sans text-[10px] tracking-[0.4em] text-xuan/30">
-          {t("主题")}
-        </p>
-        <div
-          className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
-          role="group"
-          aria-label={t("主题")}
-        >
-          {themeOptions.map((theme) => {
-            const selected = filters.theme === theme;
-            return (
-              <Link
-                key={theme}
-                href={buildPoemsHref({
-                  ...base,
-                  theme: selected ? undefined : theme,
-                  page: 1,
-                })}
-                className={chipClass(selected)}
-                scroll={false}
-              >
-                {t(getThemeVisual(theme).label)}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 轻搜索 */}
-      <form
-        onSubmit={submitSearch}
-        className="flex w-full max-w-xs items-end gap-3"
+      {/* 检索：默认收起 */}
+      <motion.div
+        className="flex w-full max-w-xs flex-col items-center gap-3"
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, delay: reduce ? 0 : 0.12, ease }}
       >
-        <label className="flex-1">
-          <span className="sr-only">{t("检索题名或作者")}</span>
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("题名 · 作者")}
-            className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-xuan placeholder:text-xuan/25 focus:border-cinnabar/50 focus:outline-none"
-          />
-        </label>
         <button
-          type="submit"
-          className="pb-2 font-sans text-[11px] tracking-[0.28em] text-xuan/45 transition-colors hover:text-cinnabar"
+          type="button"
+          className="font-sans text-[11px] tracking-[0.32em] text-xuan/40 transition-colors duration-300 hover:text-cinnabar focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+          aria-expanded={searchOpen}
+          aria-controls={searchPanelId}
+          onClick={() => setSearchOpen((o) => !o)}
         >
-          {t("寻")}
+          {searchOpen ? t("收起") : t("检索")}
         </button>
-      </form>
 
-      <div className="flex flex-col items-center gap-2 text-center">
+        <AnimatePresence initial={false}>
+          {searchOpen ? (
+            <motion.form
+              id={searchPanelId}
+              key="search-panel"
+              onSubmit={submitSearch}
+              className="flex w-full items-end gap-3 overflow-hidden"
+              initial={
+                reduce
+                  ? { opacity: 1 }
+                  : { opacity: 0, height: 0, y: -6 }
+              }
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={
+                reduce
+                  ? { opacity: 0 }
+                  : { opacity: 0, height: 0, y: -4 }
+              }
+              transition={{ duration: reduce ? 0.15 : 0.48, ease }}
+            >
+              <label className="min-w-0 flex-1">
+                <span className="sr-only">{t("检索题名或作者")}</span>
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={t("题名 · 作者")}
+                  autoFocus={!filters.q}
+                  className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-xuan placeholder:text-xuan/25 transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
+                />
+              </label>
+              <button
+                type="submit"
+                className="shrink-0 pb-2 font-sans text-[11px] tracking-[0.28em] text-xuan/45 transition-colors duration-300 hover:text-cinnabar"
+              >
+                {t("寻")}
+              </button>
+            </motion.form>
+          ) : null}
+        </AnimatePresence>
+      </motion.div>
+
+      <motion.div
+        className="flex flex-col items-center gap-1.5 text-center"
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: reduce ? 0 : 0.2, ease }}
+      >
         <p className="font-sans text-[11px] tracking-[0.3em] text-xuan/35">
           {t(`得 ${resultCount} 篇`)}
         </p>
@@ -191,7 +247,7 @@ export default function PoemsToolbar({
             {t("清除筛选")}
           </Link>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

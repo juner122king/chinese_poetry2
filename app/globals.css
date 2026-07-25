@@ -970,6 +970,45 @@ body {
   }
 }
 
+/* 诗卷筛选 chip：细底线 hover / 选中朱砂，克制无 pill */
+.poem-filter-chip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0.45;
+  transition:
+    transform 400ms var(--ease-elegant),
+    opacity 300ms ease,
+    background-color 300ms ease;
+}
+
+.poem-filter-chip:hover::after {
+  transform: scaleX(0.55);
+  opacity: 0.55;
+}
+
+.poem-filter-chip--active::after {
+  transform: scaleX(1);
+  background: var(--cinnabar);
+  opacity: 0.7;
+}
+
+.poem-filter-chip--active:hover::after {
+  transform: scaleX(1);
+  opacity: 0.85;
+}
+
+.poem-filter-chip:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.5);
+  outline-offset: 4px;
+}
+
 /* 次级文字链：遍览 / 归卷首 / 回诗卷 */
 .text-link-elegant {
   position: relative;

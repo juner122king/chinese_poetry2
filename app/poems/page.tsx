@@ -12,7 +12,6 @@ import {
   paginatePoems,
   parsePoemListFilters,
   topTagsFromPoems,
-  topThemesFromPoems,
 } from "@/lib/poems-filter";
 
 export const metadata = {
@@ -36,10 +35,9 @@ export default async function PoemsPage({ searchParams }: Props) {
 
   const dynasties = dynastiesFromPoems(poems);
   const tagOptions = topTagsFromPoems(poems, 12);
-  const themeOptions = topThemesFromPoems(poems, 10);
 
   /** 有筛选时扁平展示；无筛选时按朝代分组（仅当前页切片） */
-  const showGrouped = !filters.dynasty && !filters.tag && !filters.theme && !filters.q;
+  const showGrouped = !filters.dynasty && !filters.tag && !filters.q;
   const dynastiesOnPage = showGrouped
     ? Array.from(new Set(pageItems.map((p) => p.dynasty)))
     : [];
@@ -56,7 +54,6 @@ export default async function PoemsPage({ searchParams }: Props) {
           filters={listFilters}
           dynasties={dynasties}
           tagOptions={tagOptions}
-          themeOptions={themeOptions}
           resultCount={total}
         />
 
