@@ -53,7 +53,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Site-wide soft top veil under fixed nav — only pixels under the band fade */
+/* Site-wide soft top veil under fixed nav — light mist, not a solid bar */
 .page-top-veil {
   pointer-events: none;
   position: fixed;
@@ -61,11 +61,11 @@ body {
   left: 0;
   right: 0;
   z-index: 20;
-  height: 6.5rem;
+  height: 5.5rem;
   background: linear-gradient(
     to bottom,
-    var(--ink) 0%,
-    var(--ink) 42%,
+    rgba(13, 13, 13, 0.88) 0%,
+    rgba(13, 13, 13, 0.42) 48%,
     transparent 100%
   );
 }
