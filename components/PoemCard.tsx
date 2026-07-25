@@ -51,29 +51,24 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
         className="block rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
       >
         <div className="relative overflow-hidden rounded-sm border border-xuan/10 bg-xuan/[0.03] px-6 pb-10 pt-7 backdrop-blur-[2px] transition-all duration-700 hover:border-cinnabar/30 hover:bg-xuan/[0.06] md:px-7 md:pb-11 md:pt-8">
-          {/* 题：最多两行，槽高稳定 */}
+          {/* 题：最多两行；字距用 type-card-title */}
           <h3
             title={display.title}
-            className="mb-2.5 line-clamp-2 min-h-[2.75em] break-words font-wenkai text-xl font-normal leading-snug tracking-[0.06em] text-xuan md:min-h-[2.7em] md:text-[1.35rem]"
+            className="type-card-title mb-2.5 line-clamp-2 min-h-[2.75em] break-words text-xl leading-snug md:min-h-[2.7em] md:text-[1.35rem]"
           >
             {display.title}
           </h3>
 
           {/* 作者 · 朝代 同行 */}
-          <p className="flex min-w-0 items-baseline gap-x-2.5 font-wenkai text-sm tracking-[0.16em] text-xuan/50">
-            <span className="min-w-0 truncate">{display.author}</span>
-            <span className="shrink-0 font-sans text-[10px] tracking-[0.35em] text-xuan/35">
-              {display.dynasty}
-            </span>
+          <p className="flex min-w-0 items-baseline gap-x-2.5 text-sm">
+            <span className="type-author min-w-0 truncate">{display.author}</span>
+            <span className="type-dynasty shrink-0">{display.dynasty}</span>
           </p>
 
-          {/* 摘句常显；每句单行省略，高度封顶 */}
+          {/* 摘句常显 */}
           <div className="mt-4 min-h-[2.6rem] space-y-1.5 opacity-75 transition-opacity duration-500 group-hover:opacity-100">
             {excerpts.map((line) => (
-              <p
-                key={line.raw}
-                className="truncate font-wenkai text-xs tracking-[0.12em] text-xuan/40"
-              >
+              <p key={line.raw} className="type-card-excerpt truncate">
                 {line.text}
               </p>
             ))}
@@ -86,13 +81,16 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
           >
             {cardTags.length > 0 ? (
               <p
-                className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1 font-sans text-[10px] tracking-[0.22em] text-xuan/30"
+                className="type-quiet flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1"
                 aria-label={t("意境")}
               >
                 {cardTags.map((tag, i) => (
                   <span key={tag} className="inline-flex items-center gap-x-1.5">
                     {i > 0 && (
-                      <span className="select-none text-xuan/15" aria-hidden>
+                      <span
+                        className="select-none text-[color:var(--type-faint)]"
+                        aria-hidden
+                      >
                         ·
                       </span>
                     )}

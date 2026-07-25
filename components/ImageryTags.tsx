@@ -26,7 +26,7 @@ export default function ImageryTags({ tags, className = "" }: Props) {
         <li key={tag} className="inline-flex items-center gap-x-2">
           {i > 0 && (
             <span
-              className="select-none font-sans text-[11px] text-xuan/20"
+              className="select-none text-[11px] text-[color:var(--type-faint)]"
               aria-hidden
             >
               ·
@@ -34,7 +34,7 @@ export default function ImageryTags({ tags, className = "" }: Props) {
           )}
           <Link
             href={buildPoemsHref({ tag })}
-            className="font-sans text-[11px] tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar/70 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+            className="type-meta tracking-[0.35em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
           >
             {t(getTagLabel(tag))}
           </Link>

@@ -28,18 +28,18 @@ function titleLen(title: string): number {
 }
 
 function poemTitleClass(len: number): string {
-  const base = "font-wenkai font-normal text-balance";
+  const base = "font-wenkai font-normal text-balance text-[color:var(--type-primary)]";
   if (len <= 6) {
-    return `${base} mb-16 text-3xl tracking-[0.35em] text-xuan md:text-5xl md:tracking-[0.4em]`;
+    return `${base} mb-16 text-3xl tracking-[var(--track-poem)] md:text-5xl md:tracking-[var(--track-display)]`;
   }
   if (len <= 12) {
-    return `${base} mb-12 max-w-xl text-3xl tracking-[0.18em] text-xuan md:text-4xl md:tracking-[0.22em]`;
+    return `${base} mb-12 max-w-xl text-3xl tracking-[0.18em] md:text-4xl md:tracking-[0.22em]`;
   }
   if (len <= 20) {
-    return `${base} mb-10 max-w-lg text-2xl leading-relaxed tracking-[0.1em] text-xuan md:text-3xl`;
+    return `${base} mb-10 max-w-lg text-2xl leading-relaxed tracking-[0.1em] md:text-3xl`;
   }
-  // epic：题序体，明确让位于正文
-  return `${base} mb-8 max-w-md text-xl leading-[1.85] tracking-[0.06em] text-xuan/85 md:text-2xl`;
+  // epic：题序体，明确让位于正文（弱于 primary）
+  return `font-wenkai font-normal text-balance mb-8 max-w-md text-xl leading-[1.85] tracking-[0.08em] text-[color:var(--type-secondary)] md:text-2xl`;
 }
 
 /** 竖排标题档位 class（配合 .poem-v-title） */
@@ -63,26 +63,30 @@ export default function PoemDisplay({
   const author = getAuthorByName(poem.author);
   const titleChars = titleLen(display.title);
 
-  const authorLabel = `${display.dynasty} · ${display.author}`;
+  const authorVerticalLabel = `${display.dynasty} · ${display.author}`;
 
   const authorNode =
     showAuthorLink && author ? (
       <Link
         href={`/author/${author.slug}`}
-        className="tracking-[0.3em] text-xuan/50 transition-colors hover:text-cinnabar focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+        className="inline-flex flex-wrap items-baseline justify-center gap-x-2.5 transition-colors hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
       >
-        {authorLabel}
+        <span className="type-dynasty">{display.dynasty}</span>
+        <span className="type-author text-xs md:text-sm">{display.author}</span>
       </Link>
     ) : (
-      <span className="tracking-[0.3em] text-xuan/50">{authorLabel}</span>
+      <span className="inline-flex flex-wrap items-baseline justify-center gap-x-2.5">
+        <span className="type-dynasty">{display.dynasty}</span>
+        <span className="type-author text-xs md:text-sm">{display.author}</span>
+      </span>
     );
 
   if (vertical) {
     const authorVertical =
       showAuthorLink && author ? (
-        <Link href={`/author/${author.slug}`}>{authorLabel}</Link>
+        <Link href={`/author/${author.slug}`}>{authorVerticalLabel}</Link>
       ) : (
-        <span>{authorLabel}</span>
+        <span>{authorVerticalLabel}</span>
       );
 
     return (
@@ -155,9 +159,7 @@ export default function PoemDisplay({
   return (
     <div className="relative z-10 mx-auto flex min-h-[80vh] max-w-2xl flex-col items-center justify-center px-6 py-28 text-center">
       <ScrollReveal delay={0.1}>
-        <p className="mb-12 font-wenkai text-xs tracking-[0.45em] text-xuan/45 md:text-sm">
-          {authorNode}
-        </p>
+        <p className="mb-12">{authorNode}</p>
       </ScrollReveal>
 
       <ScrollReveal delay={0.2}>
@@ -172,7 +174,7 @@ export default function PoemDisplay({
             y={20}
           >
             <p
-              className={`font-wenkai text-lg tracking-[0.35em] text-xuan/90 md:text-2xl md:tracking-[0.4em] md:leading-relaxed ${lineSpacingClass(line.break, i === lines.length - 1)}`}
+              className={`type-poem-body text-lg md:text-2xl md:tracking-[var(--track-display)] md:leading-relaxed ${lineSpacingClass(line.break, i === lines.length - 1)}`}
             >
               {line.text}
             </p>

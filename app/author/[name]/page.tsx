@@ -46,7 +46,7 @@ export default async function AuthorPage({ params }: Props) {
         <ScrollReveal>
           <T
             as="h2"
-            className="mb-10 text-center font-sans text-sm tracking-[0.4em] text-xuan/40"
+            className="type-group-label mb-10 text-center"
           >
             代 表 作 品
           </T>
@@ -61,13 +61,13 @@ export default async function AuthorPage({ params }: Props) {
         <div className="mt-16 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-10">
           <Link
             href="/authors"
-            className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"
+            className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
           >
             <T>返回名家目录</T>
           </Link>
           <Link
             href="/poems"
-            className="font-sans text-xs tracking-[0.35em] text-xuan/35 transition-colors hover:text-cinnabar"
+            className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
           >
             <T>返回诗卷目录</T>
           </Link>

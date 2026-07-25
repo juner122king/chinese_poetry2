@@ -17,13 +17,11 @@ export default function AuthorPageHeader({ author }: { author: Author }) {
         />
         <span className="font-wenkai text-3xl text-cinnabar">{seal}</span>
       </div>
-      <p className="mb-3 font-sans text-[11px] tracking-[0.45em] text-xuan/40">
+      <p className="type-dynasty mb-3 text-[11px] tracking-[0.45em]">
         {display.dynasty}
       </p>
-      <h1 className="mb-8 font-wenkai text-3xl tracking-[0.45em] text-xuan md:text-4xl">
-        {display.name}
-      </h1>
-      <p className="max-w-lg text-sm leading-[2] tracking-[0.12em] text-xuan/50">
+      <h1 className="type-display mb-8 text-3xl md:text-4xl">{display.name}</h1>
+      <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
         {display.bio}
       </p>
       <span className="mt-10 h-px w-12 bg-cinnabar/40" />

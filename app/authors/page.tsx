@@ -27,10 +27,7 @@ export default function AuthorsPage() {
             <section key={dynasty} className="mb-20">
               <ScrollReveal>
                 <div className="mb-10 flex items-center gap-6">
-                  <T
-                    as="span"
-                    className="font-sans text-sm tracking-[0.4em] text-cinnabar/80"
-                  >
+                  <T as="span" className="type-group-label">
                     {dynasty}
                   </T>
                   <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />

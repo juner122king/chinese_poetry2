@@ -34,12 +34,7 @@ type Props = {
 const ease = [0.22, 1, 0.36, 1] as const;
 
 function chipClass(active: boolean) {
-  return [
-    "poem-filter-chip relative inline-block pb-1 font-sans text-[11px] tracking-[0.3em] transition-colors duration-300",
-    active
-      ? "poem-filter-chip--active text-cinnabar/90"
-      : "text-xuan/38 hover:text-xuan/75",
-  ].join(" ");
+  return `poem-filter-chip${active ? " poem-filter-chip--active" : ""}`;
 }
 
 function FilterSection({
@@ -60,9 +55,7 @@ function FilterSection({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, delay: reduce ? 0 : delay, ease }}
     >
-      <p className="font-sans text-[10px] tracking-[0.45em] text-xuan/25">
-        {label}
-      </p>
+      <p className="type-quiet">{label}</p>
       {children}
     </motion.div>
   );
@@ -179,7 +172,7 @@ export default function PoemsToolbar({
       >
         <button
           type="button"
-          className="font-sans text-[11px] tracking-[0.32em] text-xuan/40 transition-colors duration-300 hover:text-cinnabar focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+          className="type-meta transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
           aria-expanded={searchOpen}
           aria-controls={searchPanelId}
           onClick={() => setSearchOpen((o) => !o)}
@@ -215,12 +208,12 @@ export default function PoemsToolbar({
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={t("题名 · 作者")}
                   autoFocus={!filters.q}
-                  className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-xuan placeholder:text-xuan/25 transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
+                  className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
                 />
               </label>
               <button
                 type="submit"
-                className="shrink-0 pb-2 font-sans text-[11px] tracking-[0.28em] text-xuan/45 transition-colors duration-300 hover:text-cinnabar"
+                className="type-meta shrink-0 pb-2 transition-colors duration-300 hover:text-[color:var(--type-active)]"
               >
                 {t("寻")}
               </button>
@@ -235,9 +228,7 @@ export default function PoemsToolbar({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: reduce ? 0 : 0.2, ease }}
       >
-        <p className="font-sans text-[11px] tracking-[0.3em] text-xuan/35">
-          {t(`得 ${resultCount} 篇`)}
-        </p>
+        <p className="type-meta">{t(`得 ${resultCount} 篇`)}</p>
         {active && (
           <Link
             href="/poems"

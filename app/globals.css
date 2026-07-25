@@ -8,6 +8,29 @@
   --xuan-muted: rgba(245, 239, 226, 0.55);
   --xuan-faint: rgba(245, 239, 226, 0.12);
   --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /*
+   * Type scale — 语义色阶 / 字距（A+B）
+   * primary 正文·题 | secondary 作者 | meta UI 元信息
+   * quiet 分区标签 | faint 禁用/极弱
+   */
+  --type-primary: rgba(245, 239, 226, 0.95);
+  --type-secondary: rgba(245, 239, 226, 0.5);
+  --type-meta: rgba(245, 239, 226, 0.38);
+  --type-quiet: rgba(245, 239, 226, 0.28);
+  --type-faint: rgba(245, 239, 226, 0.2);
+  --type-active: rgba(178, 58, 72, 0.9);
+
+  --track-ui: 0.3em;
+  --track-display: 0.4em;
+  --track-poem: 0.35em;
+  --track-card-title: 0.12em;
+  --track-card-excerpt: 0.12em;
+  --track-card-author: 0.16em;
+  --track-eyebrow: 0.45em;
+
+  --duration-color: 300ms;
+  --duration-reveal: 0.55s;
 }
 
 @theme inline {
@@ -970,7 +993,105 @@ body {
   }
 }
 
-/* 诗卷筛选 chip：细底线 hover / 选中朱砂，克制无 pill */
+/*
+ * Type utilities — 组件优先用语义 class，少写零散 text-xuan/* / tracking
+ * 字体铁律：诗/题/人名 → wenkai；长文 → serif；导航筛选 → sans
+ */
+
+/* 页眉英数眉题 COLLECTION / POETS */
+.type-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: var(--track-eyebrow);
+  color: var(--type-meta);
+}
+
+/* 列表/页级大题 */
+.type-display {
+  font-family: var(--font-wenkai);
+  font-weight: 400;
+  letter-spacing: var(--track-display);
+  color: var(--type-primary);
+}
+
+/* 无衬线元信息：朝代、页码、结果数 */
+.type-meta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: var(--track-ui);
+  color: var(--type-meta);
+}
+
+/* 分区小标签：意境 */
+.type-quiet {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: var(--track-eyebrow);
+  color: var(--type-quiet);
+}
+
+/* 作者名（文楷） */
+.type-author {
+  font-family: var(--font-wenkai);
+  letter-spacing: var(--track-card-author);
+  color: var(--type-secondary);
+}
+
+/* 朝代（无衬线） */
+.type-dynasty {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--type-meta);
+}
+
+/* 诗卷卡片题 */
+.type-card-title {
+  font-family: var(--font-wenkai);
+  font-weight: 400;
+  letter-spacing: var(--track-card-title);
+  color: var(--type-primary);
+}
+
+/* 卡片摘句 */
+.type-card-excerpt {
+  font-family: var(--font-wenkai);
+  font-size: 0.75rem;
+  letter-spacing: var(--track-card-excerpt);
+  color: var(--type-meta);
+}
+
+/* 阅读页诗句 */
+.type-poem-body {
+  font-family: var(--font-wenkai);
+  letter-spacing: var(--track-poem);
+  color: var(--type-primary);
+}
+
+/*
+ * 统一「当前态」：导航 / 筛选 chip 同一语法
+ * 默认淡字 + hover 提亮底线 + 选中朱砂字 + 满宽底线
+ */
+.type-nav,
+.poem-filter-chip {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.25rem;
+  font-family: var(--font-sans);
+  letter-spacing: var(--track-ui);
+  color: var(--type-meta);
+  transition: color var(--duration-color) ease;
+}
+
+.type-nav {
+  font-size: 0.875rem; /* text-sm */
+}
+
+.poem-filter-chip {
+  font-size: 11px;
+}
+
+.type-nav::after,
 .poem-filter-chip::after {
   content: "";
   position: absolute;
@@ -984,29 +1105,56 @@ body {
   opacity: 0.45;
   transition:
     transform 400ms var(--ease-elegant),
-    opacity 300ms ease,
-    background-color 300ms ease;
+    opacity var(--duration-color) ease,
+    background-color var(--duration-color) ease;
 }
 
+.type-nav:hover,
+.poem-filter-chip:hover {
+  color: rgba(245, 239, 226, 0.75);
+}
+
+.type-nav:hover::after,
 .poem-filter-chip:hover::after {
   transform: scaleX(0.55);
   opacity: 0.55;
 }
 
+.type-nav--active,
+.poem-filter-chip--active {
+  color: var(--type-active);
+}
+
+.type-nav--active::after,
 .poem-filter-chip--active::after {
   transform: scaleX(1);
   background: var(--cinnabar);
   opacity: 0.7;
 }
 
+.type-nav--active:hover,
+.poem-filter-chip--active:hover {
+  color: var(--type-active);
+}
+
+.type-nav--active:hover::after,
 .poem-filter-chip--active:hover::after {
   transform: scaleX(1);
   opacity: 0.85;
 }
 
+.type-nav:focus-visible,
 .poem-filter-chip:focus-visible {
   outline: 1px solid rgba(178, 58, 72, 0.5);
   outline-offset: 4px;
+}
+
+/* 列表分组标题（唐/宋）：降朱砂密度，用 meta 提亮即可 */
+.type-group-label {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  letter-spacing: 0.4em;
+  color: var(--type-meta);
 }
 
 /* 次级文字链：遍览 / 归卷首 / 回诗卷 */

@@ -33,7 +33,7 @@ export default function NavBar() {
         <Link
           href="/"
           onClick={handleLogoClick}
-          className="font-sans text-sm tracking-[0.35em] text-xuan transition-opacity hover:opacity-70"
+          className="font-sans text-sm tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
         >
           {t("墨韵")}
         </Link>
@@ -46,16 +46,9 @@ export default function NavBar() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`relative font-sans text-sm tracking-[0.3em] transition-opacity ${
-                      active
-                        ? "text-xuan opacity-100"
-                        : "text-xuan opacity-45 hover:opacity-90"
-                    }`}
+                    className={`type-nav ${active ? "type-nav--active" : ""}`}
                   >
                     {t(link.label)}
-                    {active && (
-                      <span className="absolute -bottom-2 left-1/2 h-px w-3 -translate-x-1/2 bg-cinnabar" />
-                    )}
                   </Link>
                 </li>
               );
@@ -64,7 +57,7 @@ export default function NavBar() {
 
           <button
             type="button"
-            className="text-xuan/80 md:hidden"
+            className="text-[color:var(--type-secondary)] md:hidden"
             aria-label={t("菜单")}
             onClick={() => setOpen((v) => !v)}
           >
@@ -90,16 +83,9 @@ export default function NavBar() {
                     <Link
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className={`relative inline-block font-sans text-sm tracking-[0.3em] transition-opacity ${
-                        active
-                          ? "text-xuan opacity-100"
-                          : "text-xuan opacity-50 hover:opacity-90"
-                      }`}
+                      className={`type-nav ${active ? "type-nav--active" : ""}`}
                     >
                       {t(link.label)}
-                      {active && (
-                        <span className="absolute -bottom-1.5 left-0 h-px w-3 bg-cinnabar" />
-                      )}
                     </Link>
                   </li>
                 );

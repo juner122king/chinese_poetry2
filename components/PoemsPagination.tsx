@@ -41,12 +41,12 @@ export default function PoemsPagination({ filters, totalPages }: Props) {
           {t("上一页")}
         </Link>
       ) : (
-        <span className="font-sans text-[11px] tracking-[0.3em] text-xuan/20">
+        <span className="type-meta text-[color:var(--type-faint)]">
           {t("上一页")}
         </span>
       )}
 
-      <span className="font-sans text-[11px] tracking-[0.35em] text-xuan/40">
+      <span className="type-meta">
         {page} / {totalPages}
       </span>
 
@@ -59,7 +59,7 @@ export default function PoemsPagination({ filters, totalPages }: Props) {
           {t("下一页")}
         </Link>
       ) : (
-        <span className="font-sans text-[11px] tracking-[0.3em] text-xuan/20">
+        <span className="type-meta text-[color:var(--type-faint)]">
           {t("下一页")}
         </span>
       )}

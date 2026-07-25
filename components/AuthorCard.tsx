@@ -42,14 +42,12 @@ export default function AuthorCard({ author, index = 0 }: Props) {
           </span>
         </div>
         <div className="text-center">
-          <h3 className="mb-1 font-wenkai text-lg tracking-[0.3em] text-xuan">
+          <h3 className="type-display mb-1 text-lg tracking-[0.3em]">
             {display.name}
           </h3>
-          <p className="font-sans text-xs tracking-[0.35em] text-xuan/40">
-            {display.dynasty}
-          </p>
+          <p className="type-dynasty text-xs">{display.dynasty}</p>
         </div>
-        <p className="line-clamp-2 max-w-[14rem] text-center text-xs leading-relaxed tracking-wider text-xuan/40">
+        <p className="line-clamp-2 max-w-[14rem] text-center font-serif text-xs leading-relaxed tracking-wider text-[color:var(--type-meta)]">
           {display.bio}
         </p>
       </Link>

@@ -29,13 +29,8 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="font-sans text-[11px] tracking-[0.5em] text-xuan/35">
-                SELECTED
-              </p>
-              <T
-                as="h2"
-                className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
-              >
+              <p className="type-eyebrow">SELECTED</p>
+              <T as="h2" className="type-display text-2xl md:text-3xl">
                 精 选 诗 卷
               </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
@@ -61,13 +56,8 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="font-sans text-[11px] tracking-[0.5em] text-xuan/35">
-                POETS
-              </p>
-              <T
-                as="h2"
-                className="font-wenkai text-2xl tracking-[0.4em] text-xuan md:text-3xl"
-              >
+              <p className="type-eyebrow">POETS</p>
+              <T as="h2" className="type-display text-2xl md:text-3xl">
                 精 选 名 家
               </T>
               <span className="mt-2 h-px w-10 bg-cinnabar/50" />
@@ -91,7 +81,7 @@ export default function HomePage() {
       <footer className="border-t border-xuan/5 px-6 py-12 text-center">
         <T
           as="p"
-          className="font-sans text-[11px] tracking-[0.35em] text-xuan/25"
+          className="type-quiet tracking-[0.35em]"
         >
           墨韵 · 东方诗词视觉体验
         </T>

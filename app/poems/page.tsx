@@ -58,7 +58,7 @@ export default async function PoemsPage({ searchParams }: Props) {
         />
 
         {total === 0 ? (
-          <p className="py-20 text-center font-sans text-sm tracking-[0.3em] text-xuan/40">
+          <p className="type-meta py-20 text-center text-sm">
             <T>未得篇章，可改筛选或清除后再寻。</T>
           </p>
         ) : showGrouped ? (
@@ -68,10 +68,7 @@ export default async function PoemsPage({ searchParams }: Props) {
               <section key={dynasty} className="mb-20">
                 <ScrollReveal>
                   <div className="mb-10 flex items-center gap-6">
-                    <T
-                      as="span"
-                      className="font-sans text-sm tracking-[0.4em] text-cinnabar/80"
-                    >
+                    <T as="span" className="type-group-label">
                       {dynasty}
                     </T>
                     <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />

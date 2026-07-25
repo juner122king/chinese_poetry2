@@ -32,10 +32,10 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
             className="group block text-left"
             title={prevDisplay.title}
           >
-            <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+            <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">
               {t("前篇")}
             </span>
-            <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
+            <span className="type-author mt-1 block truncate text-sm transition-colors duration-300 group-hover:text-[color:var(--type-active)]">
               {clipTitle(prevDisplay.title)}
             </span>
           </Link>
@@ -55,10 +55,10 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
             className="group block text-right"
             title={nextDisplay.title}
           >
-            <span className="block font-sans text-[10px] tracking-[0.32em] text-xuan/30 transition-colors group-hover:text-xuan/50">
+            <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">
               {t("后篇")}
             </span>
-            <span className="mt-1 block truncate font-wenkai text-sm tracking-[0.2em] text-xuan/50 transition-colors group-hover:text-cinnabar">
+            <span className="type-author mt-1 block truncate text-sm transition-colors duration-300 group-hover:text-[color:var(--type-active)]">
               {clipTitle(nextDisplay.title)}
             </span>
           </Link>
