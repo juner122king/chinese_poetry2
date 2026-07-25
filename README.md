@@ -78,7 +78,9 @@ npm run enrich:motifs
 ```
 ## 设计色
 
-- 深墨 `#0D0D0D`
-- 宣纸 `#F5EFE2`
-- 朱砂 `#B23A48`
-- 青黛 `#34495E`
+- 深墨 `#0D0D0D` — 页面底
+- 宣纸 `#F5EFE2` — 主文字（以透明度分阶）
+- 朱砂 `#B23A48` — 交互当前态、印章、hover 点睛（非常显大面积）
+- 青黛 `#34495E` — **辅色预留**，当前 UI 未启用（token 仍在 `globals.css`）
+
+文字语义 class 见 `globals.css`：`.type-eyebrow` / `.type-display` / `.type-meta` / `.type-nav` 等。

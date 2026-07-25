@@ -12,7 +12,7 @@ export default function PoemsHeader({ count }: { count: number }) {
       <p className="mt-2 max-w-md font-serif text-xs leading-relaxed tracking-[0.2em] text-[color:var(--type-meta)]">
         {t(`卷轴展开，墨香与月光同在。共 ${count} 篇。`)}
       </p>
-      <span className="mt-4 h-px w-12 bg-cinnabar/40" />
+      <span className="mt-4 h-px w-12 bg-[color:var(--type-faint)]" />
     </header>
   );
 }

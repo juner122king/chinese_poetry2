@@ -33,7 +33,7 @@ export default function HomePage() {
               <T as="h2" className="type-display text-2xl md:text-3xl">
                 精 选 诗 卷
               </T>
-              <span className="mt-2 h-px w-10 bg-cinnabar/50" />
+              <span className="mt-2 h-px w-10 bg-[color:var(--type-faint)]" />
             </div>
           </ScrollReveal>
 
@@ -60,7 +60,7 @@ export default function HomePage() {
               <T as="h2" className="type-display text-2xl md:text-3xl">
                 精 选 名 家
               </T>
-              <span className="mt-2 h-px w-10 bg-cinnabar/50" />
+              <span className="mt-2 h-px w-10 bg-[color:var(--type-faint)]" />
             </div>
           </ScrollReveal>
 

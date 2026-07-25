@@ -50,7 +50,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
         href={`/poem/${poem.id}`}
         className="block rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
       >
-        <div className="relative overflow-hidden rounded-sm border border-xuan/10 bg-xuan/[0.03] px-6 pb-10 pt-7 backdrop-blur-[2px] transition-all duration-700 hover:border-cinnabar/30 hover:bg-xuan/[0.06] md:px-7 md:pb-11 md:pt-8">
+        <div className="relative overflow-hidden rounded-sm border border-xuan/10 bg-xuan/[0.03] px-6 pb-10 pt-7 backdrop-blur-[2px] transition-all duration-700 hover:border-cinnabar/20 hover:bg-xuan/[0.06] md:px-7 md:pb-11 md:pt-8">
           {/* 题：最多两行；字距用 type-card-title */}
           <h3
             title={display.title}

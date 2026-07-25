@@ -24,7 +24,7 @@ export default function AuthorPageHeader({ author }: { author: Author }) {
       <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
         {display.bio}
       </p>
-      <span className="mt-10 h-px w-12 bg-cinnabar/40" />
+      <span className="mt-10 h-px w-12 bg-[color:var(--type-faint)]" />
     </header>
   );
 }
