@@ -30,7 +30,7 @@ export default function NavBar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:items-baseline md:px-10">
         <Link
           href="/"
           onClick={handleLogoClick}
@@ -39,8 +39,8 @@ export default function NavBar() {
           {t("墨韵")}
         </Link>
 
-        <div className="flex items-center gap-8 md:gap-10">
-          <ul className="hidden items-center gap-10 md:flex">
+        <div className="flex items-center gap-8 md:items-baseline md:gap-10">
+          <ul className="hidden items-baseline gap-10 md:flex">
             {links.map((link) => {
               const active = link.match(pathname);
               return (
