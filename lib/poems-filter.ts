@@ -79,7 +79,10 @@ export function filterPoems(
     if (filters.tag && !poem.tags?.includes(filters.tag)) return false;
     if (filters.theme && poem.theme !== filters.theme) return false;
     if (q) {
-      const hay = `${poem.title}${poem.author}${poem.content.join("")}`.toLowerCase();
+      const motifs = poem.motifs?.join("") ?? "";
+      const rhythmic = poem.rhythmic ?? "";
+      const hay =
+        `${poem.title}${poem.author}${poem.content.join("")}${motifs}${rhythmic}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;

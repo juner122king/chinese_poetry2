@@ -8,11 +8,25 @@ import LogoMark from "./LogoMark";
 import { useScript } from "./ScriptProvider";
 
 const links = [
-  { href: "/poems", label: "诗卷", match: (path: string) => path.startsWith("/poem") },
+  {
+    href: "/poems",
+    label: "诗卷",
+    match: (path: string) => path.startsWith("/poem"),
+  },
+  {
+    href: "/imagery",
+    label: "意境",
+    match: (path: string) => path.startsWith("/imagery"),
+  },
   {
     href: "/authors",
     label: "名家",
     match: (path: string) => path.startsWith("/author"),
+  },
+  {
+    href: "/shelf",
+    label: "诗笺",
+    match: (path: string) => path.startsWith("/shelf"),
   },
 ];
 

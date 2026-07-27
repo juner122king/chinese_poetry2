@@ -1,15 +1,28 @@
 "use client";
 
-import type { Author } from "@/lib/types";
+import Link from "next/link";
+import type { Author, PoemTag } from "@/lib/types";
+import { getTagLabel } from "@/lib/imagery-taxonomy";
+import { buildPoemsHref } from "@/lib/poems-filter";
 import { useScript } from "./ScriptProvider";
 
-export default function AuthorPageHeader({ author }: { author: Author }) {
-  const { tAuthor } = useScript();
+type Props = {
+  author: Author;
+  workCount: number;
+  tagStats: { tag: PoemTag; count: number }[];
+};
+
+export default function AuthorPageHeader({
+  author,
+  workCount,
+  tagStats,
+}: Props) {
+  const { t, tAuthor } = useScript();
   const display = tAuthor(author);
   const seal = display.name.slice(0, 1);
 
   return (
-    <header className="mb-20 flex flex-col items-center text-center">
+    <header className="mb-16 flex flex-col items-center text-center">
       <div className="relative mb-8 flex h-20 w-20 items-center justify-center">
         <span
           className="absolute inset-0 border border-cinnabar/60"
@@ -20,10 +33,41 @@ export default function AuthorPageHeader({ author }: { author: Author }) {
       <p className="type-dynasty mb-3 text-[11px] tracking-[0.45em]">
         {display.dynasty}
       </p>
-      <h1 className="type-display mb-8 text-3xl md:text-4xl">{display.name}</h1>
+      <h1 className="type-display mb-4 text-3xl md:text-4xl">{display.name}</h1>
+      <p className="type-meta mb-8">
+        {t(`本站 ${workCount} 篇`)}
+      </p>
       <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
         {display.bio}
       </p>
+
+      {tagStats.length > 0 && (
+        <ul
+          className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
+          aria-label={t("主写意境")}
+        >
+          {tagStats.map(({ tag, count }, i) => (
+            <li key={tag} className="inline-flex items-center gap-x-3">
+              {i > 0 && (
+                <span
+                  className="select-none text-[11px] text-[color:var(--type-faint)]"
+                  aria-hidden
+                >
+                  ·
+                </span>
+              )}
+              <Link
+                href={buildPoemsHref({ tag })}
+                className="type-meta tracking-[0.3em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+                title={t(`${count} 篇`)}
+              >
+                {t(getTagLabel(tag))}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
       <span className="mt-10 h-px w-12 bg-[color:var(--type-faint)]" />
     </header>
   );

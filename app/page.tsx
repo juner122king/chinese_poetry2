@@ -2,11 +2,19 @@ import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
 import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
+import HomeImageryGates from "@/components/HomeImageryGates";
 import ScrollReveal from "@/components/ScrollReveal";
 import InkBackground from "@/components/InkBackground";
 import T from "@/components/T";
-import { getFeaturedPoems, getRandomFeaturedPoem } from "@/data/poems";
 import { getFeaturedAuthors } from "@/data/authors";
+import {
+  countPoemsByTag,
+  getFeaturedPoems,
+  getRandomFeaturedPoem,
+  poems,
+} from "@/data/poems";
+import type { PoemTag } from "@/lib/types";
+import meta from "@/data/generated/meta.json";
 
 /** 每次刷新随机 Hero 诗；静态预渲染会冻死随机结果 */
 export const dynamic = "force-dynamic";
@@ -16,9 +24,39 @@ export default function HomePage() {
   const gridPoems = getFeaturedPoems(6);
   const authors = getFeaturedAuthors(6);
 
+  const tagCounts = countPoemsByTag();
+  const gateTags: PoemTag[] = [
+    "spring",
+    "moon",
+    "parting",
+    "frontier",
+    "rain",
+    "wine",
+  ];
+  const gateCounts: Partial<Record<PoemTag, number>> = {};
+  for (const tag of gateTags) {
+    gateCounts[tag] = tagCounts.get(tag) ?? 0;
+  }
+
+  const poemCount = meta.poemCount ?? poems.length;
+  const authorCount = meta.authorCount ?? authors.length;
+  const tang = meta.tang ?? 0;
+  const ci = meta.ci ?? 0;
+
   return (
     <>
       <HeroSection key={heroPoem.id} poem={heroPoem} />
+
+      {/* Catalog whisper */}
+      <section className="relative border-b border-xuan/5 px-6 py-12 md:px-10">
+        <ScrollReveal>
+          <p className="mx-auto max-w-2xl text-center font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
+            <T>
+              {`收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`}
+            </T>
+          </p>
+        </ScrollReveal>
+      </section>
 
       {/* Featured poems */}
       <section
@@ -50,6 +88,8 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <HomeImageryGates counts={gateCounts} />
 
       {/* Featured authors */}
       <section className="relative border-t border-xuan/5 px-6 py-28 md:px-10 md:py-36">

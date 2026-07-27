@@ -8,7 +8,7 @@ import {
   toDisplayLines,
   verticalLineGapClass,
 } from "@/lib/poem-lines";
-import ImageryTags from "./ImageryTags";
+import MotifTags from "./MotifTags";
 import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
 import { getAuthorByName } from "@/data/authors";
@@ -147,9 +147,9 @@ export default function PoemDisplay({
           </div>
         </div>
 
-        {(poem.tags?.length ?? 0) > 0 && (
+        {(display.motifs?.length ?? 0) > 0 && (
           <div className="mt-14 flex flex-col items-center px-6 text-center">
-            <ImageryTags tags={poem.tags} />
+            <MotifTags motifs={display.motifs} />
           </div>
         )}
       </div>
@@ -182,9 +182,11 @@ export default function PoemDisplay({
         ))}
       </div>
 
-      <ScrollReveal delay={0.2} className="mt-16">
-        <ImageryTags tags={poem.tags} />
-      </ScrollReveal>
+      {(display.motifs?.length ?? 0) > 0 && (
+        <ScrollReveal delay={0.2} className="mt-16">
+          <MotifTags motifs={display.motifs} />
+        </ScrollReveal>
+      )}
     </div>
   );
 }

@@ -156,3 +156,133 @@ export function getAdjacentPoems(id: string): {
     }
   );
 }
+
+export type RelatedKind = "author" | "theme" | "rhythmic" | "tag" | "featured";
+
+export type RelatedPoem = {
+  poem: Poem;
+  kind: RelatedKind;
+};
+
+function tagOverlap(a: Poem, b: Poem): number {
+  const tagsA = new Set(a.tags ?? []);
+  let n = 0;
+  for (const t of b.tags ?? []) {
+    if (tagsA.has(t)) n += 1;
+  }
+  return n;
+}
+
+/**
+ * 详情页相关推荐：同作者 → 同词牌 → 同 theme → 标签近意 → featured 保底。
+ * 每种 reason 最多 1 篇，避免多张卡同标「同境」。
+ */
+export function getRelatedPoems(id: string, limit = 3): RelatedPoem[] {
+  const current = getPoemById(id);
+  if (!current || limit <= 0) return [];
+
+  const seen = new Set<string>([id]);
+  const usedKinds = new Set<RelatedKind>();
+  const out: RelatedPoem[] = [];
+
+  const push = (poem: Poem | undefined, kind: RelatedKind) => {
+    if (!poem || seen.has(poem.id) || out.length >= limit) return;
+    if (usedKinds.has(kind)) return;
+    seen.add(poem.id);
+    usedKinds.add(kind);
+    out.push({ poem, kind });
+  };
+
+  const byQuality = (a: Poem, b: Poem) => {
+    const fa = (a.featured ? 2 : 0) + (a.motifsLocked ? 1 : 0);
+    const fb = (b.featured ? 2 : 0) + (b.motifsLocked ? 1 : 0);
+    return fb - fa;
+  };
+
+  // 1. 同作者
+  const sameAuthor = poems
+    .filter((p) => p.author === current.author && p.id !== id)
+    .sort(byQuality);
+  push(sameAuthor[0], "author");
+
+  // 2. 同词牌（词）
+  if (current.rhythmic && out.length < limit) {
+    const sameRhythmic = poems
+      .filter(
+        (p) =>
+          p.id !== id &&
+          p.rhythmic === current.rhythmic &&
+          !seen.has(p.id),
+      )
+      .sort(byQuality);
+    push(sameRhythmic[0], "rhythmic");
+  }
+
+  // 3. 同 theme：只取 1 篇
+  if (out.length < limit) {
+    const sameTheme = poems
+      .filter(
+        (p) => p.id !== id && p.theme === current.theme && !seen.has(p.id),
+      )
+      .sort(byQuality);
+    push(sameTheme[0], "theme");
+  }
+
+  // 4. 近意：标签交集最高，且非同 theme（避免再标同境）
+  if (out.length < limit) {
+    const nearTag = poems
+      .filter(
+        (p) =>
+          p.id !== id &&
+          !seen.has(p.id) &&
+          p.theme !== current.theme &&
+          tagOverlap(current, p) > 0,
+      )
+      .sort((a, b) => {
+        const d = tagOverlap(current, b) - tagOverlap(current, a);
+        if (d !== 0) return d;
+        return byQuality(a, b);
+      });
+    push(nearTag[0], "tag");
+  }
+
+  // 5. featured 保底（kind 仅用一次）
+  if (out.length < limit) {
+    const featured = poems
+      .filter((p) => p.featured && !seen.has(p.id))
+      .sort(byQuality);
+    push(featured[0], "featured");
+  }
+
+  // 6. 全局序保底：只补篇数（UI 不展示 kind）
+  if (out.length < limit) {
+    for (const p of poems) {
+      if (out.length >= limit) break;
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      out.push({ poem: p, kind: "featured" });
+    }
+  }
+
+  return out;
+}
+
+/** 按标签统计本站频次（意境图鉴 / 首页入口） */
+export function countPoemsByTag(): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const poem of poems) {
+    for (const tag of poem.tags ?? []) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+  return counts;
+}
+
+/** 按主题统计 */
+export function countPoemsByTheme(): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const poem of poems) {
+    counts.set(poem.theme, (counts.get(poem.theme) ?? 0) + 1);
+  }
+  return counts;
+}

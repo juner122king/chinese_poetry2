@@ -3,9 +3,8 @@
 import { useCallback, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import type { Poem, PoemTag } from "@/lib/types";
+import type { Poem } from "@/lib/types";
 import { toDisplayLines } from "@/lib/poem-lines";
-import { getTagLabel, taxonomyById } from "@/lib/imagery-taxonomy";
 import { getThemeVisual } from "@/lib/theme-map";
 import { useScript } from "./ScriptProvider";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
@@ -16,18 +15,7 @@ type Props = {
   className?: string;
 };
 
-const CARD_TAG_MAX = 3;
-
-/** 按 taxonomy weight 取前 N 个意境标签 */
-function topCardTags(tags: PoemTag[] | undefined, max = CARD_TAG_MAX): PoemTag[] {
-  if (!tags?.length) return [];
-  return [...tags]
-    .sort(
-      (a, b) =>
-        (taxonomyById[b]?.weight ?? 0) - (taxonomyById[a]?.weight ?? 0),
-    )
-    .slice(0, max);
-}
+const CARD_MOTIF_MAX = 3;
 
 export default function PoemCard({ poem, index = 0, className = "" }: Props) {
   const { t, tPoem } = useScript();
@@ -35,7 +23,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
   const reduce = useReducedMotion();
   const enterDelay = Math.min(index, 8) * 0.05;
   const excerpts = toDisplayLines(display.content.slice(0, 2));
-  const cardTags = topCardTags(poem.tags);
+  const cardMotifs = (display.motifs ?? []).filter(Boolean).slice(0, CARD_MOTIF_MAX);
   const visual = getThemeVisual(poem.theme);
 
   const hoveredRef = useRef(false);
@@ -130,15 +118,18 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
             ))}
           </div>
 
-          {/* 意境标签：右下，hover / 聚焦同显 */}
-          {cardTags.length > 0 ? (
+          {/* 意象题跋：右下，hover / 聚焦同显（展示用，不抢筛选） */}
+          {cardMotifs.length > 0 ? (
             <div className="pointer-events-none absolute bottom-5 right-5 z-[1] max-w-[calc(100%-2.5rem)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 md:right-6">
               <p
-                className="type-quiet flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1"
-                aria-label={t("意境")}
+                className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1 font-wenkai text-[11px] tracking-[0.22em] text-[color:var(--type-quiet)] md:text-xs"
+                aria-label={t("意象")}
               >
-                {cardTags.map((tag, i) => (
-                  <span key={tag} className="inline-flex items-center gap-x-1.5">
+                {cardMotifs.map((motif, i) => (
+                  <span
+                    key={`${motif}-${i}`}
+                    className="inline-flex items-center gap-x-1.5"
+                  >
                     {i > 0 && (
                       <span
                         className="select-none text-[color:var(--type-faint)]"
@@ -147,7 +138,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
                         ·
                       </span>
                     )}
-                    <span>{t(getTagLabel(tag))}</span>
+                    <span>{motif}</span>
                   </span>
                 ))}
               </p>
