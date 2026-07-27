@@ -67,11 +67,11 @@ export default function ShelfView() {
             </button>
           </div>
 
-          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((poem, i) => (
-              <div key={poem.id} className="break-inside-avoid mb-6">
-                <PoemCard poem={poem} index={i} className="!mb-2" />
-                <div className="mb-4 text-center">
+              <div key={poem.id} className="flex flex-col">
+                <PoemCard poem={poem} index={i} className="!mb-0 h-full" />
+                <div className="mt-3 text-center">
                   <button
                     type="button"
                     onClick={() => removeFromShelf(poem.id)}
