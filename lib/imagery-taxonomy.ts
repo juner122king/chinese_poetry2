@@ -18,6 +18,15 @@ export type ImageryTagMeta = {
   keywords: string[];
 };
 
+/** 每首最多保留的意境标签数（筛选/卡片密度） */
+export const TAG_SELECT_MAX = 4;
+
+/** 非首位标签的绝对分下限（已 × weight） */
+export const TAG_SCORE_ABS_FLOOR = 70;
+
+/** 非首位标签相对 top 分的比例下限 */
+export const TAG_SCORE_REL_RATIO = 0.35;
+
 /** 古典诗词意境归集表 */
 export const imageryTaxonomy: ImageryTagMeta[] = [
   {
@@ -35,27 +44,68 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     label: "夏",
     group: "四季物候",
     defaultTheme: "summer",
-    weight: 75,
+    weight: 78,
     motifPool: ["夏荷", "蝉鸣", "绿阴", "蒲风", "炎日", "流萤"],
-    keywords: ["夏", "荷", "蝉", "炎", "榴", "萤"],
+    keywords: [
+      "夏",
+      "荷",
+      "蝉",
+      "炎",
+      "榴",
+      "萤",
+      "绿阴",
+      "流萤",
+      "仲夏",
+      "溽暑",
+      "清和",
+      "芭蕉",
+      "葵",
+    ],
   },
   {
     id: "autumn",
     label: "秋",
     group: "四季物候",
     defaultTheme: "autumn",
-    weight: 80,
+    weight: 82,
     motifPool: ["秋色", "落木", "霜叶", "寒砧", "雁阵", "黄菊"],
-    keywords: ["秋", "落木", "霜", "雁", "菊", "萧萧"],
+    keywords: [
+      "秋",
+      "落木",
+      "霜",
+      "雁",
+      "菊",
+      "萧萧",
+      "秋色",
+      "秋风",
+      "秋水",
+      "寒砧",
+      "黄叶",
+      "红叶",
+    ],
   },
   {
     id: "winter",
     label: "冬",
     group: "四季物候",
     defaultTheme: "winter",
-    weight: 76,
+    weight: 78,
     motifPool: ["冬岭", "冰河", "寒梅", "岁暮", "朔风", "残雪"],
-    keywords: ["冬", "冰", "岁暮", "朔", "残雪", "寒梅", "冰河", "凛"],
+    keywords: [
+      "冬",
+      "冰",
+      "岁暮",
+      "朔",
+      "残雪",
+      "寒梅",
+      "冰河",
+      "凛",
+      "岁寒",
+      "腊",
+      "冻",
+      "雪窗",
+      "寒宵",
+    ],
   },
   {
     id: "night",
@@ -79,10 +129,11 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     id: "moon",
     label: "月",
     group: "天象时辰",
+    // 主视觉仅 night-moon 画月；本 tag 用于筛选，weight 压低以免刷屏
     defaultTheme: "night-moon",
-    weight: 85,
+    weight: 65,
     motifPool: ["明月", "清影", "婵娟", "月下", "霜月", "圆缺"],
-    keywords: ["月", "婵娟", "清影", "玉盘", "蟾"],
+    keywords: ["月", "婵娟", "清影", "玉盘", "蟾", "明月", "月色", "月光", "月夜"],
   },
   {
     id: "rain",
@@ -162,9 +213,27 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     label: "田园",
     group: "山水地理",
     defaultTheme: "pastoral",
-    weight: 80,
+    weight: 84,
     motifPool: ["稻香", "桑麻", "柴门", "野老", "蛙声", "茅檐"],
-    keywords: ["稻", "桑", "麻", "田", "村", "蛙", "茅", "农"],
+    keywords: [
+      "稻",
+      "桑",
+      "麻",
+      "田",
+      "村",
+      "蛙",
+      "茅",
+      "农",
+      "田家",
+      "农家",
+      "野老",
+      "柴门",
+      "桑麻",
+      "东篱",
+      "南山",
+      "稻粱",
+      "麦",
+    ],
   },
   {
     id: "city-ruins",
@@ -182,7 +251,7 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     defaultTheme: "night-moon",
     weight: 45,
     motifPool: ["庭院", "阑干", "小窗", "深闺", "朱户"],
-    keywords: ["庭", "院", "窗", "阑", "闺", "户"],
+    keywords: ["庭", "院", "窗", "阑", "闺", "户", "珠帘", "帘"],
   },
   {
     id: "flowers",
@@ -243,27 +312,72 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     label: "离别",
     group: "人事情感",
     defaultTheme: "parting",
-    weight: 78,
+    // 忌单字「送/离/去」：误触极广；保留「别」与多字送别语
+    weight: 74,
     motifPool: ["长亭", "送别", "杨柳岸", "离殇", "挥手", "歧路"],
-    keywords: ["别", "送", "离", "辞", "去"],
+    keywords: [
+      "送别",
+      "离别",
+      "惜别",
+      "话别",
+      "告别",
+      "分别",
+      "长亭",
+      "南浦",
+      "挥手",
+      "歧路",
+      "杨柳岸",
+      "折柳",
+      "别",
+    ],
   },
   {
     id: "homesickness",
     label: "思乡",
     group: "人事情感",
     defaultTheme: "homesickness",
-    weight: 79,
+    // 忌单字「客/归」：羁旅误标过多
+    weight: 74,
     motifPool: ["故乡", "乡愁", "客心", "归思", "故园", "万里"],
-    keywords: ["故乡", "乡", "客", "归", "家书", "故园"],
+    keywords: [
+      "故乡",
+      "故园",
+      "乡愁",
+      "乡关",
+      "思乡",
+      "家书",
+      "客心",
+      "客中",
+      "游子",
+      "归思",
+      "归心",
+      "还乡",
+      "望乡",
+      "万里",
+      "乡",
+    ],
   },
   {
     id: "love-longing",
     label: "相思",
     group: "人事情感",
+    // 无独立 UI 主题：主视觉固定走花意（红豆/伊人），筛选仍用本 tag
     defaultTheme: "flowers",
-    weight: 70,
+    weight: 72,
     motifPool: ["相思", "红豆", "伊人", "情思"],
-    keywords: ["相思", "思君", "伊人"],
+    keywords: [
+      "相思",
+      "思君",
+      "伊人",
+      "红豆",
+      "美人",
+      "蛾眉",
+      "泪痕",
+      "珠帘",
+      "闺怨",
+      "锦书",
+      "妾",
+    ],
   },
   {
     id: "war",
@@ -307,27 +421,69 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     label: "行舟",
     group: "行旅器物",
     defaultTheme: "river-lake",
-    weight: 65,
+    weight: 68,
     motifPool: ["轻舟", "孤舟", "客船", "帆影", "渡头", "夜航"],
-    keywords: ["舟", "船", "帆", "棹", "舸", "渡"],
+    keywords: [
+      "舟",
+      "船",
+      "帆",
+      "棹",
+      "舸",
+      "渡",
+      "扁舟",
+      "孤舟",
+      "客船",
+      "兰舟",
+      "画舫",
+      "夜泊",
+      "橹",
+      "桨",
+    ],
   },
   {
     id: "temple-bell",
     label: "钟磬",
     group: "行旅器物",
     defaultTheme: "homesickness",
-    weight: 60,
+    weight: 64,
     motifPool: ["钟声", "古寺", "禅院", "暮鼓", "梵音"],
-    keywords: ["钟", "寺", "僧", "禅", "磬", "刹"],
+    keywords: [
+      "钟",
+      "寺",
+      "僧",
+      "禅",
+      "磬",
+      "刹",
+      "钟声",
+      "古寺",
+      "山寺",
+      "禅院",
+      "暮钟",
+      "梵",
+    ],
   },
   {
     id: "music",
     label: "丝竹",
     group: "行旅器物",
     defaultTheme: "wine",
-    weight: 50,
+    weight: 58,
     motifPool: ["琴音", "笛声", "凤箫", "琵琶", "歌吹"],
-    keywords: ["琴", "笛", "箫", "琵琶", "歌", "曲"],
+    keywords: [
+      "琴",
+      "笛",
+      "箫",
+      "琵琶",
+      "歌",
+      "曲",
+      "筝",
+      "弦",
+      "笙",
+      "瑟",
+      "管",
+      "清商",
+      "歌吹",
+    ],
   },
   {
     id: "lamplight",
@@ -335,9 +491,9 @@ export const imageryTaxonomy: ImageryTagMeta[] = [
     group: "行旅器物",
     // 孤灯/渔火偏夜色，非必华灯节庆
     defaultTheme: "night-moon",
-    weight: 52,
+    weight: 56,
     motifPool: ["灯火", "渔火", "烛影", "青灯", "阑珊"],
-    keywords: ["灯火", "渔火", "青灯", "烛", "灯"],
+    keywords: ["灯火", "渔火", "青灯", "烛", "灯", "篝灯", "纱灯"],
   },
 ];
 
@@ -349,19 +505,23 @@ export function getTagLabel(tag: PoemTag): string {
   return taxonomyById[tag]?.label ?? tag;
 }
 
-/** 单字「月」勿命中「三月/正月」等月份 */
+/** 单字「月」勿命中「三月/正月」等月份；裸月需排除月份前缀 */
 function keywordHits(text: string, kw: string): boolean {
   if (kw.length >= 2) return text.includes(kw);
   if (kw === "月") {
-    // 要求「月」且前一字不是数字/正/腊（月份），或已有多字月意象
+    // 多字月意象优先
     if (
-      /明|月下|月夜|月光|月色|明月|山月|江月|霜月|晓月|夜月|对月|望月|秋月|花月/.test(
+      /明月|月下|月夜|月光|月色|山月|江月|霜月|晓月|夜月|对月|望月|秋月|花月|婵娟|清影/.test(
         text,
       )
     ) {
       return true;
     }
-    return /(?<![正一二三四五六七八九十仲孟季腊闰])月/.test(text);
+    // 裸「月」且前一字不是月份标记；且全文至少像天象用法
+    if (!/(?<![正一二三四五六七八九十仲孟季腊闰])月/.test(text)) return false;
+    // 排除「岁月/年月/一月」等非天象（「岁月」里月前是岁——已由 lookbehind 部分覆盖）
+    // 要求附近有夜/天/明/影/照等，降低误触
+    return /[夜天明影照霜寒江山].{0,2}月|月.{0,2}[夜明影照色下]/.test(text);
   }
   return text.includes(kw);
 }
@@ -385,35 +545,72 @@ export function inferTagHits(title: string, content: string[]): TagHit[] {
   return hits;
 }
 
+/**
+ * 从命中列表选出 tags：
+ * - 首位必留（有命中即至少 1 个）
+ * - 其余需过绝对分 + 相对 top 分阈值
+ * - 最多 TAG_SELECT_MAX 个
+ */
+export function selectTagsFromHits(
+  hits: TagHit[],
+  max = TAG_SELECT_MAX,
+): PoemTag[] {
+  if (!hits.length) return [];
+  const top = hits[0].score;
+  const floor = Math.max(TAG_SCORE_ABS_FLOOR, top * TAG_SCORE_REL_RATIO);
+  const selected: PoemTag[] = [hits[0].id];
+  for (const h of hits.slice(1)) {
+    if (selected.length >= max) break;
+    if (h.score >= floor) selected.push(h.id);
+  }
+  return selected;
+}
+
 export function inferTagsSafe(title: string, content: string[]): PoemTag[] {
-  return inferTagHits(title, content).slice(0, 6).map((h) => h.id);
+  return selectTagsFromHits(inferTagHits(title, content));
 }
 
 /**
  * 按 tags 聚合主视觉（非「只取第一标签」）。
  * - 序位衰减：靠前的强命中仍主导
  * - 大气类（雨雪山水）轻抬、春花类轻压，缓解 spring 过载与 rain/landscape 召回不足
+ * - 四季/田园轻抬，缓解 autumn tag 多而 theme 少、夏冬田园近乎缺席
  */
 const THEME_PICK_BOOST: Partial<Record<PoemTheme, number>> = {
   rain: 1.28,
   "snow-river": 1.24,
-  winter: 1.14,
-  landscape: 1.12,
-  mountain: 1.12,
-  frontier: 1.08,
-  "river-lake": 1.06,
-  reclusion: 1.04,
+  winter: 1.22,
+  summer: 1.2,
+  autumn: 1.16,
+  pastoral: 1.22,
+  landscape: 1.08,
+  mountain: 1.1,
+  frontier: 1.06,
+  "river-lake": 1.04,
+  reclusion: 1.06,
+  // 夜月为唯一画月主题；略压，避免弱月命中抢主视觉
+  "night-moon": 0.9,
   spring: 0.78,
-  flowers: 0.92,
+  flowers: 0.9,
   birds: 0.94,
+  // love-longing 无独立 theme，落在 flowers 时再轻压，避免相思诗全屏花瓣
+  parting: 0.96,
+  homesickness: 0.96,
 };
 
 const TAG_PICK_BOOST: Partial<Record<PoemTag, number>> = {
   rain: 1.18,
   snow: 1.16,
-  "wind-cloud": 1.12,
-  mountain: 1.06,
+  "wind-cloud": 1.1,
+  mountain: 1.04,
+  autumn: 1.14,
+  summer: 1.16,
+  winter: 1.14,
+  pastoral: 1.2,
   spring: 0.88,
+  parting: 0.9,
+  homesickness: 0.9,
+  moon: 0.8,
 };
 
 /** 由带分命中聚合主题（优先） */
@@ -473,3 +670,13 @@ export function motifPoolForTags(tags: PoemTag[]): string[] {
   }
   return out;
 }
+
+/** landscape 兜底词（避免空 tags 时退化为风云模板「长风·白云·彩云」） */
+export const LANDSCAPE_FALLBACK_MOTIFS = [
+  "远山",
+  "烟水",
+  "平林",
+  "暮色",
+  "孤影",
+  "清景",
+];

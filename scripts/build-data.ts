@@ -21,6 +21,7 @@ import {
   generateTagsRule,
   inferThemeFromText,
 } from "../lib/generate-motifs";
+import { TAG_SELECT_MAX } from "../lib/imagery-taxonomy";
 import type { Author, Poem, PoemForm, PoemSource, PoemTag } from "../lib/types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -294,13 +295,15 @@ function mapSourceTags(sourceTags: string[] | undefined): PoemTag[] {
   return [...out];
 }
 
-function mergeTags(a: PoemTag[], b: PoemTag[]): PoemTag[] {
+/** 规则 tags 优先，源库 tags 补位；遵守 TAG_SELECT_MAX 上限 */
+function mergeTags(a: PoemTag[], b: PoemTag[], max = TAG_SELECT_MAX): PoemTag[] {
   const seen = new Set<PoemTag>();
   const out: PoemTag[] = [];
   for (const t of [...a, ...b]) {
     if (!VALID_TAGS.has(t) || seen.has(t)) continue;
     seen.add(t);
     out.push(t);
+    if (out.length >= max) break;
   }
   return out;
 }

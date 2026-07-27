@@ -3,6 +3,7 @@ import {
   imageryTaxonomy,
   inferTagHits,
   inferTagsSafe,
+  LANDSCAPE_FALLBACK_MOTIFS,
   motifPoolForTags,
   pickThemeFromHits,
   pickThemeFromTags,
@@ -154,10 +155,15 @@ export function generateMotifsRule(
   for (const w of motifPoolForTags(tags)) push(w);
 
   // theme-linked pool via tags that map to this theme
-  const themeTags = imageryTaxonomy
-    .filter((t) => t.defaultTheme === theme)
-    .flatMap((t) => t.motifPool);
-  for (const w of themeTags) push(w);
+  // landscape 且无 tags 时勿用 wind-cloud 的「长风·白云」模板
+  if (theme === "landscape" && !tags.length) {
+    for (const w of LANDSCAPE_FALLBACK_MOTIFS) push(w);
+  } else {
+    const themeTags = imageryTaxonomy
+      .filter((t) => t.defaultTheme === theme)
+      .flatMap((t) => t.motifPool);
+    for (const w of themeTags) push(w);
+  }
 
   if (result.length < count) {
     const body = input.content.join("");
@@ -165,6 +171,11 @@ export function generateMotifsRule(
       const bigram = body.slice(i, i + 2);
       if (/^[\u4e00-\u9fff]{2}$/.test(bigram)) push(bigram);
     }
+  }
+
+  // 最后兜底，保证恒为 count 个
+  if (result.length < count) {
+    for (const w of LANDSCAPE_FALLBACK_MOTIFS) push(w);
   }
 
   return result.slice(0, count);

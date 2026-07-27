@@ -15,7 +15,7 @@
     "note": "P0：春城烽火，主视觉 spring（tags 保留战乱/思乡）",
     "patch": {
       "theme": "spring",
-      "tags": ["spring", "war", "homesickness", "flowers", "birds", "city-ruins"],
+      "tags": ["spring", "war", "homesickness", "flowers"],
       "motifs": ["城春", "烽火", "家书"],
       "motifsSource": "manual",
       "motifsLocked": true
@@ -49,7 +49,7 @@
         "夜半钟声到客船。"
       ],
       "theme": "night-moon",
-      "tags": ["night", "moon", "autumn", "temple-bell", "boat-travel", "homesickness"],
+      "tags": ["night", "moon", "temple-bell", "boat-travel"],
       "motifs": ["枫桥", "渔火", "钟声"],
       "motifsSource": "manual",
       "motifsLocked": true
@@ -60,14 +60,7 @@
     "note": "P1：元夕灯火主视觉 festival，勿被「星如雨」带成雪/春",
     "patch": {
       "theme": "festival",
-      "tags": [
-        "festival",
-        "spring",
-        "lamplight",
-        "flowers",
-        "love-longing",
-        "night"
-      ],
+      "tags": ["festival", "lamplight", "love-longing", "spring"],
       "motifs": ["花千树", "星如雨", "灯火阑珊"],
       "motifsSource": "manual",
       "motifsLocked": true
@@ -78,8 +71,52 @@
     "note": "P1 连带：秋愁细雨，勿被「酒」字抢成 wine",
     "patch": {
       "theme": "autumn",
-      "tags": ["autumn", "rain", "homesickness", "wine", "dawn-dusk"],
+      "tags": ["autumn", "rain", "homesickness", "wine"],
       "motifs": ["寻寻觅觅", "黄昏", "细雨"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "听筝", "author": "李端" },
+    "note": "规则曾空 tags；丝竹+闺情，勿落 landscape 风云模板",
+    "patch": {
+      "theme": "wine",
+      "tags": ["music", "love-longing", "courtyard"],
+      "motifs": ["鸣筝", "玉房", "周郎"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "怨情", "author": "李白" },
+    "note": "宫怨/相思，勿空 tags + 长风白云",
+    "patch": {
+      "theme": "flowers",
+      "tags": ["love-longing", "courtyard"],
+      "motifs": ["珠帘", "蛾眉", "泪痕"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "贫女", "author": "秦韬玉" },
+    "note": "寒女自伤，人事向；勿 landscape 模板 motifs",
+    "patch": {
+      "theme": "landscape",
+      "tags": ["love-longing", "courtyard", "reclusion"],
+      "motifs": ["蓬门", "金线", "嫁衣"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "新嫁娘词三首 三", "author": "王建" },
+    "note": "新妇入厨，庭院人事；勿空 tags",
+    "patch": {
+      "theme": "pastoral",
+      "tags": ["courtyard", "pastoral", "love-longing"],
+      "motifs": ["厨下", "羹汤", "小姑"],
       "motifsSource": "manual",
       "motifsLocked": true
     }

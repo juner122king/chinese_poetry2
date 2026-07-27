@@ -21,7 +21,8 @@ export type CloudForm = false | "high" | "band" | "sea";
 export type HorizonForm = false | "plain" | "water" | "frost";
 
 /**
- * 月：关 | 夜月满轮 | 暖月 | 远月 | 田园月华 | 山月 | 江月 | 残月
+ * 月：关 | 夜月满轮 | （其余形态保留类型，供 CelestialBodies；
+ * 主视觉仅 night-moon 强相关主题挂月，见 themeMap）
  */
 export type MoonForm =
   | false
@@ -87,7 +88,7 @@ export type ThemeVisual = {
 export const themeMap: Record<PoemTheme, ThemeVisual> = {
   "night-moon": {
     label: "夜月",
-    // 满夜：远山 + 高云 + 繁星，与思乡「空」对照
+    // 唯一强相关画月主题：满轮 + 远山 + 高云 + 繁星；与思乡「无月空天」对照
     gradient:
       "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(180,190,220,0.2) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 30% 80%, rgba(52,73,94,0.38) 0%, transparent 50%), linear-gradient(180deg, #050508 0%, #0d1118 45%, #0D0D0D 100%)",
     accent: "#c8d0e0",
@@ -168,13 +169,13 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   "snow-river": {
     label: "寒江",
+    // 签名：雪 + 江线 + 舟影（无月）
     gradient:
       "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(200,220,240,0.12) 0%, transparent 50%), linear-gradient(180deg, #0a1018 0%, #121820 40%, #0D0D0D 100%)",
     accent: "#b8c8d8",
     glow: "rgba(180,200,220,0.2)",
     snow: true,
     mist: "soft",
-    moon: "river",
     mountains: "jagged",
     horizon: "frost",
     boat: true,
@@ -197,25 +198,24 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   mountain: {
     label: "山岳",
-    // 空蒙远黛：天际冷灰、山脚沉墨，配合 ink 层峦而非硬剪影
+    // 空蒙远黛：层峦 + 高云 + 雾（无月）
     gradient:
       "radial-gradient(ellipse 70% 35% at 50% 18%, rgba(70,90,120,0.1) 0%, transparent 55%), radial-gradient(ellipse 95% 42% at 50% 88%, rgba(30,40,52,0.5) 0%, transparent 48%), linear-gradient(180deg, #07090d 0%, #0c1016 42%, #0D0D0D 100%)",
     accent: "#a8b4c0",
     glow: "rgba(90,110,135,0.16)",
     mist: "soft",
     clouds: "high",
-    moon: "mountain",
     mountains: "peaks",
     particles: "none",
   },
   "river-lake": {
     label: "江湖",
+    // 签名：水际 + 涟漪 + 舟（无月）
     gradient:
       "radial-gradient(ellipse 100% 40% at 50% 85%, rgba(40,70,90,0.3) 0%, transparent 45%), linear-gradient(180deg, #080c10 0%, #0c1218 50%, #0D0D0D 100%)",
     accent: "#a0b8c8",
     glow: "rgba(70,110,140,0.18)",
     mist: "soft",
-    moon: "river",
     mountains: "range",
     horizon: "water",
     ripples: true,
@@ -224,12 +224,11 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   pastoral: {
     label: "田园",
-    // 夜田园：月华 + 田埂 + 流萤（西江月等）
+    // 签名：田埂 + 流萤 + 远丘（无月；写月名篇可 override 为 night-moon）
     gradient:
-      "radial-gradient(ellipse 55% 45% at 72% 18%, rgba(190,205,230,0.2) 0%, transparent 55%), radial-gradient(ellipse 40% 35% at 68% 22%, rgba(220,230,245,0.1) 0%, transparent 50%), radial-gradient(ellipse 70% 40% at 50% 78%, rgba(70,100,50,0.2) 0%, transparent 50%), linear-gradient(180deg, #0a0e12 0%, #0e1410 48%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 55% 45% at 72% 18%, rgba(190,205,230,0.14) 0%, transparent 55%), radial-gradient(ellipse 70% 40% at 50% 78%, rgba(70,100,50,0.22) 0%, transparent 50%), linear-gradient(180deg, #0a0e12 0%, #0e1410 48%, #0D0D0D 100%)",
     accent: "#c4d0b0",
-    glow: "rgba(180,200,230,0.2)",
-    moon: "pastoral",
+    glow: "rgba(140,170,120,0.16)",
     mist: "soft",
     fields: true,
     mountains: "rolling",
@@ -238,12 +237,11 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   frontier: {
     label: "边塞",
-    // 关外平沙 + 塞外夜空：少量高亮主星、更少散星
+    // 关外平沙 + 塞外稀星（无月）
     gradient:
       "radial-gradient(ellipse 90% 38% at 50% 72%, rgba(140,100,50,0.16) 0%, transparent 52%), radial-gradient(ellipse 50% 30% at 78% 18%, rgba(180,170,140,0.06) 0%, transparent 50%), linear-gradient(180deg, #100c08 0%, #14100c 48%, #0D0D0D 100%)",
     accent: "#d0b890",
     glow: "rgba(160,120,60,0.16)",
-    moon: "mountain",
     mist: "soft",
     mountains: "jagged",
     horizon: "plain",
@@ -299,11 +297,11 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   wine: {
     label: "对酒",
+    // 签名：朱砂暖晕居中，无月无星
     gradient:
-      "radial-gradient(ellipse 55% 55% at 50% 48%, rgba(178,58,72,0.16) 0%, transparent 55%), linear-gradient(180deg, #100808 0%, #140e0e 50%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 55% 55% at 50% 48%, rgba(178,58,72,0.2) 0%, transparent 55%), radial-gradient(ellipse 40% 40% at 50% 52%, rgba(200,90,90,0.08) 0%, transparent 50%), linear-gradient(180deg, #100808 0%, #140e0e 50%, #0D0D0D 100%)",
     accent: "#d4a0a8",
-    glow: "rgba(200,120,120,0.22)",
-    moon: "warm",
+    glow: "rgba(200,120,120,0.26)",
     mist: "soft",
     mountains: "none",
     particles: "none",
@@ -320,29 +318,27 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   homesickness: {
     label: "思乡",
-    // 空阔：无山、稀星、远月 — 与夜月「满」对照
+    // 空阔：无山、无月、稀星 + 高云 — 与夜月「满轮+山」对照
     gradient:
-      "radial-gradient(ellipse 45% 35% at 78% 16%, rgba(160,170,200,0.1) 0%, transparent 52%), linear-gradient(180deg, #07080c 0%, #0c0e14 52%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 45% 35% at 78% 16%, rgba(160,170,200,0.08) 0%, transparent 52%), linear-gradient(180deg, #07080c 0%, #0c0e14 52%, #0D0D0D 100%)",
     accent: "#c0c8d8",
-    glow: "rgba(140,160,190,0.14)",
-    moon: "far",
+    glow: "rgba(140,160,190,0.12)",
     mist: "soft",
     clouds: "high",
     mountains: "none",
     particles: "stars",
     particleSafeCenter: true,
-    particleDensity: 0.45,
+    particleDensity: 0.4,
   },
   parting: {
     label: "离别",
-    // 空驿：残月为主，山极淡，中景留白
+    // 空驿：地平尘岚 + 高云 + 淡山，无残月
     gradient:
-      "radial-gradient(ellipse 70% 35% at 50% 78%, rgba(90,70,60,0.12) 0%, transparent 50%), linear-gradient(180deg, #0e0a0a 0%, #121010 52%, #0D0D0D 100%)",
+      "radial-gradient(ellipse 70% 35% at 50% 78%, rgba(90,70,60,0.14) 0%, transparent 50%), linear-gradient(180deg, #0e0a0a 0%, #121010 52%, #0D0D0D 100%)",
     accent: "#d0b8a8",
     glow: "rgba(140,100,80,0.14)",
     mist: "soft",
     clouds: "high",
-    moon: "crescent",
     mountains: "distant",
     horizon: "plain",
     particles: "none",
