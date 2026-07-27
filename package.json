@@ -10,6 +10,7 @@
     "data:build": "npx tsx scripts/build-data.ts",
     "data:build:local": "npx tsx scripts/build-data.ts --skip-fetch",
     "enrich:motifs": "npx tsx scripts/enrich-poems.ts",
+    "enrich:motifs:llm": "npx tsx scripts/enrich-poems.ts --llm",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
