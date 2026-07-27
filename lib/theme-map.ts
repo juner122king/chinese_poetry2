@@ -116,7 +116,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   spring: {
     label: "春",
-    // 薄霞嫩绿 + 远黛，与秋「暖岭落叶」结构分离
+    // 薄霞嫩绿 + 远黛；轻瓣粒子（比花意更稀），与秋「暖岭落叶」结构分离
     gradient:
       "radial-gradient(ellipse 70% 45% at 30% 25%, rgba(200,160,170,0.1) 0%, transparent 50%), radial-gradient(ellipse 65% 50% at 55% 70%, rgba(90,130,85,0.2) 0%, transparent 52%), linear-gradient(180deg, #0b100e 0%, #101612 48%, #0D0D0D 100%)",
     accent: "#c8d4b8",
@@ -127,6 +127,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     petals: true,
     particles: "petals",
     particleSafeCenter: true,
+    particleDensity: 0.65,
   },
   summer: {
     label: "夏",
@@ -250,16 +251,17 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   flowers: {
     label: "花意",
-    // 与春共用瓣语：静态瓣光 + 更稀花瓣粒子（无山，签名在花）
+    // 签名：绛桃静光（InkBackground）+ 更密瓣粒子；无山，与春「青绿远山+稀瓣」对照
     gradient:
-      "radial-gradient(ellipse 55% 50% at 38% 38%, rgba(180,80,100,0.16) 0%, transparent 52%), linear-gradient(180deg, #10080c 0%, #140e10 50%, #0D0D0D 100%)",
-    accent: "#e0b8c0",
-    glow: "rgba(180,90,110,0.16)",
-    mist: "soft",
+      "radial-gradient(ellipse 48% 42% at 28% 32%, rgba(200,90,120,0.2) 0%, transparent 55%), radial-gradient(ellipse 40% 36% at 78% 58%, rgba(180,70,100,0.12) 0%, transparent 58%), radial-gradient(ellipse 70% 28% at 50% 100%, rgba(60,24,36,0.35) 0%, transparent 50%), linear-gradient(180deg, #12080c 0%, #160e12 48%, #0D0D0D 100%)",
+    accent: "#e8b8c4",
+    glow: "rgba(210,100,130,0.22)",
+    mist: false,
+    mountains: "none",
     petals: true,
     particles: "petals",
     particleSafeCenter: true,
-    particleDensity: 0.4,
+    particleDensity: 1.28,
   },
   birds: {
     label: "禽鸟",
@@ -297,12 +299,12 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   wine: {
     label: "对酒",
-    // 签名：朱砂暖晕居中，无月无星
+    // 签名：琥珀酒焰居中偏下 + 朱砂暖晕；无月无星无雾（InkBackground 叠脉动光核）
     gradient:
-      "radial-gradient(ellipse 55% 55% at 50% 48%, rgba(178,58,72,0.2) 0%, transparent 55%), radial-gradient(ellipse 40% 40% at 50% 52%, rgba(200,90,90,0.08) 0%, transparent 50%), linear-gradient(180deg, #100808 0%, #140e0e 50%, #0D0D0D 100%)",
-    accent: "#d4a0a8",
-    glow: "rgba(200,120,120,0.26)",
-    mist: "soft",
+      "radial-gradient(ellipse 42% 36% at 50% 58%, rgba(178,58,72,0.28) 0%, transparent 58%), radial-gradient(ellipse 55% 40% at 50% 62%, rgba(200,130,70,0.12) 0%, transparent 62%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(40,20,18,0.55) 0%, transparent 55%), linear-gradient(180deg, #0c0808 0%, #120c0c 42%, #0D0D0D 100%)",
+    accent: "#d4a090",
+    glow: "rgba(200,110,80,0.32)",
+    mist: false,
     mountains: "none",
     particles: "none",
   },

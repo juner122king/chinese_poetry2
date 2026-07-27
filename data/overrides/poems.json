@@ -1,13 +1,43 @@
 [
   {
     "match": { "title": "将进酒", "author": "李白" },
-    "note": "P0：豪饮主视觉，勿被「对月/成雪」带成 night-moon",
+    "note": "P0：豪饮/对酒主视觉，勿被「对月/成雪」带成 night-moon；motifs 勿写对月",
     "patch": {
       "theme": "wine",
-      "tags": ["wine", "moon", "river-lake", "music"],
-      "motifs": ["黄河", "金樽", "对月"],
+      "tags": ["wine", "music", "river-lake"],
+      "motifs": ["金樽", "黄河", "尽欢"],
       "motifsSource": "manual",
-      "motifsLocked": true
+      "motifsLocked": true,
+      "content": [
+        "君不见黄河之水天上来，",
+        "奔流到海不复回。",
+        "君不见高堂明镜悲白发，",
+        "朝如青丝暮成雪。",
+        "人生得意须尽欢，",
+        "莫使金樽空对月。",
+        "天生我材必有用，",
+        "千金散尽还复来。",
+        "烹羊宰牛且为乐，",
+        "会须一饮三百杯。",
+        "岑夫子，",
+        "丹丘生，",
+        "将进酒，",
+        "杯莫停。",
+        "与君歌一曲，",
+        "请君为我侧耳听。",
+        "钟鼓馔玉不足贵，",
+        "但愿长醉不复醒。",
+        "古来圣贤皆寂寞，",
+        "惟有饮者留其名。",
+        "陈王昔时宴平乐，",
+        "斗酒十千恣欢谑。",
+        "主人何为言少钱，",
+        "径须酤取对君酌。",
+        "五花马，",
+        "千金裘，",
+        "呼儿将出换美酒，",
+        "与尔同销万古愁。"
+      ]
     }
   },
   {
@@ -117,6 +147,28 @@
       "theme": "pastoral",
       "tags": ["courtyard", "pastoral", "love-longing"],
       "motifs": ["厨下", "羹汤", "小姑"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "绮寮怨", "author": "周邦彦" },
+    "note": "离歌晓发：主视觉 parting；去 frontier/江湖硬套；motifs 取正文",
+    "patch": {
+      "theme": "parting",
+      "tags": ["parting", "music", "wine", "boat-travel"],
+      "motifs": ["残醉", "津亭", "旧曲"],
+      "motifsSource": "manual",
+      "motifsLocked": true
+    }
+  },
+  {
+    "match": { "title": "桃花溪", "author": "张旭" },
+    "note": "花意：绛粉+密瓣粒子；motifs 取桃花/流水/渔船，勿题名重复",
+    "patch": {
+      "theme": "flowers",
+      "tags": ["flowers", "river-lake", "reclusion", "boat-travel"],
+      "motifs": ["桃花", "流水", "渔船"],
       "motifsSource": "manual",
       "motifsLocked": true
     }

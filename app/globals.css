@@ -667,6 +667,24 @@ body {
   animation: ripplePulse 4s ease-out infinite;
 }
 
+/* 对酒：暖焰光核慢脉动（唯一主动画） */
+.wine-ember {
+  animation: wineEmberBreathe 7.5s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@keyframes wineEmberBreathe {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
 @keyframes ripplePulse {
   0%,
   100% {
@@ -703,6 +721,13 @@ body {
   .lantern-rise {
     animation: none !important;
     opacity: 0 !important;
+  }
+
+  /* 对酒光核：停动画，保留静态暖晕 */
+  .wine-ember {
+    animation: none !important;
+    opacity: 0.85 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
   }
 
   html {

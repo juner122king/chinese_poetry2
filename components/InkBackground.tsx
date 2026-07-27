@@ -854,65 +854,141 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Lone boat silhouette — ink wash, not cartoon */}
+      {/*
+        远渚舟影：一抹墨痕，无桅杆/完整船形（忌卡通图标）。
+        江湖 / 寒江签名共用。
+      */}
       {visual.boat && (
         <div
-          className="absolute pointer-events-none"
+          className="pointer-events-none absolute"
           style={{
             left: `${boatLeft}%`,
-            bottom: `${theme === "snow-river" ? 14 : 16}%`,
-            width: "min(18vw, 140px)",
-            opacity: 0.22 * atmScale,
-            filter: "blur(0.4px)",
+            bottom: `${theme === "snow-river" ? 13 : 15}%`,
+            width: "min(11vw, 88px)",
+            opacity: (intensity === "soft" ? 0.1 : 0.14) * atmScale,
+            filter: "blur(1.6px)",
           }}
         >
-          <svg viewBox="0 0 120 40" className="h-auto w-full" aria-hidden>
-            <path
-              d="M8,28 C22,22 40,20 58,21 C78,22 98,26 112,30 C100,32 78,34 58,33 C36,32 18,30 8,28 Z"
-              fill="rgba(180,200,215,0.35)"
-            />
-            <path
-              d="M52,21 L56,8 L58,21"
-              fill="none"
-              stroke="rgba(180,200,215,0.28)"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            {/* soft water smear under hull */}
+          <svg viewBox="0 0 96 28" className="h-auto w-full" aria-hidden>
+            {/* 水底拖尾墨晕 */}
             <ellipse
-              cx="58"
-              cy="32"
-              rx="38"
-              ry="4"
-              fill="rgba(140,180,200,0.12)"
-              style={{ filter: "blur(2px)" }}
+              cx="48"
+              cy="20"
+              rx="36"
+              ry="5"
+              fill="rgba(245,239,226,0.06)"
+            />
+            {/* 主笔：扁弧一叶，不可辨船头船尾细节 */}
+            <path
+              d="M14 16 C28 11.5 40 10.5 48 11 C58 11.6 70 14 82 17.5 C68 19.5 56 20.5 48 20 C36 19.4 24 18 14 16 Z"
+              fill="rgba(245,239,226,0.2)"
+            />
+            {/* 次笔：更淡内弧，增墨色层次 */}
+            <path
+              d="M22 15.5 C34 12.8 42 12.2 48 12.4 C56 12.7 64 14.2 74 16.5"
+              fill="none"
+              stroke="rgba(245,239,226,0.12)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
             />
           </svg>
         </div>
       )}
 
-      {/* Petal wash — soft multi-spot bloom (pairs with petal particles) */}
-      {visual.petals && (
+      {/*
+        瓣光：春 = 淡青绿粉 wash；花意 = 更强绛桃签名（侧位+底落英，中栏护字）。
+        粒子瓣落由 ParticleBackground 承担。
+      */}
+      {visual.petals && theme === "spring" && (
         <div
           className="absolute inset-0"
           style={{
-            opacity: 0.38 * atmScale,
+            opacity: 0.32 * atmScale,
             backgroundImage: [
-              "radial-gradient(ellipse 28% 22% at 18% 38%, rgba(210,130,150,0.2) 0%, transparent 70%)",
-              "radial-gradient(ellipse 22% 18% at 72% 52%, rgba(190,110,130,0.14) 0%, transparent 68%)",
-              "radial-gradient(ellipse 30% 24% at 48% 68%, rgba(220,160,165,0.1) 0%, transparent 72%)",
-              "radial-gradient(ellipse 18% 14% at 82% 28%, rgba(200,120,140,0.1) 0%, transparent 65%)",
+              "radial-gradient(ellipse 26% 20% at 16% 36%, rgba(190,150,160,0.14) 0%, transparent 70%)",
+              "radial-gradient(ellipse 22% 18% at 74% 54%, rgba(160,140,130,0.1) 0%, transparent 68%)",
+              "radial-gradient(ellipse 28% 22% at 48% 70%, rgba(170,160,140,0.08) 0%, transparent 72%)",
             ].join(", "),
           }}
         />
       )}
 
-      {/* Water ripples — soft ink rings, no hard 1px border */}
+      {theme === "flowers" && (
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          style={{ opacity: atmScale }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: [
+                "radial-gradient(ellipse 30% 34% at 14% 28%, rgba(210,90,120,0.22) 0%, transparent 68%)",
+                "radial-gradient(ellipse 26% 28% at 86% 42%, rgba(200,80,110,0.16) 0%, transparent 66%)",
+                "radial-gradient(ellipse 24% 22% at 22% 72%, rgba(220,120,140,0.12) 0%, transparent 70%)",
+                "radial-gradient(ellipse 28% 20% at 78% 78%, rgba(190,70,100,0.1) 0%, transparent 68%)",
+                "radial-gradient(ellipse 70% 16% at 50% 94%, rgba(180,60,90,0.1) 0%, transparent 72%)",
+              ].join(", "),
+            }}
+          />
+          {/* 中栏微暗：护题与正文 */}
+          <div
+            className="absolute left-1/2 top-[16%] h-[58%] w-[min(44%,440px)] -translate-x-1/2"
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(13,13,13,0.2) 0%, transparent 72%)",
+            }}
+          />
+        </div>
+      )}
+
+      {/*
+        对酒签名：中心偏下暖焰光核 + 左右琥珀余烬（单主动画：脉动）。
+        中柱护字：光核在 58% 纵位、两侧余烬避开正文；无月。
+      */}
+      {theme === "wine" && (
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          style={{ opacity: atmScale }}
+        >
+          {/* 左右余烬 — 宴席暖边，不进中栏 */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: [
+                "radial-gradient(ellipse 22% 38% at 12% 68%, rgba(178,58,72,0.16) 0%, transparent 70%)",
+                "radial-gradient(ellipse 20% 34% at 88% 64%, rgba(200,120,70,0.12) 0%, transparent 68%)",
+                "radial-gradient(ellipse 36% 18% at 50% 92%, rgba(120,50,40,0.14) 0%, transparent 72%)",
+              ].join(", "),
+            }}
+          />
+          {/* 酒焰光核 — 慢脉动 */}
+          <div
+            className="wine-ember absolute left-1/2 top-[56%] h-[min(42vh,320px)] w-[min(48vw,360px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background: [
+                `radial-gradient(ellipse 50% 50% at 50% 50%, ${visual.glow} 0%, transparent 62%)`,
+                "radial-gradient(ellipse 42% 40% at 50% 55%, rgba(178,58,72,0.22) 0%, transparent 68%)",
+                "radial-gradient(ellipse 55% 48% at 48% 48%, rgba(220,160,90,0.1) 0%, transparent 72%)",
+              ].join(", "),
+              filter: "blur(2px)",
+            }}
+          />
+          {/* 中栏微暗罩：护正文对比 */}
+          <div
+            className="absolute left-1/2 top-[18%] h-[58%] w-[min(42%,420px)] -translate-x-1/2"
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(13,13,13,0.22) 0%, transparent 72%)",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Water ripples — softer ink rings, low chroma (avoid cartoon pools) */}
       {visual.ripples && (
         <div
-          className="absolute bottom-[14%] left-1/2 w-[min(70%,520px)] -translate-x-1/2"
-          style={{ opacity: atmScale }}
+          className="absolute bottom-[14%] left-1/2 w-[min(62%,460px)] -translate-x-1/2"
+          style={{ opacity: 0.72 * atmScale }}
         >
           {[0, 1, 2].map((i) => (
             <div
@@ -920,11 +996,11 @@ export default function InkBackground({
               className="ripple-ring absolute left-1/2 top-0 -translate-x-1/2 rounded-[100%]"
               style={{
                 width: `${48 + i * 28}%`,
-                height: 14 + i * 8,
+                height: 12 + i * 7,
                 border: "none",
-                background: `radial-gradient(ellipse 50% 50% at 50% 50%, transparent 42%, rgba(150,200,210,${0.07 - i * 0.015}) 58%, transparent 72%)`,
-                filter: "blur(1.2px)",
-                animationDelay: `${i * 0.9}s`,
+                background: `radial-gradient(ellipse 50% 50% at 50% 50%, transparent 44%, rgba(245,239,226,${0.045 - i * 0.01}) 58%, transparent 74%)`,
+                filter: "blur(1.8px)",
+                animationDelay: `${i * 1.1}s`,
               }}
             />
           ))}

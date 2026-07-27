@@ -109,17 +109,18 @@ const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
     blink: "hard",
   },
   petals: {
-    // 春：嫩粉、略慢飘落、轻摆
-    countDesktop: 48,
-    countMobile: 28,
-    size: 0.022,
-    rgb: [0.9, 0.72, 0.76],
+    // 花瓣：桃粉、略亮；密度由 theme particleDensity 拉开（春稀 / 花意密）
+    countDesktop: 64,
+    countMobile: 38,
+    size: 0.028,
+    rgb: [0.95, 0.7, 0.78],
     yRange: [-5, 5.5],
     xSpread: 16,
-    fall: 0.16,
-    sway: 0.11,
+    fall: 0.18,
+    sway: 0.13,
     wander: 0,
     blink: "none",
+    materialOpacity: 0.55,
   },
   leaves: {
     // 秋：暖褐、更慢、侧向翻滚感
@@ -348,6 +349,22 @@ type Props = {
   density?: number;
 };
 
+/**
+ * 装饰性粒子不需要指针射线。
+ * 默认 connect(divRef) 在卡片 hover 快装快卸 / AnimatePresence 下可能拿到 null，
+ * 触发 Provider: Cannot read properties of null (reading 'addEventListener')。
+ */
+function createNoopEvents() {
+  return {
+    enabled: false,
+    priority: 0,
+    handlers: undefined,
+    compute: () => {},
+    connect: () => {},
+    disconnect: () => {},
+  };
+}
+
 export default function ParticleBackground({
   mode = "stars",
   className = "",
@@ -380,8 +397,9 @@ export default function ParticleBackground({
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 5], fov: 50 }}
-        gl={{ alpha: true, antialias: false }}
-        style={{ background: "transparent" }}
+        gl={{ alpha: true, antialias: false, powerPreference: "low-power" }}
+        style={{ background: "transparent", pointerEvents: "none" }}
+        events={createNoopEvents}
       >
         <Particles count={count} mode={mode} />
       </Canvas>

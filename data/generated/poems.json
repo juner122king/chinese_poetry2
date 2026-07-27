@@ -98,7 +98,7 @@
       "君不见高堂明镜悲白发，",
       "朝如青丝暮成雪。",
       "人生得意须尽欢，",
-      "莫使金尊空对月。",
+      "莫使金樽空对月。",
       "天生我材必有用，",
       "千金散尽还复来。",
       "烹羊宰牛且为乐，",
@@ -125,14 +125,13 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "moon",
-      "river-lake",
-      "music"
+      "music",
+      "river-lake"
     ],
     "motifs": [
-      "黄河",
       "金樽",
-      "对月"
+      "黄河",
+      "尽欢"
     ],
     "motifsSource": "manual",
     "motifsLocked": true,
@@ -1649,17 +1648,17 @@
     "theme": "flowers",
     "tags": [
       "flowers",
-      "reclusion",
       "river-lake",
-      "mountain"
+      "reclusion",
+      "boat-travel"
     ],
     "motifs": [
       "桃花",
-      "桃花溪",
-      "落花"
+      "流水",
+      "渔船"
     ],
-    "motifsSource": "rule",
-    "motifsLocked": false,
+    "motifsSource": "manual",
+    "motifsLocked": true,
     "form": "shi",
     "source": "tang300",
     "sourceId": "1f28ab03-8388-4a2f-8c4f-3ce47789e221"
@@ -4027,17 +4026,17 @@
       "岑夫子，",
       "丹丘生，",
       "将进酒，",
-      "君莫停。",
+      "杯莫停。",
       "与君歌一曲，",
       "请君为我侧耳听。",
       "钟鼓馔玉不足贵，",
-      "但愿长醉不愿醒。",
+      "但愿长醉不复醒。",
       "古来圣贤皆寂寞，",
       "惟有饮者留其名。",
       "陈王昔时宴平乐，",
-      "斗酒十千恣讙谑。",
+      "斗酒十千恣欢谑。",
       "主人何为言少钱，",
-      "径须沽取对君酌。",
+      "径须酤取对君酌。",
       "五花马，",
       "千金裘，",
       "呼儿将出换美酒，",
@@ -4046,14 +4045,13 @@
     "theme": "wine",
     "tags": [
       "wine",
-      "moon",
-      "river-lake",
-      "music"
+      "music",
+      "river-lake"
     ],
     "motifs": [
-      "黄河",
       "金樽",
-      "对月"
+      "黄河",
+      "尽欢"
     ],
     "motifsSource": "manual",
     "motifsLocked": true,
@@ -22776,20 +22774,20 @@
       "歌声未尽处，",
       "先泪零。"
     ],
-    "theme": "river-lake",
+    "theme": "parting",
     "tags": [
-      "river-lake",
+      "parting",
       "music",
-      "frontier",
-      "wine"
+      "wine",
+      "boat-travel"
     ],
     "motifs": [
-      "绮寮怨",
-      "长江",
-      "寒江"
+      "残醉",
+      "津亭",
+      "旧曲"
     ],
-    "motifsSource": "rule",
-    "motifsLocked": false,
+    "motifsSource": "manual",
+    "motifsLocked": true,
     "form": "ci",
     "rhythmic": "绮寮怨",
     "source": "ci300"
