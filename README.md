@@ -76,6 +76,67 @@ motifs[3]  展示关联词「春晓 · 啼鸟 · 风雨」
 # 对已有 generated 再跑规则 enrich（默认写回；可加 --dry-run）
 npm run enrich:motifs
 ```
+
+## 部署（Cloudflare Workers · OpenNext）
+
+本站使用 [@opennextjs/cloudflare](https://opennext.js.org/cloudflare) 部署到 **Cloudflare Workers**。
+
+### 前置
+
+1. [Cloudflare 账号](https://dash.cloudflare.com/sign-up)
+2. 本地登录 Wrangler：
+
+```bash
+npx wrangler login
+```
+
+3. 确认 `data/generated/*.json` 已生成（仓库内一般已有；否则 `npm run data:build:local`）
+
+### 本地预览（Workers 运行时）
+
+```bash
+npm run preview
+# 等价：opennextjs-cloudflare build && opennextjs-cloudflare preview
+```
+
+日常开发仍用 `npm run dev`（Next 开发服务器）。
+
+> **Windows 提示**：OpenNext 官方更推荐在 **WSL** 下 build/preview/deploy；本机 Windows 上 `opennextjs-cloudflare build` 已验证可通过，若运行时异常可改用 WSL。
+
+### 部署到生产
+
+```bash
+npm run deploy
+# 等价：opennextjs-cloudflare build && opennextjs-cloudflare deploy
+```
+
+Worker 名见 `wrangler.jsonc` 的 `name`（默认 `chinese-poetry2`）。部署后可在 Cloudflare Dashboard 绑定自定义域名。
+
+### 配置文件
+
+| 文件 | 作用 |
+|------|------|
+| `wrangler.jsonc` | Worker 名、兼容日期、静态资源、可选 R2 缓存 |
+| `open-next.config.ts` | OpenNext 适配（默认 dummy 缓存，可开 R2 ISR） |
+| `public/_headers` | `/_next/static/*` 长缓存 |
+| `.dev.vars` | 本地预览环境变量（不入库；见 `.dev.vars.example`） |
+
+### 可选：R2 增量缓存
+
+当前未启用 R2。若需要 ISR / 更稳的缓存：
+
+```bash
+npx wrangler r2 bucket create chinese-poetry2-opennext-cache
+```
+
+然后在 `open-next.config.ts` 与 `wrangler.jsonc` 中按文件内注释启用 `r2_buckets` / `incrementalCache`。
+
+### CI 提示
+
+- Build 命令：`npx opennextjs-cloudflare build`（或 `npm run deploy` 内建）
+- 产出目录：`.open-next/`（已 gitignore）
+- 需 Node ≥ 20；账号凭证用 Cloudflare API Token（`CLOUDFLARE_API_TOKEN`）
+
 ## 设计色
 
 - 深墨 `#0D0D0D` — 页面底

@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "chinese-poetry2",
+  "compatibility_date": "2026-04-15",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  // Self-reference for revalidation / caching flows
+  // https://opennext.js.org/cloudflare/caching
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "chinese-poetry2",
+    },
+  ],
+  // Optional R2 incremental cache — create bucket then uncomment:
+  // "r2_buckets": [
+  //   {
+  //     "binding": "NEXT_INC_CACHE_R2_BUCKET",
+  //     "bucket_name": "chinese-poetry2-opennext-cache",
+  //   },
+  // ],
+  "images": {
+    // next/image optimization binding (unused today; harmless)
+    "binding": "IMAGES",
+  },
+}

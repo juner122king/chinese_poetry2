@@ -42,3 +42,10 @@ next-env.d.ts
 
 # corpus raw fetch cache (regenerate with npm run data:build)
 /data/raw/
+
+# OpenNext / Cloudflare Workers
+.open-next
+.wrangler
+.dev.vars*
+!.dev.vars.example
+
