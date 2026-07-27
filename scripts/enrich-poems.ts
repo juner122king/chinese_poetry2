@@ -7,7 +7,9 @@
  *   npx tsx scripts/enrich-poems.ts --force --include-locked
  *   npx tsx scripts/enrich-poems.ts --dry-run
  *   npx tsx scripts/enrich-poems.ts --llm --limit 5 --dry-run
- *   npx tsx scripts/enrich-poems.ts --llm --concurrency 4
+ *   npx tsx scripts/enrich-poems.ts --llm --concurrency 1 --delay-ms 1500
+ *   # 补跑上次 429 回退的（跳过已是 llm 的）
+ *   npx tsx scripts/enrich-poems.ts --llm --only-missing-llm --concurrency 1
  *
  * 环境变量（--llm 时）：
  *   SILICONFLOW_API_KEY   必填
@@ -41,6 +43,10 @@ const force = process.argv.includes("--force");
 const includeLocked = process.argv.includes("--include-locked");
 const dryRun = process.argv.includes("--dry-run");
 const useLlm = process.argv.includes("--llm");
+/** 只处理尚未 motifsSource=llm 的条目（补跑 429 回退） */
+const onlyMissingLlm = process.argv.includes("--only-missing-llm");
+/** 失败时不写 rule，保留原数据，便于下次再试 */
+const keepOnFail = process.argv.includes("--keep-on-fail");
 
 function argValue(name: string, fallback: number): number {
   const idx = process.argv.indexOf(name);
@@ -51,7 +57,15 @@ function argValue(name: string, fallback: number): number {
 }
 
 const limit = argValue("--limit", 0); // 0 = 全部
-const concurrency = Math.max(1, Math.min(16, argValue("--concurrency", 4)));
+/** LLM 默认并发 1，避免 SiliconFlow 429 */
+const concurrency = Math.max(
+  1,
+  Math.min(16, argValue("--concurrency", useLlm ? 1 : 4)),
+);
+/** 两次 API 请求最小间隔（全局节流） */
+const delayMs = argValue("--delay-ms", useLlm ? 1500 : 0);
+/** 429/5xx 最大尝试次数 */
+const maxAttempts = Math.max(1, Math.min(12, argValue("--max-attempts", 6)));
 
 const VALID_TAGS = new Set<PoemTag>([
   "spring",
@@ -149,10 +163,54 @@ function shouldSkip(poem: Poem): { skip: boolean; reason?: string } {
   if (poem.motifsLocked && !includeLocked) {
     return { skip: true, reason: "locked" };
   }
+  // 补跑模式：已是 llm 的跳过；其余即使已有 rule motifs 也重跑
+  if (onlyMissingLlm) {
+    if (poem.motifsSource === "llm") {
+      return { skip: true, reason: "already-llm" };
+    }
+    return { skip: false };
+  }
   if (poem.motifs?.length >= 3 && poem.tags?.length && !force) {
     return { skip: true, reason: "already-has-motifs" };
   }
   return { skip: false };
+}
+
+/** 全局请求节流：保证任意两次 chat 调用至少间隔 delayMs */
+let throttleChain: Promise<void> = Promise.resolve();
+let lastRequestAt = 0;
+
+async function throttleRequest(): Promise<void> {
+  if (delayMs <= 0) return;
+  const run = async () => {
+    const now = Date.now();
+    const wait = Math.max(0, lastRequestAt + delayMs - now);
+    if (wait > 0) await sleep(wait);
+    lastRequestAt = Date.now();
+  };
+  const next = throttleChain.then(run, run);
+  throttleChain = next.catch(() => undefined);
+  await next;
+}
+
+function parseRetryAfterMs(res: Response): number | null {
+  const raw = res.headers.get("retry-after");
+  if (!raw) return null;
+  const sec = Number(raw);
+  if (Number.isFinite(sec) && sec >= 0) return Math.ceil(sec * 1000);
+  const date = Date.parse(raw);
+  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+  return null;
+}
+
+/** 429 退避：优先 Retry-After，否则 5s → 15s → 30s → 60s → 90s → 120s… */
+function backoffMs(attempt: number, res?: Response): number {
+  if (res) {
+    const ra = parseRetryAfterMs(res);
+    if (ra != null) return Math.min(Math.max(ra, 1000), 180_000);
+  }
+  const table = [5_000, 15_000, 30_000, 60_000, 90_000, 120_000];
+  return table[Math.min(attempt - 1, table.length - 1)];
 }
 
 function sanitizeTags(raw: unknown): PoemTag[] {
@@ -608,29 +666,49 @@ async function callSiliconFlowChat(
   const model =
     process.env.SILICONFLOW_MODEL?.trim() || "Qwen/Qwen2.5-14B-Instruct";
 
-  const res = await fetch(`${baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.1,
-      max_tokens: 350,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-    }),
-  });
+  await throttleRequest();
+
+  let res: Response;
+  try {
+    res = await fetch(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.1,
+        max_tokens: 350,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+      }),
+    });
+  } catch (err) {
+    // 网络抖动：同样退避重试
+    if (attempt >= maxAttempts) {
+      const msg = err instanceof Error ? err.message : String(err);
+      throw new Error(`fetch failed after ${attempt} attempts: ${msg}`);
+    }
+    const wait = backoffMs(attempt);
+    console.warn(
+      `  ↻ 网络错误，${Math.round(wait / 1000)}s 后重试 (${attempt}/${maxAttempts})`,
+    );
+    await sleep(wait);
+    return callSiliconFlowChat(system, user, attempt + 1);
+  }
 
   if (res.status === 429 || res.status >= 500) {
-    if (attempt >= 4) {
+    if (attempt >= maxAttempts) {
       throw new Error(`LLM HTTP ${res.status} after ${attempt} attempts`);
     }
-    const wait = 500 * 2 ** (attempt - 1);
+    const wait = backoffMs(attempt, res);
+    console.warn(
+      `  ↻ HTTP ${res.status}，${Math.round(wait / 1000)}s 后重试 (${attempt}/${maxAttempts})`,
+    );
     await sleep(wait);
     return callSiliconFlowChat(system, user, attempt + 1);
   }
@@ -759,6 +837,14 @@ async function enrichOneLlm(
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    if (keepOnFail) {
+      console.warn(`⚠  LLM 失败，保留原文：${poem.title} — ${msg}`);
+      return {
+        skipped: false,
+        source: "keep-on-fail",
+        poem,
+      };
+    }
     console.warn(`⚠  LLM 失败，回退 rule：${poem.title} — ${msg}`);
     return {
       skipped: false,
@@ -803,11 +889,29 @@ async function mapPool<T, R>(
 
 async function main() {
   const poems = JSON.parse(readFileSync(poemsPath, "utf-8")) as Poem[];
+
+  // 预筛：only-missing-llm / locked 等在 shouldSkip 里处理；这里先算候选规模
+  let candidates = poems;
+  if (onlyMissingLlm) {
+    candidates = poems.filter(
+      (p) =>
+        p.motifsSource !== "llm" &&
+        (includeLocked || !p.motifsLocked),
+    );
+  }
   const workList =
-    limit > 0 ? poems.slice(0, limit) : poems;
+    limit > 0 ? candidates.slice(0, limit) : candidates;
+
+  const alreadyLlm = poems.filter((p) => p.motifsSource === "llm").length;
 
   console.log(
-    `共 ${poems.length} 首 · 本次处理 ${workList.length} 首 · 模式 ${useLlm ? "llm" : "rule"}${useLlm ? ` · concurrency=${concurrency}` : ""}\n`,
+    `共 ${poems.length} 首 · 已是 llm ${alreadyLlm} · 本次候选 ${workList.length} 首 · 模式 ${useLlm ? "llm" : "rule"}` +
+      (useLlm
+        ? ` · concurrency=${concurrency} · delay=${delayMs}ms · maxAttempts=${maxAttempts}`
+        : "") +
+      (onlyMissingLlm ? " · only-missing-llm" : "") +
+      (keepOnFail ? " · keep-on-fail" : "") +
+      "\n",
   );
 
   if (useLlm && !process.env.SILICONFLOW_API_KEY?.trim()) {
@@ -828,6 +932,8 @@ async function main() {
   let skipped = 0;
   let llmOk = 0;
   let ruleFallback = 0;
+  let keepFail = 0;
+  let done = 0;
 
   // 只对 workList 中需要处理的条目替换；limit 时其余原样保留
   const indexById = new Map(poems.map((p, i) => [p.id, i]));
@@ -835,7 +941,12 @@ async function main() {
 
   if (useLlm) {
     const outcomes = await mapPool(workList, concurrency, async (raw) => {
-      return enrichOneLlm(raw);
+      const outcome = await enrichOneLlm(raw);
+      done += 1;
+      if (done % 25 === 0 || done === workList.length) {
+        console.log(`… 进度 ${done}/${workList.length}`);
+      }
+      return outcome;
     });
 
     for (const outcome of outcomes) {
@@ -854,7 +965,8 @@ async function main() {
         generated += 1;
         if (outcome.source === "llm") llmOk += 1;
         if (outcome.source === "rule-fallback") ruleFallback += 1;
-        if (generated <= 30 || workList.length <= 50) {
+        if (outcome.source === "keep-on-fail") keepFail += 1;
+        if (llmOk + ruleFallback + keepFail <= 30 || workList.length <= 50) {
           console.log(
             `✨ [${outcome.source}] ${outcome.poem.title}  →  ${formatMotifs(outcome.poem.motifs)}  (${outcome.poem.theme})  [${tagStr}]`,
           );
@@ -886,9 +998,14 @@ async function main() {
     }
   }
 
+  const finalLlm = next.filter((p) => p.motifsSource === "llm").length;
   console.log(
     `\n生成 ${generated} · 跳过 ${skipped}` +
-      (useLlm ? ` · llm成功 ${llmOk} · rule回退 ${ruleFallback}` : ""),
+      (useLlm
+        ? ` · llm成功 ${llmOk} · rule回退 ${ruleFallback}` +
+          (keepOnFail ? ` · 保留失败 ${keepFail}` : "") +
+          ` · 库内 llm 合计 ${finalLlm}/${next.length}`
+        : ""),
   );
 
   if (dryRun) {
