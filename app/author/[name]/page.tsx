@@ -46,19 +46,12 @@ export default async function AuthorPage({ params }: Props) {
       <InkBackground theme="landscape" intensity="soft" />
       <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
         <ScrollReveal>
-          <AuthorPageHeader
-            author={author}
-            workCount={works.length}
-            tagStats={tagStats}
-          />
+          <AuthorPageHeader author={author} tagStats={tagStats} />
         </ScrollReveal>
 
         <ScrollReveal>
-          <T
-            as="h2"
-            className="type-group-label mb-10 text-center"
-          >
-            本 站 收 录
+          <T as="h2" className="type-group-label mb-10 text-center">
+            {`本站收录 ${works.length} 篇`}
           </T>
         </ScrollReveal>
 

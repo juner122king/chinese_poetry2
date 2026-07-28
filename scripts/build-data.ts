@@ -22,6 +22,7 @@ import {
   inferThemeFromText,
 } from "../lib/generate-motifs";
 import { TAG_SELECT_MAX } from "../lib/imagery-taxonomy";
+import { resolveAuthorYears } from "../lib/author-years";
 import type { Author, Poem, PoemForm, PoemSource, PoemTag } from "../lib/types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -578,6 +579,20 @@ async function main() {
     }
   }
 
+  /** 宋源全文，供生卒年解析（短 bio 常截断年份） */
+  const yearsSourceByName = new Map<string, string>();
+  for (const a of authorsCi) {
+    const name = toSimplified(a.name);
+    const raw = [a.short_description, a.description].filter(Boolean).join("\n");
+    if (raw) yearsSourceByName.set(name, raw);
+  }
+  for (const a of authorsTang) {
+    const name = toSimplified(a.name);
+    if (a.desc && !yearsSourceByName.has(name)) {
+      yearsSourceByName.set(name, a.desc);
+    }
+  }
+
   const usedAuthorSlugs = new Set<string>();
   const authorNames = Array.from(new Set(poems.map((p) => p.author)));
   const authors: Author[] = authorNames.map((name) => {
@@ -587,12 +602,18 @@ async function main() {
       bioByName.get(name) ||
       `${name}，${dynasty}代诗人。`;
     const slug = uniqueSlug(toSlug(name), usedAuthorSlugs);
+    const years = resolveAuthorYears(
+      name,
+      bio,
+      yearsSourceByName.get(name),
+    );
     return {
       name,
       slug,
       dynasty,
       bio,
       poemIds: poems.filter((p) => p.author === name).map((p) => p.id),
+      ...(years ? { years } : {}),
     };
   });
 

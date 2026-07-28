@@ -6,7 +6,7 @@ import PoemCard from "./PoemCard";
 import { useScript } from "./ScriptProvider";
 
 /** 首屏展示篇数；超出后需展开 */
-export const AUTHOR_WORKS_PREVIEW = 12;
+export const AUTHOR_WORKS_PREVIEW = 4;
 
 type Props = {
   works: Poem[];

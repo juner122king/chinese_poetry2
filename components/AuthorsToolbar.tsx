@@ -32,6 +32,17 @@ function chipClass(active: boolean) {
   return `poem-filter-chip${active ? " poem-filter-chip--active" : ""}`;
 }
 
+function Divider() {
+  return (
+    <span
+      className="select-none text-[10px] text-[color:var(--type-faint)]"
+      aria-hidden
+    >
+      ·
+    </span>
+  );
+}
+
 export default function AuthorsToolbar({
   filters,
   dynasties,
@@ -62,46 +73,46 @@ export default function AuthorsToolbar({
   }
 
   return (
-    <div className="mb-12 flex flex-col items-center gap-6">
-      <motion.div
-        className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
-        role="group"
-        aria-label={t("朝代")}
-        initial={reduce ? false : { opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: reduce ? 0 : 0, ease }}
-      >
-        <Link
-          href={buildAuthorsHref({ q: filters.q })}
-          className={chipClass(!filters.dynasty)}
-          scroll={false}
+    <motion.div
+      className="mb-8 flex flex-col items-center"
+      initial={reduce ? false : { opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease }}
+    >
+      {/* 主行：朝代 + 检索 + 计数 */}
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <div
+          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
+          role="group"
+          aria-label={t("朝代")}
         >
-          {t("全部")}
-        </Link>
-        {dynasties.map((d) => (
           <Link
-            key={d}
-            href={buildAuthorsHref({
-              dynasty: filters.dynasty === d ? undefined : d,
-              q: filters.q,
-            })}
-            className={chipClass(filters.dynasty === d)}
+            href={buildAuthorsHref({ q: filters.q })}
+            className={chipClass(!filters.dynasty)}
             scroll={false}
           >
-            {t(d)}
+            {t("全部")}
           </Link>
-        ))}
-      </motion.div>
+          {dynasties.map((d) => (
+            <Link
+              key={d}
+              href={buildAuthorsHref({
+                dynasty: filters.dynasty === d ? undefined : d,
+                q: filters.q,
+              })}
+              className={chipClass(filters.dynasty === d)}
+              scroll={false}
+            >
+              {t(d)}
+            </Link>
+          ))}
+        </div>
 
-      <motion.div
-        className="flex w-full max-w-xs flex-col items-center gap-3"
-        initial={reduce ? false : { opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: reduce ? 0 : 0.08, ease }}
-      >
+        <Divider />
+
         <button
           type="button"
-          className="type-meta transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+          className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
           aria-expanded={searchOpen}
           aria-controls={searchPanelId}
           onClick={() => setSearchOpen((o) => !o)}
@@ -109,65 +120,60 @@ export default function AuthorsToolbar({
           {searchOpen ? t("收起") : t("检索")}
         </button>
 
-        <AnimatePresence initial={false}>
-          {searchOpen ? (
-            <motion.form
-              id={searchPanelId}
-              key="search-panel"
-              onSubmit={submitSearch}
-              className="flex w-full items-end gap-3 overflow-hidden"
-              initial={
-                reduce
-                  ? { opacity: 1 }
-                  : { opacity: 0, height: 0, y: -6 }
-              }
-              animate={{ opacity: 1, height: "auto", y: 0 }}
-              exit={
-                reduce
-                  ? { opacity: 0 }
-                  : { opacity: 0, height: 0, y: -4 }
-              }
-              transition={{ duration: reduce ? 0.15 : 0.48, ease }}
-            >
-              <label className="min-w-0 flex-1">
-                <span className="sr-only">{t("检索姓名")}</span>
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t("姓名")}
-                  autoFocus={!filters.q}
-                  className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
-                />
-              </label>
-              <button
-                type="submit"
-                className="type-meta shrink-0 pb-2 transition-colors duration-300 hover:text-[color:var(--type-active)]"
-              >
-                {t("寻")}
-              </button>
-            </motion.form>
-          ) : null}
-        </AnimatePresence>
-      </motion.div>
+        <Divider />
 
-      <motion.div
-        className="flex flex-col items-center gap-1.5 text-center"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: reduce ? 0 : 0.14, ease }}
-      >
-        <p className="type-meta">{t(`得 ${resultCount} 家`)}</p>
+        <p className="type-meta text-[11px]">{t(`得 ${resultCount} 家`)}</p>
+
         {active && (
-          <Link
-            href="/authors"
-            className="text-link-elegant text-[11px]"
-            scroll={false}
-          >
-            {t("清除筛选")}
-          </Link>
+          <>
+            <Divider />
+            <Link
+              href="/authors"
+              className="text-link-elegant text-[11px]"
+              scroll={false}
+            >
+              {t("清除筛选")}
+            </Link>
+          </>
         )}
-      </motion.div>
-    </div>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {searchOpen ? (
+          <motion.form
+            id={searchPanelId}
+            key="search-panel"
+            onSubmit={submitSearch}
+            className="mt-3 flex w-full max-w-xs items-end gap-3 overflow-hidden"
+            initial={
+              reduce ? { opacity: 1 } : { opacity: 0, height: 0, y: -4 }
+            }
+            animate={{ opacity: 1, height: "auto", y: 0 }}
+            exit={
+              reduce ? { opacity: 0 } : { opacity: 0, height: 0, y: -2 }
+            }
+            transition={{ duration: reduce ? 0.12 : 0.35, ease }}
+          >
+            <label className="min-w-0 flex-1">
+              <span className="sr-only">{t("检索姓名")}</span>
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={t("姓名")}
+                autoFocus={!filters.q}
+                className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-1.5 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
+              />
+            </label>
+            <button
+              type="submit"
+              className="type-meta shrink-0 pb-1.5 text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+            >
+              {t("寻")}
+            </button>
+          </motion.form>
+        ) : null}
+      </AnimatePresence>
+    </motion.div>
   );
 }

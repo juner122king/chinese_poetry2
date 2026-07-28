@@ -105,6 +105,8 @@ export type Author = {
   dynasty: string;
   bio: string;
   poemIds: string[];
+  /** 生卒年展示串，如 `701—762`、`约 1155—约 1221`；缺省则详情不展示 */
+  years?: string;
 };
 
 export function formatMotifs(motifs: string[]): string {

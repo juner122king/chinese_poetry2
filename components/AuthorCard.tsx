@@ -19,7 +19,6 @@ export default function AuthorCard({
   author,
   hideDynasty = false,
 }: Props) {
-  const workCount = author.poemIds.length;
   const showBio = !isPlaceholderBio(author.bio);
   const seal = author.name.slice(0, 1);
 
@@ -50,12 +49,6 @@ export default function AuthorCard({
               {author.dynasty}
             </T>
           )}
-          <T
-            as="p"
-            className={`type-meta text-[11px] tracking-[0.28em] ${hideDynasty ? "" : "mt-1.5"}`}
-          >
-            {`本站 ${workCount} 篇`}
-          </T>
         </div>
         {showBio && (
           <T

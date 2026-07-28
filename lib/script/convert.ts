@@ -46,5 +46,7 @@ export function convertAuthor(author: Author, mode: ScriptMode): Author {
     name: convertText(author.name, mode),
     dynasty: convertText(author.dynasty, mode),
     bio: convertText(author.bio, mode),
+    // years 为西历数字串，无需转换
+    years: author.years,
   };
 }

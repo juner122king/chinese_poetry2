@@ -3,25 +3,22 @@
 import Link from "next/link";
 import type { Author, PoemTag } from "@/lib/types";
 import { isPlaceholderBio } from "@/lib/author-display";
+import { authorYears } from "@/lib/author-years";
 import { getTagLabel } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
 import { useScript } from "./ScriptProvider";
 
 type Props = {
   author: Author;
-  workCount: number;
   tagStats: { tag: PoemTag; count: number }[];
 };
 
-export default function AuthorPageHeader({
-  author,
-  workCount,
-  tagStats,
-}: Props) {
+export default function AuthorPageHeader({ author, tagStats }: Props) {
   const { t, tAuthor } = useScript();
   const display = tAuthor(author);
   const seal = display.name.slice(0, 1);
   const showBio = !isPlaceholderBio(display.bio);
+  const years = authorYears(author);
 
   return (
     <header className="mb-16 flex flex-col items-center text-center">
@@ -35,12 +32,16 @@ export default function AuthorPageHeader({
       <p className="type-dynasty mb-3 text-[11px] tracking-[0.45em]">
         {display.dynasty}
       </p>
-      <h1 className="type-display mb-4 text-3xl md:text-4xl">{display.name}</h1>
-      <p className={`type-meta ${showBio ? "mb-8" : "mb-0"}`}>
-        {t(`本站 ${workCount} 篇`)}
-      </p>
+      <h1 className="type-display mb-3 text-3xl md:text-4xl">{display.name}</h1>
+      {years && (
+        <p className="type-meta mb-6 text-[11px] tracking-[0.28em]">
+          {years.replace(/—/g, " — ")}
+        </p>
+      )}
       {showBio && (
-        <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
+        <p
+          className={`max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)] ${years ? "" : "mt-5"}`}
+        >
           {display.bio}
         </p>
       )}
