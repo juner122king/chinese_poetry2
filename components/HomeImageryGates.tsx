@@ -33,7 +33,7 @@ export default function HomeImageryGates({ counts }: Props) {
             <h2 className="type-display text-2xl md:text-3xl">
               {t("按 意 境 入 门")}
             </h2>
-            <span className="mt-2 h-px w-10 bg-[color:var(--type-faint)]" />
+            <span className="ink-rule ink-rule--md mt-2" aria-hidden />
           </div>
         </ScrollReveal>
 

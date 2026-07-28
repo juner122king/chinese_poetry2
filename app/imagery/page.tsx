@@ -48,7 +48,7 @@ export default function ImageryPage() {
             >
               按归集标签入诗卷。春月离别，各有门径。
             </T>
-            <span className="mt-4 h-px w-12 bg-[color:var(--type-faint)]" />
+            <span className="ink-rule ink-rule--lg mt-4" aria-hidden />
           </header>
         </ScrollReveal>
 

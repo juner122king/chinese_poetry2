@@ -41,7 +41,7 @@ export default function ShelfView() {
           <p className="mt-2 max-w-md font-serif text-xs leading-relaxed tracking-[0.2em] text-[color:var(--type-meta)]">
             {t("收入本机，不云不散。刷新仍在。")}
           </p>
-          <span className="mt-4 h-px w-12 bg-[color:var(--type-faint)]" />
+          <span className="ink-rule ink-rule--lg mt-4" aria-hidden />
         </header>
       </ScrollReveal>
 

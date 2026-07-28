@@ -1183,6 +1183,35 @@ body {
   color: var(--type-meta);
 }
 
+/*
+ * 古籍装饰短线：水平梭形，两头锐
+ * 细长墨线；间距仍由调用方 class 控制
+ */
+.ink-rule {
+  display: block;
+  width: 3.5rem; /* 默认更长 */
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--type-faint);
+  /* 两端收得更长更尖，中段保持细线感 */
+  clip-path: polygon(
+    0 50%,
+    18% 0,
+    82% 0,
+    100% 50%,
+    82% 100%,
+    18% 100%
+  );
+}
+
+.ink-rule--md {
+  width: 4.25rem;
+}
+
+.ink-rule--lg {
+  width: 5rem;
+}
+
 /* 次级文字链：遍览 / 归卷首 / 回诗卷 */
 .text-link-elegant {
   position: relative;

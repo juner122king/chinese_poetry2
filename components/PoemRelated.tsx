@@ -29,7 +29,7 @@ export default function PoemRelated({ items }: Props) {
           >
             {t("同 境 相 逢")}
           </h2>
-          <span className="mt-1 h-px w-10 bg-[color:var(--type-faint)]" />
+          <span className="ink-rule ink-rule--md mt-1" aria-hidden />
         </div>
       </ScrollReveal>
 

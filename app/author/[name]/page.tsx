@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AuthorCard from "@/components/AuthorCard";
-import AuthorPageHeader from "@/components/AuthorPageHeader";
+import AuthorLifeSection from "@/components/AuthorLifeSection";
+import AuthorScrollHero from "@/components/AuthorScrollHero";
 import AuthorWorksList from "@/components/AuthorWorksList";
-import InkBackground from "@/components/InkBackground";
 import ScrollReveal from "@/components/ScrollReveal";
 import T from "@/components/T";
+import ThemeScene from "@/components/ThemeScene";
 import {
   authors,
   getAuthorBySlug,
@@ -13,6 +14,11 @@ import {
   getAuthorWorks,
   getRelatedAuthors,
 } from "@/data/authors";
+import {
+  getAuthorOpening,
+  isPlaceholderBio,
+  formatCardBio,
+} from "@/lib/author-display";
 
 type Props = {
   params: Promise<{ name: string }>;
@@ -32,6 +38,11 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+/**
+ * 诗人详情 = 一本数字古卷
+ * 第一屏：人 · 时代 · 代表诗
+ * 下卷：生平 → 诗作 → 同朝
+ */
 export default async function AuthorPage({ params }: Props) {
   const { name } = await params;
   const author = getAuthorBySlug(name);
@@ -40,54 +51,62 @@ export default async function AuthorPage({ params }: Props) {
   const works = getAuthorWorks(author);
   const tagStats = getAuthorTagStats(works, 6);
   const related = getRelatedAuthors(author, 4);
+  const opening = getAuthorOpening(works);
+  const hasLife = !isPlaceholderBio(formatCardBio(author.bio));
+  /** 与开卷代表作同源意境；无作品时回退山水 */
+  const bgTheme = opening?.poem.theme ?? "landscape";
 
   return (
     <div className="relative min-h-screen">
-      <InkBackground theme="landscape" intensity="soft" />
-      <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
-        <ScrollReveal>
-          <AuthorPageHeader author={author} tagStats={tagStats} />
-        </ScrollReveal>
+      <ThemeScene theme={bgTheme} />
+      <div className="relative z-10">
+        <AuthorScrollHero
+          author={author}
+          opening={opening}
+          nextSectionId={hasLife ? "author-life" : "author-works"}
+        />
 
-        <ScrollReveal>
-          <T as="h2" className="type-group-label mb-10 text-center">
-            {`本站收录 ${works.length} 篇`}
-          </T>
-        </ScrollReveal>
+        <AuthorLifeSection author={author} tagStats={tagStats} />
 
-        {works.length === 0 ? (
-          <p className="type-meta py-12 text-center text-sm">
-            <T>本站暂未收录作品。</T>
-          </p>
-        ) : (
-          <AuthorWorksList works={works} />
-        )}
+        <AuthorWorksList
+          works={works}
+          authorSlug={author.slug}
+          tagStats={hasLife ? [] : tagStats}
+        />
 
         {related.length > 0 && (
-          <section className="mt-24">
-            <ScrollReveal>
-              <T
-                as="h2"
-                className="type-group-label mb-10 text-center"
-              >
-                同 朝 名 家
-              </T>
-            </ScrollReveal>
-            <div className="grid auto-rows-fr grid-cols-2 gap-4 md:grid-cols-4">
-              {related.map((a, i) => (
-                <AuthorCard
-                  key={a.slug}
-                  author={a}
-                  index={i}
-                  variant="compact"
-                  hideDynasty
-                />
-              ))}
+          <section className="px-6 pb-8 pt-8 md:px-10 md:pt-12">
+            <div className="mx-auto max-w-5xl">
+              <ScrollReveal>
+                <div className="mb-12 flex flex-col items-center md:mb-14">
+                  <span
+                    className="ink-rule mb-8"
+                    aria-hidden
+                  />
+                  <T
+                    as="h2"
+                    className="type-group-label tracking-[0.55em]"
+                  >
+                    同 朝
+                  </T>
+                </div>
+              </ScrollReveal>
+              <div className="grid auto-rows-fr grid-cols-2 gap-4 md:grid-cols-4">
+                {related.map((a, i) => (
+                  <AuthorCard
+                    key={a.slug}
+                    author={a}
+                    index={i}
+                    variant="compact"
+                    hideDynasty
+                  />
+                ))}
+              </div>
             </div>
           </section>
         )}
 
-        <div className="mt-16 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center sm:gap-10">
+        <div className="flex flex-col items-center gap-4 px-6 pb-28 pt-16 text-center sm:flex-row sm:justify-center sm:gap-10 md:px-10">
           <Link
             href="/authors"
             className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
