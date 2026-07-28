@@ -61,13 +61,14 @@ export default async function AuthorsPage({ searchParams }: Props) {
                     <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />
                   </div>
                 </ScrollReveal>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid auto-rows-fr grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                   {group.map((author, i) => (
                     <AuthorCard
                       key={author.slug}
                       author={author}
                       index={i}
                       hideDynasty
+                      variant="default"
                     />
                   ))}
                 </div>

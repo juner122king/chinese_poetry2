@@ -93,9 +93,15 @@ export default function HomePage() {
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {/* 3 列完整卡：含简介/生卒，避免 6 列 compact 过简 */}
+          <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {authors.map((author, i) => (
-              <AuthorCard key={author.slug} author={author} index={i} />
+              <AuthorCard
+                key={author.slug}
+                author={author}
+                index={i}
+                variant="default"
+              />
             ))}
           </div>
 

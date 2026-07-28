@@ -73,9 +73,15 @@ export default async function AuthorPage({ params }: Props) {
                 同 朝 名 家
               </T>
             </ScrollReveal>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid auto-rows-fr grid-cols-2 gap-4 md:grid-cols-4">
               {related.map((a, i) => (
-                <AuthorCard key={a.slug} author={a} index={i} />
+                <AuthorCard
+                  key={a.slug}
+                  author={a}
+                  index={i}
+                  variant="compact"
+                  hideDynasty
+                />
               ))}
             </div>
           </section>
