@@ -36,16 +36,10 @@ export default async function PoemsPage({ searchParams }: Props) {
   const dynasties = dynastiesFromPoems(poems);
   const tagOptions = topTagsFromPoems(poems, 12);
 
-  /** 有筛选时扁平展示；无筛选时按朝代分组（仅当前页切片） */
-  const showGrouped = !filters.dynasty && !filters.tag && !filters.q;
-  const dynastiesOnPage = showGrouped
-    ? Array.from(new Set(pageItems.map((p) => p.dynasty)))
-    : [];
-
   return (
     <div className="relative min-h-screen">
       <InkBackground theme="landscape" intensity="soft" />
-      <div className="relative z-10 mx-auto max-w-6xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
+      <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
         <ScrollReveal>
           <PoemsHeader count={poems.length} />
         </ScrollReveal>
@@ -61,29 +55,8 @@ export default async function PoemsPage({ searchParams }: Props) {
           <p className="type-meta py-20 text-center text-sm">
             <T>未得篇章，可改筛选或清除后再寻。</T>
           </p>
-        ) : showGrouped ? (
-          dynastiesOnPage.map((dynasty) => {
-            const group = pageItems.filter((p) => p.dynasty === dynasty);
-            return (
-              <section key={dynasty} className="mb-20">
-                <ScrollReveal>
-                  <div className="mb-10 flex items-center gap-6">
-                    <T as="span" className="type-group-label">
-                      {dynasty}
-                    </T>
-                    <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />
-                  </div>
-                </ScrollReveal>
-                <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
-                  {group.map((poem, i) => (
-                    <PoemCard key={poem.id} poem={poem} index={i} />
-                  ))}
-                </div>
-              </section>
-            );
-          })
         ) : (
-          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+          <div className="columns-1 gap-6 sm:columns-2">
             {pageItems.map((poem, i) => (
               <PoemCard key={poem.id} poem={poem} index={i} />
             ))}

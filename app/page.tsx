@@ -47,17 +47,6 @@ export default function HomePage() {
     <>
       <HeroSection key={heroPoem.id} poem={heroPoem} />
 
-      {/* Catalog whisper */}
-      <section className="relative border-b border-xuan/5 px-6 py-12 md:px-10">
-        <ScrollReveal>
-          <p className="mx-auto max-w-2xl text-center font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
-            <T>
-              {`收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`}
-            </T>
-          </p>
-        </ScrollReveal>
-      </section>
-
       {/* Featured poems */}
       <section
         id="featured"
@@ -118,10 +107,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-xuan/5 px-6 py-12 text-center">
+      <footer className="border-t border-xuan/5 px-6 py-12 text-center md:py-14">
+        <ScrollReveal>
+          <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
+            <T>
+              {`收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`}
+            </T>
+          </p>
+        </ScrollReveal>
         <T
           as="p"
-          className="type-quiet tracking-[0.35em]"
+          className="type-quiet mt-6 tracking-[0.35em]"
         >
           墨韵 · 东方诗词视觉体验
         </T>
