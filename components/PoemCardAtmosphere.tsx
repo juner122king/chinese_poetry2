@@ -51,7 +51,7 @@ export default function PoemCardAtmosphere({ theme, active, reduce }: Props) {
             />
           )}
           {/* 轻 scrim，保证题名/摘句对比度 */}
-          <div className="absolute inset-0 bg-[#0D0D0D]/25" />
+          <div className="absolute inset-0 bg-ink/25" />
         </motion.div>
       ) : null}
     </AnimatePresence>
