@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { Author, PoemTag } from "@/lib/types";
+import { isPlaceholderBio } from "@/lib/author-display";
 import { getTagLabel } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
 import { useScript } from "./ScriptProvider";
@@ -20,6 +21,7 @@ export default function AuthorPageHeader({
   const { t, tAuthor } = useScript();
   const display = tAuthor(author);
   const seal = display.name.slice(0, 1);
+  const showBio = !isPlaceholderBio(display.bio);
 
   return (
     <header className="mb-16 flex flex-col items-center text-center">
@@ -34,12 +36,14 @@ export default function AuthorPageHeader({
         {display.dynasty}
       </p>
       <h1 className="type-display mb-4 text-3xl md:text-4xl">{display.name}</h1>
-      <p className="type-meta mb-8">
+      <p className={`type-meta ${showBio ? "mb-8" : "mb-0"}`}>
         {t(`本站 ${workCount} 篇`)}
       </p>
-      <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
-        {display.bio}
-      </p>
+      {showBio && (
+        <p className="max-w-lg font-serif text-sm leading-[2] tracking-[0.12em] text-[color:var(--type-secondary)]">
+          {display.bio}
+        </p>
+      )}
 
       {tagStats.length > 0 && (
         <ul
@@ -57,9 +61,9 @@ export default function AuthorPageHeader({
                 </span>
               )}
               <Link
-                href={buildPoemsHref({ tag })}
+                href={buildPoemsHref({ tag, author: author.slug })}
                 className="type-meta tracking-[0.3em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
-                title={t(`${count} 篇`)}
+                title={t(`本家 ${count} 篇`)}
               >
                 {t(getTagLabel(tag))}
               </Link>

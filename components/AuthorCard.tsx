@@ -1,33 +1,30 @@
-"use client";
-
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { isPlaceholderBio } from "@/lib/author-display";
 import type { Author } from "@/lib/types";
-import { useScript } from "./ScriptProvider";
+import T from "./T";
 
 type Props = {
   author: Author;
+  /** @deprecated 入场动画已移除，保留以免调用方改动 */
   index?: number;
+  /** 目录已按朝代分组时隐藏卡片上的朝代，避免重复 */
+  hideDynasty?: boolean;
 };
 
-export default function AuthorCard({ author, index = 0 }: Props) {
-  const { tAuthor } = useScript();
-  const display = tAuthor(author);
-  const seal = display.name.slice(0, 1);
-  const reduce = useReducedMotion();
-  const enterDelay = Math.min(index, 8) * 0.05;
+/**
+ * 名家卡片（Server Component）。
+ * 繁简仅通过轻量 client 节点 `T` 转换；无 framer-motion，避免目录页百余卡各自水合与 IntersectionObserver。
+ */
+export default function AuthorCard({
+  author,
+  hideDynasty = false,
+}: Props) {
+  const workCount = author.poemIds.length;
+  const showBio = !isPlaceholderBio(author.bio);
+  const seal = author.name.slice(0, 1);
 
   return (
-    <motion.article
-      initial={reduce ? false : { opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.8,
-        delay: reduce ? 0 : enterDelay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
+    <article>
       <Link
         href={`/author/${author.slug}`}
         className="group flex flex-col items-center gap-5 rounded-sm border border-transparent px-6 py-8 transition-all duration-500 hover:border-xuan/10 hover:bg-xuan/[0.03] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
@@ -38,19 +35,37 @@ export default function AuthorCard({ author, index = 0 }: Props) {
             style={{ borderRadius: "42% 58% 50% 50% / 48% 48% 52% 52%" }}
           />
           <span className="font-wenkai text-2xl tracking-widest text-cinnabar">
-            {seal}
+            <T>{seal}</T>
           </span>
         </div>
         <div className="text-center">
-          <h3 className="type-display mb-1 text-lg tracking-[0.3em]">
-            {display.name}
-          </h3>
-          <p className="type-dynasty text-xs">{display.dynasty}</p>
+          <T
+            as="h3"
+            className="type-display mb-1 text-lg tracking-[0.3em]"
+          >
+            {author.name}
+          </T>
+          {!hideDynasty && (
+            <T as="p" className="type-dynasty text-xs">
+              {author.dynasty}
+            </T>
+          )}
+          <T
+            as="p"
+            className={`type-meta text-[11px] tracking-[0.28em] ${hideDynasty ? "" : "mt-1.5"}`}
+          >
+            {`本站 ${workCount} 篇`}
+          </T>
         </div>
-        <p className="line-clamp-2 max-w-[14rem] text-center font-serif text-xs leading-relaxed tracking-wider text-[color:var(--type-meta)]">
-          {display.bio}
-        </p>
+        {showBio && (
+          <T
+            as="p"
+            className="line-clamp-2 max-w-[14rem] text-center font-serif text-xs leading-relaxed tracking-wider text-[color:var(--type-meta)]"
+          >
+            {author.bio}
+          </T>
+        )}
       </Link>
-    </motion.article>
+    </article>
   );
 }

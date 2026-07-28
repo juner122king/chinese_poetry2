@@ -21,6 +21,7 @@ export default function PoemsPagination({ filters, totalPages }: Props) {
     dynasty: filters.dynasty,
     tag: filters.tag,
     theme: filters.theme,
+    author: filters.author,
     q: filters.q,
   };
 

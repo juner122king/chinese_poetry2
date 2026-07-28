@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AuthorCard from "@/components/AuthorCard";
 import AuthorPageHeader from "@/components/AuthorPageHeader";
+import AuthorWorksList from "@/components/AuthorWorksList";
 import InkBackground from "@/components/InkBackground";
-import PoemCard from "@/components/PoemCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import T from "@/components/T";
 import {
@@ -25,9 +25,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { name } = await params;
   const author = getAuthorBySlug(name);
-  if (!author) return { title: "诗人 · 墨韵" };
+  if (!author) return { title: "名家 · 墨韵" };
   return {
-    title: `${author.name} · 墨韵`,
+    title: `${author.name} · 名家 · 墨韵`,
     description: author.bio,
   };
 }
@@ -58,7 +58,7 @@ export default async function AuthorPage({ params }: Props) {
             as="h2"
             className="type-group-label mb-10 text-center"
           >
-            代 表 作 品
+            本 站 收 录
           </T>
         </ScrollReveal>
 
@@ -67,11 +67,7 @@ export default async function AuthorPage({ params }: Props) {
             <T>本站暂未收录作品。</T>
           </p>
         ) : (
-          <div className="columns-1 gap-6 sm:columns-2">
-            {works.map((poem, i) => (
-              <PoemCard key={poem.id} poem={poem} index={i} />
-            ))}
-          </div>
+          <AuthorWorksList works={works} />
         )}
 
         {related.length > 0 && (

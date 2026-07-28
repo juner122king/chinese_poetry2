@@ -7,90 +7,44 @@ import {
   useId,
   useState,
   type FormEvent,
-  type ReactNode,
 } from "react";
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
 } from "framer-motion";
-import { getAuthorBySlug } from "@/data/authors";
-import { getTagLabel } from "@/lib/imagery-taxonomy";
 import {
-  buildPoemsHref,
-  hasActivePoemFilters,
-  type PoemListFilters,
-} from "@/lib/poems-filter";
-import type { PoemTag } from "@/lib/types";
+  buildAuthorsHref,
+  hasActiveAuthorFilters,
+  type AuthorListFilters,
+} from "@/lib/authors-filter";
 import { useScript } from "./ScriptProvider";
 
 type Props = {
-  filters: PoemListFilters;
+  filters: AuthorListFilters;
   dynasties: string[];
-  tagOptions: PoemTag[];
   resultCount: number;
 };
 
-/** 与全站 --ease-elegant 一致 */
 const ease = [0.22, 1, 0.36, 1] as const;
 
 function chipClass(active: boolean) {
   return `poem-filter-chip${active ? " poem-filter-chip--active" : ""}`;
 }
 
-function FilterSection({
-  label,
-  children,
-  delay = 0,
-  reduce,
-}: {
-  label: string;
-  children: ReactNode;
-  delay?: number;
-  reduce: boolean | null;
-}) {
-  return (
-    <motion.div
-      className="flex max-w-3xl flex-col items-center gap-2.5"
-      initial={reduce ? false : { opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, delay: reduce ? 0 : delay, ease }}
-    >
-      <p className="type-quiet">{label}</p>
-      {children}
-    </motion.div>
-  );
-}
-
-export default function PoemsToolbar({
+export default function AuthorsToolbar({
   filters,
   dynasties,
-  tagOptions,
   resultCount,
 }: Props) {
-  const { t, tAuthor } = useScript();
+  const { t } = useScript();
   const router = useRouter();
   const reduce = useReducedMotion();
   const searchPanelId = useId();
   const [query, setQuery] = useState(filters.q ?? "");
   const [searchOpen, setSearchOpen] = useState(Boolean(filters.q));
-  const active = hasActivePoemFilters(filters);
-  const filterAuthor = filters.author
-    ? getAuthorBySlug(filters.author)
-    : undefined;
-  const authorLabel = filterAuthor
-    ? tAuthor(filterAuthor).name
-    : undefined;
+  const active = hasActiveAuthorFilters(filters);
 
-  const base = {
-    dynasty: filters.dynasty,
-    tag: filters.tag,
-    theme: filters.theme,
-    author: filters.author,
-    q: filters.q,
-  };
-
-  // 带检索进页或 URL q 变化时保持展开
   useEffect(() => {
     if (filters.q) setSearchOpen(true);
     setQuery(filters.q ?? "");
@@ -100,17 +54,15 @@ export default function PoemsToolbar({
     e.preventDefault();
     const q = query.trim();
     router.push(
-      buildPoemsHref({
-        ...base,
+      buildAuthorsHref({
+        dynasty: filters.dynasty,
         q: q || undefined,
-        page: 1,
       }),
     );
   }
 
   return (
     <div className="mb-12 flex flex-col items-center gap-6">
-      {/* 朝代 */}
       <motion.div
         className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
         role="group"
@@ -120,11 +72,7 @@ export default function PoemsToolbar({
         transition={{ duration: 0.55, delay: reduce ? 0 : 0, ease }}
       >
         <Link
-          href={buildPoemsHref({
-            ...base,
-            dynasty: undefined,
-            page: 1,
-          })}
+          href={buildAuthorsHref({ q: filters.q })}
           className={chipClass(!filters.dynasty)}
           scroll={false}
         >
@@ -133,10 +81,9 @@ export default function PoemsToolbar({
         {dynasties.map((d) => (
           <Link
             key={d}
-            href={buildPoemsHref({
-              ...base,
+            href={buildAuthorsHref({
               dynasty: filters.dynasty === d ? undefined : d,
-              page: 1,
+              q: filters.q,
             })}
             className={chipClass(filters.dynasty === d)}
             scroll={false}
@@ -146,39 +93,11 @@ export default function PoemsToolbar({
         ))}
       </motion.div>
 
-      {/* 意境 */}
-      <FilterSection label={t("意境")} delay={0.06} reduce={reduce}>
-        <div
-          className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
-          role="group"
-          aria-label={t("意境")}
-        >
-          {tagOptions.map((tag) => {
-            const selected = filters.tag === tag;
-            return (
-              <Link
-                key={tag}
-                href={buildPoemsHref({
-                  ...base,
-                  tag: selected ? undefined : tag,
-                  page: 1,
-                })}
-                className={chipClass(selected)}
-                scroll={false}
-              >
-                {t(getTagLabel(tag))}
-              </Link>
-            );
-          })}
-        </div>
-      </FilterSection>
-
-      {/* 检索：默认收起 */}
       <motion.div
         className="flex w-full max-w-xs flex-col items-center gap-3"
         initial={reduce ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: reduce ? 0 : 0.12, ease }}
+        transition={{ duration: 0.55, delay: reduce ? 0 : 0.08, ease }}
       >
         <button
           type="button"
@@ -211,12 +130,12 @@ export default function PoemsToolbar({
               transition={{ duration: reduce ? 0.15 : 0.48, ease }}
             >
               <label className="min-w-0 flex-1">
-                <span className="sr-only">{t("检索题名或作者")}</span>
+                <span className="sr-only">{t("检索姓名")}</span>
                 <input
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t("题名 · 作者")}
+                  placeholder={t("姓名")}
                   autoFocus={!filters.q}
                   className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-2 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
                 />
@@ -236,37 +155,12 @@ export default function PoemsToolbar({
         className="flex flex-col items-center gap-1.5 text-center"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: reduce ? 0 : 0.2, ease }}
+        transition={{ duration: 0.5, delay: reduce ? 0 : 0.14, ease }}
       >
-        {authorLabel && (
-          <p className="type-meta">
-            <Link
-              href={`/author/${filters.author}`}
-              className="transition-colors duration-300 hover:text-[color:var(--type-active)]"
-              scroll={false}
-            >
-              {t(`名家 · ${authorLabel}`)}
-            </Link>
-            <span className="mx-2 text-[color:var(--type-faint)]" aria-hidden>
-              ·
-            </span>
-            <Link
-              href={buildPoemsHref({
-                ...base,
-                author: undefined,
-                page: 1,
-              })}
-              className="text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)]"
-              scroll={false}
-            >
-              {t("去掉名家")}
-            </Link>
-          </p>
-        )}
-        <p className="type-meta">{t(`得 ${resultCount} 篇`)}</p>
+        <p className="type-meta">{t(`得 ${resultCount} 家`)}</p>
         {active && (
           <Link
-            href="/poems"
+            href="/authors"
             className="text-link-elegant text-[11px]"
             scroll={false}
           >

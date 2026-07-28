@@ -1,3 +1,4 @@
+import { getAuthorBySlug } from "@/data/authors";
 import { taxonomyById } from "@/lib/imagery-taxonomy";
 import { themeMap } from "@/lib/theme-map";
 import type { Poem, PoemTag, PoemTheme } from "@/lib/types";
@@ -8,6 +9,8 @@ export type PoemListFilters = {
   dynasty?: string;
   tag?: PoemTag;
   theme?: PoemTheme;
+  /** 名家 slug，与 tag 等可组合 */
+  author?: string;
   q?: string;
   page: number;
 };
@@ -34,22 +37,32 @@ export function parsePoemListFilters(
   const dynastyRaw = firstParam(searchParams.dynasty)?.trim();
   const tagRaw = firstParam(searchParams.tag)?.trim();
   const themeRaw = firstParam(searchParams.theme)?.trim();
+  const authorRaw = firstParam(searchParams.author)?.trim();
   const qRaw = firstParam(searchParams.q)?.trim();
   const pageRaw = firstParam(searchParams.page);
 
   const pageNum = pageRaw ? Number.parseInt(pageRaw, 10) : 1;
+  const author =
+    authorRaw && getAuthorBySlug(authorRaw) ? authorRaw : undefined;
 
   return {
     dynasty: dynastyRaw || undefined,
     tag: tagRaw && isPoemTag(tagRaw) ? tagRaw : undefined,
     theme: themeRaw && isPoemTheme(themeRaw) ? themeRaw : undefined,
+    author,
     q: qRaw || undefined,
     page: Number.isFinite(pageNum) && pageNum > 0 ? pageNum : 1,
   };
 }
 
 export function hasActivePoemFilters(filters: PoemListFilters): boolean {
-  return Boolean(filters.dynasty || filters.tag || filters.theme || filters.q);
+  return Boolean(
+    filters.dynasty ||
+      filters.tag ||
+      filters.theme ||
+      filters.author ||
+      filters.q,
+  );
 }
 
 /** 构建 /poems 查询串；改筛选时默认回到第 1 页 */
@@ -60,6 +73,7 @@ export function buildPoemsHref(
   if (filters.dynasty) params.set("dynasty", filters.dynasty);
   if (filters.tag) params.set("tag", filters.tag);
   if (filters.theme) params.set("theme", filters.theme);
+  if (filters.author) params.set("author", filters.author);
   if (filters.q) params.set("q", filters.q);
   if (filters.page && filters.page > 1) {
     params.set("page", String(filters.page));
@@ -73,11 +87,15 @@ export function filterPoems(
   filters: PoemListFilters,
 ): Poem[] {
   const q = filters.q?.toLowerCase();
+  const authorName = filters.author
+    ? getAuthorBySlug(filters.author)?.name
+    : undefined;
 
   return all.filter((poem) => {
     if (filters.dynasty && poem.dynasty !== filters.dynasty) return false;
     if (filters.tag && !poem.tags?.includes(filters.tag)) return false;
     if (filters.theme && poem.theme !== filters.theme) return false;
+    if (authorName && poem.author !== authorName) return false;
     if (q) {
       const motifs = poem.motifs?.join("") ?? "";
       const rhythmic = poem.rhythmic ?? "";
