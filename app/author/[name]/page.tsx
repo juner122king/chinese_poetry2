@@ -51,7 +51,7 @@ export default async function AuthorPage({ params }: Props) {
   const works = getAuthorWorks(author);
   const tagStats = getAuthorTagStats(works, 6);
   const related = getRelatedAuthors(author, 4);
-  const opening = getAuthorOpening(works);
+  const opening = getAuthorOpening(works, author);
   const hasLife = !isPlaceholderBio(formatCardBio(author.bio));
   /** 与开卷代表作同源意境；无作品时回退山水 */
   const bgTheme = opening?.poem.theme ?? "landscape";

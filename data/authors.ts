@@ -1,4 +1,5 @@
 import { isDemotedAuthor } from "@/lib/author-display";
+import { orderWorksWithRepresentative } from "@/lib/author-openings";
 import type { Author, Poem, PoemTag } from "@/lib/types";
 import authorsJson from "./generated/authors.json";
 import { getPoemById } from "./poems";
@@ -23,11 +24,12 @@ export function getFeaturedAuthors(limit = 6): Author[] {
     .slice(0, limit);
 }
 
-/** 作者本站作品 */
+/** 作者本站作品：LLM/人工代表作置顶，其余按名篇分排序 */
 export function getAuthorWorks(author: Author): Poem[] {
-  return author.poemIds
+  const works = author.poemIds
     .map((id) => getPoemById(id))
     .filter((p): p is Poem => Boolean(p));
+  return orderWorksWithRepresentative(works, author.slug);
 }
 
 /** 作品意境标签频次（降序） */

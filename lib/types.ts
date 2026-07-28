@@ -97,6 +97,12 @@ export type Poem = {
   source?: PoemSource;
   /** 源库 uuid（若有） */
   sourceId?: string;
+  /**
+   * 开卷摘句：content 行下标（0-based），通常 2 句。
+   * 由离线 LLM / 人工写入；运行时优先于「前两句」兜底。
+   * 亦可落在 data/generated/opening-quotes.json，见 getOpeningQuoteLines。
+   */
+  openingQuoteLines?: number[];
 };
 
 export type Author = {

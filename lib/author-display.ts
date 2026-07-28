@@ -1,5 +1,8 @@
 import type { Author, Poem } from "@/lib/types";
-import { toDisplayLines } from "@/lib/poem-lines";
+import {
+  linesFromOpeningResolution,
+  resolveAuthorRepresentativePoem,
+} from "@/lib/author-openings";
 
 /** 占位简介：不在卡片 / 详情展示 */
 export function isPlaceholderBio(bio: string): boolean {
@@ -62,34 +65,25 @@ export type AuthorOpening = {
 };
 
 /**
- * 开卷代表作：精选优先，其次短篇近体；取前两句作卷首引文。
+ * 开卷代表作：优先离线 LLM/人工（author-openings.json）；
+ * 否则名篇打分回退；摘句同行下标，否则前两句。
  */
-export function getAuthorOpening(works: Poem[]): AuthorOpening | null {
+export function getAuthorOpening(
+  works: Poem[],
+  author?: Pick<Author, "slug">,
+): AuthorOpening | null {
   if (works.length === 0) return null;
 
-  const scored = works.map((poem) => {
-    const n = poem.content?.length ?? 0;
-    let score = 0;
-    if (poem.featured) score += 20;
-    if (n >= 2 && n <= 4) score += 8;
-    else if (n >= 5 && n <= 8) score += 5;
-    else if (n > 8) score += 1;
-    // 略偏好词牌短令 / 常见近体
-    if (n === 4 || n === 8) score += 2;
-    return { poem, score };
-  });
+  const resolved = resolveAuthorRepresentativePoem(works, author?.slug);
+  if (!resolved) return null;
 
-  scored.sort((a, b) => b.score - a.score);
-  const poem = scored[0].poem;
-  const display = toDisplayLines(poem.content ?? []);
-  const lines = display
-    .map((d) => d.text)
-    .filter(Boolean)
-    .slice(0, 2);
-
+  const lines = linesFromOpeningResolution(
+    resolved.poem,
+    resolved.lineIndices,
+  );
   if (lines.length === 0) return null;
 
-  return { poem, title: poem.title, lines };
+  return { poem: resolved.poem, title: resolved.poem.title, lines };
 }
 
 /** 目录排序降权：无名氏、不详等 */
