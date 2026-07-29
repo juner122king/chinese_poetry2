@@ -11,14 +11,17 @@ const ParticleBackground = dynamic(() => import("./ParticleBackground"), {
 
 type Props = {
   theme: PoemTheme;
+  /** 确定性构图种子（推荐 poem.id） */
+  seed?: string;
 };
 
-export default function ThemeScene({ theme }: Props) {
+export default function ThemeScene({ theme, seed }: Props) {
   const visual = getThemeVisual(theme);
+  const sceneSeed = seed ?? `theme:${theme}`;
 
   return (
     <div className="noise-overlay pointer-events-none fixed inset-0 -z-10">
-      <InkBackground theme={theme} />
+      <InkBackground theme={theme} seed={sceneSeed} />
       {visual.particles !== "none" && (
         <ParticleBackground
           mode={visual.particles}

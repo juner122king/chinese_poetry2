@@ -4,13 +4,10 @@ import { type CSSProperties } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import type { PoemTheme } from "@/lib/types";
+import { ATMOS_ENTER, ATMOS_EXIT } from "@/lib/atmosphere-timing";
 import { useHoverFocusActive } from "@/lib/use-hover-focus-active";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
 import { useScript } from "./ScriptProvider";
-
-/** 意境氛围：入场仍利落，离场慢慢淡去 */
-const ATMOS_ENTER = 0.45;
-const ATMOS_EXIT = 1.15;
 
 type Props = {
   label: string;
@@ -30,8 +27,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const VIEWPORT = { once: true, margin: "-8% 0px -8% 0px" } as const;
 
 /**
- * 意境卡 —— hover/focus 动效与诗卷卡片一致（壳体 + PoemCardAtmosphere）。
- * 静置仅标题；选中显意境词与右下篇数。
+ * 意境卡 —— hover/focus 动效与诗卷/首页入口一致（壳体 + PoemCardAtmosphere）。
+ * 时长见 lib/atmosphere-timing；静置仅标题，选中显意境词与篇数。
  */
 export default function ImageryBar({
   label,
@@ -65,6 +62,7 @@ export default function ImageryBar({
         theme={theme}
         active={active}
         reduce={!!reduce}
+        seed={`tag:${label}`}
         enterDuration={ATMOS_ENTER}
         exitDuration={ATMOS_EXIT}
       />

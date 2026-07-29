@@ -1,23 +1,21 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
-import type { PoemTheme } from "@/lib/types";
+import { useMemo, type CSSProperties, type ReactNode } from "react";
 import type { MoonForm, SunForm } from "@/lib/theme-map";
+import { makeRng, rngRange, type Rng } from "@/lib/scene-seed";
 
 type Props = {
-  theme: PoemTheme;
   /** Explicit moon form; false/undefined = no moon */
   moon?: MoonForm;
   /** Explicit sun form; false/undefined = no sun */
   sun?: SunForm;
-  /** 1 = full hero, 0.7 = soft section */
+  /** 1 = full hero, 0.7 = soft, 卡片内再压 */
   scale?: number;
   glow?: string;
+  /** 确定性构图种子（如 poem.id） */
+  seed?: string;
+  /** 卡片画布：限制日月直径相对容器高度 */
+  card?: boolean;
 };
 
 function resolveSunForm(form: SunForm | undefined): "low" | "high" | "pale" | null {
@@ -33,26 +31,28 @@ type SunPlacement = {
   size: number;
 };
 
-function sampleSunPlacement(form: "low" | "high" | "pale"): SunPlacement {
+function sampleSunPlacement(
+  form: "low" | "high" | "pale",
+  rng: Rng,
+): SunPlacement {
   if (form === "low") {
     return {
-      left: rand(8, 22),
-      bottom: rand(12, 24),
-      size: rand(155, 180),
+      left: rngRange(rng, 8, 22),
+      bottom: rngRange(rng, 12, 24),
+      size: rngRange(rng, 155, 180),
     };
   }
   if (form === "high") {
     return {
-      top: rand(6, 16),
-      right: rand(6, 18),
-      size: rand(115, 140),
+      top: rngRange(rng, 6, 16),
+      right: rngRange(rng, 6, 18),
+      size: rngRange(rng, 115, 140),
     };
   }
-  // pale — far, small, high
   return {
-    top: rand(8, 18),
-    left: rand(10, 30),
-    size: rand(90, 115),
+    top: rngRange(rng, 8, 18),
+    left: rngRange(rng, 10, 30),
+    size: rngRange(rng, 90, 115),
   };
 }
 
@@ -108,97 +108,72 @@ type MoonJitter = {
   discHy: number;
 };
 
-/** SSR / first paint: mid of each variant's sky band */
-function midPlacement(v: MoonVariant): MoonPlacement {
-  switch (v) {
-    case "warm":
-      return { top: 11, side: "right", inset: 22 };
-    case "far":
-      return { top: 9, side: "right", inset: 12 };
-    case "pastoral":
-      return { top: 10, side: "right", inset: 16 };
-    case "mountain":
-      return { top: 20, side: "right", inset: 14 };
-    case "river":
-      return { top: 42, side: "right", inset: 14 };
-    case "crescent":
-      return { top: 10, side: "right", inset: 18 };
-    default:
-      return { top: 11, side: "right", inset: 15 };
-  }
-}
-
 /**
  * Wide sky region per form — avoid center column so vertical text stays clear.
- * leftChance: probability of left-side sky (warm stays right).
  */
-function sampleMoonPlacement(v: MoonVariant): MoonPlacement {
-  const roll = Math.random();
+function sampleMoonPlacement(v: MoonVariant, rng: Rng): MoonPlacement {
+  const roll = rng();
   switch (v) {
     case "warm":
       return {
-        top: rand(6, 16),
+        top: rngRange(rng, 6, 16),
         side: "right",
-        inset: rand(12, 32),
+        inset: rngRange(rng, 12, 32),
       };
     case "far":
       return {
-        top: rand(4, 14),
+        top: rngRange(rng, 4, 14),
         side: roll < 0.38 ? "left" : "right",
-        inset: roll < 0.38 ? rand(4, 16) : rand(4, 20),
+        inset: roll < 0.38 ? rngRange(rng, 4, 16) : rngRange(rng, 4, 20),
       };
     case "pastoral":
       return {
-        top: rand(5, 16),
+        top: rngRange(rng, 5, 16),
         side: roll < 0.35 ? "left" : "right",
-        inset: roll < 0.35 ? rand(8, 20) : rand(6, 26),
+        inset: roll < 0.35 ? rngRange(rng, 8, 20) : rngRange(rng, 6, 26),
       };
     case "mountain":
       return {
-        top: rand(12, 28),
+        top: rngRange(rng, 12, 28),
         side: roll < 0.4 ? "left" : "right",
-        inset: roll < 0.4 ? rand(6, 18) : rand(6, 24),
+        inset: roll < 0.4 ? rngRange(rng, 6, 18) : rngRange(rng, 6, 24),
       };
     case "river":
       return {
-        top: rand(32, 52),
+        top: rngRange(rng, 32, 52),
         side: roll < 0.42 ? "left" : "right",
-        inset: roll < 0.42 ? rand(6, 20) : rand(6, 24),
+        inset: roll < 0.42 ? rngRange(rng, 6, 20) : rngRange(rng, 6, 24),
       };
     case "crescent":
       return {
-        top: rand(5, 16),
+        top: rngRange(rng, 5, 16),
         side: roll < 0.36 ? "left" : "right",
-        inset: roll < 0.36 ? rand(8, 22) : rand(8, 28),
+        inset: roll < 0.36 ? rngRange(rng, 8, 22) : rngRange(rng, 8, 28),
       };
     default:
       return {
-        top: rand(5, 18),
+        top: rngRange(rng, 5, 18),
         side: roll < 0.35 ? "left" : "right",
-        inset: roll < 0.35 ? rand(6, 22) : rand(6, 28),
+        inset: roll < 0.35 ? rngRange(rng, 6, 22) : rngRange(rng, 6, 28),
       };
   }
 }
 
-function defaultJitter(v: MoonVariant): MoonJitter {
+function sampleMoonJitter(v: MoonVariant, rng: Rng): MoonJitter {
   return {
-    placement: midPlacement(v),
-    scaleMul: 1,
-    opacityMul: 1,
-    haloMul: 1,
-    blurAdd: 0,
-    bloomMul: 1,
-    coreAdd: 0,
-    termX: 0,
-    termY: 0,
-    termOp: 0,
-    discHx: 0,
-    discHy: 0,
+    placement: sampleMoonPlacement(v, rng),
+    scaleMul: rngRange(rng, 0.96, 1.05),
+    opacityMul: rngRange(rng, 0.96, 1.04),
+    haloMul: rngRange(rng, 0.92, 1.1),
+    blurAdd: rngRange(rng, -1.5, 2),
+    bloomMul: rngRange(rng, 0.94, 1.08),
+    coreAdd: rngRange(rng, -2, 2.2),
+    termX: rngRange(rng, v === "crescent" ? -6 : -4, v === "crescent" ? 5 : 4),
+    termY: rngRange(rng, -4, 4),
+    termOp: rngRange(rng, -0.04, 0.05),
+    discHx: rngRange(rng, -3, 3),
+    discHy: rngRange(rng, -3, 3),
   };
-}
-
-function rand(min: number, max: number) {
-  return min + Math.random() * (max - min);
 }
 
 function resolveMoonVariant(form: MoonForm | undefined): MoonVariant | null {
@@ -351,56 +326,30 @@ function moonBase(v: MoonVariant): MoonBase {
   }
 }
 
-/** Placement from wide sky band + light visual jitter */
-function sampleMoonJitter(v: MoonVariant): MoonJitter {
-  return {
-    placement: sampleMoonPlacement(v),
-    scaleMul: rand(0.96, 1.05),
-    opacityMul: rand(0.96, 1.04),
-    haloMul: rand(0.92, 1.1),
-    blurAdd: rand(-1.5, 2),
-    bloomMul: rand(0.94, 1.08),
-    coreAdd: rand(-2, 2.2),
-    termX: rand(v === "crescent" ? -6 : -4, v === "crescent" ? 5 : 4),
-    termY: rand(-4, 4),
-    termOp: rand(-0.04, 0.05),
-    discHx: rand(-3, 3),
-    discHy: rand(-3, 3),
-  };
-}
-
 /**
  * Layered moon / sun for Eastern ink scenes.
- * Seven moon forms + SunForm (low/high/pale) with light per-mount placement.
+ * Seven moon forms + SunForm；构图由 seed 决定，首帧即定稿、无跳变。
  */
 export default function CelestialBodies({
-  theme: _theme,
   moon,
   sun,
   scale = 1,
   glow = "rgba(220,230,255,0.25)",
+  seed = "celestial",
+  card = false,
 }: Props) {
-  void _theme; // reserved for future theme-coupled tweaks
   const variant = resolveMoonVariant(moon);
   const sunForm = resolveSunForm(sun);
-  const [jitter, setJitter] = useState<MoonJitter | null>(null);
-  const [sunPlace, setSunPlace] = useState<SunPlacement | null>(null);
 
-  useEffect(() => {
-    if (!variant) {
-      setJitter(null);
-      return;
-    }
-    setJitter(sampleMoonJitter(variant));
-  }, [variant]);
+  const jitter = useMemo(() => {
+    if (!variant) return null;
+    return sampleMoonJitter(variant, makeRng(`${seed}:moon:${variant}`));
+  }, [variant, seed]);
 
-  useEffect(() => {
-    if (!sunForm) {
-      setSunPlace(null);
-      return;
-    }
-    setSunPlace(sampleSunPlacement(sunForm));
-  }, [sunForm]);
+  const sunPlace = useMemo(() => {
+    if (!sunForm) return null;
+    return sampleSunPlacement(sunForm, makeRng(`${seed}:sun:${sunForm}`));
+  }, [sunForm, seed]);
 
   if (!variant && !sunForm) return null;
 
@@ -409,10 +358,12 @@ export default function CelestialBodies({
   const sunPale = sunForm === "pale";
 
   let moonNode: ReactNode = null;
-  if (variant) {
+  if (variant && jitter) {
     const base = moonBase(variant);
-    const j = jitter ?? defaultJitter(variant);
-    const sizePx = 120 * scale * base.size * j.scaleMul;
+    const j = jitter;
+    // 卡片内 cap 相对高度，避免糊满整格
+    const rawSize = 120 * scale * base.size * j.scaleMul;
+    const sizePx = card ? Math.min(rawSize, 28) : rawSize;
     const opacity = Math.min(1, Math.max(0.72, base.opacity * j.opacityMul));
     const halo = base.halo * j.haloMul;
     const haloH = base.haloH * j.haloMul;
@@ -544,15 +495,10 @@ export default function CelestialBodies({
     <>
       {moonNode}
 
-      {sunForm && (() => {
-        const place =
-          sunPlace ??
-          (sunLow
-            ? { left: 14, bottom: 16, size: 168 }
-            : sunHigh
-              ? { top: 10, right: 10, size: 128 }
-              : { top: 12, left: 18, size: 100 });
-        const dim = place.size * scale;
+      {sunForm && sunPlace && (() => {
+        const place = sunPlace;
+        const rawDim = place.size * scale;
+        const dim = card ? Math.min(rawDim, 32) : rawDim;
         const pos: CSSProperties = {
           width: dim,
           height: dim,

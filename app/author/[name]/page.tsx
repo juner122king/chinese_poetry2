@@ -58,7 +58,7 @@ export default async function AuthorPage({ params }: Props) {
 
   return (
     <div className="relative min-h-screen">
-      <ThemeScene theme={bgTheme} />
+      <ThemeScene theme={bgTheme} seed={`author:${author.slug}`} />
       <div className="relative z-10">
         <AuthorScrollHero
           author={author}

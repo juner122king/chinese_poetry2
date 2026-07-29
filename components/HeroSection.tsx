@@ -486,7 +486,7 @@ export default function HeroSection({ poem }: Props) {
         className="hero-scene"
         style={reduce ? undefined : { y: sceneY }}
       >
-        <InkBackground theme={poem.theme} />
+        <InkBackground theme={poem.theme} seed={poem.id} />
         {visual.particles !== "none" && (
           <ParticleBackground
             mode={visual.particles}

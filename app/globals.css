@@ -330,6 +330,12 @@ body {
   animation: mistDrift 48s ease-in-out infinite reverse;
 }
 
+/* 第三条雾：错相位，避免与 mist-a 同步摆动 */
+.ink-mist-c {
+  animation: mistDrift 41s ease-in-out infinite;
+  animation-delay: -13s;
+}
+
 .ink-cloud {
   will-change: transform;
 }
@@ -340,6 +346,13 @@ body {
 
 .ink-cloud-b {
   animation: cloudDrift 68s ease-in-out infinite reverse;
+  animation-delay: -18s;
+}
+
+/* 场景容器：cqh/cqw 相对画布（Hero / 卡片）缩放 */
+.ink-scene {
+  container-type: size;
+  container-name: ink-scene;
 }
 
 /* Celestial: only halo opacity breathes — no flashy scale */
@@ -367,10 +380,10 @@ body {
   opacity: 0.95;
 }
 
-/* Stars: only upper sky band */
+/* Stars: only upper sky band（多裁下沿，星群更靠天顶） */
 .particle-clip-sky {
-  clip-path: inset(0 0 42% 0);
-  -webkit-clip-path: inset(0 0 42% 0);
+  clip-path: inset(0 0 48% 0);
+  -webkit-clip-path: inset(0 0 48% 0);
 }
 
 /* Soft-mask center so particles don't fight poem text */
@@ -389,6 +402,31 @@ body {
     #000 78%,
     #000 100%
   );
+}
+
+/* 竖屏：收窄中央护字、放宽天空带，避免只剩几颗星 */
+@media (max-width: 700px) {
+  .particle-clip-sky {
+    clip-path: inset(0 0 36% 0);
+    -webkit-clip-path: inset(0 0 36% 0);
+  }
+
+  .particle-safe-center {
+    -webkit-mask-image: radial-gradient(
+      ellipse 38% 30% at 50% 48%,
+      transparent 0%,
+      transparent 28%,
+      #000 72%,
+      #000 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 38% 30% at 50% 48%,
+      transparent 0%,
+      transparent 28%,
+      #000 72%,
+      #000 100%
+    );
+  }
 }
 
 /* Birds theme template motion */
@@ -443,6 +481,7 @@ body {
  * Opacity never jumps — last ~45% of timeline is continuous fade.
  * Default opacity:0 + fill-mode:both → no static “waiting” dots during delay.
  */
+/* 灯笼位移用 cqh：相对场景容器高度，卡片内也能完成升起与熄灭 */
 @keyframes lanternRiseA {
   0% {
     transform: translate3d(0, 12px, 0) scale(0.72);
@@ -452,35 +491,35 @@ body {
     opacity: 0.55;
   }
   15% {
-    transform: translate3d(3px, -6vh, 0) scale(0.7);
+    transform: translate3d(3px, -6cqh, 0) scale(0.7);
     opacity: 0.62;
   }
   30% {
-    transform: translate3d(7px, -16vh, 0) scale(0.66);
+    transform: translate3d(7px, -16cqh, 0) scale(0.66);
     opacity: 0.6;
   }
   45% {
-    transform: translate3d(11px, -26vh, 0) scale(0.6);
+    transform: translate3d(11px, -26cqh, 0) scale(0.6);
     opacity: 0.55;
   }
   58% {
-    transform: translate3d(14px, -34vh, 0) scale(0.56);
+    transform: translate3d(14px, -34cqh, 0) scale(0.56);
     opacity: 0.42;
   }
   70% {
-    transform: translate3d(16px, -40vh, 0) scale(0.52);
+    transform: translate3d(16px, -40cqh, 0) scale(0.52);
     opacity: 0.28;
   }
   82% {
-    transform: translate3d(18px, -46vh, 0) scale(0.48);
+    transform: translate3d(18px, -46cqh, 0) scale(0.48);
     opacity: 0.14;
   }
   92% {
-    transform: translate3d(19px, -50vh, 0) scale(0.44);
+    transform: translate3d(19px, -50cqh, 0) scale(0.44);
     opacity: 0.05;
   }
   100% {
-    transform: translate3d(20px, -54vh, 0) scale(0.4);
+    transform: translate3d(20px, -54cqh, 0) scale(0.4);
     opacity: 0;
   }
 }
@@ -494,35 +533,35 @@ body {
     opacity: 0.52;
   }
   15% {
-    transform: translate3d(-3px, -5vh, 0) scale(0.72);
+    transform: translate3d(-3px, -5cqh, 0) scale(0.72);
     opacity: 0.6;
   }
   30% {
-    transform: translate3d(-7px, -15vh, 0) scale(0.68);
+    transform: translate3d(-7px, -15cqh, 0) scale(0.68);
     opacity: 0.58;
   }
   45% {
-    transform: translate3d(-11px, -25vh, 0) scale(0.62);
+    transform: translate3d(-11px, -25cqh, 0) scale(0.62);
     opacity: 0.52;
   }
   58% {
-    transform: translate3d(-13px, -33vh, 0) scale(0.56);
+    transform: translate3d(-13px, -33cqh, 0) scale(0.56);
     opacity: 0.4;
   }
   70% {
-    transform: translate3d(-15px, -40vh, 0) scale(0.52);
+    transform: translate3d(-15px, -40cqh, 0) scale(0.52);
     opacity: 0.26;
   }
   82% {
-    transform: translate3d(-16px, -45vh, 0) scale(0.48);
+    transform: translate3d(-16px, -45cqh, 0) scale(0.48);
     opacity: 0.13;
   }
   92% {
-    transform: translate3d(-17px, -49vh, 0) scale(0.44);
+    transform: translate3d(-17px, -49cqh, 0) scale(0.44);
     opacity: 0.05;
   }
   100% {
-    transform: translate3d(-18px, -52vh, 0) scale(0.4);
+    transform: translate3d(-18px, -52cqh, 0) scale(0.4);
     opacity: 0;
   }
 }
@@ -536,35 +575,35 @@ body {
     opacity: 0.56;
   }
   15% {
-    transform: translate3d(-2px, -4vh, 0) scale(0.68);
+    transform: translate3d(-2px, -4cqh, 0) scale(0.68);
     opacity: 0.62;
   }
   28% {
-    transform: translate3d(2px, -12vh, 0) scale(0.66);
+    transform: translate3d(2px, -12cqh, 0) scale(0.66);
     opacity: 0.58;
   }
   42% {
-    transform: translate3d(6px, -22vh, 0) scale(0.6);
+    transform: translate3d(6px, -22cqh, 0) scale(0.6);
     opacity: 0.54;
   }
   55% {
-    transform: translate3d(4px, -30vh, 0) scale(0.56);
+    transform: translate3d(4px, -30cqh, 0) scale(0.56);
     opacity: 0.44;
   }
   68% {
-    transform: translate3d(8px, -38vh, 0) scale(0.52);
+    transform: translate3d(8px, -38cqh, 0) scale(0.52);
     opacity: 0.3;
   }
   80% {
-    transform: translate3d(11px, -45vh, 0) scale(0.48);
+    transform: translate3d(11px, -45cqh, 0) scale(0.48);
     opacity: 0.16;
   }
   90% {
-    transform: translate3d(12px, -50vh, 0) scale(0.44);
+    transform: translate3d(12px, -50cqh, 0) scale(0.44);
     opacity: 0.06;
   }
   100% {
-    transform: translate3d(14px, -56vh, 0) scale(0.38);
+    transform: translate3d(14px, -56cqh, 0) scale(0.38);
     opacity: 0;
   }
 }
@@ -583,7 +622,6 @@ body {
   animation-timing-function: linear; /* even opacity steps — no ease “pop” at ends */
   animation-iteration-count: infinite;
   animation-fill-mode: both; /* hold opacity:0 during delay */
-  will-change: transform, opacity;
 }
 
 .lantern-rise-a {
@@ -627,7 +665,8 @@ body {
 .rain-drop {
   /* Unified light wind: small positive tilt; path follows tilt via sin/cos */
   --rain-tilt: 4deg;
-  --rain-fall: 120vh;
+  /* 相对场景高度，卡片内行程与画布匹配 */
+  --rain-fall: 120cqh;
   top: -12%;
   width: 1px;
   border-radius: 999px;
@@ -643,7 +682,6 @@ body {
   animation-name: rainDropFall;
   animation-timing-function: cubic-bezier(0.28, 0.02, 0.62, 0.98);
   animation-iteration-count: infinite;
-  will-change: transform, opacity;
   backface-visibility: hidden;
 }
 
@@ -680,7 +718,7 @@ body {
   }
 }
 
-/* Soft ink ripple — scale + fade, no hard border flash */
+/* Soft ink ripple — 单向外扩 + 衰减（同心 ripple） */
 .ripple-ring {
   animation: ripplePulse 4s ease-out infinite;
 }
@@ -704,15 +742,118 @@ body {
 }
 
 @keyframes ripplePulse {
+  0% {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.55);
+  }
+}
+
+/* 禽鸟扇翅：双翼 opacity 交替 */
+@keyframes birdsWingA {
   0%,
   100% {
-    opacity: 0.2;
-    transform: translateX(-50%) scale(1);
+    opacity: 1;
   }
   50% {
-    opacity: 0.45;
-    transform: translateX(-50%) scale(1.06);
+    opacity: 0.25;
   }
+}
+@keyframes birdsWingB {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.birds-wing {
+  animation-duration: 0.65s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.birds-wing--a {
+  animation-name: birdsWingA;
+}
+.birds-wing--b {
+  animation-name: birdsWingB;
+}
+
+/* 竹竿极慢摆 */
+@keyframes bambooSway {
+  0%,
+  100% {
+    transform: rotate(-0.35deg);
+  }
+  50% {
+    transform: rotate(0.4deg);
+  }
+}
+.bamboo-sway {
+  animation: bambooSway 12s ease-in-out infinite;
+}
+
+/* 云影掠过山脊 / 隐逸雾涨落 / 江面波光 */
+@keyframes ridgeShadowDrift {
+  0%,
+  100% {
+    transform: translateX(-8%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(10%);
+    opacity: 0.55;
+  }
+}
+.ink-ridge-shadow {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.14) 40%,
+    rgba(0, 0, 0, 0.1) 60%,
+    transparent 100%
+  );
+  filter: blur(18px);
+  animation: ridgeShadowDrift 28s ease-in-out infinite;
+}
+
+@keyframes mistBreathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.ink-mist-breathe {
+  animation: mistBreathe 14s ease-in-out infinite;
+}
+
+@keyframes waterShimmer {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+.ink-water-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200, 220, 235, 0.08) 35%,
+    rgba(220, 235, 245, 0.12) 50%,
+    rgba(200, 220, 235, 0.08) 65%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  animation: waterShimmer 5.5s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -721,24 +862,40 @@ body {
   .ink-mist,
   .ink-mist-a,
   .ink-mist-b,
+  .ink-mist-c,
   .ink-cloud,
   .ink-cloud-a,
   .ink-cloud-b,
   .celestial-moon-halo,
   .celestial-sun-halo,
   .birds-flock-drift,
-  .birds-near-drift {
+  .birds-near-drift,
+  .bamboo-sway,
+  .ink-ridge-shadow,
+  .ink-mist-breathe,
+  .ink-water-shimmer,
+  .birds-wing {
     animation: none !important;
     /* keep static atmosphere — do not zero opacity */
   }
 
-  /* Moving dots / ornaments: hide static leftovers */
+  /* 细线/圆环静止即残留物：可隐藏 */
   .rain-drop,
-  .ripple-ring,
-  .birds-bob,
-  .lantern-rise {
+  .ripple-ring {
     animation: none !important;
     opacity: 0 !important;
+  }
+
+  /* 鸟：停浮动，仍可见；扇翅停 */
+  .birds-bob {
+    animation: none !important;
+  }
+
+  /* 华灯：停升起，保留静态挂灯 */
+  .lantern-rise {
+    animation: none !important;
+    opacity: 0.5 !important;
+    transform: translate3d(0, -12cqh, 0) scale(0.62) !important;
   }
 
   /* 对酒光核：停动画，保留静态暖晕 */
@@ -1405,6 +1562,7 @@ body {
   position: relative;
   display: block;
   overflow: hidden;
+  container-type: size;
   min-height: 6.75rem;
   border-radius: 0.125rem;
   border: none;
@@ -1614,6 +1772,7 @@ body {
   justify-content: center;
   gap: 1rem;
   overflow: hidden;
+  container-type: size;
   border-radius: 0.125rem;
   border: none;
   background: var(--rule-wash);

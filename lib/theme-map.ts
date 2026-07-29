@@ -99,7 +99,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     mountains: "distant",
     particles: "stars",
     particleSafeCenter: true,
-    particleDensity: 1.15,
+    particleDensity: 0.72,
   },
   "dawn-dusk": {
     label: "晨昏",
@@ -127,7 +127,8 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     petals: true,
     particles: "petals",
     particleSafeCenter: true,
-    particleDensity: 0.65,
+    // 最高频主题：轻瓣点染（P1 贴视口后旧 0.65 偏满）
+    particleDensity: 0.38,
   },
   summer: {
     label: "夏",
@@ -141,6 +142,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     mountains: "distant",
     particles: "firefly",
     particleSafeCenter: true,
+    particleDensity: 1.05,
   },
   autumn: {
     label: "秋",
@@ -154,6 +156,7 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     horizon: "plain",
     particles: "leaves",
     particleSafeCenter: true,
+    particleDensity: 0.9,
   },
   winter: {
     label: "冬",
@@ -166,23 +169,23 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     snow: true,
     particles: "snow",
     particleSafeCenter: true,
-    particleDensity: 0.85,
+    particleDensity: 0.48,
   },
   "snow-river": {
     label: "寒江",
-    // 签名：雪 + 江线 + 舟影（无月）
+    // 签名：江线 + 雪粒子 + 舟影（无月、无 CSS 静雪点，对齐 README）
     gradient:
       "radial-gradient(ellipse 70% 50% at 50% 30%, rgba(200,220,240,0.12) 0%, transparent 50%), linear-gradient(180deg, #0a1018 0%, #121820 40%, #1a1a1a 100%)",
     accent: "#b8c8d8",
     glow: "rgba(180,200,220,0.2)",
-    snow: true,
+    snow: false,
     mist: "soft",
     mountains: "jagged",
     horizon: "frost",
     boat: true,
     particles: "snow",
     particleSafeCenter: true,
-    particleDensity: 0.7,
+    particleDensity: 0.32,
   },
   rain: {
     label: "烟雨",
@@ -235,6 +238,8 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     mountains: "rolling",
     particles: "firefly",
     particleSafeCenter: true,
+    // 田园略疏于夏，仍比旧 0.5 更密
+    particleDensity: 0.85,
   },
   frontier: {
     label: "边塞",
@@ -261,7 +266,8 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     petals: true,
     particles: "petals",
     particleSafeCenter: true,
-    particleDensity: 1.28,
+    // 仍密于春（0.38），但不顶到 80+ 颗
+    particleDensity: 0.75,
   },
   birds: {
     label: "禽鸟",
@@ -330,7 +336,8 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
     mountains: "none",
     particles: "stars",
     particleSafeCenter: true,
-    particleDensity: 0.4,
+    // 真正稀星：有效颗数应低于边塞 ~32
+    particleDensity: 0.12,
   },
   parting: {
     label: "离别",

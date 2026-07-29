@@ -7,14 +7,11 @@ import { getTagLabel, taxonomyById } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
 import { getThemeVisual } from "@/lib/theme-map";
 import type { PoemTag } from "@/lib/types";
+import { ATMOS_ENTER, ATMOS_EXIT } from "@/lib/atmosphere-timing";
 import { useHoverFocusActive } from "@/lib/use-hover-focus-active";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
 import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
-
-/** 意境氛围：入场仍利落，离场慢慢淡去 */
-const ATMOS_ENTER = 0.45;
-const ATMOS_EXIT = 1.15;
 
 /** 首页意境入门：六道，克制入口，不做成仪表盘 */
 const GATES: PoemTag[] = [
@@ -87,6 +84,7 @@ function GateCard({
           theme={meta.defaultTheme}
           active={active}
           reduce={!!reduce}
+          seed={`gate:${tag}`}
           enterDuration={ATMOS_ENTER}
           exitDuration={ATMOS_EXIT}
         />
@@ -136,7 +134,7 @@ function GateCard({
 
 /**
  * 意境入门 —— 六道独立卡片。
- * hover 动效与诗卷卡片一致（PoemCardAtmosphere + 壳体抬升）。
+ * hover 动效与诗卷 / 意境卡一致（PoemCardAtmosphere + 壳体；时长见 atmosphere-timing）。
  */
 export default function HomeImageryGates({ counts }: Props) {
   const { t } = useScript();

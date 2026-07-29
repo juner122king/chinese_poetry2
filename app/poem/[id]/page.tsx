@@ -40,7 +40,7 @@ export default async function PoemDetailPage({ params }: Props) {
 
   return (
     <div className="relative min-h-screen">
-      <ThemeScene theme={poem.theme} />
+      <ThemeScene theme={poem.theme} seed={poem.id} />
       <PoemReadingView poem={poem} />
       <PoemRelated items={related} />
       <PoemAdjacentNav prev={prev} next={next} />

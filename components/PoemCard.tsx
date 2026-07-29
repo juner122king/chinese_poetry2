@@ -89,7 +89,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
         onBlur={onBlur}
       >
         <div
-          className="relative overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 backdrop-blur-[2px] transition-[border-color,background-color,transform,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
+          className="relative overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 backdrop-blur-[2px] transition-[border-color,background-color,transform,box-shadow] duration-[1.15s] ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
           style={
             (active
               ? {
@@ -107,6 +107,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
             theme={poem.theme}
             active={active}
             reduce={!!reduce}
+            seed={poem.id}
           />
 
           {/* 题：最多两行 */}

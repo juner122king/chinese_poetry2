@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState, type CSSProperties } from "react";
+import { useId, useMemo, type CSSProperties } from "react";
 import type { PoemTheme } from "@/lib/types";
 import {
   getThemeVisual,
@@ -8,11 +8,14 @@ import {
   type HorizonForm,
   type MountainForm,
 } from "@/lib/theme-map";
+import {
+  makeRng,
+  rngBool,
+  rngInt,
+  rngRange,
+  type Rng,
+} from "@/lib/scene-seed";
 import CelestialBodies from "./CelestialBodies";
-
-function rand(min: number, max: number) {
-  return min + Math.random() * (max - min);
-}
 
 type BirdLayout = {
   farSide: "left" | "right";
@@ -33,42 +36,81 @@ type LanternSpot = {
   path: "a" | "b" | "c";
 };
 
-function sampleBirdLayout(): BirdLayout {
+/** rain: left%, delay, dur, len, opacity, tilt, layer 0=far 1=near */
+type RainDrop = [number, number, number, number, number, number, number];
+
+function sampleBirdLayout(rng: Rng): BirdLayout {
   return {
-    farSide: Math.random() < 0.42 ? "left" : "right",
-    farTop: rand(8, 20),
-    farInset: rand(2, 12),
-    nearSide: Math.random() < 0.5 ? "left" : "right",
-    nearBottom: rand(18, 34),
-    nearInset: rand(5, 16),
+    farSide: rngBool(rng, 0.42) ? "left" : "right",
+    farTop: rngRange(rng, 8, 20),
+    farInset: rngRange(rng, 2, 12),
+    nearSide: rngBool(rng) ? "left" : "right",
+    nearBottom: rngRange(rng, 18, 34),
+    nearInset: rngRange(rng, 5, 16),
   };
 }
 
-function sampleLanterns(): LanternSpot[] {
+function sampleLanterns(rng: Rng, count: number): LanternSpot[] {
   const paths: Array<"a" | "b" | "c"> = ["a", "b", "c"];
-  const n = 8 + Math.floor(Math.random() * 4);
+  const n = count;
   const spots: LanternSpot[] = [];
   for (let i = 0; i < n; i++) {
-    // Prefer lower thirds left/right — avoid center poem column
-    const leftBand = Math.random() < 0.5;
-    const left = leftBand ? rand(4, 32) : rand(68, 96);
+    const leftBand = rngBool(rng);
+    const left = leftBand ? rngRange(rng, 4, 32) : rngRange(rng, 68, 96);
     spots.push({
       left,
-      bottom: rand(3, 24),
-      w: rand(5, 10),
-      h: rand(7, 13),
-      dur: rand(40, 56),
-      delay: rand(0, 16),
+      bottom: rngRange(rng, 3, 24),
+      w: rngRange(rng, 5, 10),
+      h: rngRange(rng, 7, 13),
+      dur: rngRange(rng, 40, 56),
+      delay: rngRange(rng, 0, 16),
       path: paths[i % 3],
     });
   }
   return spots;
 }
 
+/** 程序化雨丝：按种子与数量分布，mask 护中央，无硬编码稀疏带 */
+function sampleRainDrops(rng: Rng, count: number): RainDrop[] {
+  const drops: RainDrop[] = [];
+  for (let i = 0; i < count; i++) {
+    const near = i >= Math.floor(count * 0.55);
+    const left = rngRange(rng, 2, 98);
+    const delay = rngRange(rng, 0, 5.5);
+    if (near) {
+      drops.push([
+        left,
+        delay,
+        rngRange(rng, 3.6, 4.2),
+        rngRange(rng, 34, 46),
+        rngRange(rng, 0.24, 0.32),
+        rngRange(rng, 2, 6),
+        1,
+      ]);
+    } else {
+      drops.push([
+        left,
+        delay,
+        rngRange(rng, 5.2, 6.0),
+        rngRange(rng, 18, 26),
+        rngRange(rng, 0.12, 0.17),
+        rngRange(rng, 2, 6),
+        0,
+      ]);
+    }
+  }
+  return drops;
+}
+
+type Intensity = "soft" | "full" | "card";
+
 type Props = {
   theme?: PoemTheme;
   className?: string;
-  intensity?: "soft" | "full";
+  /** full 全视口 · soft 列表底 · card 卡片 hover（独立尺度） */
+  intensity?: Intensity;
+  /** 确定性构图种子（poem.id / tag 等） */
+  seed?: string;
 };
 
 type MountainPaths = {
@@ -326,12 +368,15 @@ export default function InkBackground({
   theme = "night-moon",
   className = "",
   intensity = "full",
+  seed,
 }: Props) {
   const uid = useId().replace(/:/g, "");
+  const sceneSeed = seed ?? `theme:${theme}`;
+  const isCard = intensity === "card";
   const visual = getThemeVisual(theme);
   const mountainForm = resolveMountainForm(visual.mountains ?? "rolling");
   const mountainStyle = mountainForm ? MOUNTAIN_FORMS[mountainForm] : null;
-  const size = intensity === "full" ? 1 : 0.7;
+  const size = intensity === "full" ? 1 : intensity === "soft" ? 0.7 : 0.45;
   const nearGradId = `ink-mtn-near-${uid}`;
   const mistLevel =
     visual.mist === "soft"
@@ -341,62 +386,66 @@ export default function InkBackground({
         : null;
   const cloudForm = resolveCloudForm(visual.clouds);
   const horizonForm = resolveHorizonForm(visual.horizon);
-  const atmScale = intensity === "soft" ? 0.72 : 1;
+  const atmScale =
+    intensity === "card" ? 0.55 : intensity === "soft" ? 0.72 : 1;
+  /** 卡片：只留远景一层山，或关掉 mid/near */
+  const showFullMountains = !isCard;
+  const showMistSheet = !isCard && mistLevel === "heavy";
+  const showExtraMist =
+    !isCard && (mistLevel === "heavy" || intensity === "full");
+  const showSnowDots = !isCard && visual.snow;
 
-  const [birdLayout, setBirdLayout] = useState<BirdLayout | null>(null);
-  const [lanterns, setLanterns] = useState<LanternSpot[] | null>(null);
-  const [boatLeft, setBoatLeft] = useState(30);
+  const birdPos = useMemo(() => {
+    if (!visual.birds) {
+      return {
+        farSide: "right" as const,
+        farTop: 12,
+        farInset: 4,
+        nearSide: "left" as const,
+        nearBottom: 26,
+        nearInset: 7,
+      };
+    }
+    return sampleBirdLayout(makeRng(`${sceneSeed}:birds`));
+  }, [sceneSeed, visual.birds]);
 
-  useEffect(() => {
-    if (visual.birds) setBirdLayout(sampleBirdLayout());
-    else setBirdLayout(null);
-  }, [theme, visual.birds]);
+  const lanternList = useMemo(() => {
+    if (!visual.lanterns) return [] as LanternSpot[];
+    const n = isCard ? 4 : 8 + rngInt(makeRng(`${sceneSeed}:lantern-n`), 0, 4);
+    return sampleLanterns(makeRng(`${sceneSeed}:lanterns`), n);
+  }, [sceneSeed, visual.lanterns, isCard]);
 
-  useEffect(() => {
-    if (visual.lanterns) setLanterns(sampleLanterns());
-    else setLanterns(null);
-  }, [theme, visual.lanterns]);
+  const boatLeft = useMemo(() => {
+    if (!visual.boat) return 30;
+    return rngRange(makeRng(`${sceneSeed}:boat`), 18, 48);
+  }, [sceneSeed, visual.boat]);
 
-  useEffect(() => {
-    if (!visual.boat) return;
-    setBoatLeft(rand(18, 48));
-  }, [theme, visual.boat]);
+  const rainDrops = useMemo(() => {
+    if (!visual.rain) return [] as RainDrop[];
+    const n = isCard ? 18 : 48;
+    return sampleRainDrops(makeRng(`${sceneSeed}:rain`), n);
+  }, [sceneSeed, visual.rain, isCard]);
 
-  const birdPos = birdLayout ?? {
-    farSide: "right" as const,
-    farTop: 12,
-    farInset: 4,
-    nearSide: "left" as const,
-    nearBottom: 26,
-    nearInset: 7,
-  };
-
-  const lanternList = useMemo(
-    () =>
-      lanterns ?? [
-        { left: 10, bottom: 6, w: 6, h: 9, dur: 42, delay: 0, path: "a" as const },
-        { left: 80, bottom: 12, w: 8, h: 11, dur: 50, delay: 3, path: "b" as const },
-      ],
-    [lanterns],
-  );
+  const vignetteAlpha = 0.55 * atmScale;
 
   return (
     <div
-      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`ink-scene pointer-events-none absolute inset-0 overflow-hidden ${isCard ? "ink-scene--card" : ""} ${className}`}
       aria-hidden
     >
       <div
-        className="absolute inset-0 transition-[background] duration-1000"
+        className="absolute inset-0"
         style={{ background: visual.gradient }}
       />
 
       {/* Celestial behind mountain silhouettes (low sun / high moon) */}
       <CelestialBodies
-        theme={theme}
         moon={visual.moon}
         sun={visual.sun}
         scale={size}
         glow={visual.glow}
+        seed={sceneSeed}
+        card={isCard}
       />
 
       {/* High clouds — behind ridges (远山入云) */}
@@ -431,13 +480,14 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Mountains — layered ink wash (far soft → near solid) */}
+      {/* Mountains — layered ink wash (far soft → near solid); 卡片只留远景 */}
       {mountainStyle && (
         <div
           className={`absolute bottom-0 left-0 w-full ${mountainStyle.heightClass}`}
           style={{
             opacity:
-              mountainStyle.opacity * (intensity === "soft" ? 0.75 : 1),
+              mountainStyle.opacity *
+              (intensity === "soft" ? 0.75 : intensity === "card" ? 0.55 : 1),
           }}
         >
           <svg
@@ -453,7 +503,7 @@ export default function InkBackground({
           >
             <path d={mountainStyle.far} fill={mountainStyle.farFill} />
           </svg>
-          {mountainStyle.mid && (
+          {showFullMountains && mountainStyle.mid && (
             <svg
               className="absolute inset-0 h-full w-full"
               style={{
@@ -471,6 +521,7 @@ export default function InkBackground({
               />
             </svg>
           )}
+          {showFullMountains && (
           <svg
             className="absolute inset-0 h-full w-full"
             viewBox="0 0 1440 400"
@@ -497,7 +548,8 @@ export default function InkBackground({
               style={{ opacity: 0.55 }}
             />
           </svg>
-          {mountainStyle.footHaze && (
+          )}
+          {showFullMountains && mountainStyle.footHaze && (
             <div
               className="absolute bottom-0 left-0 right-0 h-[38%]"
               style={{
@@ -515,6 +567,49 @@ export default function InkBackground({
           form={horizonForm}
           glow={visual.glow}
           intensityScale={atmScale}
+        />
+      )}
+
+      {/* 静态主题签名运动：一主一辅，低成本 */}
+      {theme === "parting" && !visual.ripples && (
+        <div
+          className="absolute bottom-[12%] left-1/2 h-6 w-[min(48%,320px)] -translate-x-1/2"
+          style={{ opacity: 0.55 * atmScale }}
+        >
+          <div
+            className="ripple-ring absolute left-1/2 top-1/2 aspect-[6/1] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-[100%]"
+            style={{
+              background:
+                "radial-gradient(ellipse 50% 50% at 50% 50%, transparent 48%, rgba(245,239,226,0.05) 60%, transparent 76%)",
+              filter: "blur(1.6px)",
+              animationDuration: "6.5s",
+            }}
+          />
+        </div>
+      )}
+      {(theme === "landscape" || theme === "mountain") && (
+        <div
+          className="ink-ridge-shadow absolute inset-x-0 top-[42%] h-[18%]"
+          style={{ opacity: 0.35 * atmScale }}
+          aria-hidden
+        />
+      )}
+      {theme === "reclusion" && mistLevel && (
+        <div
+          className="ink-mist-breathe absolute inset-x-[10%] top-[48%] h-[14%] rounded-[100%]"
+          style={{
+            opacity: 0.2 * atmScale,
+            filter: "blur(28px)",
+            background: `radial-gradient(ellipse 80% 50% at 50% 50%, ${visual.glow} 0%, transparent 72%)`,
+          }}
+          aria-hidden
+        />
+      )}
+      {theme === "river-lake" && (
+        <div
+          className="ink-water-shimmer absolute inset-x-[18%] bottom-[10%] h-[6%]"
+          style={{ opacity: 0.4 * atmScale }}
+          aria-hidden
         />
       )}
 
@@ -583,13 +678,14 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Bamboo — soft ink stems + leaf washes (not line-art sticks) */}
+      {/* Bamboo — soft ink stems + leaf washes；极慢竿身摆 */}
       {visual.bamboo && (
         <div
-          className="absolute inset-y-0 left-0 w-[32%] max-w-[280px]"
+          className="bamboo-sway absolute inset-y-0 left-0 w-[32%] max-w-[280px]"
           style={{
             opacity: (theme === "reclusion" ? 0.16 : 0.22) * atmScale,
             filter: "blur(0.6px)",
+            transformOrigin: "50% 100%",
           }}
         >
           <svg
@@ -681,7 +777,7 @@ export default function InkBackground({
       {/* Mist — horizontal 岚气 bands (waist + valley), not glow blobs */}
       {mistLevel && (
         <div className="absolute inset-0" style={{ opacity: atmScale }}>
-          {mistLevel === "heavy" && (
+          {showMistSheet && (
             <div
               className="ink-mist-sheet absolute inset-0"
               style={{
@@ -706,7 +802,8 @@ export default function InkBackground({
               ].join(", "),
             }}
           />
-          {/* Valley fog — 谷底 */}
+          {/* Valley fog — 谷底；卡片只保留一层腰雾+谷底 */}
+          {!isCard && (
           <div
             className="ink-mist ink-mist-b absolute -left-[10%] w-[120%]"
             style={{
@@ -721,9 +818,10 @@ export default function InkBackground({
               ].join(", "),
             }}
           />
-          {(mistLevel === "heavy" || intensity === "full") && (
+          )}
+          {showExtraMist && (
             <div
-              className="ink-mist ink-mist-a absolute left-[5%] w-[95%]"
+              className="ink-mist ink-mist-c absolute left-[5%] w-[95%]"
               style={{
                 top: "52%",
                 height: "12%",
@@ -738,73 +836,11 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Rain — unified wind, depth layers, mild tilt jitter */}
+      {/* Rain — 种子程序化生成；行程用 cqh 随画布缩放 */}
       {visual.rain && (
         <div className="rain-field pointer-events-none absolute inset-0 overflow-hidden">
           <div className="rain-veil absolute inset-0" />
-          {(
-            [
-              // left%, delay, dur, len, opacity, tilt (wind ~+4°), layer 0=far 1=near
-              [4, 0, 5.6, 22, 0.16, 3, 0],
-              [7, 0.5, 5.8, 20, 0.14, 5, 0],
-              [10, 1.1, 5.4, 24, 0.15, 4, 0],
-              [13, 1.7, 5.9, 18, 0.14, 2, 0],
-              [16, 0.3, 5.5, 25, 0.16, 5, 0],
-              [19, 2.4, 5.7, 21, 0.15, 3, 0],
-              [23, 1.4, 5.3, 26, 0.16, 6, 0],
-              [26, 3.0, 6.0, 19, 0.13, 4, 0],
-              [30, 0.8, 5.5, 23, 0.15, 3, 0],
-              [34, 2.0, 5.8, 21, 0.14, 5, 0],
-              [38, 3.5, 5.4, 24, 0.15, 2, 0],
-              [60, 0.4, 5.6, 22, 0.15, 4, 0],
-              [63, 1.3, 5.9, 20, 0.14, 3, 0],
-              [66, 2.6, 5.4, 25, 0.16, 5, 0],
-              [69, 0.9, 5.7, 18, 0.13, 6, 0],
-              [72, 3.2, 5.5, 23, 0.15, 2, 0],
-              [76, 1.6, 5.8, 21, 0.14, 4, 0],
-              [79, 3.8, 5.3, 26, 0.16, 3, 0],
-              [83, 0.2, 5.9, 19, 0.13, 5, 0],
-              [86, 2.2, 5.5, 24, 0.15, 4, 0],
-              [90, 3.6, 5.7, 20, 0.14, 2, 0],
-              [93, 1.0, 5.4, 25, 0.16, 6, 0],
-              [96, 4.2, 5.8, 21, 0.13, 3, 0],
-              [5, 4.6, 5.5, 22, 0.14, 4, 0],
-              [28, 4.9, 5.6, 20, 0.14, 5, 0],
-              [74, 5.1, 5.7, 24, 0.15, 2, 0],
-              [8, 0.2, 3.9, 40, 0.28, 5, 1],
-              [11, 0.7, 4.0, 38, 0.26, 3, 1],
-              [14, 1.3, 3.7, 44, 0.3, 4, 1],
-              [18, 1.9, 4.1, 36, 0.26, 6, 1],
-              [21, 0.5, 3.8, 42, 0.28, 2, 1],
-              [25, 2.5, 4.0, 39, 0.27, 5, 1],
-              [29, 1.2, 3.7, 45, 0.3, 3, 1],
-              [33, 3.1, 4.2, 35, 0.24, 4, 1],
-              [37, 2.0, 3.9, 41, 0.28, 6, 1],
-              [61, 0.4, 3.8, 40, 0.28, 4, 1],
-              [65, 1.5, 4.1, 37, 0.26, 3, 1],
-              [68, 2.8, 3.7, 43, 0.29, 5, 1],
-              [72, 0.8, 4.0, 39, 0.27, 2, 1],
-              [75, 2.2, 3.8, 44, 0.3, 6, 1],
-              [79, 3.4, 4.2, 36, 0.25, 4, 1],
-              [82, 1.0, 3.9, 41, 0.28, 3, 1],
-              [85, 2.6, 4.0, 38, 0.26, 5, 1],
-              [88, 3.7, 3.7, 45, 0.29, 2, 1],
-              [92, 0.6, 4.1, 40, 0.27, 6, 1],
-              [95, 1.8, 3.8, 37, 0.25, 4, 1],
-              [9, 4.4, 4.0, 42, 0.26, 3, 1],
-              [16, 4.8, 3.8, 39, 0.26, 5, 1],
-              [23, 5.0, 4.1, 36, 0.24, 2, 1],
-              [31, 5.3, 3.9, 43, 0.27, 6, 1],
-              [70, 5.5, 4.0, 40, 0.26, 4, 1],
-              [77, 5.7, 3.7, 44, 0.28, 3, 1],
-              [84, 5.9, 4.1, 38, 0.25, 5, 1],
-              [91, 6.1, 3.9, 41, 0.26, 2, 1],
-              [43, 2.3, 5.7, 22, 0.12, 4, 0],
-              [47, 3.9, 4.0, 36, 0.2, 5, 1],
-              [53, 5.2, 5.6, 21, 0.12, 3, 0],
-              [57, 6.0, 4.1, 38, 0.2, 4, 1],
-            ] as const
-          ).map(([left, delay, dur, h, op, tilt, layer], i) => (
+          {rainDrops.map(([left, delay, dur, h, op, tilt, layer], i) => (
             <span
               key={i}
               className={`rain-drop absolute ${layer === 0 ? "rain-drop--far" : "rain-drop--near"}`}
@@ -823,8 +859,8 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Soft ground snow wash — under falling particles */}
-      {visual.snow && (
+      {/* Soft ground snow wash — under falling particles（寒江无 CSS 雪点） */}
+      {showSnowDots && (
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ opacity: 0.55 * atmScale }}
@@ -864,8 +900,9 @@ export default function InkBackground({
           style={{
             left: `${boatLeft}%`,
             bottom: `${theme === "snow-river" ? 13 : 15}%`,
-            width: "min(11vw, 88px)",
-            opacity: (intensity === "soft" ? 0.1 : 0.14) * atmScale,
+            width: isCard ? "min(18cqw, 48px)" : "min(11vw, 88px)",
+            opacity:
+              (intensity === "soft" || isCard ? 0.1 : 0.14) * atmScale,
             filter: "blur(1.6px)",
           }}
         >
@@ -963,7 +1000,7 @@ export default function InkBackground({
           />
           {/* 酒焰光核 — 慢脉动 */}
           <div
-            className="wine-ember absolute left-1/2 top-[56%] h-[min(42vh,320px)] w-[min(48vw,360px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="wine-ember absolute left-1/2 top-[56%] h-[min(42cqh,320px)] w-[min(48cqw,360px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
               background: [
                 `radial-gradient(ellipse 50% 50% at 50% 50%, ${visual.glow} 0%, transparent 62%)`,
@@ -984,23 +1021,22 @@ export default function InkBackground({
         </div>
       )}
 
-      {/* Water ripples — softer ink rings, low chroma (avoid cartoon pools) */}
+      {/* Water ripples — 同心外扩，三环同中心、delay 各差 1/3 周期 */}
       {visual.ripples && (
         <div
-          className="absolute bottom-[14%] left-1/2 w-[min(62%,460px)] -translate-x-1/2"
+          className="absolute bottom-[14%] left-1/2 h-8 w-[min(62%,460px)] -translate-x-1/2"
           style={{ opacity: 0.72 * atmScale }}
         >
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="ripple-ring absolute left-1/2 top-0 -translate-x-1/2 rounded-[100%]"
+              className="ripple-ring absolute left-1/2 top-1/2 aspect-[5/1] -translate-x-1/2 -translate-y-1/2 rounded-[100%]"
               style={{
                 width: `${48 + i * 28}%`,
-                height: 12 + i * 7,
                 border: "none",
-                background: `radial-gradient(ellipse 50% 50% at 50% 50%, transparent 44%, rgba(245,239,226,${0.045 - i * 0.01}) 58%, transparent 74%)`,
+                background: `radial-gradient(ellipse 50% 50% at 50% 50%, transparent 44%, rgba(245,239,226,${0.05 - i * 0.01}) 58%, transparent 74%)`,
                 filter: "blur(1.8px)",
-                animationDelay: `${i * 1.1}s`,
+                animationDelay: `${i * (4 / 3)}s`,
               }}
             />
           ))}
@@ -1061,9 +1097,22 @@ export default function InkBackground({
                   opacity={b.o}
                 >
                   <g className="birds-bob" style={{ animationDelay: b.delay }}>
+                    {/* 双翼 path 错相位 opacity 交替 → 扇翅感 */}
                     <path
-                      d="M0,0 C-8,-6 -16,-4 -22,-1 C-12,-2 -6,1 0,2 C6,1 12,-2 22,-1 C16,-4 8,-6 0,0 Z"
+                      className="birds-wing birds-wing--a"
+                      d="M0,0 C-8,-6 -16,-4 -22,-1 C-12,-2 -6,1 0,2"
                       fill="rgba(230,236,242,0.9)"
+                      style={{ animationDelay: b.delay }}
+                    />
+                    <path
+                      className="birds-wing birds-wing--b"
+                      d="M0,2 C6,1 12,-2 22,-1 C16,-4 8,-6 0,0"
+                      fill="rgba(230,236,242,0.9)"
+                      style={{ animationDelay: b.delay }}
+                    />
+                    <path
+                      d="M0,0 C-3,0.5 0,1.2 0,2 C0,1.2 3,0.5 0,0 Z"
+                      fill="rgba(230,236,242,0.95)"
                     />
                   </g>
                 </g>
@@ -1106,12 +1155,11 @@ export default function InkBackground({
         </>
       )}
 
-      {/* Vignette */}
+      {/* Vignette — 随 atmScale，卡片不压黑四角 */}
       <div
         className="absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%)",
+          background: `radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,${vignetteAlpha}) 100%)`,
         }}
       />
     </div>
