@@ -55,12 +55,11 @@ export default function HomePage() {
         <InkBackground theme="landscape" intensity="soft" />
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="type-eyebrow">SELECTED</p>
-              <T as="h2" className="type-display text-2xl md:text-3xl">
+            <div className="mb-16 flex flex-col items-center md:mb-20">
+              <span className="ink-rule mb-8" aria-hidden />
+              <T as="h2" className="type-group-label tracking-[0.55em]">
                 精 选 诗 卷
               </T>
-              <span className="ink-rule ink-rule--md mt-2" aria-hidden />
             </div>
           </ScrollReveal>
 
@@ -80,16 +79,15 @@ export default function HomePage() {
 
       <HomeImageryGates counts={gateCounts} />
 
-      {/* Featured authors */}
-      <section className="relative border-t border-xuan/5 px-6 py-28 md:px-10 md:py-36">
+      {/* Featured authors —— 与上方意境带长短相间，不再用水平灰线分区 */}
+      <section className="relative px-6 py-28 md:px-10 md:py-40">
         <div className="relative z-10 mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-16 flex flex-col items-center gap-4 text-center md:mb-20">
-              <p className="type-eyebrow">POETS</p>
-              <T as="h2" className="type-display text-2xl md:text-3xl">
+            <div className="mb-16 flex flex-col items-center md:mb-20">
+              <span className="ink-rule mb-8" aria-hidden />
+              <T as="h2" className="type-group-label tracking-[0.55em]">
                 精 选 名 家
               </T>
-              <span className="ink-rule ink-rule--md mt-2" aria-hidden />
             </div>
           </ScrollReveal>
 
@@ -113,7 +111,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-xuan/5 px-6 py-12 text-center md:py-14">
+      <footer className="border-t border-rule-faint px-6 py-12 text-center md:py-14">
         <ScrollReveal>
           <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
             <T>

@@ -11,6 +11,16 @@
   --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
 
   /*
+   * 青黛结构线 —— 版心 / 卡片边 / 分区
+   * 灰描边读作 UI chrome，冷墨线读作印版墨线。
+   * 用 --qingdai 的提亮调而非原色叠 alpha：#34495e 亮度与墨底相近，
+   * 直接压 alpha 会糊进背景，提亮后才在墨底上读得出线。
+   */
+  --rule-line: rgba(104, 130, 156, 0.5);
+  --rule-faint: rgba(104, 130, 156, 0.26);
+  --rule-wash: rgba(52, 73, 94, 0.16);
+
+  /*
    * Type scale — 语义色阶 / 字距（A+B）
    * primary 正文·题 | secondary 作者 | meta UI 元信息
    * quiet 分区标签 | faint 禁用/极弱
@@ -41,6 +51,10 @@
   --color-qingdai: #34495e;
   --color-xuan-muted: rgba(245, 239, 226, 0.55);
   --color-xuan-faint: rgba(245, 239, 226, 0.12);
+  /* inline：值本身是 custom property，需内联展开（同下方 --font-serif 机制） */
+  --color-rule: var(--rule-line);
+  --color-rule-faint: var(--rule-faint);
+  --color-rule-wash: var(--rule-wash);
   --font-serif-sc: var(--font-noto-serif-sc), "Noto Serif SC", "Songti SC",
     "SimSun", serif;
   --font-serif-tc: var(--font-noto-serif-tc), "Noto Serif TC", "Songti TC",
@@ -1024,14 +1038,6 @@ body {
  * 字体铁律：诗/题/人名 → wenkai；长文 → serif；导航筛选 → sans
  */
 
-/* 页眉英数眉题 COLLECTION / POETS */
-.type-eyebrow {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: var(--track-eyebrow);
-  color: var(--type-meta);
-}
-
 /* 列表/页级大题 */
 .type-display {
   font-family: var(--font-wenkai);
@@ -1210,6 +1216,425 @@ body {
 
 .ink-rule--lg {
   width: 5rem;
+}
+
+/*
+ * 版心 —— 刻本书页中缝，目录四页共用
+ * 竖条在流内，边线即内容栏的版框；卷名 → 鱼尾 → 页码 → 翻页
+ * 结构色走青黛（--rule-*），与灰描边的 UI chrome 区分开
+ */
+.banxin {
+  position: relative;
+  width: clamp(3.25rem, 4.5vw, 4rem);
+  flex-shrink: 0;
+}
+
+/*
+ * 版框墨线与底纹拆成独立元素，边线才能自上而下画出来 ——
+ * 缩放 aside 本身会一并挤压卷名一叠。aside 是 stretch 的 flex 子项，
+ * top/bottom 归零即满栏高，满高版框不因此丢失。
+ */
+.banxin-rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--rule-line);
+  transform-origin: top;
+}
+
+/* 纸靠版框略暗，离缝渐淡 */
+.banxin-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--rule-wash), transparent 76%);
+  pointer-events: none;
+}
+
+/* 卷名一叠随滚动停在导航下方；须盖在墨线与底纹之上 */
+.banxin-plate {
+  position: sticky;
+  z-index: 1;
+  top: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding-top: 0.35rem;
+}
+
+/* 竖排宽字距：letter-spacing 在 vertical-rl 下即字与字的上下距 */
+.banxin-volume {
+  writing-mode: vertical-rl;
+  font-family: var(--font-wenkai);
+  font-size: 0.9375rem;
+  letter-spacing: 0.42em;
+  color: var(--type-primary);
+  /* 末字之后仍留一格字距，回收之才与鱼尾等距 */
+  margin-bottom: -0.42em;
+}
+
+.banxin-fishtail {
+  color: var(--rule-line);
+}
+
+.banxin-below {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.banxin-folio {
+  writing-mode: vertical-rl;
+  font-family: var(--font-wenkai);
+  font-size: 0.8125rem;
+  letter-spacing: 0.3em;
+  color: var(--type-meta);
+  margin-bottom: -0.3em;
+}
+
+/* 页码上下两数之间的界线：本页 / 全卷 */
+.banxin-hair {
+  display: block;
+  width: 1.05rem;
+  height: 1px;
+  background: var(--rule-faint);
+}
+
+/*
+ * 页码滚动格：格里叠一个不可见的最长页码撑住尺寸，动的那个数浮在同一格上。
+ * 不撑则「九 → 十」多出一字，界线与全卷数要跟着跳一格。
+ */
+.banxin-roll {
+  display: grid;
+  justify-items: center;
+}
+
+.banxin-roll > * {
+  grid-area: 1 / 1;
+}
+
+.banxin-turn-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.banxin-turn {
+  font-family: var(--font-wenkai);
+  font-size: 0.8125rem;
+  line-height: 1;
+  color: var(--type-quiet);
+  transition: color var(--duration-color) ease;
+}
+
+.banxin-turn:hover {
+  color: var(--cinnabar);
+}
+
+.banxin-turn:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline-offset: 4px;
+}
+
+.banxin-turn--off {
+  color: var(--type-faint);
+}
+
+/* 移动端：版心降级为内容顶部的横向书眉 */
+.banxin-eave {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 0.7rem;
+}
+
+/* 书眉横线：与版框同一手势，只是自左而右 */
+.banxin-eave-rule {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--rule-faint);
+  transform-origin: left;
+}
+
+.banxin-eave-volume {
+  font-family: var(--font-wenkai);
+  font-size: 0.9375rem;
+  letter-spacing: 0.3em;
+  color: var(--type-primary);
+}
+
+/* 横排汉数字：书眉与移动端页尾翻页共用 */
+.banxin-num {
+  font-family: var(--font-wenkai);
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  color: var(--type-meta);
+}
+
+/* 书眉页码：「本页」在滚动格里动，「／全卷」静止在右 */
+.banxin-eave-folio {
+  margin-left: auto;
+  display: flex;
+  align-items: baseline;
+}
+
+/* 格子右缘对齐，页码位数变化时「／全卷」不左右晃 */
+.banxin-eave-folio .banxin-roll {
+  justify-items: end;
+}
+
+/*
+ * 意境条 —— 替掉描边方块阵
+ * 各条自带主题辉光（`themeMap.glow`），从右缘晕入，左侧留给文字；
+ * 底部朱砂基线长度编码篇数多寡（柱状图退化成一根线）。
+ * 只用静态 gradient：35 条同屏，不挂氛围层与粒子。
+ */
+.imagery-bar {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 1.15rem 1.15rem 1.4rem;
+  border-left: 1px solid var(--rule-faint);
+  transition: border-color var(--duration-color) ease;
+}
+
+.imagery-bar__wash {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 600ms var(--ease-elegant);
+}
+
+.imagery-bar__label {
+  position: relative;
+  display: block;
+  font-family: var(--font-wenkai);
+  font-size: 1.0625rem;
+  letter-spacing: 0.3em;
+  color: var(--type-primary);
+  transition: color var(--duration-color) ease;
+}
+
+.imagery-bar__count {
+  position: relative;
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: var(--track-ui);
+  color: var(--type-quiet);
+}
+
+/*
+ * 篇数多寡：宽度由页面按 √(n/max) 算。
+ * 入场时用 scaleX 从这个左端点长到既定宽度 —— 缩放不触发布局，
+ * 且终态 scaleX(1) 就是内联宽度本身，量差信息不因动效变形。
+ */
+.imagery-bar__base {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--cinnabar);
+  opacity: 0.5;
+  transform-origin: left;
+}
+
+.imagery-bar:hover {
+  border-left-color: var(--cinnabar);
+}
+
+.imagery-bar:hover .imagery-bar__wash {
+  opacity: 1;
+}
+
+.imagery-bar:hover .imagery-bar__label {
+  color: var(--cinnabar);
+}
+
+.imagery-bar:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline-offset: 2px;
+}
+
+/* 无篇章：不可点，退到最弱一档 */
+.imagery-bar--empty {
+  border-left-color: var(--rule-wash);
+}
+
+.imagery-bar--empty .imagery-bar__wash {
+  opacity: 0.25;
+}
+
+.imagery-bar--empty .imagery-bar__label {
+  color: var(--type-quiet);
+}
+
+/*
+ * 诗笺 —— 空笺、笺印、收入次序
+ * 与版心同一套青黛结构线；「笺」印沿用详情页 ShelfButton 的字面与朱砂
+ */
+.empty-jian {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13.5rem;
+  height: 21rem;
+  border: 1px solid var(--rule-line);
+  background: var(--rule-wash);
+}
+
+/* 刻本双边：外框硬，内框细 */
+.empty-jian::before {
+  content: "";
+  position: absolute;
+  inset: 0.4rem;
+  border: 1px solid var(--rule-faint);
+  pointer-events: none;
+}
+
+.empty-jian__line {
+  writing-mode: vertical-rl;
+  font-family: var(--font-wenkai);
+  font-size: 1.125rem;
+  letter-spacing: 0.4em;
+  color: var(--type-secondary);
+}
+
+.empty-jian__note {
+  writing-mode: vertical-rl;
+  margin-top: 0.9rem;
+  font-family: var(--font-wenkai);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--type-quiet);
+}
+
+/* 盖在卡片右上角的朱砂小印，常显 */
+.jian-seal {
+  position: absolute;
+  top: -0.375rem;
+  right: -0.375rem;
+  z-index: 2;
+  display: flex;
+  height: 1.65rem;
+  width: 1.65rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(178, 58, 72, 0.45);
+  background: var(--ink);
+  font-family: var(--font-wenkai);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--cinnabar);
+  transition:
+    border-color var(--duration-color) ease,
+    background-color var(--duration-color) ease;
+}
+
+.jian-seal:hover {
+  border-color: var(--cinnabar);
+  background: rgba(178, 58, 72, 0.14);
+}
+
+.jian-seal:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline-offset: 3px;
+}
+
+.jian-ordinal {
+  position: absolute;
+  left: 0;
+  bottom: -1.5rem;
+  font-family: var(--font-wenkai);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--type-faint);
+}
+
+/*
+ * 意境带 —— 首页六道竖栏，一条横幅而非六个方块
+ * 栏间细线是版框墨线（--rule-faint），不是卡片描边
+ */
+.imagery-band {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border: 1px solid var(--rule-faint);
+}
+
+.imagery-band__cell + .imagery-band__cell {
+  border-left: 1px solid var(--rule-faint);
+}
+
+.imagery-band__gate {
+  position: relative;
+  display: flex;
+  height: 13rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+  transition: background-color var(--duration-color) ease;
+}
+
+@media (min-width: 768px) {
+  .imagery-band__gate {
+    height: 17rem;
+  }
+}
+
+.imagery-band__wash {
+  position: absolute;
+  inset: 0;
+  opacity: 0.75;
+  pointer-events: none;
+  transition: opacity 600ms var(--ease-elegant);
+}
+
+.imagery-band__label {
+  position: relative;
+  writing-mode: vertical-rl;
+  font-family: var(--font-wenkai);
+  font-size: 1.25rem;
+  letter-spacing: 0.36em;
+  color: var(--type-primary);
+  transition: color var(--duration-color) ease;
+  /* 竖排末字后的字距回收，使字组视觉居中 */
+  margin-bottom: -0.36em;
+}
+
+.imagery-band__count {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: var(--track-ui);
+  color: var(--type-quiet);
+}
+
+.imagery-band__gate:hover .imagery-band__wash {
+  opacity: 1;
+}
+
+.imagery-band__gate:hover .imagery-band__label {
+  color: var(--cinnabar);
+}
+
+.imagery-band__gate:focus-visible {
+  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline-offset: -3px;
 }
 
 /* 次级文字链：遍览 / 归卷首 / 回诗卷 */

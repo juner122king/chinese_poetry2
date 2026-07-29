@@ -1,12 +1,12 @@
 import InkBackground from "@/components/InkBackground";
+import Banxin from "@/components/Banxin";
 import PoemCard from "@/components/PoemCard";
-import PoemsHeader from "@/components/PoemsHeader";
 import PoemsPagination from "@/components/PoemsPagination";
 import PoemsToolbar from "@/components/PoemsToolbar";
-import ScrollReveal from "@/components/ScrollReveal";
 import T from "@/components/T";
 import { poems } from "@/data/poems";
 import {
+  buildPoemsHref,
   dynastiesFromPoems,
   filterPoems,
   paginatePoems,
@@ -36,34 +36,46 @@ export default async function PoemsPage({ searchParams }: Props) {
   const dynasties = dynastiesFromPoems(poems);
   const tagOptions = topTagsFromPoems(poems, 12);
 
+  // 版心翻页：复用 buildPoemsHref，翻页不丢筛选
+  const turnBase = { ...filters, page: undefined };
+
   return (
     <div className="relative min-h-screen">
       <InkBackground theme="landscape" intensity="soft" />
-      <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
-        <ScrollReveal>
-          <PoemsHeader count={poems.length} />
-        </ScrollReveal>
+      <div className="relative z-10">
+        <Banxin
+          volume="诗卷"
+          folio={{ page, total: totalPages }}
+          prevHref={
+            page > 1 ? buildPoemsHref({ ...turnBase, page: page - 1 }) : null
+          }
+          nextHref={
+            page < totalPages
+              ? buildPoemsHref({ ...turnBase, page: page + 1 })
+              : null
+          }
+        >
+          <PoemsToolbar
+            filters={listFilters}
+            dynasties={dynasties}
+            tagOptions={tagOptions}
+            resultCount={total}
+          />
 
-        <PoemsToolbar
-          filters={listFilters}
-          dynasties={dynasties}
-          tagOptions={tagOptions}
-          resultCount={total}
-        />
+          {total === 0 ? (
+            <p className="type-meta py-20 text-center text-sm">
+              <T>未得篇章，可改筛选或清除后再寻。</T>
+            </p>
+          ) : (
+            <div className="columns-1 gap-6 sm:columns-2">
+              {pageItems.map((poem, i) => (
+                <PoemCard key={poem.id} poem={poem} index={i} />
+              ))}
+            </div>
+          )}
 
-        {total === 0 ? (
-          <p className="type-meta py-20 text-center text-sm">
-            <T>未得篇章，可改筛选或清除后再寻。</T>
-          </p>
-        ) : (
-          <div className="columns-1 gap-6 sm:columns-2">
-            {pageItems.map((poem, i) => (
-              <PoemCard key={poem.id} poem={poem} index={i} />
-            ))}
-          </div>
-        )}
-
-        <PoemsPagination filters={listFilters} totalPages={totalPages} />
+          <PoemsPagination filters={listFilters} totalPages={totalPages} />
+        </Banxin>
       </div>
     </div>
   );

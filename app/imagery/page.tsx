@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Banxin from "@/components/Banxin";
+import GroupRule from "@/components/GroupRule";
+import ImageryBar from "@/components/ImageryBar";
 import InkBackground from "@/components/InkBackground";
-import ScrollReveal from "@/components/ScrollReveal";
-import T from "@/components/T";
 import { countPoemsByTag } from "@/data/poems";
 import {
   imageryTaxonomy,
   type TagGroup,
 } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
+import { getThemeVisual } from "@/lib/theme-map";
 
 export const metadata: Metadata = {
   title: "意境 · 墨韵",
@@ -24,8 +25,18 @@ const GROUP_ORDER: TagGroup[] = [
   "行旅器物",
 ];
 
+/**
+ * 基线长度用平方根压缩：篇数跨度约 1–150，线性刻度会把个位数的意境
+ * 压成看不见的一点。确数就印在旁边，这根线只作相对轻重，非量具。
+ */
+function baselineWidth(n: number, max: number): string {
+  if (n <= 0 || max <= 0) return "0%";
+  return `${(Math.sqrt(n / max) * 100).toFixed(1)}%`;
+}
+
 export default function ImageryPage() {
   const counts = countPoemsByTag();
+  const maxCount = Math.max(1, ...counts.values());
 
   const byGroup = GROUP_ORDER.map((group) => ({
     group,
@@ -35,71 +46,41 @@ export default function ImageryPage() {
   return (
     <div className="relative min-h-screen">
       <InkBackground theme="landscape" intensity="soft" />
-      <div className="relative z-10 mx-auto max-w-5xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
-        <ScrollReveal>
-          <header className="mb-20 flex flex-col items-center gap-4 text-center">
-            <p className="type-eyebrow">IMAGERY</p>
-            <T as="h1" className="type-display text-3xl md:text-4xl">
-              意 境
-            </T>
-            <T
-              as="p"
-              className="mt-2 max-w-md font-serif text-xs leading-relaxed tracking-[0.2em] text-[color:var(--type-meta)]"
-            >
-              按归集标签入诗卷。春月离别，各有门径。
-            </T>
-            <span className="ink-rule ink-rule--lg mt-4" aria-hidden />
-          </header>
-        </ScrollReveal>
+      <div className="relative z-10">
+        <Banxin
+          volume="意境"
+          extent={{ count: imageryTaxonomy.length, unit: "目" }}
+        >
+          {byGroup.map(({ group, tags }, gi) => {
+            const groupDelay = Math.min(gi, 4) * 0.04;
 
-        {byGroup.map(({ group, tags }, gi) => (
-          <section key={group} className="mb-16">
-            <ScrollReveal delay={Math.min(gi, 4) * 0.04}>
-              <div className="mb-8 flex items-center gap-6">
-                <T as="span" className="type-group-label">
-                  {group}
-                </T>
-                <span className="h-px flex-1 bg-gradient-to-r from-xuan/15 to-transparent" />
-              </div>
-            </ScrollReveal>
+            return (
+              <section key={group} className="mb-14">
+                <GroupRule label={group} delay={groupDelay} />
 
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {tags.map((tag, i) => {
-                const n = counts.get(tag.id) ?? 0;
-                return (
-                  <li key={tag.id}>
-                    <ScrollReveal delay={Math.min(i, 8) * 0.03}>
-                      <Link
-                        href={buildPoemsHref({ tag: tag.id })}
-                        className="group flex flex-col items-center gap-2 rounded-sm border border-xuan/10 bg-xuan/[0.02] px-4 py-6 text-center transition-[border-color,background-color] duration-500 hover:border-cinnabar/35 hover:bg-xuan/[0.04]"
-                      >
-                        <T
-                          as="span"
-                          className="font-wenkai text-lg tracking-[0.35em] text-[color:var(--type-primary)] transition-colors duration-300 group-hover:text-cinnabar"
-                        >
-                          {tag.label}
-                        </T>
-                        <span className="type-quiet text-[11px]">
-                          {n > 0 ? (
-                            <T>{`${n} 篇`}</T>
-                          ) : (
-                            <T>暂无</T>
-                          )}
-                        </span>
-                      </Link>
-                    </ScrollReveal>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))}
+                {/* 竖列不留缝：各条左侧墨线相接成一道版框，读作刻本目录而非卡片阵 */}
+                <ul className="grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+                  {tags.map((tag, i) => {
+                    const n = counts.get(tag.id) ?? 0;
 
-        <div className="mt-8 text-center">
-          <Link href="/poems" className="text-link-elegant">
-            <T>回诗卷</T>
-          </Link>
-        </div>
+                    return (
+                      <ImageryBar
+                        key={tag.id}
+                        label={tag.label}
+                        count={n}
+                        href={n > 0 ? buildPoemsHref({ tag: tag.id }) : null}
+                        glow={getThemeVisual(tag.defaultTheme).glow}
+                        baseWidth={baselineWidth(n, maxCount)}
+                        // 组内逐条错峰；封顶避免末尾几条等太久
+                        delay={groupDelay + Math.min(i, 11) * 0.035}
+                      />
+                    );
+                  })}
+                </ul>
+              </section>
+            );
+          })}
+        </Banxin>
       </div>
     </div>
   );

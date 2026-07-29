@@ -55,7 +55,7 @@ export default function AuthorWorksList({
             </h2>
             {works.length > 0 && (
               <p className="mt-5 type-meta tracking-[0.28em]">
-                {t(`本站 ${works.length} 篇`)}
+                {t(`收 ${works.length} 篇`)}
               </p>
             )}
             {authorSlug && tagStats.length > 0 && (
@@ -76,7 +76,7 @@ export default function AuthorWorksList({
                     <Link
                       href={buildPoemsHref({ tag, author: authorSlug })}
                       className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
-                      title={t(`本家 ${count} 篇`)}
+                      title={t(`得 ${count} 篇`)}
                     >
                       {t(getTagLabel(tag))}
                     </Link>
@@ -102,18 +102,14 @@ export default function AuthorWorksList({
         {needsCollapse && (
           <div className="mt-12 flex flex-col items-center gap-3 text-center">
             {!expanded ? (
-              <>
-                <p className="type-meta text-[11px]">
-                  {t(`尚有 ${hiddenCount} 篇`)}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setExpanded(true)}
-                  className="text-link-elegant text-[11px]"
-                >
-                  {t("展开全部")}
-                </button>
-              </>
+              // 计数并入按钮：一个元件做一件事，也省掉第五种计数说法
+              <button
+                type="button"
+                onClick={() => setExpanded(true)}
+                className="text-link-elegant text-[11px]"
+              >
+                {t(`展开余下 ${hiddenCount} 篇`)}
+              </button>
             ) : (
               <button
                 type="button"

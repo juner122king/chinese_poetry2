@@ -1,8 +1,10 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useMemo, useSyncExternalStore } from "react";
 import { getPoemById } from "@/data/poems";
+import { toHanNumeral } from "@/lib/han-numeral";
 import type { Poem } from "@/lib/types";
 import {
   clearShelf,
@@ -11,12 +13,29 @@ import {
   removeFromShelf,
   subscribeShelf,
 } from "@/lib/shelf";
+import Banxin from "./Banxin";
 import PoemCard from "./PoemCard";
-import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
 
+/** 与全站 --ease-elegant 一致 */
+const ease = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * 诗笺 —— 读者自攒的一叠册页。
+ *
+ * 移出是两拍：先取出那一张（淡出微缩 0.3s），余下再合拢空位（`layout` 0.45s）。
+ * 顺序即实物顺序 —— 抽走一页，叠子才闭合；序号跟着重编是诚实的。
+ * 不用 `mode="popLayout"` 让两拍并作一拍：它会把退场那张绝对定位，
+ * 在 CSS grid 里需要额外的定位祖先，风险换来的只是省下 0.45s。
+ *
+ * 空笺与网格的切换是**单向**动效。诗笺存在 localStorage，
+ * `getShelfServerSnapshot()` 恒为空，所以每次进入本页都要走一趟「空 → 有」：
+ * 若给空笺配退场、给网格配入场，那一趟就会假报一次「笺是空的」。
+ * 故空笺只有入场，网格只有退场 —— 只有真正移出最后一篇时才看得见。
+ */
 export default function ShelfView() {
   const { t } = useScript();
+  const reduce = useReducedMotion();
   const state = useSyncExternalStore(
     subscribeShelf,
     getShelfSnapshot,
@@ -33,58 +52,90 @@ export default function ShelfView() {
   }, [state.ids]);
 
   return (
-    <>
-      <ScrollReveal>
-        <header className="mb-16 flex flex-col items-center gap-4 text-center">
-          <p className="type-eyebrow">SHELF</p>
-          <h1 className="type-display text-3xl md:text-4xl">{t("诗 笺")}</h1>
-          <p className="mt-2 max-w-md font-serif text-xs leading-relaxed tracking-[0.2em] text-[color:var(--type-meta)]">
-            {t("收入本机，不云不散。刷新仍在。")}
-          </p>
-          <span className="ink-rule ink-rule--lg mt-4" aria-hidden />
-        </header>
-      </ScrollReveal>
-
-      {items.length === 0 ? (
-        <div className="flex flex-col items-center gap-8 py-16 text-center">
-          <p className="type-meta text-sm">
-            {t("笺尚空，可在篇末点「笺」收入。")}
-          </p>
-          <Link href="/poems" className="text-link-elegant">
-            {t("去诗卷")}
-          </Link>
-        </div>
-      ) : (
-        <>
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-6">
-            <p className="type-meta">{t(`收 ${items.length} 篇`)}</p>
-            <button
-              type="button"
-              onClick={() => clearShelf()}
-              className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
-            >
-              {t("清空诗笺")}
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((poem, i) => (
-              <div key={poem.id} className="flex flex-col">
-                <PoemCard poem={poem} index={i} className="!mb-0 h-full" />
-                <div className="mt-3 text-center">
-                  <button
-                    type="button"
-                    onClick={() => removeFromShelf(poem.id)}
-                    className="type-quiet text-[11px] tracking-[0.25em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
-                  >
-                    {t("移出")}
-                  </button>
-                </div>
+    <Banxin
+      volume="诗笺"
+      width="6xl"
+      extent={{ count: items.length, unit: "篇" }}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {items.length === 0 ? (
+          <motion.div
+            key="empty"
+            className="flex flex-col items-center gap-10 py-10"
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduce ? 0 : 0.6, ease }}
+          >
+            {/* 空笺：这一屏确实是空的，就让它是一张空纸条 */}
+            <div className="empty-jian">
+              <div className="flex flex-row-reverse items-start gap-6">
+                <span className="empty-jian__line">{t("笺尚空")}</span>
+                <span className="empty-jian__note">
+                  {t("点篇末「笺」字收入")}
+                </span>
               </div>
-            ))}
-          </div>
-        </>
-      )}
-    </>
+            </div>
+            <Link href="/poems" className="text-link-elegant">
+              {t("去诗卷")}
+            </Link>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="filled"
+            exit={reduce ? undefined : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.35, ease }}
+          >
+            <div className="mb-10 flex justify-end">
+              <button
+                type="button"
+                onClick={() => clearShelf()}
+                className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
+              >
+                {t("全部移出")}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              <AnimatePresence initial={false}>
+                {items.map((poem, i) => (
+                  <motion.div
+                    key={poem.id}
+                    layout={!reduce}
+                    exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
+                    transition={{
+                      duration: reduce ? 0 : 0.3,
+                      ease,
+                      layout: { duration: reduce ? 0 : 0.45, ease },
+                    }}
+                    className="relative flex flex-col"
+                  >
+                    <PoemCard poem={poem} index={i} className="!mb-0 h-full" />
+
+                    {/*
+                      「笺」印盖在卡片右上角，与详情页 ShelfButton 同一套字面与朱砂；
+                      常显（触屏无 hover），点击即移出。压在角上而非卡内，避开长题。
+                    */}
+                    <button
+                      type="button"
+                      onClick={() => removeFromShelf(poem.id)}
+                      aria-label={t("移出")}
+                      title={t("移出")}
+                      className="jian-seal"
+                    >
+                      {t("笺")}
+                    </button>
+
+                    {/* 收入次序：新收在前。此处是读者自攒的有序册页，编号才成立 */}
+                    <span className="jian-ordinal" aria-hidden>
+                      {toHanNumeral(i + 1)}
+                    </span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Banxin>
   );
 }

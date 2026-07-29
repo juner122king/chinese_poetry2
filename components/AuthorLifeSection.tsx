@@ -76,7 +76,7 @@ export default function AuthorLifeSection({ author, tagStats }: Props) {
                   <Link
                     href={buildPoemsHref({ tag, author: author.slug })}
                     className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
-                    title={t(`本家 ${count} 篇`)}
+                    title={t(`得 ${count} 篇`)}
                   >
                     {t(getTagLabel(tag))}
                   </Link>

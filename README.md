@@ -143,13 +143,87 @@ npx wrangler r2 bucket create chinese-poetry2-opennext-cache
 - 产出目录：`.open-next/`（已 gitignore）
 - 需 Node ≥ 20；账号凭证用 Cloudflare API Token（`CLOUDFLARE_API_TOKEN`）
 
-## 设计色
+## 视觉设计
+
+### 设计色
 
 - 深墨 `#0D0D0D` — 页面底
 - 宣纸 `#F5EFE2` — 主文字（以透明度分阶）
 - 朱砂 `#B23A48` — 交互当前态、印章、hover 点睛（非常显大面积）
-- 青黛 `#34495E` — **辅色预留**，当前 UI 未启用（token 仍在 `globals.css`）
+- 青黛 `#34495E` — **结构线**：版框、组题横线、卡片边与极淡底纹
 
-文字语义 class 见 `globals.css`：`.type-eyebrow` / `.type-display` / `.type-meta` / `.type-nav` 等。
+青黛不作色块，只作线；同一色相分三档：
+
+| token | 值 | 用处 |
+|------|----|------|
+| `--rule-line` | `rgba(104,130,156,.5)` | 版框竖线、空笺外框 |
+| `--rule-faint` | `rgba(104,130,156,.26)` | 组题横线、卡片边、页脚线、书眉线 |
+| `--rule-wash` | `rgba(52,73,94,.16)` | 卡片与空笺底纹 |
+
+`@theme inline` 另出 `--color-rule` / `--color-rule-faint` / `--color-rule-wash`，故 Tailwind 侧可直接写 `border-rule-faint` / `bg-rule-wash` / `from-rule-faint`。
+
+### 字体铁律
+
+| 用途 | 字体 |
+|------|------|
+| 诗句、诗题、人名、汉数字 | `--font-wenkai`（霞鹜文楷） |
+| 简介、长文 | `--font-serif`（Noto Serif SC/TC） |
+| 导航、筛选、计数、组题 | `--font-sans`（Noto Sans SC/TC） |
+
+文字语义 class 见 `globals.css`：`.type-display` / `.type-group-label` / `.type-meta` / `.type-quiet` / `.type-nav` 等。分区标题一律「前置 `.ink-rule` + `.type-group-label`」，不用英文眉题。
 
 简繁：`moyun-script` cookie 决定 SSR 挂载 Noto Serif/Sans 的 SC 或 TC；霞鹜文楷始终加载。切换简繁会刷新页面以换字体包。
+
+### 结构装置：版心
+
+目录四页（`/poems` `/imagery` `/authors` `/shelf`）共用 `components/Banxin.tsx` —— 刻本书页中缝，一条右缘竖条，自上而下：
+
+```
+卷名         诗卷 / 意境 / 名家 / 诗笺
+鱼尾         FishtailMark，位置即真实分界
+页码 / 总量  有分页的卷放「本页／全卷」，无分页的卷放卷内总量
+翻页         上 / 下
+```
+
+- **鱼尾之上恒为卷名，之下恒为「位置或范围」**，四页不设特例。
+- 竖条在流内（`sticky`）而非 `fixed`：边线因此自然成为内容栏的版框，宽屏下贴内容右缘而不漂在视口边上。
+- 页宽与内边距由 `Banxin` 统一持有（`width="5xl" | "6xl"`），页面自身不再写 `max-w-*`。
+- 移动端降级为内容顶部的横向书眉；翻页交回页尾的 `PoemsPagination` / `AuthorsPagination`（`md:hidden`，拇指可达优于顶部）。
+- 汉数字只出现在版心（`lib/han-numeral.ts`），读屏另给阿拉伯数字（`sr-only`）；工具栏与筛选仍用阿拉伯数字。
+
+### 动效母题：打界行
+
+刻本第一道工序是打界行 —— 先划版框行线，后落字。站点三根线各载一种量：
+
+| 线 | 手势 | 载什么 |
+|----|------|--------|
+| 版框竖线（版心） | `scaleY 0→1`，自上而下 | 「这是一卷书页的中缝」 |
+| 组题横线（`GroupRule`） | `scaleX 0→1`，自左而右 | 「这一组到此为止」 |
+| 朱砂基线（`ImageryBar`） | `scaleX 0→1`，长到 √(n/max) | **篇数多寡在眼前画出来** |
+
+**边界**：这道手势只给这三根线。意境带、空笺、诗笺都不画线 —— 一个签名手势用满全站就不再是签名。与既有的 `.ink-rule`（梭形短墨线，静止）不是一回事。
+
+另有三处编排：
+
+- **落版**：进入目录页时版心按 界线 → 底纹 → 卷名 → 鱼尾 → 页码 → 翻页 自我组装，共约 1s（`Banxin.tsx` 的 `LAY`）。
+- **翻页有向滚动**：`?page=` 变化时只有「本页」那个数动，往后翻自下升入、往前翻自上降入；界线、卷名、鱼尾一概不动 —— 翻的是页，不是版。`app/template.tsx` 按 segment 重挂而 search param 不重挂，故落版不随翻页重放。
+- **诗笺移出**：两拍。先取出那一张（淡出微缩 0.3s），余下再 `layout` 合拢空位（0.45s）。空笺与网格的切换是单向的：空笺只有入场、网格只有退场 —— `getShelfServerSnapshot()` 恒为空，双向会让每次进入 `/shelf` 都假报一次「笺是空的」。
+
+全部动效只动 `opacity` / `transform`。缓动 `--ease-elegant: cubic-bezier(.22,1,.36,1)`，JS 侧写作 `[0.22, 1, 0.36, 1]`。
+
+### 无障碍底线
+
+新动效一律由 framer-motion 的 `useReducedMotion()` 兜底（`initial={reduce ? false : …}`）。其中**朱砂基线在「减少动态效果」下必须渲染为完整长度** —— 停在 `scaleX(0)` 会让篇数多寡这条真实信息直接消失，故 `ImageryBar` / `GroupRule` 各有一条显式的静态分支。
+
+导航不用 `mix-blend-difference`：它会把当前态朱砂反色（墨底 → 暗红，亮暖氛围区 → 暗绿）。顶栏可读性交给 `.page-top-veil`（顶部 5.5rem 渐隐遮罩）与文字投影。
+
+### 文案：一种计数说法
+
+| 场合 | 说法 |
+|------|------|
+| 全站规模 | `收 N 篇` |
+| 某意境 / 某家名下 | `得 N 篇` |
+| 折起的余量 | `展开余下 N 篇`（计数并入按钮，一个元件只做一件事） |
+| 空诗笺 | `未收`（不写「收〇篇」——〇 是数字里的占位符，不是「零个」的说法） |
+
+卡片摘句取到首个句读为止，最多 2 行（`PoemCard` 的 `firstSentence()`）：宁可少取一行，也不让诗句被省略号从中间截断。卡片题与摘句不定高 —— 瀑布流参差本就正确。

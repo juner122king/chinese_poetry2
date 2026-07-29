@@ -19,6 +19,7 @@ type Props = {
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** 右下角「笺」：加入 / 移出本地诗笺 */
+/* 不用 mix-blend-difference（会反掉已收入态的朱砂）；改用墨色字影保证亮氛围下可读 */
 export default function ShelfButton({ poemId, className = "" }: Props) {
   const { t } = useScript();
   const reduce = useReducedMotion();
@@ -40,9 +41,9 @@ export default function ShelfButton({ poemId, className = "" }: Props) {
       aria-pressed={saved}
       aria-label={saved ? t("移出诗笺") : t("收入诗笺")}
       title={saved ? t("移出诗笺") : t("收入诗笺")}
-      className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] mix-blend-difference transition-opacity duration-500 md:bottom-4 md:right-4 ${
+      className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] transition-opacity duration-500 [text-shadow:0_0_9px_rgba(26,26,26,0.9)] md:bottom-4 md:right-4 ${
         saved
-          ? "text-cinnabar opacity-90"
+          ? "text-cinnabar opacity-100"
           : "text-xuan opacity-35 hover:opacity-90"
       } ${className}`}
     >

@@ -4,7 +4,7 @@ import T from "@/components/T";
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <p className="type-eyebrow mb-4 tracking-[0.4em]">404</p>
+      <p className="type-meta mb-4 tracking-[0.4em]">404</p>
       <T as="h1" className="type-display mb-6 text-2xl tracking-[0.35em]">
         页不存在
       </T>

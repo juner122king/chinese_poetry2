@@ -21,15 +21,14 @@ export default function PoemRelated({ items }: Props) {
       aria-labelledby="related-heading"
     >
       <ScrollReveal>
-        <div className="mb-10 flex flex-col items-center gap-3 text-center">
-          <p className="type-eyebrow">RELATED</p>
+        <div className="mb-10 flex flex-col items-center">
+          <span className="ink-rule mb-8" aria-hidden />
           <h2
             id="related-heading"
-            className="type-display text-xl tracking-[0.35em] md:text-2xl"
+            className="type-group-label tracking-[0.55em]"
           >
             {t("同 境 相 逢")}
           </h2>
-          <span className="ink-rule ink-rule--md mt-1" aria-hidden />
         </div>
       </ScrollReveal>
 

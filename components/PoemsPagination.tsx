@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { toHanNumeral } from "@/lib/han-numeral";
 import {
   buildPoemsHref,
   type PoemListFilters,
@@ -12,6 +13,7 @@ type Props = {
   totalPages: number;
 };
 
+/** 移动端页尾翻页。≥768px 交给版心（`Banxin`），此处隐藏 */
 export default function PoemsPagination({ filters, totalPages }: Props) {
   const { t } = useScript();
   if (totalPages <= 1) return null;
@@ -30,7 +32,7 @@ export default function PoemsPagination({ filters, totalPages }: Props) {
 
   return (
     <nav
-      className="mt-16 flex items-center justify-center gap-10"
+      className="mt-16 flex items-center justify-center gap-10 md:hidden"
       aria-label={t("分页")}
     >
       {prev ? (
@@ -47,8 +49,13 @@ export default function PoemsPagination({ filters, totalPages }: Props) {
         </span>
       )}
 
-      <span className="type-meta">
-        {page} / {totalPages}
+      <span className="banxin-num">
+        <span className="sr-only">
+          {t(`第 ${page} 页，共 ${totalPages} 页`)}
+        </span>
+        <span aria-hidden>
+          {toHanNumeral(page)}／{toHanNumeral(totalPages)}
+        </span>
       </span>
 
       {next ? (

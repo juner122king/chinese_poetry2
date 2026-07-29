@@ -25,8 +25,10 @@ export default function ScrollReveal({
   const reduce = useReducedMotion();
   const MotionTag = motion[as];
 
+  // 减少动态时仍须保留 as：硬编码 div 会在 as="li"/"p" 处产生非法嵌套
   if (reduce) {
-    return <div className={className}>{children}</div>;
+    const Tag = as;
+    return <Tag className={className}>{children}</Tag>;
   }
 
   return (

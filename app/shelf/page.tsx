@@ -11,7 +11,8 @@ export default function ShelfPage() {
   return (
     <div className="relative min-h-screen">
       <InkBackground theme="landscape" intensity="soft" />
-      <div className="relative z-10 mx-auto max-w-6xl px-6 pb-28 pt-28 md:px-10 md:pt-32">
+      {/* 版心与内容栏由 ShelfView 里的 Banxin 负责（卷内总量取本机收藏数） */}
+      <div className="relative z-10">
         <ShelfView />
       </div>
     </div>

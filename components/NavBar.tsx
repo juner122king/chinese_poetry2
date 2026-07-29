@@ -57,7 +57,11 @@ export default function NavBar() {
           <span className="leading-none">{t("墨韵")}</span>
         </Link>
 
-        <div className="flex items-center gap-8 mix-blend-difference md:gap-10">
+        {/*
+          不用 mix-blend-difference：它会把当前态朱砂 #b23a48 反色
+          （墨底→暗红，亮暖氛围区→暗绿）。可读性由 .page-top-veil 负责。
+        */}
+        <div className="flex items-center gap-8 md:gap-10">
           <ul className="hidden items-center gap-10 md:flex">
             {links.map((link) => {
               const active = link.match(pathname);
