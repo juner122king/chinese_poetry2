@@ -1,16 +1,16 @@
 "use client";
 
-import {
-  useCallback,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { type CSSProperties } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import type { PoemTheme } from "@/lib/types";
+import { useHoverFocusActive } from "@/lib/use-hover-focus-active";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
 import { useScript } from "./ScriptProvider";
+
+/** 意境氛围：入场仍利落，离场慢慢淡去 */
+const ATMOS_ENTER = 0.45;
+const ATMOS_EXIT = 1.15;
 
 type Props = {
   label: string;
@@ -44,34 +44,8 @@ export default function ImageryBar({
 }: Props) {
   const { t } = useScript();
   const reduce = useReducedMotion();
-
-  const hoveredRef = useRef(false);
-  const focusedRef = useRef(false);
-  const [active, setActive] = useState(false);
-
-  const syncActive = useCallback(() => {
-    setActive(hoveredRef.current || focusedRef.current);
-  }, []);
-
-  const onPointerEnter = useCallback(() => {
-    hoveredRef.current = true;
-    syncActive();
-  }, [syncActive]);
-
-  const onPointerLeave = useCallback(() => {
-    hoveredRef.current = false;
-    syncActive();
-  }, [syncActive]);
-
-  const onFocus = useCallback(() => {
-    focusedRef.current = true;
-    syncActive();
-  }, [syncActive]);
-
-  const onBlur = useCallback(() => {
-    focusedRef.current = false;
-    syncActive();
-  }, [syncActive]);
+  const { active, onPointerEnter, onPointerLeave, onFocus, onBlur } =
+    useHoverFocusActive();
 
   const shellStyle = {
     ...(active
@@ -87,7 +61,13 @@ export default function ImageryBar({
 
   const face = (
     <>
-      <PoemCardAtmosphere theme={theme} active={active} reduce={!!reduce} />
+      <PoemCardAtmosphere
+        theme={theme}
+        active={active}
+        reduce={!!reduce}
+        enterDuration={ATMOS_ENTER}
+        exitDuration={ATMOS_EXIT}
+      />
       <span className="imagery-bar__label">{t(label)}</span>
       {motifs.length > 0 ? (
         <p

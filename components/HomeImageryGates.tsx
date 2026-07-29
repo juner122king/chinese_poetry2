@@ -1,20 +1,20 @@
 "use client";
 
-import {
-  useCallback,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { type CSSProperties } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { getTagLabel, taxonomyById } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
 import { getThemeVisual } from "@/lib/theme-map";
 import type { PoemTag } from "@/lib/types";
+import { useHoverFocusActive } from "@/lib/use-hover-focus-active";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
 import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
+
+/** 意境氛围：入场仍利落，离场慢慢淡去 */
+const ATMOS_ENTER = 0.45;
+const ATMOS_EXIT = 1.15;
 
 /** 首页意境入门：六道，克制入口，不做成仪表盘 */
 const GATES: PoemTag[] = [
@@ -53,34 +53,8 @@ function GateCard({
   const meta = taxonomyById[tag];
   const visual = getThemeVisual(meta.defaultTheme);
   const motifs = meta.motifPool.slice(0, 2);
-
-  const hoveredRef = useRef(false);
-  const focusedRef = useRef(false);
-  const [active, setActive] = useState(false);
-
-  const syncActive = useCallback(() => {
-    setActive(hoveredRef.current || focusedRef.current);
-  }, []);
-
-  const onPointerEnter = useCallback(() => {
-    hoveredRef.current = true;
-    syncActive();
-  }, [syncActive]);
-
-  const onPointerLeave = useCallback(() => {
-    hoveredRef.current = false;
-    syncActive();
-  }, [syncActive]);
-
-  const onFocus = useCallback(() => {
-    focusedRef.current = true;
-    syncActive();
-  }, [syncActive]);
-
-  const onBlur = useCallback(() => {
-    focusedRef.current = false;
-    syncActive();
-  }, [syncActive]);
+  const { active, onPointerEnter, onPointerLeave, onFocus, onBlur } =
+    useHoverFocusActive();
 
   const shellStyle = {
     ...(active
@@ -113,6 +87,8 @@ function GateCard({
           theme={meta.defaultTheme}
           active={active}
           reduce={!!reduce}
+          enterDuration={ATMOS_ENTER}
+          exitDuration={ATMOS_EXIT}
         />
         <motion.span
           className="imagery-band__label"
