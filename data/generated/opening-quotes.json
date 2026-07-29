@@ -48,6 +48,13 @@
     ],
     "source": "manual"
   },
+  "ding-feng-bo-su-shi": {
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "manual"
+  },
   "yu-lin-ling-liu-yong": {
     "lineIndices": [
       14,
@@ -58,7 +65,24 @@
   "qing-yu-an-xin-qi-ji": {
     "lineIndices": [
       9,
+      10,
+      11,
       12
+    ],
+    "source": "manual"
+  },
+  "zui-hua-yin-li-qing-zhao": {
+    "lineIndices": [
+      7,
+      8,
+      9
+    ],
+    "source": "manual"
+  },
+  "huan-xi-sha-yan-shu-2": {
+    "lineIndices": [
+      3,
+      4
     ],
     "source": "manual"
   },
@@ -85,15 +109,16 @@
   },
   "huan-xi-sha-yan-shu": {
     "lineIndices": [
-      4,
-      5
+      3,
+      4
     ],
     "source": "manual"
   },
   "die-lian-hua-ou-yang-xiu": {
     "lineIndices": [
-      8,
-      9
+      0,
+      1,
+      2
     ],
     "source": "manual"
   },

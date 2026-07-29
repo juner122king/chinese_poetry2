@@ -63,9 +63,15 @@ export default function HomePage() {
             </div>
           </ScrollReveal>
 
-          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+          {/* 等宽等高网格（非瀑布流），精选区卡片对齐 */}
+          <div className="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {gridPoems.map((poem, i) => (
-              <PoemCard key={poem.id} poem={poem} index={i} />
+              <PoemCard
+                key={poem.id}
+                poem={poem}
+                index={i}
+                className="!mb-0 h-full"
+              />
             ))}
           </div>
 

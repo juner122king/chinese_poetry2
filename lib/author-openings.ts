@@ -1,8 +1,12 @@
 import authorOpeningsJson from "@/data/generated/author-openings.json";
 import type { Author, Poem } from "@/lib/types";
 import { sortWorksByRepresentative } from "@/lib/famous-poems";
-import { toDisplayLines } from "@/lib/poem-lines";
 import {
+  expandIndicesToVisualLines,
+  visualLinesFromIndices,
+} from "@/lib/poem-lines";
+import {
+  MAX_EXCERPT_VISUAL_LINES,
   resolveOpeningDisplayLines,
   sanitizeQuoteLineIndices,
 } from "@/lib/opening-quotes";
@@ -14,7 +18,7 @@ import {
 export type AuthorOpeningEntry = {
   /** 代表作 poem.id */
   poemId: string;
-  /** content 0-based 下标，通常 2 句 */
+  /** content 0-based 下标；可连续段落或多句跳取 */
   lineIndices: number[];
   source?: "llm" | "manual" | "rule";
 };
@@ -87,18 +91,26 @@ export function orderWorksWithRepresentative(
 }
 
 /**
- * 从代表作 entry 的行下标取展示句；无效则走通用摘句逻辑。
+ * 从代表作 entry 的行下标取展示句（pause 粘合，不足则前后补满视觉行）；
+ * 无效则走通用摘句逻辑。
  */
 export function linesFromOpeningResolution(
   poem: Poem,
   lineIndices: number[] | null,
 ): string[] {
+  const content = poem.content ?? [];
   if (lineIndices?.length) {
-    const display = toDisplayLines(poem.content ?? []);
-    const picked = lineIndices
-      .map((i) => display[i]?.text)
-      .filter((t): t is string => Boolean(t));
-    if (picked.length) return picked.slice(0, 2);
+    const expanded = expandIndicesToVisualLines(
+      content,
+      lineIndices,
+      MAX_EXCERPT_VISUAL_LINES,
+    );
+    const joined = visualLinesFromIndices(
+      content,
+      expanded,
+      MAX_EXCERPT_VISUAL_LINES,
+    );
+    if (joined.length) return joined;
   }
   return resolveOpeningDisplayLines(poem);
 }

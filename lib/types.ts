@@ -98,9 +98,9 @@ export type Poem = {
   /** 源库 uuid（若有） */
   sourceId?: string;
   /**
-   * 开卷摘句：content 行下标（0-based），通常 2 句。
-   * 由离线 LLM / 人工写入；运行时优先于「前两句」兜底。
-   * 亦可落在 data/generated/opening-quotes.json，见 getOpeningQuoteLines。
+   * 开卷/卡片摘句：content 行下标（0-based），可连续段落或跳取。
+   * 由离线 LLM / 人工写入；运行时优先，展示时 pause 粘合为空格。
+   * 亦可落在 data/generated/opening-quotes.json，见 getOpeningQuoteIndices。
    */
   openingQuoteLines?: number[];
 };

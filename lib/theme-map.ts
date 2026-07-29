@@ -305,11 +305,11 @@ export const themeMap: Record<PoemTheme, ThemeVisual> = {
   },
   wine: {
     label: "对酒",
-    // 签名：琥珀酒焰居中偏下 + 朱砂暖晕；无月无星无雾（InkBackground 叠脉动光核）
+    // 签名：宴席酒焰（双层光核+余烬呼吸）+ 琥珀/朱砂暖；无月无星无雾无粒子
     gradient:
-      "radial-gradient(ellipse 42% 36% at 50% 58%, rgba(178,58,72,0.28) 0%, transparent 58%), radial-gradient(ellipse 55% 40% at 50% 62%, rgba(200,130,70,0.12) 0%, transparent 62%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(40,20,18,0.55) 0%, transparent 55%), linear-gradient(180deg, #0c0808 0%, #120c0c 42%, #1a1a1a 100%)",
-    accent: "#d4a090",
-    glow: "rgba(200,110,80,0.32)",
+      "radial-gradient(ellipse 44% 38% at 50% 52%, rgba(178,58,72,0.32) 0%, transparent 58%), radial-gradient(ellipse 58% 42% at 50% 58%, rgba(220,150,80,0.16) 0%, transparent 62%), radial-gradient(ellipse 80% 48% at 50% 100%, rgba(50,22,18,0.48) 0%, transparent 55%), linear-gradient(180deg, #0e0909 0%, #14100e 42%, #1a1a1a 100%)",
+    accent: "#e0b098",
+    glow: "rgba(220,130,85,0.38)",
     mist: false,
     mountains: "none",
     particles: "none",

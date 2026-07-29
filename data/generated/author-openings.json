@@ -58,18 +58,20 @@
   "liu-yong": {
     "poemId": "yu-lin-ling-liu-yong",
     "lineIndices": [
-      15,
+      14,
       16
     ],
-    "source": "llm"
+    "source": "manual"
   },
   "xin-qi-ji": {
     "poemId": "qing-yu-an-xin-qi-ji",
     "lineIndices": [
       9,
+      10,
+      11,
       12
     ],
-    "source": "llm"
+    "source": "manual"
   },
   "su-shi": {
     "poemId": "shui-diao-ge-tou-su-shi",
@@ -101,15 +103,16 @@
       3,
       4
     ],
-    "source": "llm"
+    "source": "manual"
   },
   "ou-yang-xiu": {
     "poemId": "die-lian-hua-ou-yang-xiu",
     "lineIndices": [
-      8,
-      9
+      0,
+      1,
+      2
     ],
-    "source": "llm"
+    "source": "manual"
   },
   "cen-can": {
     "poemId": "feng-ru-jing-shi",

@@ -4,7 +4,7 @@ import { useCallback, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { Poem } from "@/lib/types";
-import { toDisplayLines, type DisplayLine } from "@/lib/poem-lines";
+import { resolveOpeningDisplayLines } from "@/lib/opening-quotes";
 import { getThemeVisual } from "@/lib/theme-map";
 import { useScript } from "./ScriptProvider";
 import PoemCardAtmosphere from "./PoemCardAtmosphere";
@@ -16,27 +16,14 @@ type Props = {
 };
 
 const CARD_MOTIF_MAX = 3;
-const CARD_EXCERPT_MAX_LINES = 2;
-
-/**
- * 摘句取第一个完整句读单元 —— 到首个句号为止。
- * 宁可少取一行，也不让诗句被省略号从中间截断。
- */
-function firstSentence(lines: DisplayLine[]): DisplayLine[] {
-  const out: DisplayLine[] = [];
-  for (const line of lines) {
-    out.push(line);
-    if (line.break === "stop" || out.length >= CARD_EXCERPT_MAX_LINES) break;
-  }
-  return out;
-}
 
 export default function PoemCard({ poem, index = 0, className = "" }: Props) {
   const { t, tPoem } = useScript();
   const display = tPoem(poem);
   const reduce = useReducedMotion();
   const enterDelay = Math.min(index, 8) * 0.05;
-  const excerpts = firstSentence(toDisplayLines(display.content));
+  // 下标以原文 content 为准；粘合后整行做繁简
+  const excerpts = resolveOpeningDisplayLines(poem).map((line) => t(line));
   const cardMotifs = (display.motifs ?? []).filter(Boolean).slice(0, CARD_MOTIF_MAX);
   const visual = getThemeVisual(poem.theme);
 
@@ -70,7 +57,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
 
   return (
     <motion.article
-      className={`group break-inside-avoid mb-6 ${className}`}
+      className={`group flex break-inside-avoid mb-6 flex-col ${className}`}
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-5%" }}
@@ -82,14 +69,14 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
     >
       <Link
         href={`/poem/${poem.id}`}
-        className="block rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+        className="flex h-full min-h-0 flex-col rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
         onFocus={onFocus}
         onBlur={onBlur}
       >
         <div
-          className="relative overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 backdrop-blur-[2px] transition-[border-color,background-color,transform,box-shadow] duration-[1.15s] ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
+          className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 backdrop-blur-[2px] transition-[border-color,background-color,transform,box-shadow] duration-[1.15s] ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
           style={
             (active
               ? {
@@ -110,32 +97,35 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
             seed={poem.id}
           />
 
-          {/* 题：最多两行 */}
+          {/* 题：固定两行槽，避免长短题拉高卡片 */}
           <h3
             title={display.title}
-            className="relative z-[1] type-card-title mb-2.5 line-clamp-2 break-words text-xl leading-snug md:text-[1.35rem]"
+            className="relative z-[1] type-card-title mb-2.5 line-clamp-2 min-h-[2.6em] break-words text-xl leading-snug md:min-h-[2.7em] md:text-[1.35rem]"
           >
             {display.title}
           </h3>
 
           {/* 作者 · 朝代 同行 */}
-          <p className="relative z-[1] flex min-w-0 items-baseline gap-x-2.5 text-sm">
+          <p className="relative z-[1] flex min-w-0 shrink-0 items-baseline gap-x-2.5 text-sm">
             <span className="type-author min-w-0 truncate">{display.author}</span>
             <span className="type-dynasty shrink-0">{display.dynasty}</span>
           </p>
 
-          {/* 摘句常显；不定高，瀑布流参差本就正确 */}
-          <div className="relative z-[1] mt-4 space-y-1.5 opacity-75 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
+          {/* 摘句：占满中段，两视觉行槽，过长截断 */}
+          <div className="relative z-[1] mt-4 flex min-h-[2.75rem] flex-1 flex-col justify-start gap-y-1.5 opacity-75 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 md:min-h-[3rem]">
             {excerpts.map((line) => (
-              <p key={line.raw} className="type-card-excerpt break-words">
-                {line.text}
+              <p
+                key={line}
+                className="type-card-excerpt line-clamp-2 break-words leading-relaxed"
+              >
+                {line}
               </p>
             ))}
           </div>
 
-          {/* 意象题跋：右下常显（触屏无 hover），hover / 聚焦提亮 */}
-          {cardMotifs.length > 0 ? (
-            <div className="relative z-[1] mt-5 opacity-55 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
+          {/* 意象题跋：底栏固定槽，无意象也占位以齐高 */}
+          <div className="relative z-[1] mt-5 min-h-[1.25rem] opacity-55 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 md:min-h-[1.35rem]">
+            {cardMotifs.length > 0 ? (
               <p
                 className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1 font-wenkai text-[11px] tracking-[0.22em] text-[color:var(--type-quiet)] md:text-xs"
                 aria-label={t("意象")}
@@ -157,8 +147,8 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
                   </span>
                 ))}
               </p>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
       </Link>
     </motion.article>

@@ -723,21 +723,61 @@ body {
   animation: ripplePulse 4s ease-out infinite;
 }
 
-/* 对酒：暖焰光核慢脉动（唯一主动画） */
-.wine-ember {
-  animation: wineEmberBreathe 7.5s ease-in-out infinite;
+/* 对酒：宴席酒焰 —— 内核较快、外晕更慢；余烬错相呼吸 */
+.wine-ember--core {
+  animation: wineEmberCore 5.5s ease-in-out infinite;
   will-change: opacity, transform;
 }
 
-@keyframes wineEmberBreathe {
+.wine-ember--outer {
+  animation: wineEmberOuter 9s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.wine-cinder {
+  will-change: opacity;
+}
+
+.wine-cinder--left {
+  animation: wineCinderBreathe 14s ease-in-out infinite;
+}
+
+.wine-cinder--right {
+  animation: wineCinderBreathe 18s ease-in-out infinite reverse;
+  animation-delay: -6s;
+}
+
+@keyframes wineEmberCore {
   0%,
   100% {
-    opacity: 0.72;
+    opacity: 0.78;
     transform: translate(-50%, -50%) scale(1);
   }
   50% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.06);
+    transform: translate(-50%, -50%) scale(1.07);
+  }
+}
+
+@keyframes wineEmberOuter {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.88;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes wineCinderBreathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
@@ -898,11 +938,19 @@ body {
     transform: translate3d(0, -12cqh, 0) scale(0.62) !important;
   }
 
-  /* 对酒光核：停动画，保留静态暖晕 */
-  .wine-ember {
+  /* 对酒：停动画，保留静态暖晕 / 余烬 */
+  .wine-ember--core,
+  .wine-ember--outer {
     animation: none !important;
     opacity: 0.85 !important;
     transform: translate(-50%, -50%) scale(1) !important;
+  }
+
+  .wine-cinder,
+  .wine-cinder--left,
+  .wine-cinder--right {
+    animation: none !important;
+    opacity: 0.75 !important;
   }
 
   html {

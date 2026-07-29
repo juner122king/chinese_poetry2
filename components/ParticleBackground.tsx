@@ -129,8 +129,9 @@ const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
     targetPx: 1.7,
     rgb: [0.78, 0.52, 0.28],
     yBand: { from: "top", start: -0.05, span: 1.1 },
-    fall: 0.1,
-    sway: 0.18,
+    // 以落为主：沉得下、少横漂（秋叶非春瓣）
+    fall: 0.15,
+    sway: 0.08,
     wander: 0,
     blink: "none",
     materialOpacity: 0.5,
@@ -261,6 +262,7 @@ function Particles({
     const swayFreq = new Float32Array(count);
     const swayFreq2 = new Float32Array(count);
     const windPhase = new Float32Array(count);
+    const windDir = new Float32Array(count);
     const spin = new Float32Array(count);
     const sizes = new Float32Array(count);
     const aspects = new Float32Array(count);
@@ -281,43 +283,50 @@ function Particles({
       drifts[i] = 0.6 + rng() * 0.8;
 
       if (fall) {
+        // 自旋方向各半，避免全体同向齐转
+        const spinSign = rng() < 0.5 ? -1 : 1;
         if (mode === "petals") {
           fallMul[i] = 0.45 + rng() * 0.9;
           swayAmp[i] = 0.7 + rng() * 0.9;
           swayFreq[i] = 0.25 + rng() * 0.6;
           swayFreq2[i] = 0.6 + rng() * 0.8;
-          spin[i] = 0.35 + rng() * 0.85;
+          spin[i] = (0.35 + rng() * 0.85) * spinSign;
           // 尺寸倍率收窄，避免偶发「过大」瓣
           sizes[i] = 0.45 + rng() * 0.3;
           aspects[i] = baseAspect * (0.85 + rng() * 0.35);
           alphaMul[i] = 0.55 + rng() * 0.45;
         } else if (mode === "leaves") {
-          fallMul[i] = 0.55 + rng() * 0.6;
-          swayAmp[i] = 0.9 + rng() * 0.9;
-          swayFreq[i] = 0.2 + rng() * 0.35;
-          swayFreq2[i] = 0.4 + rng() * 0.6;
-          spin[i] = 0.55 + rng() * 1.1;
+          fallMul[i] = 0.7 + rng() * 0.65;
+          swayAmp[i] = 0.35 + rng() * 0.5;
+          swayFreq[i] = 0.12 + rng() * 0.22;
+          swayFreq2[i] = 0.25 + rng() * 0.35;
+          spin[i] = (0.65 + rng() * 1.15) * spinSign;
           sizes[i] = 0.5 + rng() * 0.35;
           aspects[i] = baseAspect * (0.9 + rng() * 0.3);
           alphaMul[i] = 0.6 + rng() * 0.4;
+          // 单向斜落风向（晚来风），非左右横飘
+          windDir[i] = rng() < 0.5 ? -1 : 1;
         } else {
           // snow
           fallMul[i] = 0.5 + rng() * 0.9;
           swayAmp[i] = 0.25 + rng() * 0.45;
           swayFreq[i] = 0.15 + rng() * 0.3;
           swayFreq2[i] = 0.3 + rng() * 0.6;
-          spin[i] = 0.08 + rng() * 0.25;
+          spin[i] = (0.08 + rng() * 0.25) * spinSign;
           sizes[i] = 0.35 + rng() * 0.28;
           aspects[i] = baseAspect * (0.92 + rng() * 0.2);
           alphaMul[i] = 0.4 + rng() * 0.55;
+          windDir[i] = 0;
         }
         windPhase[i] = rng() * Math.PI * 2;
+        if (mode === "petals") windDir[i] = 0;
       } else {
         fallMul[i] = 1;
         swayAmp[i] = 1;
         swayFreq[i] = 0.4;
         swayFreq2[i] = 0.8;
         windPhase[i] = 0;
+        windDir[i] = 0;
         spin[i] = 0;
         sizes[i] = 1;
         aspects[i] = 1;
@@ -378,6 +387,7 @@ function Particles({
       swayFreq,
       swayFreq2,
       windPhase,
+      windDir,
       spin,
       sizes,
       aspects,
@@ -451,6 +461,7 @@ function Particles({
       swayFreq,
       swayFreq2,
       windPhase,
+      windDir,
       spin,
     } = sim;
 
@@ -483,18 +494,21 @@ function Particles({
           cfg.fall * fm * (0.88 + 0.12 * Math.sin(t * 0.3 + ph));
         pos[ix + 1] -= fallSpeed * dt;
 
-        // 阵风：低频尖峰，破齐步
+        // 阵风：叶/雪更稳，瓣保留尖峰
         const gustBase = Math.max(0, Math.sin(t * 0.11 + wp));
         const gust =
-          mode === "snow"
-            ? 0.55 + 0.45 * gustBase * gustBase
-            : 0.35 + 0.65 * gustBase * gustBase;
+          mode === "petals"
+            ? 0.35 + 0.65 * gustBase * gustBase
+            : 0.6 + 0.4 * gustBase * gustBase;
 
         const swayScale = cfg.sway * amp;
+        // 叶侧摆系数更低，避免横漂盖过下落
+        const swayMul = mode === "leaves" ? 3.2 : 6;
+        const swayMul2 = mode === "leaves" ? 1.2 : 2.5;
         pos[ix] +=
-          Math.sin(t * f1 + ph) * dt * swayScale * 6 * gust;
+          Math.sin(t * f1 + ph) * dt * swayScale * swayMul * gust;
         pos[ix] +=
-          Math.sin(t * f2 + ph * 1.7) * dt * swayScale * 2.5;
+          Math.sin(t * f2 + ph * 1.7) * dt * swayScale * swayMul2;
 
         if (mode === "petals") {
           pos[ix] +=
@@ -502,10 +516,11 @@ function Particles({
           pos[ix + 2] +=
             Math.sin(t * f2 * 0.4 + ph) * dt * spin[i] * 0.03;
         } else if (mode === "leaves") {
-          pos[ix] +=
-            Math.cos(t * 0.22 + ph) * dt * 0.12 * amp;
+          // 斜落 + 轻摆 + 翻滚（非来回横飘）
+          pos[ix] += windDir[i] * fallSpeed * 0.18 * dt;
+          pos[ix] += Math.cos(t * 0.22 + ph) * dt * 0.04 * amp;
           pos[ix + 2] +=
-            Math.sin(t * 0.4 + ph) * dt * spin[i] * 0.05;
+            Math.sin(t * 0.4 + ph) * dt * spin[i] * 0.06;
         } else {
           // snow：更稳
           pos[ix] += Math.sin(t * f1 * 0.7 + ph) * dt * 0.025;

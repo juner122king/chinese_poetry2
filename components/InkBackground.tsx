@@ -979,43 +979,76 @@ export default function InkBackground({
       )}
 
       {/*
-        对酒签名：中心偏下暖焰光核 + 左右琥珀余烬（单主动画：脉动）。
-        中柱护字：光核在 58% 纵位、两侧余烬避开正文；无月。
+        对酒签名：宴席酒焰 —— 双层光核 + 错相余烬（仍无月无粒子）。
+        光核略上移进中段；中栏暗罩减弱，少压焰。
       */}
       {theme === "wine" && (
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
           style={{ opacity: atmScale }}
         >
-          {/* 左右余烬 — 宴席暖边，不进中栏 */}
+          {/* 左右余烬 — 错相位呼吸，破对称静物 */}
           <div
-            className="absolute inset-0"
+            className="wine-cinder wine-cinder--left absolute"
             style={{
-              backgroundImage: [
-                "radial-gradient(ellipse 22% 38% at 12% 68%, rgba(178,58,72,0.16) 0%, transparent 70%)",
-                "radial-gradient(ellipse 20% 34% at 88% 64%, rgba(200,120,70,0.12) 0%, transparent 68%)",
-                "radial-gradient(ellipse 36% 18% at 50% 92%, rgba(120,50,40,0.14) 0%, transparent 72%)",
-              ].join(", "),
+              left: "4%",
+              bottom: "18%",
+              width: "min(28%, 220px)",
+              height: "min(42%, 280px)",
+              background:
+                "radial-gradient(ellipse 70% 80% at 40% 55%, rgba(178,58,72,0.2) 0%, rgba(200,120,70,0.08) 45%, transparent 72%)",
+              filter: "blur(18px)",
             }}
           />
-          {/* 酒焰光核 — 慢脉动 */}
           <div
-            className="wine-ember absolute left-1/2 top-[56%] h-[min(42cqh,320px)] w-[min(48cqw,360px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="wine-cinder wine-cinder--right absolute"
             style={{
-              background: [
-                `radial-gradient(ellipse 50% 50% at 50% 50%, ${visual.glow} 0%, transparent 62%)`,
-                "radial-gradient(ellipse 42% 40% at 50% 55%, rgba(178,58,72,0.22) 0%, transparent 68%)",
-                "radial-gradient(ellipse 55% 48% at 48% 48%, rgba(220,160,90,0.1) 0%, transparent 72%)",
-              ].join(", "),
-              filter: "blur(2px)",
+              right: "3%",
+              bottom: "22%",
+              width: "min(26%, 200px)",
+              height: "min(38%, 250px)",
+              background:
+                "radial-gradient(ellipse 70% 80% at 60% 50%, rgba(220,140,70,0.16) 0%, rgba(178,58,72,0.07) 48%, transparent 72%)",
+              filter: "blur(16px)",
             }}
           />
-          {/* 中栏微暗罩：护正文对比 */}
+          {/* 席底暖带 */}
           <div
-            className="absolute left-1/2 top-[18%] h-[58%] w-[min(42%,420px)] -translate-x-1/2"
+            className="absolute inset-x-0 bottom-0 h-[22%]"
             style={{
               background:
-                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(26,26,26,0.22) 0%, transparent 72%)",
+                "radial-gradient(ellipse 70% 80% at 50% 100%, rgba(120,50,40,0.18) 0%, transparent 70%)",
+            }}
+          />
+          {/* 外晕 — 更慢、更宽 */}
+          <div
+            className="wine-ember wine-ember--outer absolute left-1/2 top-[53%] h-[min(48cqh,360px)] w-[min(54cqw,400px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background: [
+                `radial-gradient(ellipse 55% 55% at 50% 50%, ${visual.glow} 0%, transparent 68%)`,
+                "radial-gradient(ellipse 48% 45% at 50% 55%, rgba(200,110,70,0.14) 0%, transparent 72%)",
+              ].join(", "),
+              filter: "blur(6px)",
+            }}
+          />
+          {/* 内核 — 略快、略紧 */}
+          <div
+            className="wine-ember wine-ember--core absolute left-1/2 top-[53%] h-[min(32cqh,240px)] w-[min(36cqw,280px)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background: [
+                `radial-gradient(ellipse 48% 48% at 50% 48%, ${visual.glow} 0%, transparent 58%)`,
+                "radial-gradient(ellipse 40% 38% at 50% 55%, rgba(178,58,72,0.28) 0%, transparent 66%)",
+                "radial-gradient(ellipse 52% 46% at 48% 48%, rgba(240,180,100,0.14) 0%, transparent 70%)",
+              ].join(", "),
+              filter: "blur(1.5px)",
+            }}
+          />
+          {/* 中栏微暗罩：护字但不压焰 */}
+          <div
+            className="absolute left-1/2 top-[16%] h-[56%] w-[min(40%,400px)] -translate-x-1/2"
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(26,26,26,0.12) 0%, transparent 72%)",
             }}
           />
         </div>
