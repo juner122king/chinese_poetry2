@@ -1,11 +1,18 @@
 "use client";
 
+import {
+  useCallback,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { getTagLabel, taxonomyById } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
 import { getThemeVisual } from "@/lib/theme-map";
 import type { PoemTag } from "@/lib/types";
+import PoemCardAtmosphere from "./PoemCardAtmosphere";
 import ScrollReveal from "./ScrollReveal";
 import { useScript } from "./ScriptProvider";
 
@@ -28,20 +35,132 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 const VIEWPORT = { once: true, margin: "-8% 0px -8% 0px" } as const;
 
-/**
- * 动效落在栏上而非 `<li>` 上：`<li>` 携着栏间墨线，
- * 淡入它就把带框一起淡了 —— 带框与栏间竖线一律静止。
- */
 const MotionGate = motion.create(Link);
 
+function GateCard({
+  tag,
+  count,
+  delay,
+  reduce,
+  t,
+}: {
+  tag: PoemTag;
+  count: number;
+  delay: number;
+  reduce: boolean | null;
+  t: (s: string) => string;
+}) {
+  const meta = taxonomyById[tag];
+  const visual = getThemeVisual(meta.defaultTheme);
+  const motifs = meta.motifPool.slice(0, 2);
+
+  const hoveredRef = useRef(false);
+  const focusedRef = useRef(false);
+  const [active, setActive] = useState(false);
+
+  const syncActive = useCallback(() => {
+    setActive(hoveredRef.current || focusedRef.current);
+  }, []);
+
+  const onPointerEnter = useCallback(() => {
+    hoveredRef.current = true;
+    syncActive();
+  }, [syncActive]);
+
+  const onPointerLeave = useCallback(() => {
+    hoveredRef.current = false;
+    syncActive();
+  }, [syncActive]);
+
+  const onFocus = useCallback(() => {
+    focusedRef.current = true;
+    syncActive();
+  }, [syncActive]);
+
+  const onBlur = useCallback(() => {
+    focusedRef.current = false;
+    syncActive();
+  }, [syncActive]);
+
+  const shellStyle = {
+    ...(active
+      ? {
+          backgroundColor: "transparent",
+          boxShadow: reduce
+            ? undefined
+            : `0 14px 44px -22px color-mix(in srgb, ${visual.glow} 50%, transparent)`,
+          transform: reduce ? undefined : "translateY(-2px)",
+        }
+      : undefined),
+  } as CSSProperties;
+
+  return (
+    <li>
+      <MotionGate
+        href={buildPoemsHref({ tag })}
+        className={`imagery-band__gate${active ? " is-active" : ""}`}
+        style={shellStyle}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        initial={reduce ? false : { opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={VIEWPORT}
+        transition={{ duration: reduce ? 0 : 0.8, delay, ease }}
+      >
+        <PoemCardAtmosphere
+          theme={meta.defaultTheme}
+          active={active}
+          reduce={!!reduce}
+        />
+        <motion.span
+          className="imagery-band__label"
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{
+            duration: reduce ? 0 : 0.6,
+            delay: reduce ? 0 : delay + 0.12,
+            ease,
+          }}
+        >
+          {t(getTagLabel(tag))}
+        </motion.span>
+        {motifs.length > 0 ? (
+          <p
+            className="imagery-band__motifs"
+            style={{ opacity: active ? 1 : 0 }}
+            aria-label={t("意境词")}
+          >
+            {motifs.map((motif, mi) => (
+              <span key={`${motif}-${mi}`} className="imagery-band__motif">
+                {mi > 0 ? (
+                  <span className="imagery-band__dot" aria-hidden>
+                    ·
+                  </span>
+                ) : null}
+                <span>{t(motif)}</span>
+              </span>
+            ))}
+          </p>
+        ) : null}
+        {count > 0 ? (
+          <span
+            className="imagery-band__count"
+            style={{ opacity: active ? 1 : 0 }}
+          >
+            {t(`得 ${count} 篇`)}
+          </span>
+        ) : null}
+      </MotionGate>
+    </li>
+  );
+}
+
 /**
- * 意境带 —— 一条横幅切成六道竖栏，各携自己的主题辉光。
- * 与 `/imagery` 的意境条不同构：那里是全表长列，这里是一条带。
- * 标签竖排，窄栏越窄竖排越合用，故移动端也保持六道不折行。
- *
- * 六道依次升起（`i × 0.07`，六格铺开 0.42s）：辉光本就锚在栏底（`at 50% 100%`），
- * 让它自下滑入被裁掉的那一截，升起是它自己的方向；字随后到。
- * 读作一次横扫，而非六个方块各自蹦出。
+ * 意境入门 —— 六道独立卡片。
+ * hover 动效与诗卷卡片一致（PoemCardAtmosphere + 壳体抬升）。
  */
 export default function HomeImageryGates({ counts }: Props) {
   const { t } = useScript();
@@ -60,54 +179,16 @@ export default function HomeImageryGates({ counts }: Props) {
         </ScrollReveal>
 
         <ul className="imagery-band">
-          {GATES.map((tag, i) => {
-            const n = counts[tag] ?? 0;
-            const { glow } = getThemeVisual(taxonomyById[tag].defaultTheme);
-            const delay = i * 0.07;
-
-            return (
-              <li key={tag} className="imagery-band__cell">
-                <MotionGate
-                  href={buildPoemsHref({ tag })}
-                  className="imagery-band__gate"
-                  initial={reduce ? false : { opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={VIEWPORT}
-                  transition={{ duration: reduce ? 0 : 0.8, delay, ease }}
-                >
-                  <motion.span
-                    className="imagery-band__wash"
-                    style={{
-                      background: `radial-gradient(ellipse 180% 70% at 50% 100%, ${glow} 0%, transparent 70%)`,
-                    }}
-                    initial={reduce ? false : { y: "14%" }}
-                    whileInView={{ y: 0 }}
-                    viewport={VIEWPORT}
-                    transition={{ duration: reduce ? 0 : 1, delay, ease }}
-                    aria-hidden
-                  />
-                  <motion.span
-                    className="imagery-band__label"
-                    initial={reduce ? false : { opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={VIEWPORT}
-                    transition={{
-                      duration: reduce ? 0 : 0.6,
-                      delay: reduce ? 0 : delay + 0.12,
-                      ease,
-                    }}
-                  >
-                    {t(getTagLabel(tag))}
-                  </motion.span>
-                  {n > 0 ? (
-                    <span className="imagery-band__count">
-                      {t(`得 ${n} 篇`)}
-                    </span>
-                  ) : null}
-                </MotionGate>
-              </li>
-            );
-          })}
+          {GATES.map((tag, i) => (
+            <GateCard
+              key={tag}
+              tag={tag}
+              count={counts[tag] ?? 0}
+              delay={i * 0.07}
+              reduce={reduce}
+              t={t}
+            />
+          ))}
         </ul>
 
         <ScrollReveal className="mt-12 text-center" delay={0.1}>

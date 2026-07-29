@@ -25,18 +25,8 @@ const GROUP_ORDER: TagGroup[] = [
   "行旅器物",
 ];
 
-/**
- * 基线长度用平方根压缩：篇数跨度约 1–150，线性刻度会把个位数的意境
- * 压成看不见的一点。确数就印在旁边，这根线只作相对轻重，非量具。
- */
-function baselineWidth(n: number, max: number): string {
-  if (n <= 0 || max <= 0) return "0%";
-  return `${(Math.sqrt(n / max) * 100).toFixed(1)}%`;
-}
-
 export default function ImageryPage() {
   const counts = countPoemsByTag();
-  const maxCount = Math.max(1, ...counts.values());
 
   const byGroup = GROUP_ORDER.map((group) => ({
     group,
@@ -58,10 +48,10 @@ export default function ImageryPage() {
               <section key={group} className="mb-14">
                 <GroupRule label={group} delay={groupDelay} />
 
-                {/* 竖列不留缝：各条左侧墨线相接成一道版框，读作刻本目录而非卡片阵 */}
-                <ul className="grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-5 lg:grid-cols-3 lg:gap-x-8">
                   {tags.map((tag, i) => {
                     const n = counts.get(tag.id) ?? 0;
+                    const visual = getThemeVisual(tag.defaultTheme);
 
                     return (
                       <ImageryBar
@@ -69,8 +59,9 @@ export default function ImageryPage() {
                         label={tag.label}
                         count={n}
                         href={n > 0 ? buildPoemsHref({ tag: tag.id }) : null}
-                        glow={getThemeVisual(tag.defaultTheme).glow}
-                        baseWidth={baselineWidth(n, maxCount)}
+                        motifs={tag.motifPool.slice(0, 3)}
+                        theme={tag.defaultTheme}
+                        glow={visual.glow}
                         // 组内逐条错峰；封顶避免末尾几条等太久
                         delay={groupDelay + Math.min(i, 11) * 0.035}
                       />
