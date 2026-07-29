@@ -54,7 +54,6 @@ export default function ShelfView() {
   return (
     <Banxin
       volume="诗笺"
-      width="6xl"
       extent={{ count: items.length, unit: "篇" }}
     >
       <AnimatePresence mode="wait" initial={false}>

@@ -49,7 +49,6 @@ export default async function AuthorsPage({ searchParams }: Props) {
       <div className="relative z-10">
         <Banxin
           volume="名家"
-          width="6xl"
           folio={{ page, total: totalPages }}
           prevHref={
             page > 1 ? buildAuthorsHref({ ...turnBase, page: page - 1 }) : null

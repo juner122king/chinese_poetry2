@@ -19,7 +19,10 @@ type Props = {
   extent?: Extent;
   prevHref?: string | null;
   nextHref?: string | null;
-  /** 内容栏宽，与原页面 max-w 对齐 */
+  /**
+   * 内容栏宽。目录四页统一默认 6xl，与顶栏 NavBar 对齐，
+   * 避免切换列表时右侧版心横向跳动。个别页若需更窄可显式传 5xl。
+   */
   width?: "5xl" | "6xl";
   children: ReactNode;
 };
@@ -86,7 +89,7 @@ export default function Banxin({
   extent,
   prevHref,
   nextHref,
-  width = "5xl",
+  width = "6xl",
   children,
 }: Props) {
   const { t } = useScript();
