@@ -83,9 +83,50 @@ motifs[3]  诗意题跋「春晓 · 啼鸟 · 风雨」     → 详情与卡片�
 npm run enrich:motifs
 ```
 
+## 部署（自托管 · SSH `pas`）
+
+生产路径之一：本机构建 → 上传到阿里云主机 **`pas`**（`root@47.113.189.27`），用 **Next standalone + PM2 + Nginx** 运行。
+
+| 项 | 值 |
+|----|-----|
+| 应用目录 | `/var/www/moyun` |
+| PM2 进程名 | `moyun` |
+| 对外 | Nginx `:80` → `127.0.0.1:3000` |
+| 访问 | [http://47.113.189.27](http://47.113.189.27)（暂无 HTTPS） |
+
+### 日常发布
+
+```bash
+npm run deploy:pas
+# 等价：pwsh -File scripts/deploy-pas.ps1
+# 已构建过可跳过：pwsh -File scripts/deploy-pas.ps1 -SkipBuild
+```
+
+脚本会：`next build`（`output: "standalone"`）→ 打 tar → `scp` 到 `pas` → 解压到 `/var/www/moyun` → `pm2 reload moyun`。
+
+相关文件：
+
+| 文件 | 作用 |
+|------|------|
+| `deploy/ecosystem.config.cjs` | PM2 配置 |
+| `deploy/nginx.moyun.conf` | Nginx 反代（大 `Link` 头需 512k buffer） |
+| `scripts/deploy-pas.ps1` | Windows 一键部署 |
+
+### 服务器一次性准备（已做过可跳过）
+
+1. Node ≥ 20、Nginx、PM2  
+2. 目录 `/var/www/moyun`  
+3. 安装 Nginx 站点：`/etc/nginx/conf.d/moyun.conf`（仓库内 `deploy/nginx.moyun.conf`）  
+4. **阿里云安全组入方向放行 TCP 80**（仅开 22 时外网打不开页面）  
+5. `pm2 startup` + `pm2 save`
+
+> 注意：`npm run deploy` 仍是 **Cloudflare Workers** 路径，与 `deploy:pas` 无关。
+
+---
+
 ## 部署（Cloudflare Workers · OpenNext）
 
-本站使用 [@opennextjs/cloudflare](https://opennext.js.org/cloudflare) 部署到 **Cloudflare Workers**。
+本站也可使用 [@opennextjs/cloudflare](https://opennext.js.org/cloudflare) 部署到 **Cloudflare Workers**。
 
 ### 前置
 
