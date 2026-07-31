@@ -163,7 +163,6 @@ private fun MoyunNavHost(container: AppContainer) {
                     poemId = poemId,
                     repository = container.poetryRepository,
                     shelfDataStore = container.shelfDataStore,
-                    atmospherePrefs = container.atmospherePrefs,
                     onBack = { navController.popBackStack() },
                     onOpenPoem = { id ->
                         navController.navigate(Routes.reader(id)) {

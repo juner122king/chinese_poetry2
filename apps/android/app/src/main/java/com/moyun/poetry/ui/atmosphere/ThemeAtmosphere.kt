@@ -22,15 +22,15 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
 /**
  * 分层意境场景：对齐 Web ThemeScene / InkBackground 的水墨语汇。
  *
- * - FULL：全部分层 + 粒子 + 轻动画
- * - CARD：远山/雾/天体静帧（atmScale≈0.55），无粒子 — 对齐 Web intensity=card
- * - REDUCED：静帧构图，无粒子/无动画
+ * - FULL：全部分层 + 粒子 + 轻动画（读诗 / 首页）
+ * - CARD：远山/雾/天体弱化静帧（atmScale≈0.55），无粒子 — 对齐 Web intensity=card
  *
  * @param theme poem.theme
  * @param seed  通常 poem.id，保证构图确定
@@ -112,9 +112,35 @@ fun ThemeAtmosphere(
     } else {
         0.72f
     }
+    /** 粒子/雨丝独立时钟：比大气 24s 更密，运动可读 */
+    val particleT = if (animate) {
+        infinite.animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 14_000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart,
+            ),
+            label = "particleT",
+        ).value
+    } else {
+        0.15f
+    }
 
+    val isStarMode = visual.particles == ParticleMode.STARS ||
+        visual.particles == ParticleMode.STARS_FRONTIER
+    val stars = remember(seed, theme, intensity, visual.particles, visual.particleDensity) {
+        if (intensity != AtmosphereIntensity.FULL || !isStarMode) {
+            emptyList()
+        } else {
+            spawnStars(visual.particles, visual.particleDensity, seed)
+        }
+    }
     val particles = remember(seed, theme, intensity, visual.particles, visual.particleDensity) {
-        if (intensity != AtmosphereIntensity.FULL || visual.particles == ParticleMode.NONE) {
+        if (intensity != AtmosphereIntensity.FULL ||
+            visual.particles == ParticleMode.NONE ||
+            isStarMode
+        ) {
             emptyList()
         } else {
             spawnParticles(visual, seed)
@@ -219,14 +245,14 @@ fun ThemeAtmosphere(
         }
 
         // 静雪洗（冬；寒江按 Web 倾向少用静点）
-        if (visual.snow && intensity != AtmosphereIntensity.REDUCED) {
+        if (visual.snow) {
             drawSnowWash(w, h, atm)
         }
 
         // 雨丝
         if (visual.rain) {
             if (intensity == AtmosphereIntensity.FULL) {
-                drawRain(w, h, t, seed, visual.particleSafeCenter)
+                drawRain(w, h, particleT, seed, visual.particleSafeCenter)
             } else if (intensity == AtmosphereIntensity.CARD) {
                 drawRainStatic(w, h, seed, atm)
             }
@@ -237,9 +263,12 @@ fun ThemeAtmosphere(
             drawMistSoft(visual, w, h, mistShift, mistShiftB, atm, fullLayers)
         }
 
-        // L4 粒子
+        // L4 粒子：星走独立清爽路径；其余模式共用 drawParticles
+        if (stars.isNotEmpty()) {
+            drawStars(stars, visual.particles, particleT, visual.particleSafeCenter)
+        }
         if (particles.isNotEmpty()) {
-            drawParticles(particles, visual, w, h, t)
+            drawParticles(particles, visual, w, h, particleT)
         }
 
         // 收束：纸纹 + 暗角
@@ -812,21 +841,26 @@ private fun DrawScope.drawRain(
     safeCenter: Boolean,
 ) {
     val rng = SceneSeed.makeRng("$seed:rain")
-    val count = 42
+    val count = 60
     repeat(count) {
         val x0 = SceneSeed.range(rng, 0f, 1f)
-        if (safeCenter && x0 in 0.35f..0.65f) return@repeat
-        val len = SceneSeed.range(rng, 16f, 34f)
-        val speed = SceneSeed.range(rng, 0.55f, 1.15f)
+        val yNorm = SceneSeed.range(rng, 0f, 1f)
+        val mask = particleSafeMask(x0, yNorm, safeCenter)
+        if (mask < 0.08f) return@repeat
+        val len = SceneSeed.range(rng, 18f, 40f)
+        val speed = SceneSeed.range(rng, 0.65f, 1.25f)
         val phase = SceneSeed.range(rng, 0f, 1f)
-        val near = it > count * 0.55f
-        val y = ((t * speed + phase) % 1.15f) * h
+        val near = it > count * 0.5f
+        // 整数圈下落，避免 particleT Restart 时雨丝瞬移
+        val cycles = if (near) 2f else 1f
+        val y = wrap01(phase + t * cycles, span = 1f) * h
         val x = x0 * w + (y * 0.07f)
+        val baseA = if (near) 0.34f else 0.18f
         drawLine(
-            color = Color(0xFFA8B8C8).copy(alpha = if (near) 0.22f else 0.12f),
+            color = Color(0xFFA8B8C8).copy(alpha = baseA * mask),
             start = Offset(x, y),
-            end = Offset(x + 3f, y + len),
-            strokeWidth = if (near) 1.3f else 1f,
+            end = Offset(x + 4f, y + len),
+            strokeWidth = if (near) 1.6f else 1.15f,
             cap = StrokeCap.Round,
         )
     }
@@ -848,7 +882,7 @@ private fun DrawScope.drawRainStatic(w: Float, h: Float, seed: String, atm: Floa
     }
 }
 
-// ─── particles ────────────────────────────────────────────
+// ─── particles：6 模式差异化（形 / 色 / 运动 / 分布） ─
 
 private data class P(
     val x: Float,
@@ -858,29 +892,191 @@ private data class P(
     val size: Float,
     val alpha: Float,
     val phase: Float,
+    /** 亮星 / 边塞主星 */
+    val bright: Boolean = false,
+    val spin: Float = 1f,
+    /** 秋叶统一风向 ±1；其它模式 0 */
+    val wind: Float = 0f,
 )
+
+/** 对齐 Web 手机 `.particle-safe-center`：ellipse 38%×30% @50% 48%，中心软隐 */
+private fun particleSafeMask(x: Float, y: Float, enabled: Boolean): Float {
+    if (!enabled) return 1f
+    val nx = (x - 0.5f) / 0.19f
+    val ny = (y - 0.48f) / 0.15f
+    val r = kotlin.math.sqrt(nx * nx + ny * ny)
+    return smoothstep(0.28f, 1f, r)
+}
+
+private fun smoothstep(edge0: Float, edge1: Float, x: Float): Float {
+    val t = ((x - edge0) / (edge1 - edge0)).coerceIn(0f, 1f)
+    return t * t * (3f - 2f * t)
+}
+
+private fun wrap01(v: Float, span: Float = 1.15f): Float {
+    var x = v % span
+    if (x < 0f) x += span
+    return x
+}
 
 private fun spawnParticles(visual: ThemeVisual, seed: String): List<P> {
     val rng = SceneSeed.makeRng("$seed:p")
-    val base = when (visual.particles) {
-        ParticleMode.STARS -> 48
-        ParticleMode.STARS_FRONTIER -> 36
-        ParticleMode.PETALS -> 36
-        ParticleMode.LEAVES -> 28
-        ParticleMode.SNOW -> 40
-        ParticleMode.FIREFLY -> 22
+    val mode = visual.particles
+    val base = when (mode) {
+        // 星由 StarParticles.spawnStars 处理
+        ParticleMode.STARS, ParticleMode.STARS_FRONTIER -> 0
+        ParticleMode.PETALS -> 56
+        ParticleMode.LEAVES -> 48
+        ParticleMode.SNOW -> 80
+        ParticleMode.FIREFLY -> 56
         ParticleMode.NONE -> 0
     }
-    val n = (base * visual.particleDensity).toInt().coerceIn(0, 56)
+    val n = (base * visual.particleDensity).toInt().coerceIn(0, 120)
+    // 秋叶：整场统一风向
+    val leafWind = if (mode == ParticleMode.LEAVES) {
+        if (SceneSeed.bool(rng)) 1f else -1f
+    } else {
+        0f
+    }
+
     return List(n) {
-        P(
-            x = SceneSeed.range(rng, 0f, 1f),
-            y = SceneSeed.range(rng, 0f, 1f),
-            vx = SceneSeed.range(rng, -0.04f, 0.04f),
-            vy = SceneSeed.range(rng, 0.02f, 0.12f),
-            size = SceneSeed.range(rng, 0.45f, 1.25f),
-            alpha = SceneSeed.range(rng, 0.25f, 0.85f),
-            phase = SceneSeed.range(rng, 0f, 1f),
+        val (y0, y1) = when (mode) {
+            ParticleMode.FIREFLY -> 0.48f to 0.96f // 近草泽
+            else -> 0f to 1f
+        }
+        val spinSign = if (SceneSeed.bool(rng)) 1f else -1f
+        when (mode) {
+            ParticleMode.STARS, ParticleMode.STARS_FRONTIER ->
+                P(0f, 0f, 0f, 0f, 0f, 0f, 0f) // 由 StarParticles 绘制
+            ParticleMode.PETALS -> P(
+                x = SceneSeed.range(rng, 0f, 1f),
+                y = SceneSeed.range(rng, 0f, 1f),
+                vx = SceneSeed.range(rng, 0.7f, 1.3f), // 摆幅倍率
+                vy = SceneSeed.range(rng, 0.07f, 0.13f), // 慢落
+                size = SceneSeed.range(rng, 0.7f, 1.25f),
+                alpha = SceneSeed.range(rng, 0.5f, 0.88f),
+                phase = SceneSeed.range(rng, 0f, 1f),
+                spin = (0.25f + SceneSeed.range(rng, 0f, 0.45f)) * spinSign, // 慢转
+            )
+            ParticleMode.LEAVES -> P(
+                x = SceneSeed.range(rng, 0f, 1f),
+                y = SceneSeed.range(rng, 0f, 1f),
+                vx = SceneSeed.range(rng, 0.04f, 0.10f), // 斜移强度
+                vy = SceneSeed.range(rng, 0.14f, 0.24f), // 快落
+                size = SceneSeed.range(rng, 0.65f, 1.2f),
+                alpha = SceneSeed.range(rng, 0.55f, 0.9f),
+                phase = SceneSeed.range(rng, 0f, 1f),
+                spin = (0.9f + SceneSeed.range(rng, 0f, 1.2f)) * spinSign, // 快翻
+                wind = leafWind,
+            )
+            ParticleMode.SNOW -> P(
+                x = SceneSeed.range(rng, 0f, 1f),
+                y = SceneSeed.range(rng, 0f, 1f),
+                vx = SceneSeed.range(rng, -0.008f, 0.008f),
+                vy = SceneSeed.range(rng, 0.09f, 0.16f), // 匀速直落
+                size = SceneSeed.range(rng, 0.35f, 0.85f), // 细
+                alpha = SceneSeed.range(rng, 0.4f, 0.75f),
+                phase = SceneSeed.range(rng, 0f, 1f),
+            )
+            ParticleMode.FIREFLY -> P(
+                x = SceneSeed.range(rng, 0.08f, 0.92f),
+                y = SceneSeed.range(rng, y0, y1),
+                vx = SceneSeed.range(rng, 0.02f, 0.05f), // 游荡半径
+                vy = SceneSeed.range(rng, 0.015f, 0.04f),
+                size = SceneSeed.range(rng, 0.7f, 1.35f),
+                alpha = SceneSeed.range(rng, 0.5f, 0.92f),
+                phase = SceneSeed.range(rng, 0f, 1f),
+            )
+            ParticleMode.NONE -> P(0f, 0f, 0f, 0f, 0f, 0f, 0f)
+        }
+    }
+}
+
+private fun DrawScope.drawSoftGlow(
+    center: Offset,
+    haloR: Float,
+    coreR: Float,
+    color: Color,
+    alpha: Float,
+) {
+    if (alpha < 0.02f || haloR <= 0f) return
+    val a = alpha.coerceIn(0f, 1f)
+    drawCircle(
+        brush = Brush.radialGradient(
+            colorStops = arrayOf(
+                0f to color.copy(alpha = a),
+                0.28f to color.copy(alpha = a * 0.7f),
+                0.6f to color.copy(alpha = a * 0.22f),
+                1f to Color.Transparent,
+            ),
+            center = center,
+            radius = haloR,
+        ),
+        radius = haloR,
+        center = center,
+    )
+    if (coreR > 0.4f) {
+        drawCircle(
+            color = color.copy(alpha = (a * 1.05f).coerceAtMost(1f)),
+            radius = coreR,
+            center = center,
+        )
+    }
+}
+
+/** 春瓣：竖向水滴形（尖底椭圆感） */
+private fun DrawScope.drawPetalShape(
+    center: Offset,
+    unit: Float,
+    size: Float,
+    color: Color,
+    alpha: Float,
+    degrees: Float,
+) {
+    val bw = unit * 0.95f * size
+    val bh = unit * 1.75f * size
+    rotate(degrees = degrees, pivot = center) {
+        // 上圆瓣
+        drawOval(
+            color = color.copy(alpha = alpha),
+            topLeft = Offset(center.x - bw / 2f, center.y - bh * 0.55f),
+            size = Size(bw, bh * 0.72f),
+        )
+        // 下尖：略窄椭圆叠出花瓣尖
+        drawOval(
+            color = color.copy(alpha = alpha * 0.9f),
+            topLeft = Offset(center.x - bw * 0.32f, center.y - bh * 0.05f),
+            size = Size(bw * 0.64f, bh * 0.55f),
+        )
+    }
+}
+
+/** 秋叶：菱形尖叶 + 中轴脉 */
+private fun DrawScope.drawLeafShape(
+    center: Offset,
+    unit: Float,
+    size: Float,
+    color: Color,
+    alpha: Float,
+    degrees: Float,
+) {
+    val halfW = unit * 0.95f * size
+    val halfH = unit * 0.55f * size
+    rotate(degrees = degrees, pivot = center) {
+        val path = Path().apply {
+            moveTo(center.x, center.y - halfH)
+            lineTo(center.x + halfW, center.y)
+            lineTo(center.x, center.y + halfH)
+            lineTo(center.x - halfW, center.y)
+            close()
+        }
+        drawPath(path, color = color.copy(alpha = alpha))
+        drawLine(
+            color = color.copy(alpha = alpha * 0.55f),
+            start = Offset(center.x - halfW * 0.55f, center.y),
+            end = Offset(center.x + halfW * 0.55f, center.y),
+            strokeWidth = maxOf(0.8f, unit * 0.08f),
+            cap = StrokeCap.Round,
         )
     }
 }
@@ -893,72 +1089,109 @@ private fun DrawScope.drawParticles(
     t: Float,
 ) {
     val safe = visual.particleSafeCenter
+    val short = min(w, h)
+    val mode = visual.particles
+
+    val flakeUnit = maxOf(3.4f, short * 0.0085f)
+    val tau = (t * 2 * PI).toFloat()
+
     for (p in particles) {
-        var x = ((p.x + p.vx * t * 8f) % 1.2f)
-        if (x < 0f) x += 1.2f
-        val y = ((p.y + p.vy * t * 6f + p.phase) % 1.15f)
-        if (safe && x in 0.30f..0.70f && y in 0.25f..0.75f) continue
+        // particleT Restart：飘落用整数圈 wrap；萤用 sin/cos。星已分流至 StarParticles。
+        val (x, y) = when (mode) {
+            ParticleMode.STARS, ParticleMode.STARS_FRONTIER -> p.x to p.y // 不应进入
+            ParticleMode.PETALS -> {
+                val sway = sin(tau * 0.9f + p.phase * 6f) * 0.10f * p.vx
+                val fall = wrap01(p.y + p.phase + t, span = 1f)
+                wrap01(p.x + sway, span = 1f) to fall
+            }
+            ParticleMode.LEAVES -> {
+                val wind = p.wind * sin(tau * 0.5f) * 0.06f * (0.6f + p.vx * 8f)
+                val flutter = sin(tau * 1.6f + p.phase * 5f) * 0.02f
+                val fall = wrap01(p.y + p.phase + t * 2f, span = 1f)
+                wrap01(p.x + wind + flutter, span = 1f) to fall
+            }
+            ParticleMode.SNOW -> {
+                val micro = sin(tau * 0.7f + p.phase * 3f) * 0.012f
+                val fall = wrap01(p.y + p.phase + t, span = 1f)
+                wrap01(p.x + micro, span = 1f) to fall
+            }
+            ParticleMode.FIREFLY -> {
+                val ang = tau * 0.85f + p.phase * 6.28f
+                val ox = cos(ang) * p.vx * 0.55f
+                val oy = sin(ang * 1.3f) * p.vy * 0.45f
+                (p.x + ox).coerceIn(0.04f, 0.96f) to
+                    (p.y + oy).coerceIn(0.45f, 0.98f)
+            }
+            ParticleMode.NONE -> p.x to p.y
+        }
+
+        val mask = particleSafeMask(x, y, safe)
+        if (mask < 0.03f) continue
 
         val px = x * w
         val py = y * h
-        val twinkle = 0.55f + 0.45f * sin((t * 2 * PI + p.phase * 6).toFloat())
 
-        when (visual.particles) {
-            ParticleMode.STARS, ParticleMode.STARS_FRONTIER -> {
-                val a = p.alpha * twinkle *
-                    if (visual.particles == ParticleMode.STARS_FRONTIER) 0.7f else 1f
-                // 星仅天空带
-                if (py > h * 0.58f) continue
-                drawCircle(
-                    Color.White.copy(alpha = a * 0.5f),
-                    radius = 1.15f * p.size,
+        when (mode) {
+            ParticleMode.STARS, ParticleMode.STARS_FRONTIER -> Unit
+            ParticleMode.PETALS -> {
+                val a = (p.alpha * 0.62f * mask).coerceIn(0f, 1f)
+                val deg = (t * 70f * p.spin + p.phase * 360f) % 360f
+                drawPetalShape(
                     center = Offset(px, py),
+                    unit = flakeUnit,
+                    size = p.size,
+                    color = Color(0xFFF2B3C7),
+                    alpha = a,
+                    degrees = deg,
                 )
             }
-            ParticleMode.PETALS -> {
-                rotate(degrees = (t * 120f + p.phase * 360f) % 360f, pivot = Offset(px, py)) {
-                    drawOval(
-                        color = visual.accent.copy(alpha = p.alpha * 0.32f),
-                        topLeft = Offset(px - 3f * p.size, py - 5f * p.size),
-                        size = Size(6f * p.size, 10f * p.size),
-                    )
-                }
-            }
             ParticleMode.LEAVES -> {
-                rotate(degrees = (t * 80f + p.phase * 200f) % 360f, pivot = Offset(px, py)) {
-                    drawOval(
-                        color = visual.accent.copy(alpha = p.alpha * 0.38f),
-                        topLeft = Offset(px - 4f * p.size, py - 2.5f * p.size),
-                        size = Size(8f * p.size, 5f * p.size),
-                    )
-                }
+                val a = (p.alpha * 0.68f * mask).coerceIn(0f, 1f)
+                val deg = (t * 200f * p.spin + p.phase * 200f) % 360f
+                val deep = p.phase > 0.55f
+                drawLeafShape(
+                    center = Offset(px, py),
+                    unit = flakeUnit,
+                    size = p.size,
+                    color = if (deep) Color(0xFFA06030) else Color(0xFFC78547),
+                    alpha = a,
+                    degrees = deg,
+                )
             }
             ParticleMode.SNOW -> {
+                // 细密直落：弱晕近实心
+                val a = (p.alpha * 0.58f * mask).coerceIn(0f, 1f)
+                val core = maxOf(1.15f, short * 0.0022f * p.size)
                 drawCircle(
-                    Color.White.copy(alpha = p.alpha * 0.38f),
-                    radius = 1.5f * p.size,
-                    center = Offset(px + sin((t + p.phase) * 4f) * 8f, py),
+                    color = Color(0xFFEDF2F8).copy(alpha = a),
+                    radius = core,
+                    center = Offset(px, py),
+                )
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        listOf(Color.White.copy(alpha = a * 0.35f), Color.Transparent),
+                        center = Offset(px, py),
+                        radius = core * 2.2f,
+                    ),
+                    radius = core * 2.2f,
+                    center = Offset(px, py),
                 )
             }
             ParticleMode.FIREFLY -> {
-                // 硬闪烁：pow(max(0,sin),2) 骤亮骤暗
-                val s = sin((t * 2 * PI + p.phase * 8).toFloat()).coerceAtLeast(0f)
+                // 硬闪 + 大晕游荡；色可跟 accent
+                val s = sin(tau * 1.1f + p.phase * 8f).coerceAtLeast(0f)
                 val blink = s * s
-                val a = p.alpha * (0.2f + 0.8f * blink)
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        listOf(visual.accent.copy(alpha = a), Color.Transparent),
-                        center = Offset(px, py),
-                        radius = 9f * p.size,
-                    ),
-                    radius = 9f * p.size,
-                    center = Offset(px, py),
+                val a = (p.alpha * (0.22f + 0.78f * blink) * mask).coerceIn(0f, 1f)
+                val halo = maxOf(11f, short * 0.02f) * p.size
+                val core = maxOf(2.0f, short * 0.004f) * p.size
+                val glow = if (visual.id == "wine") Color(0xFFE8B060) else Color(0xFFEBCA5A)
+                // 略混主题 accent
+                val tint = Color(
+                    red = (glow.red * 0.75f + visual.accent.red * 0.25f),
+                    green = (glow.green * 0.75f + visual.accent.green * 0.25f),
+                    blue = (glow.blue * 0.75f + visual.accent.blue * 0.25f),
                 )
-                drawCircle(
-                    visual.accent.copy(alpha = a),
-                    radius = 1.35f * p.size,
-                    center = Offset(px, py),
-                )
+                drawSoftGlow(Offset(px, py), halo, core, tint, a)
             }
             ParticleMode.NONE -> Unit
         }

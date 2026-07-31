@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.moyun.poetry.data.local.AtmospherePrefs
 import com.moyun.poetry.data.local.ShelfDataStore
 import com.moyun.poetry.data.model.RelatedKind
 import com.moyun.poetry.data.repo.PoetryRepository
@@ -53,7 +52,6 @@ fun ReaderScreen(
     poemId: String,
     repository: PoetryRepository,
     shelfDataStore: ShelfDataStore,
-    atmospherePrefs: AtmospherePrefs,
     onBack: () -> Unit,
     onOpenPoem: (String) -> Unit,
     onOpenAuthor: (String) -> Unit = {},
@@ -63,9 +61,6 @@ fun ReaderScreen(
     val adjacent = remember(poemId) { repository.getAdjacent(poemId) }
     val related = remember(poemId) { repository.getRelated(poemId, 3) }
     val shelfIds by shelfDataStore.ids.collectAsStateWithLifecycle(initialValue = emptyList())
-    val intensity by atmospherePrefs.readerIntensity.collectAsStateWithLifecycle(
-        initialValue = AtmosphereIntensity.FULL,
-    )
     val onShelf = poemId in shelfIds
     val scope = rememberCoroutineScope()
 
@@ -98,7 +93,7 @@ fun ReaderScreen(
             ThemeAtmosphere(
                 theme = theme,
                 seed = id,
-                intensity = intensity,
+                intensity = AtmosphereIntensity.FULL,
                 modifier = Modifier.fillMaxSize(),
             )
         }
@@ -132,38 +127,15 @@ fun ReaderScreen(
                     style = MoyunType.nav,
                     modifier = Modifier.clickable(onClick = onBack),
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                    Text(
-                        if (intensity == AtmosphereIntensity.FULL) "静帧" else "意境",
-                        style = MoyunType.nav.copy(
-                            color = if (intensity == AtmosphereIntensity.FULL) {
-                                visual.accent
-                            } else {
-                                MoyunTokens.TypeMeta
-                            },
-                        ),
-                        modifier = Modifier.clickable {
-                            scope.launch {
-                                atmospherePrefs.setReaderIntensity(
-                                    if (intensity == AtmosphereIntensity.FULL) {
-                                        AtmosphereIntensity.REDUCED
-                                    } else {
-                                        AtmosphereIntensity.FULL
-                                    },
-                                )
-                            }
-                        },
-                    )
-                    Text(
-                        if (onShelf) "已笺" else "诗笺",
-                        style = MoyunType.nav.copy(
-                            color = if (onShelf) MoyunTokens.TypeActive else MoyunTokens.TypeMeta,
-                        ),
-                        modifier = Modifier.clickable {
-                            scope.launch { shelfDataStore.toggle(poemId) }
-                        },
-                    )
-                }
+                Text(
+                    if (onShelf) "已笺" else "诗笺",
+                    style = MoyunType.nav.copy(
+                        color = if (onShelf) MoyunTokens.TypeActive else MoyunTokens.TypeMeta,
+                    ),
+                    modifier = Modifier.clickable {
+                        scope.launch { shelfDataStore.toggle(poemId) }
+                    },
+                )
             }
 
             Column(

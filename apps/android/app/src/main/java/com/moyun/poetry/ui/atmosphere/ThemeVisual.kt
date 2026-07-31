@@ -73,10 +73,8 @@ data class ThemeVisual(
 }
 
 enum class AtmosphereIntensity {
-    /** 读诗：全部分层 + 粒子 */
+    /** 读诗 / 首页：全部分层 + 粒子 + 动画 */
     FULL,
-    /** 列表卡：弱渐变 + accent，无粒子 */
+    /** 列表卡：弱渐变 + accent，无粒子 — 对齐 Web intensity=card */
     CARD,
-    /** 仅底色 + 天体/山静帧 */
-    REDUCED,
 }

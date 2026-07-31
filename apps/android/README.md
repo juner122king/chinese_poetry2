@@ -87,6 +87,7 @@ cd apps/android
   - `InkPaint`：径向柔边椭圆模拟 blur（云/雾/水际/暗角）
   - CARD ≈ Web `intensity=card`（远山/雾/天体静帧，无粒子）
   - FULL：粒子 + 雨丝 + 极慢云雾漂移 + 酒焰/灯笼签名
+  - 粒子 6 模式差异化：繁星 / 边塞十字疏星 / 春瓣 / 秋叶 / 细雪 / 萤火 + 独立雨丝；CARD 无动态粒子
 - 驱动字段：每首诗的 `theme`（非 tags）；题跋仍用 `motifs`
 - 构图种子：`poem.id` → 确定性 RNG（对齐 `scene-seed.ts`）
 

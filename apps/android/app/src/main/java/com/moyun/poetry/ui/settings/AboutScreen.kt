@@ -69,7 +69,7 @@ fun AboutScreen(
                 style = MoyunType.meta,
             )
             Text(
-                "意境按 poem.theme 渲染（theme-map 22 套）。读诗页可切换完整意境 / 静帧。",
+                "意境按 poem.theme 渲染（theme-map 22 套）。读诗页固定完整意境（含粒子）。",
                 style = MoyunType.meta,
             )
         }

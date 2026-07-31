@@ -17,13 +17,11 @@ object InkPaint {
 
     fun atmScale(intensity: AtmosphereIntensity): Float = when (intensity) {
         AtmosphereIntensity.FULL -> 1f
-        AtmosphereIntensity.REDUCED -> 0.85f
         AtmosphereIntensity.CARD -> 0.55f
     }
 
     fun vignetteAlpha(intensity: AtmosphereIntensity): Float = when (intensity) {
         AtmosphereIntensity.FULL -> 0.48f
-        AtmosphereIntensity.REDUCED -> 0.40f
         AtmosphereIntensity.CARD -> 0.28f
     }
 
