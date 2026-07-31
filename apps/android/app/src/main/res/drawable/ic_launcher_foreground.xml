@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 简笔墨点 + 横线，作临时启动图标 -->
+    <path
+        android:fillColor="#1A1A18"
+        android:pathData="M54,38c-7,0 -12,5 -12,12c0,7 5,12 12,12s12,-5 12,-12c0,-7 -5,-12 -12,-12z" />
+    <path
+        android:fillColor="#1A1A18"
+        android:fillAlpha="0.55"
+        android:pathData="M34,68h40c1.2,0 2,1 1.7,2.1l-1.5,5.5c-0.3,1.1 -1.4,1.9 -2.5,1.9H36.3c-1.1,0 -2.2,-0.8 -2.5,-1.9l-1.5,-5.5C32,69 32.8,68 34,68z" />
+</vector>

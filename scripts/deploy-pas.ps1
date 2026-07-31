@@ -1,10 +1,11 @@
-# Deploy 墨韵 to SSH host `pas` (local build + upload + PM2 reload)
-# Usage:  pwsh -File scripts/deploy-pas.ps1
-#         pwsh -File scripts/deploy-pas.ps1 -SkipBuild
+# Deploy 墨韵 to SSH hosts pas-hy / pas-hk (local build + upload + PM2 reload)
+# Usage:
+#   pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hk
+#   pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hy -SkipBuild
 
 param(
   [switch]$SkipBuild,
-  [string]$SshHost = "pas",
+  [string]$SshHost = "pas-hy",
   [string]$RemoteDir = "/var/www/moyun"
 )
 
@@ -12,9 +13,15 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
-$Staging = Join-Path $Root ".deploy-staging"
 $ArchiveName = "moyun-standalone.tar.gz"
 $ArchivePath = Join-Path $Root $ArchiveName
+
+# Public URL hints (IP-first; update when domains bind)
+$PublicUrlByHost = @{
+  "pas-hy" = "http://47.113.189.27"
+  "pas"    = "http://47.113.189.27"  # legacy alias if still in ssh config
+  "pas-hk" = "http://47.239.28.41"
+}
 
 function Assert-Command($Name) {
   if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
@@ -99,4 +106,7 @@ ssh $SshHost $RemoteScript
 if ($LASTEXITCODE -ne 0) { throw "remote deploy failed" }
 
 Remove-Item -Force $ArchivePath -ErrorAction SilentlyContinue
-Write-Host "==> Done. Open http://47.113.189.27" -ForegroundColor Green
+
+$PublicUrl = $PublicUrlByHost[$SshHost]
+if (-not $PublicUrl) { $PublicUrl = "http://$SshHost" }
+Write-Host "==> Done ($SshHost). Open $PublicUrl" -ForegroundColor Green

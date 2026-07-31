@@ -1,4 +1,4 @@
-/** PM2 ecosystem for 墨韵 on host `pas` */
+/** PM2 ecosystem for 墨韵 on pas-hy / pas-hk */
 module.exports = {
   apps: [
     {

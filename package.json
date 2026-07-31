@@ -20,7 +20,9 @@
     "enrich:opening-quotes:seed": "npx tsx scripts/seed-opening-quotes-manual.ts",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "deploy:pas": "pwsh -File scripts/deploy-pas.ps1",
+    "deploy:pas": "pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hy",
+    "deploy:pas-hy": "pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hy",
+    "deploy:pas-hk": "pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hk",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },

@@ -19,6 +19,19 @@ npm run dev
 
 浏览器打开 [http://localhost:3000](http://localhost:3000)。
 
+## Android 内测（本仓）
+
+原生客户端在 [`apps/android`](apps/android)（Kotlin + Jetpack Compose），离线消费 `data/generated/*`。
+
+```powershell
+pwsh -File apps/android/scripts/sync-data.ps1
+cd apps/android
+.\gradlew.bat assembleDebug
+# APK: apps/android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+详见 [apps/android/README.md](apps/android/README.md)。
+
 ## 页面
 
 | 路径 | 说明 |
@@ -83,44 +96,54 @@ motifs[3]  诗意题跋「春晓 · 啼鸟 · 风雨」     → 详情与卡片�
 npm run enrich:motifs
 ```
 
-## 部署（自托管 · SSH `pas`）
+## 部署（自托管 · SSH pas-hy / pas-hk）
 
-生产路径之一：本机构建 → 上传到阿里云主机 **`pas`**（`root@47.113.189.27`），用 **Next standalone + PM2 + Nginx** 运行。
+生产路径之一：本机构建 → 上传到阿里云，用 **Next standalone + PM2 + Nginx** 运行。
+
+| 节点 | SSH | 公网 IP | 访问 |
+|------|-----|---------|------|
+| 河源 | `pas-hy` | 47.113.189.27 | [http://47.113.189.27](http://47.113.189.27) |
+| 香港 | `pas-hk` | 47.239.28.41 | [http://47.239.28.41](http://47.239.28.41) |
+
+两台机应用配置一致：
 
 | 项 | 值 |
 |----|-----|
 | 应用目录 | `/var/www/moyun` |
 | PM2 进程名 | `moyun` |
 | 对外 | Nginx `:80` → `127.0.0.1:3000` |
-| 访问 | [http://47.113.189.27](http://47.113.189.27)（暂无 HTTPS） |
+| HTTPS | 暂无（IP 访问） |
 
 ### 日常发布
 
 ```bash
-npm run deploy:pas
-# 等价：pwsh -File scripts/deploy-pas.ps1
-# 已构建过可跳过：pwsh -File scripts/deploy-pas.ps1 -SkipBuild
+npm run deploy:pas-hy   # 河源
+npm run deploy:pas-hk   # 香港
+# 别名：npm run deploy:pas → 河源
+# 已构建过可跳过 build：
+#   pwsh -File scripts/deploy-pas.ps1 -SshHost pas-hk -SkipBuild
 ```
 
-脚本会：`next build`（`output: "standalone"`）→ 打 tar → `scp` 到 `pas` → 解压到 `/var/www/moyun` → `pm2 reload moyun`。
+脚本会：`next build`（`output: "standalone"`）→ 打 tar → `scp` → 解压到 `/var/www/moyun` → `pm2 reload moyun`。
 
 相关文件：
 
 | 文件 | 作用 |
 |------|------|
 | `deploy/ecosystem.config.cjs` | PM2 配置 |
-| `deploy/nginx.moyun.conf` | Nginx 反代（大 `Link` 头需 512k buffer） |
-| `scripts/deploy-pas.ps1` | Windows 一键部署 |
+| `deploy/nginx.moyun.conf` | Nginx 通用模板（512k proxy buffer） |
+| `deploy/nginx.moyun.pas-hk.conf` | 香港节点 server_name |
+| `scripts/deploy-pas.ps1` | Windows 一键部署（`-SshHost`） |
 
 ### 服务器一次性准备（已做过可跳过）
 
 1. Node ≥ 20、Nginx、PM2  
 2. 目录 `/var/www/moyun`  
-3. 安装 Nginx 站点：`/etc/nginx/conf.d/moyun.conf`（仓库内 `deploy/nginx.moyun.conf`）  
+3. 安装 Nginx 站点：`/etc/nginx/conf.d/moyun.conf`  
 4. **阿里云安全组入方向放行 TCP 80**（仅开 22 时外网打不开页面）  
 5. `pm2 startup` + `pm2 save`
 
-> 注意：`npm run deploy` 仍是 **Cloudflare Workers** 路径，与 `deploy:pas` 无关。
+> 注意：`npm run deploy` 仍是 **Cloudflare Workers** 路径，与 `deploy:pas-*` 无关。
 
 ---
 

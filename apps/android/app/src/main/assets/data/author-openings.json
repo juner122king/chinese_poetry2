@@ -1,0 +1,1349 @@
+{
+  "li-bai": {
+    "poemId": "jiang-jin-jiu",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "du-fu": {
+    "poemId": "deng-gao",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "wang-wei": {
+    "poemId": "wei-cheng-qu",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-shang-yin": {
+    "poemId": "wu-ti",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "jiang-kui": {
+    "poemId": "yang-zhou-man-jiang-kui",
+    "lineIndices": [
+      18,
+      19
+    ],
+    "source": "llm"
+  },
+  "yan-ji-dao": {
+    "poemId": "lin-jiang-xian-yan-ji-dao",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "meng-hao-ran": {
+    "poemId": "chun-xiao",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "liu-yong": {
+    "poemId": "yu-lin-ling-liu-yong",
+    "lineIndices": [
+      14,
+      16
+    ],
+    "source": "manual"
+  },
+  "xin-qi-ji": {
+    "poemId": "qing-yu-an-xin-qi-ji",
+    "lineIndices": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "source": "manual"
+  },
+  "su-shi": {
+    "poemId": "shui-diao-ge-tou-su-shi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "du-mu": {
+    "poemId": "bo-qin-huai",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "wang-chang-ling": {
+    "poemId": "chu-sai-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "yan-shu": {
+    "poemId": "huan-xi-sha-yan-shu",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "manual"
+  },
+  "ou-yang-xiu": {
+    "poemId": "die-lian-hua-ou-yang-xiu",
+    "lineIndices": [
+      0,
+      1,
+      2
+    ],
+    "source": "manual"
+  },
+  "cen-can": {
+    "poemId": "feng-ru-jing-shi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "bai-ju-yi": {
+    "poemId": "fu-de-gu-yuan-cao-song-bie",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "cui-hao": {
+    "poemId": "huang-he-lou",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-qing-zhao": {
+    "poemId": "sheng-sheng-man-li-qing-zhao",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "qin-guan": {
+    "poemId": "huan-xi-sha-qin-guan",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "zhang-jiu-ling": {
+    "poemId": "wang-yue-huai-yuan",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "meng-jiao": {
+    "poemId": "you-zi-yin",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "wang-zhi-huan": {
+    "poemId": "deng-guan-que-lou",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "fan-zhong-yan": {
+    "poemId": "su-mu-zhe-fan-zhong-yan",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "lu-you": {
+    "poemId": "bu-suan-zi-lu-you",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "wang-bo": {
+    "poemId": "du-shao-fu-zhi-ren-shu-zhou",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "wang-wan": {
+    "poemId": "ci-bei-gu-shan-xia",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "yue-fei": {
+    "poemId": "man-jiang-hong-yue-fei",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "zhang-ji-2": {
+    "poemId": "feng-qiao-ye-bo",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhou-bang-yan": {
+    "poemId": "xi-he-zhou-bang-yan",
+    "lineIndices": [
+      19,
+      20
+    ],
+    "source": "llm"
+  },
+  "wu-wen-ying": {
+    "poemId": "huan-xi-sha-wu-wen-ying",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "wei-ying-wu": {
+    "poemId": "chu-zhou-xi-jian",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "liu-chang-qing": {
+    "poemId": "song-ling-che-shang-ren",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "he-zhu": {
+    "poemId": "die-lian-hua-he-zhu",
+    "lineIndices": [
+      8,
+      9
+    ],
+    "source": "llm"
+  },
+  "shi-da-zu": {
+    "poemId": "shuang-shuang-yan-shi-da-zu",
+    "lineIndices": [
+      0,
+      2
+    ],
+    "source": "llm"
+  },
+  "li-qi": {
+    "poemId": "gu-cong-jun-xing",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "lu-lun": {
+    "poemId": "he-zhang-pu-she-sai-xia-qu-san",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "wang-yi-sun": {
+    "poemId": "qi-tian-le-wang-yi-sun",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "zhang-yan": {
+    "poemId": "gao-yang-tai-zhang-yan",
+    "lineIndices": [
+      20,
+      21
+    ],
+    "source": "llm"
+  },
+  "liu-zong-yuan": {
+    "poemId": "jiang-xue",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhang-hu": {
+    "poemId": "gong-ci-er-shou-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "zhou-mi": {
+    "poemId": "gao-yang-tai-zhou-mi",
+    "lineIndices": [
+      16,
+      19
+    ],
+    "source": "llm"
+  },
+  "zhang-xian": {
+    "poemId": "tian-xian-zi-zhang-xian",
+    "lineIndices": [
+      7,
+      8
+    ],
+    "source": "llm"
+  },
+  "han-yu": {
+    "poemId": "shi-gu-ge",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-yi": {
+    "poemId": "ye-shang-shou-xiang-cheng-wen-di",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "liu-ke-zhuang": {
+    "poemId": "yu-lou-chun-liu-ke-zhuang",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "liu-chen-weng": {
+    "poemId": "lan-ling-wang-liu-chen-weng",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "liu-yu-xi": {
+    "poemId": "jin-ling-wu-ti-wu-yi-xiang",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "qian-qi": {
+    "poemId": "he-zhang-pu-she-sai-xia-qu",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "wen-ting-yun": {
+    "poemId": "su-wu-miao",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "yuan-zhen": {
+    "poemId": "xing-gong",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "chao-bu-zhi": {
+    "poemId": "shui-long-yin-chao-bu-zhi",
+    "lineIndices": [
+      0,
+      12
+    ],
+    "source": "llm"
+  },
+  "han-hong": {
+    "poemId": "han-shi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "fan-cheng-da": {
+    "poemId": "qin-lou-yue-yi-qin-e-fan-cheng-da",
+    "lineIndices": [
+      4,
+      9
+    ],
+    "source": "llm"
+  },
+  "shen-quan-qi": {
+    "poemId": "du-bu-jian",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "si-kong-shu": {
+    "poemId": "xi-wai-di-lu-lun-jian-su",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "song-zhi-wen": {
+    "poemId": "ti-da-yu-ling-bei-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "wang-an-shi": {
+    "poemId": "gui-zhi-xiang-wang-an-shi",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "wei-zhuang": {
+    "poemId": "tai-cheng",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "jiang-jie": {
+    "poemId": "n-guan-zi-jiang-jie",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "yuan-qu-hua": {
+    "poemId": "an-gong-zi-yuan-qu-hua",
+    "lineIndices": [
+      12,
+      13
+    ],
+    "source": "llm"
+  },
+  "bu-xiang": {
+    "poemId": "jin-l-yi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "wu-ming-shi": {
+    "poemId": "qing-yu-an-wu-ming-shi-2",
+    "lineIndices": [
+      10,
+      11
+    ],
+    "source": "llm"
+  },
+  "cai-shen": {
+    "poemId": "liu-shao-qing-cai-shen",
+    "lineIndices": [
+      6,
+      8
+    ],
+    "source": "llm"
+  },
+  "chen-ke": {
+    "poemId": "pu-sa-man-chen-ke",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "cui-tu": {
+    "poemId": "ba-shan-dao-zhong-chu-ye-shu-huai",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "chen-yu-yi": {
+    "poemId": "lin-jiang-xian-chen-yu-yi-2",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "du-xun-he": {
+    "poemId": "chun-gong-yuan",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "gao-shi": {
+    "poemId": "yan-ge-xing",
+    "lineIndices": [
+      10,
+      11
+    ],
+    "source": "llm"
+  },
+  "han-yuan-ji": {
+    "poemId": "hao-shi-jin-han-yuan-ji",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "li-zhi-yi": {
+    "poemId": "bu-suan-zi-li-zhi-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "lu-zu-gao": {
+    "poemId": "jiang-cheng-zi-lu-zu-gao",
+    "lineIndices": [
+      13,
+      15
+    ],
+    "source": "llm"
+  },
+  "liu-fang-ping": {
+    "poemId": "chun-yuan-liu-fang-ping",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "ma-dai": {
+    "poemId": "chu-jiang-huai-gu-san-shou-yi",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "wang-jian": {
+    "poemId": "gu-xing-gong",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "wang-ya": {
+    "poemId": "qiu-ye-qu",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "peng-yuan-xun": {
+    "poemId": "liu-chou-peng-yuan-xun",
+    "lineIndices": [
+      0,
+      29
+    ],
+    "source": "llm"
+  },
+  "xu-hun": {
+    "poemId": "qiu-ri-fu-que-ti-tong-guan-yi-lou",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "ye-meng-de": {
+    "poemId": "yu-mei-ren-ye-meng-de",
+    "lineIndices": [
+      7,
+      9
+    ],
+    "source": "llm"
+  },
+  "yuan-jie": {
+    "poemId": "shi-yu-hu-shang-zui-ge",
+    "lineIndices": [
+      8,
+      9
+    ],
+    "source": "llm"
+  },
+  "zhang-xiao-xiang": {
+    "poemId": "nian-nu-jiao-zhang-xiao-xiang",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "zhang-yuan-gan": {
+    "poemId": "shi-zhou-man-zhang-yuan-gan",
+    "lineIndices": [
+      7,
+      20
+    ],
+    "source": "llm"
+  },
+  "zhang": {
+    "poemId": "yan-shan-ting-yan-shan-ting-zhang",
+    "lineIndices": [
+      18,
+      19
+    ],
+    "source": "llm"
+  },
+  "zhou-zi-zhi": {
+    "poemId": "zhe-gu-tian-zhou-zi-zhi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhu-qing-yu": {
+    "poemId": "jin-shi-shang-zhang-ji-shui-bu",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zu-yong": {
+    "poemId": "zhong-nan-wang-yu-xue",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "cai-xiang": {
+    "poemId": "du-nan-jian",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "chang-jian": {
+    "poemId": "su-wang-chang-ling-yin-ju",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "chao-chong-zhi": {
+    "poemId": "lin-jiang-xian-chao-chong-zhi",
+    "lineIndices": [
+      5,
+      6
+    ],
+    "source": "llm"
+  },
+  "cao-zu": {
+    "poemId": "mo-shan-xi-cao-zu",
+    "lineIndices": [
+      2,
+      10
+    ],
+    "source": "llm"
+  },
+  "chen-liang": {
+    "poemId": "shui-long-yin-chen-liang",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "chao-duan-li": {
+    "poemId": "l-tou-ya-duo-li-chao-duan-li",
+    "lineIndices": [
+      32,
+      33
+    ],
+    "source": "llm"
+  },
+  "chen-tao": {
+    "poemId": "long-xi-xing-si-shou-er",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "chen-zi-ang": {
+    "poemId": "deng-you-zhou-tai-ge",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "cui-shu": {
+    "poemId": "jiu-ri-deng-wang-xian-tai-cheng-liu-ming-fu-rong",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "cheng-gai": {
+    "poemId": "shui-long-yin-cheng-gai",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "dai-shu-lun": {
+    "poemId": "ke-ye-yu-gu-ren-ou-ji",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "du-shen-yan": {
+    "poemId": "he-jin-ling-lu-cheng-zao-chun-you-wang",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "gu-kuang": {
+    "poemId": "gong-ci-wu-shou-er",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "han": {
+    "poemId": "gao-yang-tai-han",
+    "lineIndices": [
+      20,
+      21
+    ],
+    "source": "llm"
+  },
+  "han-wo": {
+    "poemId": "yi-liang",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "han-zhen": {
+    "poemId": "feng-xiao-yin-fang-cao-han-zhen",
+    "lineIndices": [
+      22,
+      23
+    ],
+    "source": "llm"
+  },
+  "huang-gong": {
+    "poemId": "huan-xiang-ou-shu-qi-er",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "huang-fu-ran": {
+    "poemId": "chun-si-huang-fu-ran",
+    "lineIndices": [
+      0,
+      5
+    ],
+    "source": "llm"
+  },
+  "jia-dao": {
+    "poemId": "xun-yin-zhe-bu-yu",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "jiao-ran": {
+    "poemId": "xun-lu-hong-jian-bu-yu",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "jin-chang-xu": {
+    "poemId": "chun-yuan",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "kong-yi": {
+    "poemId": "nan-pu-kong-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "huang-xiao-mai": {
+    "poemId": "xiang-chun-ye-yue-huang-xiao-mai",
+    "lineIndices": [
+      17,
+      19
+    ],
+    "source": "llm"
+  },
+  "li-bing": {
+    "poemId": "han-gong-chun-li-bing",
+    "lineIndices": [
+      20,
+      21
+    ],
+    "source": "llm"
+  },
+  "li-duan": {
+    "poemId": "ting-zheng",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-pin": {
+    "poemId": "du-han-jiang",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-jia": {
+    "poemId": "di-tai-chun-li-jia",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "li-yu": {
+    "poemId": "he-xin-lang-li-yu",
+    "lineIndices": [
+      21,
+      23
+    ],
+    "source": "llm"
+  },
+  "li-zhong-yuan": {
+    "poemId": "yi-wang-sun-li-zhong-yuan",
+    "lineIndices": [
+      4,
+      3
+    ],
+    "source": "llm"
+  },
+  "li-yuan-ying": {
+    "poemId": "dong-xian-ge-li-yuan-ying",
+    "lineIndices": [
+      9,
+      16
+    ],
+    "source": "llm"
+  },
+  "liao-shi-mei": {
+    "poemId": "zhu-ying-yao-hong-liao-shi-mei",
+    "lineIndices": [
+      12,
+      13
+    ],
+    "source": "llm"
+  },
+  "liu-guo": {
+    "poemId": "tang-duo-ling-liu-guo",
+    "lineIndices": [
+      11,
+      13
+    ],
+    "source": "llm"
+  },
+  "liu-shen-xu": {
+    "poemId": "que-ti",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "liu-zhong-yong": {
+    "poemId": "zheng-yuan",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "liu-yi-zhi": {
+    "poemId": "xi-qian-ying-liu-yi-zhi",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "lu-song": {
+    "poemId": "rui-he-xian-lu-song",
+    "lineIndices": [
+      13,
+      14
+    ],
+    "source": "llm"
+  },
+  "lu-rui": {
+    "poemId": "rui-he-xian-lu-rui",
+    "lineIndices": [
+      1,
+      2
+    ],
+    "source": "llm"
+  },
+  "luo-bin-wang": {
+    "poemId": "zai-yue-yong-chan",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "mao-pang": {
+    "poemId": "xi-fen-fei-mao-pang",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "l-wei-lao": {
+    "poemId": "bo-xing-l-wei-lao",
+    "lineIndices": [
+      17,
+      18
+    ],
+    "source": "llm"
+  },
+  "pan-fen": {
+    "poemId": "he-xin-lang-pan-fen",
+    "lineIndices": [
+      21,
+      23
+    ],
+    "source": "llm"
+  },
+  "ming-huang-di": {
+    "poemId": "jing-zou-lu-ji-kong-zi-er-tan-zhi",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "pei-di": {
+    "poemId": "cui-jiu-yu-wang-nan-shan-ma-shang-kou-hao-yu-bie",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "pan-xi-bai": {
+    "poemId": "da-you-pan-xi-bai",
+    "lineIndices": [
+      15,
+      16
+    ],
+    "source": "llm"
+  },
+  "qi-wu-qian": {
+    "poemId": "chun-fan-ruo-ye-xi",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "qian-wei-yan": {
+    "poemId": "mu-lan-hua-yu-lou-chun-qian-wei-yan",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "qin-tao-yu": {
+    "poemId": "pin-n",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "quan-de-yu": {
+    "poemId": "yu-tai-ti-shi-er-shou-shi-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "qiu-wei": {
+    "poemId": "xun-xi-shan-yin-zhe-bu-yu",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "shi-ming-bian": {
+    "poemId": "song-gu-san-shi-er-shou-qi-er-san",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "shi-yan": {
+    "poemId": "qing-men-yin-shi-yan",
+    "lineIndices": [
+      16,
+      17
+    ],
+    "source": "llm"
+  },
+  "song-qi": {
+    "poemId": "yu-lou-chun-song-qi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "su-guo": {
+    "poemId": "dian-jiang-chun-su-guo",
+    "lineIndices": [
+      3,
+      8
+    ],
+    "source": "llm"
+  },
+  "shu-dan": {
+    "poemId": "yu-mei-ren-shu-dan",
+    "lineIndices": [
+      7,
+      9
+    ],
+    "source": "llm"
+  },
+  "sun-ge": {
+    "poemId": "fang-yang-zun-shi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "tian-wei": {
+    "poemId": "jiang-shen-zi-man-jiang-cheng-zi-man-tian-wei",
+    "lineIndices": [
+      10,
+      11
+    ],
+    "source": "llm"
+  },
+  "wan-si-yong": {
+    "poemId": "san-tai-wan-si-yong",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "wang-an-guo": {
+    "poemId": "qing-ping-le-wang-an-guo",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "wang-zao": {
+    "poemId": "dian-jiang-chun-wang-zao",
+    "lineIndices": [
+      3,
+      8
+    ],
+    "source": "llm"
+  },
+  "wang-guan": {
+    "poemId": "sheng-cha-zi-wang-guan",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "wang-han": {
+    "poemId": "liang-zhou-ci-er-shou-yi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "xi-bi-ren": {
+    "poemId": "ge-shu-ge",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "xue-feng": {
+    "poemId": "gong-ci",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "yan-ren": {
+    "poemId": "yu-lou-chun-yan-ren",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "yan-wei": {
+    "poemId": "song-li-duan",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "yang-jing-shu-jin": {
+    "poemId": "po-luo-men",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "yao-yun-wen": {
+    "poemId": "zi-yu-xiang-man-yao-yun-wen",
+    "lineIndices": [
+      9,
+      11
+    ],
+    "source": "llm"
+  },
+  "zhang-bi": {
+    "poemId": "ji-ren-er-shou-qi-yi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "yu-guo-bao": {
+    "poemId": "feng-ru-song-yu-guo-bao",
+    "lineIndices": [
+      12,
+      13
+    ],
+    "source": "llm"
+  },
+  "zhang-ji": {
+    "poemId": "mei-fan-gu-ren",
+    "lineIndices": [
+      6,
+      7
+    ],
+    "source": "llm"
+  },
+  "zhang-mi": {
+    "poemId": "ji-ren-yi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhang-lun": {
+    "poemId": "zhu-ying-yao-hong-zhang-lun",
+    "lineIndices": [
+      18,
+      19
+    ],
+    "source": "llm"
+  },
+  "zhang-qiao": {
+    "poemId": "shu-bian-shi",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "zhang-xu": {
+    "poemId": "tao-hua-xi",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhang-liang-neng": {
+    "poemId": "xiao-chong-shan-zhang-liang-neng",
+    "lineIndices": [
+      10,
+      11
+    ],
+    "source": "llm"
+  },
+  "zhao-ji": {
+    "poemId": "yan-shan-ting-zhao-ji",
+    "lineIndices": [
+      15,
+      16
+    ],
+    "source": "llm"
+  },
+  "zhao-ling": {
+    "poemId": "die-lian-hua-zhao-ling",
+    "lineIndices": [
+      0,
+      4
+    ],
+    "source": "llm"
+  },
+  "zheng-tian": {
+    "poemId": "ma-wei-po",
+    "lineIndices": [
+      0,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhong-shu": {
+    "poemId": "xia-yun-feng-zhong-shu",
+    "lineIndices": [
+      0,
+      1
+    ],
+    "source": "llm"
+  },
+  "zhou-pu": {
+    "poemId": "chun-gong-yuan-zhou-pu",
+    "lineIndices": [
+      4,
+      5
+    ],
+    "source": "llm"
+  },
+  "zhu-bin": {
+    "poemId": "deng-lou-zhu-bin",
+    "lineIndices": [
+      2,
+      3
+    ],
+    "source": "llm"
+  },
+  "zhu-si-fa": {
+    "poemId": "mo-yu-er-zhu-si-fa",
+    "lineIndices": [
+      3,
+      4
+    ],
+    "source": "llm"
+  },
+  "zhu-fu": {
+    "poemId": "yu-jia-ao-zhu-fu",
+    "lineIndices": [
+      5,
+      6
+    ],
+    "source": "llm"
+  }
+}
