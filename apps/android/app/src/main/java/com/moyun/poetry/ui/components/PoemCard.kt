@@ -31,6 +31,7 @@ import com.moyun.poetry.data.model.Poem
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.atmosphere.ThemeMap
+import com.moyun.poetry.ui.theme.MoyunMotion
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 
@@ -52,7 +53,10 @@ fun PoemCard(
     val pressed by interaction.collectIsPressedAsState()
     val lift by animateFloatAsState(
         targetValue = if (pressed) -2f else 0f,
-        animationSpec = tween(400, easing = MoyunTokens.EaseElegant),
+        animationSpec = tween(
+            durationMillis = if (pressed) MoyunMotion.AtmosPressInMs else MoyunMotion.AtmosPressOutMs,
+            easing = MoyunMotion.EaseElegant,
+        ),
         label = "lift",
     )
 

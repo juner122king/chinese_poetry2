@@ -75,6 +75,7 @@ cd apps/android
 | 意境氛围 22 套 | `ThemeAtmosphere` + theme-map |
 | 嵌入 Noto / LXGW 字体 | `sync-fonts.ps1` + `MoyunType`（Noto SC + 文楷 TC） |
 | 正文句读展示（去标点 + pause/stop 行距） | `PoemLines` → Reader / Hero / 卡片摘句 |
+| 沉浸过渡（系统栏/路由淡入/读诗落版/Hero 段 stagger） | 本轮已做 |
 | 诗卷热门 tag 横滑 | 待补 |
 | 作者 scroll hero | 待补 |
 | 简繁切换 | 未做 |

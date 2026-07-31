@@ -26,9 +26,11 @@ import com.moyun.poetry.data.model.ImageryTaxonomy
 import com.moyun.poetry.data.model.PoemListFilters
 import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.components.BanxinHeader
+import com.moyun.poetry.ui.components.FadeReveal
 import com.moyun.poetry.ui.components.ListPageScaffold
 import com.moyun.poetry.ui.components.PoemCard
 import com.moyun.poetry.ui.components.PoemFilterChip
+import com.moyun.poetry.ui.components.listRevealDelayMs
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 
@@ -144,12 +146,18 @@ fun PoemsScreen(
                 )
             }
         } else {
-            items(poems, key = { it.id }) { poem ->
-                PoemCard(
-                    poem = poem,
-                    onClick = { onOpenPoem(poem.id) },
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp),
-                )
+            items(
+                count = poems.size,
+                key = { poems[it].id },
+            ) { index ->
+                val poem = poems[index]
+                FadeReveal(delayMs = listRevealDelayMs(index)) {
+                    PoemCard(
+                        poem = poem,
+                        onClick = { onOpenPoem(poem.id) },
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 6.dp),
+                    )
+                }
             }
         }
     }

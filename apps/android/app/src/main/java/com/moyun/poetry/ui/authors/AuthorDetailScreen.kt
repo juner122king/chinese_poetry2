@@ -2,16 +2,20 @@ package com.moyun.poetry.ui.authors
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,9 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.moyun.poetry.data.repo.PoetryRepository
+import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
+import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
+import com.moyun.poetry.ui.components.FadeReveal
 import com.moyun.poetry.ui.components.InkRule
 import com.moyun.poetry.ui.components.PoemCard
-import com.moyun.poetry.ui.theme.MoyunTokens
+import com.moyun.poetry.ui.components.listRevealDelayMs
 import com.moyun.poetry.ui.theme.MoyunType
 
 @Composable
@@ -35,6 +42,10 @@ fun AuthorDetailScreen(
     val works = remember(slug) {
         author?.let { repository.getAuthorWorks(it) }.orEmpty()
     }
+    val bgTheme = remember(works) {
+        works.firstOrNull()?.theme ?: "landscape"
+    }
+    val navBottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     if (author == null) {
         Column(Modifier.padding(24.dp).statusBarsPadding()) {
@@ -44,45 +55,60 @@ fun AuthorDetailScreen(
         return
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(top = 72.dp),
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        item {
-            Text("返回", style = MoyunType.nav, modifier = Modifier.clickable(onClick = onBack))
-            Spacer(Modifier.height(24.dp))
-            Column(
-                Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                InkRule()
+    Box(Modifier.fillMaxSize()) {
+        ThemeAtmosphere(
+            theme = bgTheme,
+            seed = "author:${author.slug}",
+            intensity = AtmosphereIntensity.SOFT,
+            modifier = Modifier.fillMaxSize(),
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(top = 72.dp),
+            contentPadding = PaddingValues(
+                start = 24.dp,
+                end = 24.dp,
+                top = 16.dp,
+                bottom = 16.dp + navBottom,
+            ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            item {
+                Text("返回", style = MoyunType.nav, modifier = Modifier.clickable(onClick = onBack))
                 Spacer(Modifier.height(24.dp))
-                Text(author.name, style = MoyunType.display)
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = buildString {
-                        append(author.dynasty)
-                        if (!author.years.isNullOrBlank()) append(" · ${author.years}")
-                        append(" · ${works.size} 首")
-                    },
-                    style = MoyunType.meta,
-                )
+                Column(
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    InkRule()
+                    Spacer(Modifier.height(24.dp))
+                    Text(author.name, style = MoyunType.display)
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        text = buildString {
+                            append(author.dynasty)
+                            if (!author.years.isNullOrBlank()) append(" · ${author.years}")
+                            append(" · ${works.size} 首")
+                        },
+                        style = MoyunType.meta,
+                    )
+                }
+                if (author.bio.isNotBlank()) {
+                    Spacer(Modifier.height(24.dp))
+                    Text(author.bio, style = MoyunType.cardExcerpt)
+                }
+                Spacer(Modifier.height(32.dp))
+                Text("作品", style = MoyunType.groupLabel)
+                Spacer(Modifier.height(8.dp))
             }
-            if (author.bio.isNotBlank()) {
-                Spacer(Modifier.height(24.dp))
-                Text(author.bio, style = MoyunType.cardExcerpt)
+            itemsIndexed(works, key = { _, p -> p.id }) { index, poem ->
+                FadeReveal(delayMs = listRevealDelayMs(index)) {
+                    PoemCard(poem = poem, onClick = { onOpenPoem(poem.id) })
+                }
             }
-            Spacer(Modifier.height(32.dp))
-            Text("作品", style = MoyunType.groupLabel)
-            Spacer(Modifier.height(8.dp))
+            item { Spacer(Modifier.height(32.dp)) }
         }
-        items(works, key = { it.id }) { poem ->
-            PoemCard(poem = poem, onClick = { onOpenPoem(poem.id) })
-        }
-        item { Spacer(Modifier.height(32.dp)) }
     }
 }

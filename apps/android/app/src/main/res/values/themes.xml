@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Moyun" parent="android:Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">#FF1A1A1A</item>
-        <item name="android:navigationBarColor">#FF1A1A1A</item>
+        <!-- 透明系统栏：意境铺到屏边；图标浅色由 MainActivity 控制 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
         <item name="android:windowBackground">#FF1A1A1A</item>
         <item name="android:colorBackground">#FF1A1A1A</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 </resources>

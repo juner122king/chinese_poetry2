@@ -15,8 +15,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moyun.poetry.data.local.ShelfDataStore
 import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.components.BanxinHeader
+import com.moyun.poetry.ui.components.FadeReveal
 import com.moyun.poetry.ui.components.ListPageScaffold
 import com.moyun.poetry.ui.components.PoemCard
+import com.moyun.poetry.ui.components.listRevealDelayMs
 import com.moyun.poetry.ui.theme.MoyunType
 
 @Composable
@@ -51,12 +53,18 @@ fun ShelfScreen(
                 )
             }
         } else {
-            items(poems, key = { it.id }) { poem ->
-                PoemCard(
-                    poem = poem,
-                    onClick = { onOpenPoem(poem.id) },
-                    modifier = Modifier.padding(vertical = 6.dp),
-                )
+            items(
+                count = poems.size,
+                key = { poems[it].id },
+            ) { index ->
+                val poem = poems[index]
+                FadeReveal(delayMs = listRevealDelayMs(index)) {
+                    PoemCard(
+                        poem = poem,
+                        onClick = { onOpenPoem(poem.id) },
+                        modifier = Modifier.padding(vertical = 6.dp),
+                    )
+                }
             }
         }
     }

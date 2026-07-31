@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
+import com.moyun.poetry.ui.theme.MoyunMotion
 import com.moyun.poetry.ui.theme.MoyunTokens
 
 /**
@@ -44,8 +45,8 @@ fun ImageryCardShell(
     val lift by animateFloatAsState(
         targetValue = if (active) -2f else 0f,
         animationSpec = tween(
-            durationMillis = if (active) 550 else 1150,
-            easing = MoyunTokens.EaseElegant,
+            durationMillis = if (active) MoyunMotion.AtmosPressInMs else MoyunMotion.AtmosPressOutMs,
+            easing = MoyunMotion.EaseElegant,
         ),
         label = "imagery-shell-lift",
     )

@@ -27,10 +27,12 @@ import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.components.AuthorCard
+import com.moyun.poetry.ui.components.FadeReveal
 import com.moyun.poetry.ui.components.ImageryGateCard
 import com.moyun.poetry.ui.components.InkRule
 import com.moyun.poetry.ui.components.PoemCard
 import com.moyun.poetry.ui.components.TextLinkElegant
+import com.moyun.poetry.ui.components.listRevealDelayMs
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 import kotlinx.coroutines.launch
@@ -93,12 +95,18 @@ fun HomeScreen(
             }
 
             item { SectionHeader(title = "精 选 诗 卷") }
-            items(featured, key = { it.id }) { poem ->
-                PoemCard(
-                    poem = poem,
-                    onClick = { onOpenPoem(poem.id) },
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                )
+            items(
+                count = featured.size,
+                key = { featured[it].id },
+            ) { index ->
+                val poem = featured[index]
+                FadeReveal(delayMs = listRevealDelayMs(index)) {
+                    PoemCard(
+                        poem = poem,
+                        onClick = { onOpenPoem(poem.id) },
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                    )
+                }
             }
             item {
                 Column(

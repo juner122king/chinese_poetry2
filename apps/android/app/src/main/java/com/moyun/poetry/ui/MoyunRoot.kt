@@ -1,10 +1,18 @@
 package com.moyun.poetry.ui
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -38,8 +47,10 @@ import com.moyun.poetry.ui.poems.PoemsScreen
 import com.moyun.poetry.ui.reader.ReaderScreen
 import com.moyun.poetry.ui.settings.AboutScreen
 import com.moyun.poetry.ui.shelf.ShelfScreen
+import com.moyun.poetry.ui.theme.MoyunMotion
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
+import com.moyun.poetry.ui.theme.rememberReducedMotion
 
 @Composable
 fun MoyunRoot(container: AppContainer) {
@@ -59,9 +70,7 @@ fun MoyunRoot(container: AppContainer) {
     ) {
         when (val state = loadState) {
             is LoadState.Idle, LoadState.Loading -> {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = MoyunTokens.Cinnabar)
-                }
+                InkLoadingMark()
             }
 
             is LoadState.Error -> {
@@ -87,15 +96,73 @@ fun MoyunRoot(container: AppContainer) {
     }
 }
 
+/** 墨韵加载：品牌字极淡呼吸，取代 Material 圆环。 */
+@Composable
+private fun InkLoadingMark() {
+    val reduce = rememberReducedMotion()
+    val alpha = if (reduce) {
+        0.72f
+    } else {
+        val infinite = rememberInfiniteTransition(label = "load")
+        infinite.animateFloat(
+            initialValue = 0.38f,
+            targetValue = 0.82f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1600, easing = MoyunMotion.EaseElegant),
+                repeatMode = RepeatMode.Reverse,
+            ),
+            label = "loadAlpha",
+        ).value
+    }
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "墨韵",
+            style = MoyunType.brand,
+            color = MoyunTokens.TypePrimary,
+            modifier = Modifier.alpha(alpha),
+        )
+    }
+}
+
 @Composable
 private fun MoyunNavHost(container: AppContainer) {
     val navController = rememberNavController()
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
     var menuOpen by remember { mutableStateOf(false) }
+    val reduce = rememberReducedMotion()
 
     val showTopNav = currentRoute != null &&
         !currentRoute.startsWith("reader")
+
+    val enter = if (reduce) {
+        fadeIn(animationSpec = tween(0))
+    } else {
+        fadeIn(animationSpec = MoyunMotion.pageFade())
+    }
+    val exit = if (reduce) {
+        fadeOut(animationSpec = tween(0))
+    } else {
+        fadeOut(animationSpec = MoyunMotion.pageFadeOut())
+    }
+    val readerEnter = if (reduce) {
+        fadeIn(animationSpec = tween(0))
+    } else {
+        fadeIn(animationSpec = MoyunMotion.pageFade()) +
+            scaleIn(
+                initialScale = 0.985f,
+                animationSpec = MoyunMotion.pageFade(),
+            )
+    }
+    val readerExit = if (reduce) {
+        fadeOut(animationSpec = tween(0))
+    } else {
+        fadeOut(animationSpec = MoyunMotion.pageFadeOut()) +
+            scaleOut(
+                targetScale = 0.99f,
+                animationSpec = MoyunMotion.pageFadeOut(),
+            )
+    }
 
     fun go(route: String) {
         menuOpen = false
@@ -106,16 +173,31 @@ private fun MoyunNavHost(container: AppContainer) {
         }
     }
 
+    fun openReader(poemId: String) {
+        val onReader = currentRoute?.startsWith("reader") == true
+        navController.navigate(Routes.reader(poemId)) {
+            if (onReader) {
+                // 上下篇替换当前读诗栈，返回仍落到列表/首页
+                popUpTo(Routes.READER) { inclusive = true }
+            }
+            launchSingleTop = true
+        }
+    }
+
     Box(Modifier.fillMaxSize().background(MoyunTokens.Ink)) {
         NavHost(
             navController = navController,
             startDestination = Routes.HOME,
             modifier = Modifier.fillMaxSize(),
+            enterTransition = { enter },
+            exitTransition = { exit },
+            popEnterTransition = { enter },
+            popExitTransition = { exit },
         ) {
             composable(Routes.HOME) {
                 HomeScreen(
                     repository = container.poetryRepository,
-                    onOpenPoem = { navController.navigate(Routes.reader(it)) },
+                    onOpenPoem = { openReader(it) },
                     onOpenPoems = { go(Routes.POEMS) },
                     onOpenImagery = { go(Routes.IMAGERY) },
                     onOpenAuthors = { go(Routes.AUTHORS) },
@@ -127,7 +209,7 @@ private fun MoyunNavHost(container: AppContainer) {
             composable(Routes.POEMS) {
                 PoemsScreen(
                     repository = container.poetryRepository,
-                    onOpenPoem = { navController.navigate(Routes.reader(it)) },
+                    onOpenPoem = { openReader(it) },
                 )
             }
             composable(
@@ -138,7 +220,7 @@ private fun MoyunNavHost(container: AppContainer) {
                 PoemsScreen(
                     repository = container.poetryRepository,
                     initialTag = tag,
-                    onOpenPoem = { navController.navigate(Routes.reader(it)) },
+                    onOpenPoem = { openReader(it) },
                 )
             }
             composable(Routes.IMAGERY) {
@@ -151,12 +233,16 @@ private fun MoyunNavHost(container: AppContainer) {
                 ShelfScreen(
                     repository = container.poetryRepository,
                     shelfDataStore = container.shelfDataStore,
-                    onOpenPoem = { navController.navigate(Routes.reader(it)) },
+                    onOpenPoem = { openReader(it) },
                 )
             }
             composable(
                 route = Routes.READER,
                 arguments = listOf(navArgument("poemId") { type = NavType.StringType }),
+                enterTransition = { readerEnter },
+                exitTransition = { readerExit },
+                popEnterTransition = { enter },
+                popExitTransition = { readerExit },
             ) { entry ->
                 val poemId = entry.arguments?.getString("poemId") ?: return@composable
                 ReaderScreen(
@@ -164,11 +250,7 @@ private fun MoyunNavHost(container: AppContainer) {
                     repository = container.poetryRepository,
                     shelfDataStore = container.shelfDataStore,
                     onBack = { navController.popBackStack() },
-                    onOpenPoem = { id ->
-                        navController.navigate(Routes.reader(id)) {
-                            launchSingleTop = true
-                        }
-                    },
+                    onOpenPoem = { openReader(it) },
                     onOpenAuthor = { name ->
                         container.poetryRepository.getAuthorByName(name)?.let {
                             navController.navigate(Routes.author(it.slug))
@@ -195,7 +277,7 @@ private fun MoyunNavHost(container: AppContainer) {
                     slug = slug,
                     repository = container.poetryRepository,
                     onBack = { navController.popBackStack() },
-                    onOpenPoem = { navController.navigate(Routes.reader(it)) },
+                    onOpenPoem = { openReader(it) },
                 )
             }
             composable(Routes.ABOUT) {
@@ -206,7 +288,6 @@ private fun MoyunNavHost(container: AppContainer) {
             }
         }
 
-        // 顶栏浮层（对齐 Web fixed header）
         if (showTopNav) {
             Box(Modifier.zIndex(10f)) {
                 PageTopVeil(Modifier.align(Alignment.TopCenter))

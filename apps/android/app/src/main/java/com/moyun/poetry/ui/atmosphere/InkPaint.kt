@@ -20,12 +20,14 @@ object InkPaint {
 
     fun atmScale(intensity: AtmosphereIntensity): Float = when (intensity) {
         AtmosphereIntensity.FULL -> 1f
+        AtmosphereIntensity.SOFT -> 0.72f
         AtmosphereIntensity.CARD -> 0.55f
     }
 
     fun vignetteAlpha(intensity: AtmosphereIntensity): Float = when (intensity) {
         // 过重会中心亮、四周暗，读成「第二层天」；收束即可
         AtmosphereIntensity.FULL -> 0.22f
+        AtmosphereIntensity.SOFT -> 0.18f
         AtmosphereIntensity.CARD -> 0.16f
     }
 

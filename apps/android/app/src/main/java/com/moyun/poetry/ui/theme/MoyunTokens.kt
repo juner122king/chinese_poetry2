@@ -25,8 +25,8 @@ object MoyunTokens {
     val TypeFaint = Xuan.copy(alpha = 0.20f)
     val TypeActive = Cinnabar.copy(alpha = 0.90f)
 
-    /** --ease-elegant */
-    val EaseElegant = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
+    /** --ease-elegant；时长见 [MoyunMotion] */
+    val EaseElegant = MoyunMotion.EaseElegant
 
     val PagePaddingH: Dp = 24.dp
     val NavPaddingV: Dp = 20.dp

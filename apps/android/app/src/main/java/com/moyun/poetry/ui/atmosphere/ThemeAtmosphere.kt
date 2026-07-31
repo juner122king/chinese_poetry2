@@ -30,6 +30,7 @@ import kotlin.math.sin
  * 分层意境场景：对齐 Web ThemeScene / InkBackground 的水墨语汇。
  *
  * - FULL：全部分层 + 粒子 + 轻动画（读诗 / 首页）
+ * - SOFT：雾/云轻动画、无粒子（目录页 landscape 底）
  * - CARD：远山/雾/天体弱化静帧（atmScale≈0.55），无粒子 — 对齐 Web intensity=card
  *
  * @param theme poem.theme
@@ -56,8 +57,9 @@ fun ThemeAtmosphere(
         )
     }
     val atm = InkPaint.atmScale(intensity)
-    val fullLayers = intensity == AtmosphereIntensity.FULL
-    val animate = intensity == AtmosphereIntensity.FULL
+    val fullLayers = intensity == AtmosphereIntensity.FULL || intensity == AtmosphereIntensity.SOFT
+    val animate = intensity == AtmosphereIntensity.FULL || intensity == AtmosphereIntensity.SOFT
+    val particlesEnabled = intensity == AtmosphereIntensity.FULL
 
     val infinite = rememberInfiniteTransition(label = "atmosphere")
     val t = if (animate) {
@@ -130,14 +132,14 @@ fun ThemeAtmosphere(
     val isStarMode = visual.particles == ParticleMode.STARS ||
         visual.particles == ParticleMode.STARS_FRONTIER
     val stars = remember(seed, theme, intensity, visual.particles, visual.particleDensity) {
-        if (intensity != AtmosphereIntensity.FULL || !isStarMode) {
+        if (!particlesEnabled || !isStarMode) {
             emptyList()
         } else {
             spawnStars(visual.particles, visual.particleDensity, seed)
         }
     }
     val particles = remember(seed, theme, intensity, visual.particles, visual.particleDensity) {
-        if (intensity != AtmosphereIntensity.FULL ||
+        if (!particlesEnabled ||
             visual.particles == ParticleMode.NONE ||
             isStarMode
         ) {
@@ -256,11 +258,11 @@ fun ThemeAtmosphere(
             drawSnowWash(w, h, atm)
         }
 
-        // 雨丝
+        // 雨丝：FULL 动态；SOFT/CARD 静帧稀疏
         if (visual.rain) {
-            if (intensity == AtmosphereIntensity.FULL) {
+            if (particlesEnabled) {
                 drawRain(w, h, particleT, seed, visual.particleSafeCenter)
-            } else if (intensity == AtmosphereIntensity.CARD) {
+            } else {
                 drawRainStatic(w, h, seed, atm)
             }
         }
