@@ -1,25 +1,17 @@
 package com.moyun.poetry.ui.authors
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.components.AuthorCard
-import com.moyun.poetry.ui.components.InkRule
+import com.moyun.poetry.ui.components.BanxinHeader
+import com.moyun.poetry.ui.components.ListPageScaffold
 import com.moyun.poetry.ui.theme.MoyunType
 
 @Composable
@@ -28,8 +20,9 @@ fun AuthorsScreen(
     onBack: () -> Unit,
     onOpenAuthor: (String) -> Unit,
 ) {
+    val authors = remember { repository.getAllAuthors() }
     val grouped = remember {
-        repository.getAllAuthors()
+        authors
             .groupBy { it.dynasty }
             .toList()
             .sortedBy { (dynasty, _) ->
@@ -41,26 +34,17 @@ fun AuthorsScreen(
             }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(top = 72.dp),
-        contentPadding = PaddingValues(bottom = 40.dp),
+    ListPageScaffold(
+        contentPadding = PaddingValues(bottom = 48.dp),
     ) {
         item {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                InkRule()
-                Spacer(Modifier.height(24.dp))
-                Text("名 家", style = MoyunType.groupLabel)
-            }
+            BanxinHeader(
+                volume = "名 家",
+                extentCount = authors.size,
+                extentUnit = "家",
+            )
         }
-        grouped.forEach { (dynasty, authors) ->
+        grouped.forEach { (dynasty, list) ->
             item {
                 Text(
                     text = dynasty,
@@ -68,7 +52,7 @@ fun AuthorsScreen(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
                 )
             }
-            items(authors.sortedByDescending { it.poemIds.size }, key = { it.slug }) { author ->
+            items(list.sortedByDescending { it.poemIds.size }, key = { it.slug }) { author ->
                 AuthorCard(
                     author = author,
                     hideDynasty = true,

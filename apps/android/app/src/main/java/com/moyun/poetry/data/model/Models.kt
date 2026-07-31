@@ -25,15 +25,17 @@ data class Poem(
     fun formatMotifs(separator: String = " · "): String =
         motifs.filter { it.isNotBlank() }.joinToString(separator)
 
-    fun openingQuote(maxLines: Int = 2): String {
+    fun openingQuote(maxLines: Int = 2): String =
+        resolveOpeningLines(maxLines).joinToString("  ")
+
+    /** 摘句分行（卡片两行槽） */
+    fun resolveOpeningLines(maxLines: Int = 2): List<String> {
         val indices = openingQuoteLines?.takeIf { it.isNotEmpty() }
         if (indices != null) {
-            return indices
-                .mapNotNull { i -> content.getOrNull(i) }
-                .joinToString("  ")
-                .ifBlank { content.take(maxLines).joinToString("  ") }
+            val lines = indices.mapNotNull { i -> content.getOrNull(i) }
+            if (lines.isNotEmpty()) return lines.take(maxLines)
         }
-        return content.take(maxLines).joinToString("  ")
+        return content.take(maxLines)
     }
 }
 
@@ -89,4 +91,8 @@ data class ImageryTag(
     val id: String,
     val label: String,
     val group: String,
+    /** 对齐 Web defaultTheme */
+    val defaultTheme: String = "landscape",
+    /** 对齐 Web motifPool；卡片按压展示前 2 词 */
+    val motifPool: List<String> = emptyList(),
 )

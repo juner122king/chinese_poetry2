@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,11 @@ import com.moyun.poetry.ui.atmosphere.ThemeMap
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 
+private const val CARD_MOTIF_MAX = 3
+
 /**
- * 对齐 Web PoemCard：rule-faint 边 / rule-wash 底 / 按压提氛围与 accent 边。
+ * 诗卡：rule-faint 边 + 意境 **常显**（原生触控不依赖 hover）。
+ * 按压仅保留抬升 / accent 边 / 轻阴影反馈。
  */
 @Composable
 fun PoemCard(
@@ -51,11 +55,6 @@ fun PoemCard(
         animationSpec = tween(400, easing = MoyunTokens.EaseElegant),
         label = "lift",
     )
-    val atmosAlpha by animateFloatAsState(
-        targetValue = if (pressed) 1f else 0.22f,
-        animationSpec = tween(if (pressed) 450 else 1000, easing = MoyunTokens.EaseElegant),
-        label = "atmos",
-    )
 
     val borderColor = if (pressed) {
         visual.accent.copy(alpha = 0.40f)
@@ -67,9 +66,21 @@ fun PoemCard(
         modifier = modifier
             .fillMaxWidth()
             .graphicsLayer { translationY = lift }
+            .then(
+                if (pressed) {
+                    Modifier.shadow(
+                        elevation = 18.dp,
+                        shape = shape,
+                        ambientColor = visual.glow.copy(alpha = 0.35f),
+                        spotColor = visual.glow.copy(alpha = 0.45f),
+                    )
+                } else {
+                    Modifier
+                },
+            )
             .clip(shape)
             .border(1.dp, borderColor, shape)
-            .background(MoyunTokens.RuleWash)
+            .background(MoyunTokens.Ink.copy(alpha = 0.12f))
             .clickable(
                 interactionSource = interaction,
                 indication = null,
@@ -80,9 +91,7 @@ fun PoemCard(
             theme = poem.theme,
             seed = poem.id,
             intensity = AtmosphereIntensity.CARD,
-            modifier = Modifier
-                .matchParentSize()
-                .graphicsLayer { alpha = atmosAlpha },
+            modifier = Modifier.matchParentSize(),
         )
 
         Column(
@@ -109,18 +118,22 @@ fun PoemCard(
                 Text(text = poem.dynasty, style = MoyunType.dynasty)
             }
             Spacer(Modifier.height(16.dp))
-            Text(
-                text = poem.openingQuote(2),
-                style = MoyunType.cardExcerpt,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.heightIn(min = 44.dp),
-            )
-            val motifs = poem.formatMotifs()
-            if (motifs.isNotBlank()) {
+            val lines = poem.resolveOpeningLines(2)
+            Column(Modifier.heightIn(min = 44.dp)) {
+                lines.forEach { line ->
+                    Text(
+                        text = line,
+                        style = MoyunType.cardExcerpt,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            val motifs = poem.motifs.filter { it.isNotBlank() }.take(CARD_MOTIF_MAX)
+            if (motifs.isNotEmpty()) {
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = motifs,
+                    text = motifs.joinToString(" · "),
                     style = MoyunType.motif,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

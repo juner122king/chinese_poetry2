@@ -1,11 +1,9 @@
 package com.moyun.poetry.ui.home
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +25,7 @@ import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.components.AuthorCard
+import com.moyun.poetry.ui.components.ImageryGateCard
 import com.moyun.poetry.ui.components.InkRule
 import com.moyun.poetry.ui.components.PoemCard
 import com.moyun.poetry.ui.components.TextLinkElegant
@@ -34,14 +33,8 @@ import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 import kotlinx.coroutines.launch
 
-private val GATE_TAGS = listOf(
-    "spring" to "spring",
-    "moon" to "night-moon",
-    "parting" to "parting",
-    "frontier" to "frontier",
-    "rain" to "rain",
-    "wine" to "wine",
-)
+/** 对齐 Web HomeImageryGates 六道 */
+private val GATE_IDS = listOf("spring", "moon", "parting", "frontier", "rain", "wine")
 
 @Composable
 fun HomeScreen(
@@ -117,13 +110,17 @@ fun HomeScreen(
             }
 
             item { SectionHeader(title = "意 境 入 门") }
-            items(GATE_TAGS, key = { it.first }) { (tag, theme) ->
-                GateRow(
-                    label = ImageryTaxonomy.labelOf(tag),
-                    count = counts[tag] ?: 0,
-                    theme = theme,
-                    seed = "gate:$tag",
-                    onClick = { onOpenPoemsWithTag(tag) },
+            items(GATE_IDS, key = { it }) { tagId ->
+                val meta = ImageryTaxonomy.get(tagId)
+                ImageryGateCard(
+                    label = meta?.label ?: ImageryTaxonomy.labelOf(tagId),
+                    count = counts[tagId] ?: 0,
+                    theme = meta?.defaultTheme ?: "landscape",
+                    seed = "gate:$tagId",
+                    motifs = meta?.motifPool.orEmpty(),
+                    onClick = { onOpenPoemsWithTag(tagId) },
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                    tall = true,
                 )
             }
             item {
@@ -186,36 +183,4 @@ private fun SectionHeader(title: String) {
     }
 }
 
-@Composable
-private fun GateRow(
-    label: String,
-    count: Int,
-    theme: String,
-    seed: String,
-    onClick: () -> Unit,
-) {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
-            .height(88.dp)
-            .clickable(onClick = onClick),
-    ) {
-        ThemeAtmosphere(
-            theme = theme,
-            seed = seed,
-            intensity = AtmosphereIntensity.CARD,
-            modifier = Modifier.fillMaxSize(),
-        )
-        Row(
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(label, style = MoyunType.cardTitle)
-            Text("$count 首", style = MoyunType.meta)
-        }
-    }
-}
+

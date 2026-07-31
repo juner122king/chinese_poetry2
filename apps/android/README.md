@@ -43,10 +43,16 @@ cd apps/android
 |------|------|
 | 设计令牌 ink/xuan/cinnabar | `MoyunTokens` / `MoyunType` |
 | 顶栏 Logo + 汉堡菜单 | 对齐 NavBar（诗卷/意境/名家/诗笺） |
-| 首页 Hero→精选→意境门→名家 | 结构对齐 |
-| 诗卡 / 筛选 chip / ink-rule | 对齐 Web 语法 |
+| 首页 Hero 固定意境 + 滚动内容 | 对齐整页固定底 |
+| 列表页 soft landscape + 版心书眉 | `ListPageScaffold` / `BanxinHeader` / 鱼尾 |
+| 诗卡意境常显 / 摘句分行 / motifs≤3 | 原生常显（非 Web hover） |
+| 意境门/图鉴氛围+词+篇数常显 | `ImageryGateCard` + motifPool |
+| 读诗轻 scrim / 作者分色 / 相关卡 | 对齐 PoemDisplay 横排 |
+| 筛选 chip / ink-rule | 对齐 Web 语法 |
 | 读诗文楷字阶 + 题长分档 | `MoyunType.poemTitle` |
 | 意境氛围 22 套 | `ThemeAtmosphere` + theme-map |
+| 诗卷热门 tag 横滑 | 待补 |
+| 作者 scroll hero | 待补 |
 | 嵌入 Noto / LXGW 字体文件 | 待补（现用系统 Serif/Sans + 字距） |
 | 简繁切换 | 未做 |
 

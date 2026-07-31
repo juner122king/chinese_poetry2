@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moyun.poetry.data.local.AtmospherePrefs
@@ -38,6 +42,7 @@ import com.moyun.poetry.data.repo.PoetryRepository
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.atmosphere.ThemeMap
+import com.moyun.poetry.ui.components.PoemCard
 import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 import kotlinx.coroutines.launch
@@ -51,6 +56,7 @@ fun ReaderScreen(
     onBack: () -> Unit,
     onOpenPoem: (String) -> Unit,
     onOpenAuthor: (String) -> Unit = {},
+    onOpenTag: (String) -> Unit = {},
 ) {
     val poem = remember(poemId) { repository.getPoem(poemId) }
     val adjacent = remember(poemId) { repository.getAdjacent(poemId) }
@@ -70,6 +76,13 @@ fun ReaderScreen(
     }
 
     val visual = remember(poem.theme) { ThemeMap.get(poem.theme) }
+    val titleLen = poem.title.length
+    val titleBottom = when {
+        titleLen <= 6 -> 40.dp
+        titleLen <= 12 -> 32.dp
+        titleLen <= 20 -> 28.dp
+        else -> 24.dp
+    }
 
     Box(Modifier.fillMaxSize()) {
         AnimatedContent(
@@ -89,10 +102,17 @@ fun ReaderScreen(
             )
         }
 
+        // 轻 scrim，让意境透出（对齐 Web 阅读页不厚罩）
         Box(
             Modifier
                 .fillMaxSize()
-                .background(MoyunTokens.Ink.copy(alpha = 0.22f)),
+                .background(
+                    Brush.verticalGradient(
+                        0f to MoyunTokens.Ink.copy(alpha = 0.12f),
+                        0.45f to MoyunTokens.Ink.copy(alpha = 0.06f),
+                        1f to MoyunTokens.Ink.copy(alpha = 0.18f),
+                    ),
+                ),
         )
 
         Column(
@@ -152,7 +172,7 @@ fun ReaderScreen(
                     .padding(horizontal = 28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(28.dp))
                 Text(
                     text = visual.label,
                     style = MoyunType.meta.copy(color = visual.accent.copy(alpha = 0.85f)),
@@ -163,15 +183,17 @@ fun ReaderScreen(
                     style = MoyunType.poemTitle(poem.title.length),
                     textAlign = TextAlign.Center,
                 )
-                Spacer(Modifier.height(16.dp))
-                Text(
-                    text = "${poem.dynasty} · ${poem.author}",
-                    style = MoyunType.author,
-                    color = MoyunTokens.TypeSecondary,
+                Spacer(Modifier.height(titleBottom))
+                // 朝代 + 作者分色（对齐 PoemDisplay）
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.clickable { onOpenAuthor(poem.author) },
-                )
+                ) {
+                    Text(poem.dynasty, style = MoyunType.dynasty)
+                    Text(poem.author, style = MoyunType.author)
+                }
                 if (!poem.rhythmic.isNullOrBlank()) {
-                    Spacer(Modifier.height(6.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(poem.rhythmic.orEmpty(), style = MoyunType.meta)
                 }
                 Spacer(Modifier.height(40.dp))
@@ -185,36 +207,57 @@ fun ReaderScreen(
                             .padding(vertical = 6.dp),
                     )
                 }
-                val motifs = poem.formatMotifs()
-                if (motifs.isNotBlank()) {
+                val motifs = poem.motifs.filter { it.isNotBlank() }
+                if (motifs.isNotEmpty()) {
                     Spacer(Modifier.height(48.dp))
-                    Text(
-                        text = motifs,
-                        style = MoyunType.motif.copy(color = visual.accent.copy(alpha = 0.75f)),
-                        textAlign = TextAlign.Center,
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    ) {
+                        motifs.forEachIndexed { i, m ->
+                            if (i > 0) {
+                                Text("·", style = MoyunType.motif)
+                            }
+                            val tagId = poem.tags.getOrNull(i) ?: poem.tags.firstOrNull()
+                            Text(
+                                text = m,
+                                style = MoyunType.motif.copy(
+                                    color = visual.accent.copy(alpha = 0.75f),
+                                ),
+                                modifier = if (tagId != null) {
+                                    Modifier.clickable { onOpenTag(tagId) }
+                                } else {
+                                    Modifier
+                                },
+                            )
+                        }
+                    }
                 }
                 if (related.isNotEmpty()) {
                     Spacer(Modifier.height(48.dp))
                     Text(
-                        "相关",
+                        "相 关",
                         style = MoyunType.groupLabel,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
+                        textAlign = TextAlign.Center,
                     )
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        contentPadding = PaddingValues(bottom = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(bottom = 8.dp, end = 8.dp),
                     ) {
                         items(related, key = { it.poem.id }) { item ->
-                            Column(
-                                Modifier
-                                    .clickable { onOpenPoem(item.poem.id) }
-                                    .padding(vertical = 8.dp),
-                            ) {
-                                Text(item.poem.title, style = MoyunType.cardTitle)
-                                Text(relatedLabel(item.kind), style = MoyunType.meta)
+                            Column(Modifier.widthIn(max = 260.dp)) {
+                                Text(
+                                    relatedLabel(item.kind),
+                                    style = MoyunType.meta,
+                                    modifier = Modifier.padding(bottom = 6.dp, start = 4.dp),
+                                )
+                                PoemCard(
+                                    poem = item.poem,
+                                    onClick = { onOpenPoem(item.poem.id) },
+                                )
                             }
                         }
                     }
@@ -222,39 +265,60 @@ fun ReaderScreen(
                 Spacer(Modifier.height(32.dp))
             }
 
+            // 相邻篇 —— 对齐 PoemAdjacentNav
             Row(
                 Modifier
                     .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.Transparent, MoyunTokens.Ink.copy(alpha = 0.45f)),
+                        ),
+                    )
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(
-                    adjacent.prev?.let { "上一篇 · ${it.title}" } ?: "上一篇",
-                    style = MoyunType.nav.copy(
-                        color = if (adjacent.prev != null) {
-                            MoyunTokens.TypeSecondary
-                        } else {
-                            MoyunTokens.TypeFaint
-                        },
-                    ),
-                    modifier = Modifier.clickable(enabled = adjacent.prev != null) {
-                        adjacent.prev?.let { onOpenPoem(it.id) }
-                    },
+                AdjacentLink(
+                    enabled = adjacent.prev != null,
+                    label = "上一篇",
+                    title = adjacent.prev?.title,
+                    onClick = { adjacent.prev?.let { onOpenPoem(it.id) } },
                 )
-                Text(
-                    adjacent.next?.let { "下一篇 · ${it.title}" } ?: "下一篇",
-                    style = MoyunType.nav.copy(
-                        color = if (adjacent.next != null) {
-                            MoyunTokens.TypeSecondary
-                        } else {
-                            MoyunTokens.TypeFaint
-                        },
-                    ),
-                    modifier = Modifier.clickable(enabled = adjacent.next != null) {
-                        adjacent.next?.let { onOpenPoem(it.id) }
-                    },
+                AdjacentLink(
+                    enabled = adjacent.next != null,
+                    label = "下一篇",
+                    title = adjacent.next?.title,
+                    alignEnd = true,
+                    onClick = { adjacent.next?.let { onOpenPoem(it.id) } },
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun AdjacentLink(
+    enabled: Boolean,
+    label: String,
+    title: String?,
+    onClick: () -> Unit,
+    alignEnd: Boolean = false,
+) {
+    val color = if (enabled) MoyunTokens.TypeSecondary else MoyunTokens.TypeFaint
+    Column(
+        horizontalAlignment = if (alignEnd) Alignment.End else Alignment.Start,
+        modifier = Modifier
+            .widthIn(max = 160.dp)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(4.dp),
+    ) {
+        Text(label, style = MoyunType.nav.copy(color = color))
+        if (!title.isNullOrBlank()) {
+            Text(
+                text = title,
+                style = MoyunType.meta.copy(color = color),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }

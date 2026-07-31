@@ -175,6 +175,9 @@ private fun MoyunNavHost(container: AppContainer) {
                             navController.navigate(Routes.author(it.slug))
                         }
                     },
+                    onOpenTag = { tag ->
+                        navController.navigate("poems_tag/$tag")
+                    },
                 )
             }
             composable(Routes.AUTHORS) {
