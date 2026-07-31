@@ -130,6 +130,62 @@ object MoyunType {
         color = MoyunTokens.TypeMeta,
     )
 
+    /** 首页意境门竖排标题 —— `.imagery-band__label` 1.25rem / 0.36em 文楷 */
+    val imageryGateLabel = TextStyle(
+        fontFamily = wenkai,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp,
+        color = MoyunTokens.TypePrimary,
+    )
+
+    /** 图鉴条标题 —— `.imagery-bar__label` 1.0625rem / 0.3em 文楷 */
+    val imageryBarLabel = TextStyle(
+        fontFamily = wenkai,
+        fontWeight = FontWeight.Normal,
+        fontSize = 17.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 5.1.sp, // ~0.3em
+        color = MoyunTokens.TypePrimary,
+    )
+
+    /** 门卡意境词 —— `.imagery-band__motifs` 10px / 0.12em */
+    val imageryGateMotif = TextStyle(
+        fontFamily = wenkai,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        letterSpacing = 1.2.sp,
+        color = MoyunTokens.TypeQuiet,
+    )
+
+    /** 图鉴条意境词 —— `.imagery-bar__motifs` 11px / 0.2em */
+    val imageryBarMotif = TextStyle(
+        fontFamily = wenkai,
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp,
+        letterSpacing = 2.2.sp,
+        color = MoyunTokens.TypeQuiet,
+    )
+
+    /** 门卡篇数 —— `.imagery-band__count` 9px */
+    val imageryGateCount = TextStyle(
+        fontFamily = sans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 9.sp,
+        letterSpacing = 1.5.sp,
+        color = MoyunTokens.TypeQuiet,
+    )
+
+    /** 图鉴条篇数 —— `.imagery-bar__count` 10px */
+    val imageryBarCount = TextStyle(
+        fontFamily = sans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        letterSpacing = 1.5.sp,
+        color = MoyunTokens.TypeQuiet,
+    )
+
     val display = TextStyle(
         fontFamily = serif,
         fontWeight = FontWeight.Light,

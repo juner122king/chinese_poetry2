@@ -91,6 +91,6 @@ data class ImageryTag(
     val group: String,
     /** 对齐 Web defaultTheme */
     val defaultTheme: String = "landscape",
-    /** 对齐 Web motifPool；卡片按压展示前 2 词 */
+    /** 对齐 Web motifPool；门卡 ≤2、图鉴条 ≤3 */
     val motifPool: List<String> = emptyList(),
 )

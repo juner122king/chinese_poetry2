@@ -151,38 +151,45 @@ fun ThemeAtmosphere(
         val w = size.width
         val h = size.height
 
-        // L0 底色
+        // L0：整屏同一色相极缓沉（无中腰停），脚略深仍同相 —— 无感一体
         drawRect(
             brush = Brush.verticalGradient(
-                colors = listOf(visual.baseTop, visual.baseMid, visual.baseBottom),
+                colorStops = arrayOf(
+                    0f to visual.baseMid,
+                    0.55f to visual.baseMid,
+                    0.82f to lerpColor(visual.baseMid, visual.baseBottom, 0.25f),
+                    1f to lerpColor(visual.baseMid, visual.baseBottom, 0.55f),
+                ),
             ),
         )
 
-        // 径向光斑
+        // 径向光斑：唯一全屏染色入口；须 softOval。禁止两停实盘。
         for (spot in visual.glowSpots) {
             val r = min(w, h) * spot.radius
             val c = spot.color.scaleA(atm)
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(c, Color.Transparent),
+            val skyBand = spot.cy < 0.55f
+            InkPaint.run {
+                softOval(
+                    color = c,
                     center = Offset(w * spot.cx, h * spot.cy),
-                    radius = r,
-                ),
-                radius = r,
-                center = Offset(w * spot.cx, h * spot.cy),
-            )
+                    radiusX = r * if (skyBand) 1.15f else 1f,
+                    radiusY = r * if (skyBand) 0.85f else 0.72f,
+                    soft = if (skyBand) 0.92f else 0.86f,
+                )
+            }
         }
 
         // L1 地平（柔边，非硬线）
         drawHorizonSoft(visual, w, h, atm)
 
-        // L1 山（贝塞尔远/中/近）
+        // L1 山：染 skyTint + 脊顶羽化，禁止冷灰实填半屏水平切天
         if (visual.mountains != MountainForm.NONE) {
             MountainForms.run {
                 drawMountains(
                     form = visual.mountains,
                     fullLayers = fullLayers,
                     opacityScale = atm * if (intensity == AtmosphereIntensity.CARD) 0.9f else 1f,
+                    skyTint = visual.baseMid,
                 )
             }
         }
@@ -292,6 +299,17 @@ private data class LayoutSeed(
 private fun Color.scaleA(factor: Float): Color =
     copy(alpha = (alpha * factor).coerceIn(0f, 1f))
 
+/** 线性插值 RGB/A */
+private fun lerpColor(a: Color, b: Color, t: Float): Color {
+    val u = t.coerceIn(0f, 1f)
+    return Color(
+        red = a.red + (b.red - a.red) * u,
+        green = a.green + (b.green - a.green) * u,
+        blue = a.blue + (b.blue - a.blue) * u,
+        alpha = a.alpha + (b.alpha - a.alpha) * u,
+    )
+}
+
 // ─── soft layers ──────────────────────────────────────────
 
 private fun DrawScope.drawHorizonSoft(
@@ -303,66 +321,49 @@ private fun DrawScope.drawHorizonSoft(
     when (visual.horizon) {
         HorizonForm.OFF -> return
         HorizonForm.PLAIN -> {
-            // 底部尘岚，非白杠
-            drawRect(
-                brush = Brush.verticalGradient(
-                    0f to Color.Transparent,
-                    0.55f to visual.accent.copy(alpha = 0.04f * atm),
-                    1f to visual.accent.copy(alpha = 0.12f * atm),
-                ),
-                topLeft = Offset(0f, h * 0.68f),
-                size = Size(w, h * 0.32f),
-            )
+            // 仅 soft 尘岚，禁用整段 drawRect（会造水平色带）
             InkPaint.run {
                 softOval(
-                    color = visual.glow.copy(alpha = 0.10f * atm),
+                    color = visual.baseMid.copy(alpha = 0.06f * atm),
+                    center = Offset(w * 0.5f, h * 0.90f),
+                    radiusX = w * 0.65f,
+                    radiusY = h * 0.16f,
+                    soft = 0.90f,
+                )
+                softOval(
+                    color = visual.glow.copy(alpha = 0.05f * atm),
                     center = Offset(w * 0.5f, h * 0.88f),
                     radiusX = w * 0.55f,
-                    radiusY = h * 0.14f,
-                    soft = 0.82f,
+                    radiusY = h * 0.12f,
+                    soft = 0.88f,
                 )
             }
         }
         HorizonForm.WATER, HorizonForm.FROST -> {
             val frost = visual.horizon == HorizonForm.FROST
-            val baseA = if (frost) 0.14f else 0.18f
-            // 大椭圆水光 / 霜气
+            val baseA = if (frost) 0.08f else 0.10f
+            // 只保留椭圆水光/霜气，去掉水平反光 rect
             InkPaint.run {
                 softOval(
                     color = visual.glow.copy(alpha = baseA * atm),
-                    center = Offset(w * 0.5f, h * 0.88f),
-                    radiusX = w * 0.58f,
-                    radiusY = h * 0.16f,
-                    soft = 0.8f,
+                    center = Offset(w * 0.5f, h * 0.90f),
+                    radiusX = w * 0.62f,
+                    radiusY = h * 0.18f,
+                    soft = 0.88f,
                 )
                 softOval(
-                    color = Color(140 / 255f, 180 / 255f, 200 / 255f, (if (frost) 0.08f else 0.10f) * atm),
-                    center = Offset(w * 0.48f, h * 0.84f),
-                    radiusX = w * 0.42f,
-                    radiusY = h * 0.08f,
-                    soft = 0.75f,
+                    color = Color(
+                        red = (visual.baseMid.red * 0.5f + 0.35f).coerceIn(0f, 1f),
+                        green = (visual.baseMid.green * 0.5f + 0.4f).coerceIn(0f, 1f),
+                        blue = (visual.baseMid.blue * 0.5f + 0.42f).coerceIn(0f, 1f),
+                        alpha = (if (frost) 0.05f else 0.06f) * atm,
+                    ),
+                    center = Offset(w * 0.48f, h * 0.86f),
+                    radiusX = w * 0.45f,
+                    radiusY = h * 0.10f,
+                    soft = 0.86f,
                 )
             }
-            // 薄水平反光带（仍柔，无硬线）
-            drawRect(
-                brush = Brush.horizontalGradient(
-                    0f to Color.Transparent,
-                    0.35f to visual.accent.copy(alpha = 0.06f * atm),
-                    0.5f to visual.accent.copy(alpha = 0.09f * atm),
-                    0.65f to visual.accent.copy(alpha = 0.05f * atm),
-                    1f to Color.Transparent,
-                ),
-                topLeft = Offset(w * 0.08f, h * 0.78f),
-                size = Size(w * 0.84f, h * 0.04f),
-            )
-            drawRect(
-                brush = Brush.verticalGradient(
-                    0f to visual.glow.copy(alpha = 0.08f * atm),
-                    1f to Color.Transparent,
-                ),
-                topLeft = Offset(0f, h * 0.80f),
-                size = Size(w, h * 0.18f),
-            )
         }
     }
 }
@@ -433,48 +434,51 @@ private fun DrawScope.drawMistSoft(
     fullLayers: Boolean,
 ) {
     val heavy = visual.mist == MistLevel.HEAVY
-    val a = (if (heavy) 0.14f else 0.09f) * atm
-    val mistColor = Color(0.92f, 0.94f, 0.96f, a)
+    // heavy 仍只走 softOval；半屏 drawRect 是雨主题水平色带主因，已去掉
+    val a = (if (heavy) 0.11f else 0.08f) * atm
+    val cool = Color(0.92f, 0.94f, 0.96f, 1f)
+    val midTint = Color(
+        red = (visual.baseMid.red * 0.55f + 0.45f).coerceIn(0f, 1f),
+        green = (visual.baseMid.green * 0.55f + 0.45f).coerceIn(0f, 1f),
+        blue = (visual.baseMid.blue * 0.55f + 0.45f).coerceIn(0f, 1f),
+        alpha = 1f,
+    )
+    val mistRgb = lerpColor(cool, midTint, 0.48f)
+    val mistColor = mistRgb.copy(alpha = a)
 
     InkPaint.run {
-        // 山腰岚
         softOval(
             color = mistColor,
-            center = Offset(w * (0.32f + shiftA), h * 0.52f),
-            radiusX = w * 0.48f,
-            radiusY = h * (if (heavy) 0.14f else 0.11f),
-            soft = 0.86f,
+            center = Offset(w * (0.32f + shiftA), h * 0.54f),
+            radiusX = w * 0.52f,
+            radiusY = h * (if (heavy) 0.16f else 0.12f),
+            soft = 0.90f,
         )
-        // 谷底雾
         softOval(
             color = mistColor.copy(alpha = a * 0.85f),
-            center = Offset(w * (0.68f + shiftB), h * 0.70f),
-            radiusX = w * 0.52f,
-            radiusY = h * (if (heavy) 0.15f else 0.12f),
-            soft = 0.88f,
+            center = Offset(w * (0.68f + shiftB), h * 0.72f),
+            radiusX = w * 0.55f,
+            radiusY = h * (if (heavy) 0.17f else 0.13f),
+            soft = 0.91f,
         )
-        if (fullLayers && (heavy || true)) {
-            // 第三条错相位（FULL / heavy）
-            if (heavy || fullLayers) {
-                softOval(
-                    color = mistColor.copy(alpha = a * 0.55f),
-                    center = Offset(w * (0.50f - shiftA * 0.6f), h * 0.62f),
-                    radiusX = w * 0.55f,
-                    radiusY = h * 0.10f,
-                    soft = 0.9f,
-                )
-            }
+        if (fullLayers) {
+            softOval(
+                color = mistColor.copy(alpha = a * 0.5f),
+                center = Offset(w * (0.50f - shiftA * 0.6f), h * 0.64f),
+                radiusX = w * 0.58f,
+                radiusY = h * (if (heavy) 0.12f else 0.10f),
+                soft = 0.92f,
+            )
         }
-    }
-    if (heavy) {
-        drawRect(
-            brush = Brush.verticalGradient(
-                0f to Color.Transparent,
-                1f to Color.White.copy(alpha = 0.07f * atm),
-            ),
-            topLeft = Offset(0f, h * 0.52f),
-            size = Size(w, h * 0.48f),
-        )
+        if (heavy) {
+            softOval(
+                color = mistRgb.copy(alpha = 0.045f * atm),
+                center = Offset(w * 0.5f, h * 0.88f),
+                radiusX = w * 0.75f,
+                radiusY = h * 0.22f,
+                soft = 0.93f,
+            )
+        }
     }
 }
 

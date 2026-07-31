@@ -3,6 +3,7 @@ package com.moyun.poetry.ui.atmosphere
 import android.graphics.Matrix
 import android.graphics.Path as AndroidPath
 import android.graphics.RectF
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -12,7 +13,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 
 /**
  * 对齐 Web `InkBackground.tsx` `MOUNTAIN_FORMS`：
- * 手绘贝塞尔远/中/近三层，远虚近实 + 山脚 haze。
+ * 手绘贝塞尔远/中/近；Android 读诗要求 **天—山完全无感溶合**（同色相 + 长羽化，无水平色带）。
  */
 data class MountainStyle(
     val far: String,
@@ -24,7 +25,6 @@ data class MountainStyle(
     val farFill: Color,
     val midFill: Color?,
     val nearFill: Color,
-    /** 相对远景「虚」程度（叠一层低 alpha 扩大轮廓模拟 blur） */
     val farSoft: Float,
     val midSoft: Float,
     val footHaze: Boolean,
@@ -92,13 +92,13 @@ object MountainForms {
             far = "M0,400 L0,278 C120,258 200,218 320,228 C460,240 560,180 720,196 C880,212 1000,160 1160,180 C1280,194 1380,210 1440,198 L1440,400 Z",
             mid = "M0,400 L0,308 C140,290 260,268 400,282 C560,298 700,258 860,278 C1020,298 1180,268 1340,284 C1400,290 1425,286 1440,288 L1440,400 Z",
             near = "M0,400 L0,338 C160,322 300,312 460,324 C640,338 820,308 1000,324 C1160,336 1300,318 1440,328 L1440,400 Z",
-            heightRatio = 0.46f,
-            opacity = 0.42f,
-            farFill = rgba(20, 28, 36, 0.40f),
-            midFill = rgba(12, 18, 24, 0.54f),
-            nearFill = rgba(8, 12, 16, 0.80f),
-            farSoft = 0.95f,
-            midSoft = 0.4f,
+            heightRatio = 0.42f,
+            opacity = 0.34f,
+            farFill = rgba(22, 30, 40, 0.28f),
+            midFill = rgba(14, 20, 28, 0.38f),
+            nearFill = rgba(10, 14, 20, 0.52f),
+            farSoft = 1.05f,
+            midSoft = 0.55f,
             footHaze = true,
         ),
     )
@@ -117,21 +117,17 @@ object MountainForms {
         )
     }
 
-    fun styleOf(form: MountainForm): MountainStyle? =
-        if (form == MountainForm.NONE) null else all[form]
+    fun styleOf(form: MountainForm): MountainStyle? = all[form]
 
-    /**
-     * 解析仅含 M/L/C/Z 的 SVG path（Web 山峦数据子集）。
-     */
     private fun parseSvgPathAndroid(d: String): AndroidPath {
-        val android = AndroidPath()
+        val path = AndroidPath()
+        // 极简 path 解析：仅 M L C Z（与现有数据一致）
         val tokens = tokenize(d)
         var i = 0
         var cmd = 'M'
         var cx = 0f
         var cy = 0f
-        fun num(): Float = tokens[i++].toFloat()
-
+        fun next(): Float = tokens[i++].toFloat()
         while (i < tokens.size) {
             val t = tokens[i]
             if (t.length == 1 && t[0].isLetter()) {
@@ -140,33 +136,29 @@ object MountainForms {
             }
             when (cmd) {
                 'M' -> {
-                    cx = num(); cy = num()
-                    android.moveTo(cx, cy)
+                    cx = next(); cy = next()
+                    path.moveTo(cx, cy)
                     cmd = 'L'
                 }
                 'L' -> {
-                    cx = num(); cy = num()
-                    android.lineTo(cx, cy)
+                    cx = next(); cy = next()
+                    path.lineTo(cx, cy)
                 }
                 'C' -> {
-                    val x1 = num(); val y1 = num()
-                    val x2 = num(); val y2 = num()
-                    cx = num(); cy = num()
-                    android.cubicTo(x1, y1, x2, y2, cx, cy)
+                    val x1 = next(); val y1 = next()
+                    val x2 = next(); val y2 = next()
+                    cx = next(); cy = next()
+                    path.cubicTo(x1, y1, x2, y2, cx, cy)
                 }
-                'Z', 'z' -> {
-                    android.close()
-                }
-                else -> {
-                    if (i < tokens.size && tokens[i].toFloatOrNull() != null) i++ else break
-                }
+                'Z', 'z' -> path.close()
+                else -> break
             }
         }
-        return android
+        return path
     }
 
     private fun tokenize(d: String): List<String> {
-        val out = ArrayList<String>(64)
+        val out = ArrayList<String>()
         val sb = StringBuilder()
         fun flush() {
             if (sb.isNotEmpty()) {
@@ -205,87 +197,108 @@ object MountainForms {
     }
 
     /**
-     * @param fullLayers false 时仅 far + footHaze（CARD）
-     * @param opacityScale atmScale 等
+     * 天—山无感溶合，且 **山形可读**：
+     * - 同相 skyTint（不用冷灰异相）
+     * - 脊顶羽化无硬切；中下段足够实以见轮廓
+     * - 不画 near 实墙；far + mid 分层
      */
     fun DrawScope.drawMountains(
         form: MountainForm,
         fullLayers: Boolean,
         opacityScale: Float,
+        skyTint: Color = Color(0xFF0E1218),
     ) {
         val style = styleOf(form) ?: return
         val paths = parsed[form] ?: return
         val w = size.width
         val h = size.height
-        val op = style.opacity * opacityScale
+        val heightRatio = style.heightRatio
+        val bandTop = h * (1f - heightRatio)
+        val bandH = h * heightRatio
+        val op = opacityScale.coerceIn(0f, 1.2f)
 
-        val farPath = mapToCanvas(paths.far, w, h, style.heightRatio)
-
-        // 远景：低 alpha 扩大层模拟 blur 空蒙 + 主轮廓
-        if (style.farSoft > 0f) {
-            val soft = expandFromBottom(farPath, 1f + 0.035f * style.farSoft)
-            drawPath(
-                soft,
-                color = style.farFill.copy(alpha = (style.farFill.alpha * op * 0.5f).coerceIn(0f, 1f)),
+        fun mountainTone(depth: Float): Color {
+            val t = depth.coerceIn(0f, 1f)
+            val k = 1f - 0.20f * t
+            return Color(
+                red = (skyTint.red * k).coerceIn(0f, 1f),
+                green = (skyTint.green * k).coerceIn(0f, 1f),
+                blue = (skyTint.blue * k).coerceIn(0f, 1f),
+                alpha = 1f,
             )
         }
-        drawPath(
-            farPath,
-            color = style.farFill.copy(alpha = (style.farFill.alpha * op * 1.2f).coerceIn(0f, 1f)),
-        )
+
+        /**
+         * 上 18% 透明 → 缓升到 maxA（可读山形）。
+         * 上次 45%+ 全透明导致山几乎消失。
+         */
+        fun dissolveBrush(maxA: Float, depth: Float): Brush {
+            val c = mountainTone(depth)
+            val a = (maxA * op).coerceIn(0f, 0.38f)
+            return Brush.verticalGradient(
+                colorStops = arrayOf(
+                    0.00f to c.copy(alpha = 0f),
+                    0.18f to c.copy(alpha = 0f),
+                    0.32f to c.copy(alpha = a * 0.12f),
+                    0.48f to c.copy(alpha = a * 0.40f),
+                    0.68f to c.copy(alpha = a * 0.75f),
+                    1.00f to c.copy(alpha = a),
+                ),
+                startY = bandTop,
+                endY = h,
+            )
+        }
+
+        InkPaint.run {
+            softOval(
+                color = mountainTone(0.15f).copy(alpha = 0.045f * op),
+                center = Offset(w * 0.5f, bandTop + bandH * 0.28f),
+                radiusX = w * 0.70f,
+                radiusY = bandH * 0.38f,
+                soft = 0.92f,
+            )
+        }
+
+        val farPath = mapToCanvas(paths.far, w, h, heightRatio)
+        val farMax = 0.26f
+        if (style.farSoft > 0f) {
+            val soft = expandFromBottom(farPath, 1f + 0.055f * style.farSoft)
+            drawPath(soft, brush = dissolveBrush(farMax * 0.55f, depth = 0.22f))
+        }
+        drawPath(farPath, brush = dissolveBrush(farMax, depth = 0.32f))
 
         if (fullLayers) {
             paths.mid?.let { midSrc ->
-                val midPath = mapToCanvas(midSrc, w, h, style.heightRatio)
+                val midPath = mapToCanvas(midSrc, w, h, heightRatio)
+                val midMax = 0.30f
                 if (style.midSoft > 0f) {
-                    val soft = expandFromBottom(midPath, 1f + 0.02f * style.midSoft)
-                    val fill = style.midFill ?: style.farFill
-                    drawPath(
-                        soft,
-                        color = fill.copy(alpha = (fill.alpha * op * 0.4f).coerceIn(0f, 1f)),
-                    )
+                    val soft = expandFromBottom(midPath, 1f + 0.035f * style.midSoft)
+                    drawPath(soft, brush = dissolveBrush(midMax * 0.5f, depth = 0.48f))
                 }
-                val fill = style.midFill ?: style.farFill
-                drawPath(
-                    midPath,
-                    color = fill.copy(alpha = (fill.alpha * op * 1.1f).coerceIn(0f, 1f)),
-                )
+                drawPath(midPath, brush = dissolveBrush(midMax, depth = 0.58f))
             }
-
-            val nearPath = mapToCanvas(paths.near, w, h, style.heightRatio)
-            drawPath(
-                nearPath,
-                color = style.nearFill.copy(alpha = (style.nearFill.alpha * op * 1.05f).coerceIn(0f, 1f)),
-            )
-            // 近山纵向墨染：脊浅脚深
-            drawPath(
-                nearPath,
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(16 / 255f, 20 / 255f, 28 / 255f, 0.35f * op),
-                        Color(10 / 255f, 13 / 255f, 18 / 255f, 0.55f * op),
-                        Color(6 / 255f, 8 / 255f, 12 / 255f, 0.72f * op),
-                    ),
-                    startY = h - h * style.heightRatio,
-                    endY = h,
-                ),
-            )
         }
 
         if (style.footHaze) {
             InkPaint.run {
                 footHaze(
-                    color = Color(180 / 255f, 190 / 255f, 200 / 255f, 1f),
+                    color = mountainTone(0.55f),
                     width = w,
                     height = h,
-                    bottomY = h * (1f - style.heightRatio * 0.12f),
-                    alpha = 0.10f * opacityScale,
+                    bottomY = h - bandH * 0.06f,
+                    alpha = 0.10f * op,
+                )
+                softOval(
+                    color = mountainTone(0.72f).copy(alpha = 0.08f * op),
+                    center = Offset(w * 0.5f, h * 0.94f),
+                    radiusX = w * 0.62f,
+                    radiusY = h * 0.11f,
+                    soft = 0.88f,
                 )
             }
         }
     }
 
-    /** 自山脚略放大轮廓，近似远景 blur 外晕 */
     private fun expandFromBottom(src: Path, scale: Float): Path {
         if (scale <= 1.001f) return src
         val android = AndroidPath(src.asAndroidPath())

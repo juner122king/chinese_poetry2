@@ -68,7 +68,7 @@ cd apps/android
 | 首页 Hero 固定意境 + 滚动内容 | 对齐整页固定底 |
 | 列表页 soft landscape + 版心书眉 | `ListPageScaffold` / `BanxinHeader` / 鱼尾 |
 | 诗卡意境常显 / 摘句分行 / motifs≤3 | 原生常显（非 Web hover） |
-| 意境门/图鉴氛围+词+篇数常显 | `ImageryGateCard` + motifPool |
+| 意境门/图鉴布局 1:1（无描边、门竖排 3 列、图鉴条右下篇数） | `ImageryGateCard` / `ImageryBarCard`；词+篇数常显 |
 | 读诗轻 scrim / 作者分色 / 相关卡 | 对齐 PoemDisplay 横排 |
 | 筛选 chip / ink-rule | 对齐 Web 语法 |
 | 读诗文楷字阶 + 题长分档 | `MoyunType.poemTitle` |

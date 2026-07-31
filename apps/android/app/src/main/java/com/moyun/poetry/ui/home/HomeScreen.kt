@@ -1,9 +1,11 @@
 package com.moyun.poetry.ui.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -109,19 +111,37 @@ fun HomeScreen(
                 }
             }
 
-            item { SectionHeader(title = "意 境 入 门") }
-            items(GATE_IDS, key = { it }) { tagId ->
-                val meta = ImageryTaxonomy.get(tagId)
-                ImageryGateCard(
-                    label = meta?.label ?: ImageryTaxonomy.labelOf(tagId),
-                    count = counts[tagId] ?: 0,
-                    theme = meta?.defaultTheme ?: "landscape",
-                    seed = "gate:$tagId",
-                    motifs = meta?.motifPool.orEmpty(),
-                    onClick = { onOpenPoemsWithTag(tagId) },
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-                    tall = true,
-                )
+            item { SectionHeader(title = "按 意 境 入 门") }
+            // 移动端 3 列网格（对齐 .imagery-band）；用 Row chunk 避免 Lazy 嵌套滚动
+            GATE_IDS.chunked(3).forEachIndexed { rowIndex, rowIds ->
+                item(key = "gate-row-$rowIndex") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(
+                                top = if (rowIndex == 0) 0.dp else 12.dp,
+                            ),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        rowIds.forEach { tagId ->
+                            val tagMeta = ImageryTaxonomy.get(tagId)
+                            ImageryGateCard(
+                                label = tagMeta?.label ?: ImageryTaxonomy.labelOf(tagId),
+                                count = counts[tagId] ?: 0,
+                                theme = tagMeta?.defaultTheme ?: "landscape",
+                                seed = "gate:$tagId",
+                                motifs = tagMeta?.motifPool.orEmpty(),
+                                onClick = { onOpenPoemsWithTag(tagId) },
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        // 末行不足 3 格时补空位，保持等宽
+                        repeat(3 - rowIds.size) {
+                            Spacer(Modifier.weight(1f))
+                        }
+                    }
+                }
             }
             item {
                 Column(
@@ -130,7 +150,7 @@ fun HomeScreen(
                         .padding(vertical = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    TextLinkElegant(text = "意境图鉴", onClick = onOpenImagery)
+                    TextLinkElegant(text = "遍览意境", onClick = onOpenImagery)
                 }
             }
 

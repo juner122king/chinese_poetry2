@@ -1,9 +1,5 @@
 package com.moyun.poetry.ui.reader
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -81,37 +77,20 @@ fun ReaderScreen(
     }
 
     Box(Modifier.fillMaxSize()) {
-        AnimatedContent(
-            targetState = poem.id to poem.theme,
-            transitionSpec = {
-                fadeIn(animationSpec = androidx.compose.animation.core.tween(420)) togetherWith
-                    fadeOut(animationSpec = androidx.compose.animation.core.tween(320))
-            },
-            label = "atmosphere",
+        // 意境铺满根 Box，勿塞进 AnimatedContent（部分机型子项高度不足会露出 Ink 底，
+        // 与意境叠成截图那种「上半纯深 / 下半浅褐」硬切）。
+        ThemeAtmosphere(
+            theme = poem.theme,
+            seed = poem.id,
+            intensity = AtmosphereIntensity.FULL,
             modifier = Modifier.fillMaxSize(),
-        ) { (id, theme) ->
-            // 包一层 Box，避免个别机型上 AnimatedContent 子项测量过窄
-            Box(Modifier.fillMaxSize()) {
-                ThemeAtmosphere(
-                    theme = theme,
-                    seed = id,
-                    intensity = AtmosphereIntensity.FULL,
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
-        }
+        )
 
-        // 轻 scrim，让意境透出（对齐 Web 阅读页不厚罩）
+        // 极轻 scrim：均匀，避免 0.45 处再开一档明度
         Box(
             Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        0f to MoyunTokens.Ink.copy(alpha = 0.12f),
-                        0.45f to MoyunTokens.Ink.copy(alpha = 0.06f),
-                        1f to MoyunTokens.Ink.copy(alpha = 0.18f),
-                    ),
-                ),
+                .background(MoyunTokens.Ink.copy(alpha = 0.08f)),
         )
 
         Column(

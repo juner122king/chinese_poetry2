@@ -1,37 +1,27 @@
 package com.moyun.poetry.ui.components
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
-import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.atmosphere.ThemeMap
-import com.moyun.poetry.ui.theme.MoyunTokens
 import com.moyun.poetry.ui.theme.MoyunType
 
+private const val GATE_MOTIF_MAX = 2
+
 /**
- * 意境门 / 图鉴卡：意境与词、篇数 **常显**（原生不依赖 hover）。
- * 按压仅抬升与 accent 边。
+ * 首页意境入门门 —— 对齐 Web `.imagery-band__gate`（移动端高 13rem、竖排标题）。
+ * 词 / 篇数常显（原生无 hover），位置与 Web active 态一致。
  */
 @Composable
 fun ImageryGateCard(
@@ -42,64 +32,71 @@ fun ImageryGateCard(
     motifs: List<String>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    /** 首页门略高；图鉴条略矮 */
-    tall: Boolean = false,
 ) {
     val visual = remember(theme) { ThemeMap.get(theme) }
-    val shape = RoundedCornerShape(MoyunTokens.CardRadius)
-    val interaction = remember { MutableInteractionSource() }
-    val pressed by interaction.collectIsPressedAsState()
-    val lift by animateFloatAsState(
-        targetValue = if (pressed) -2f else 0f,
-        animationSpec = tween(400, easing = MoyunTokens.EaseElegant),
-        label = "gate-lift",
-    )
+    val motifText = motifs
+        .filter { it.isNotBlank() }
+        .take(GATE_MOTIF_MAX)
+        .joinToString(" · ")
 
-    val h = if (tall) 108.dp else 88.dp
-    val motifText = motifs.take(2).joinToString(" · ")
-
-    Box(
+    ImageryCardShell(
+        theme = theme,
+        seed = seed,
+        glow = visual.glow,
+        enabled = count > 0,
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(h)
-            .graphicsLayer { translationY = lift }
-            .clip(shape)
-            .border(
-                1.dp,
-                if (pressed) visual.accent.copy(alpha = 0.40f) else MoyunTokens.RuleFaint,
-                shape,
-            )
-            .background(MoyunTokens.Ink.copy(alpha = 0.12f))
-            .clickable(
-                interactionSource = interaction,
-                indication = null,
-                onClick = onClick,
-            ),
+            .height(208.dp),
     ) {
-        ThemeAtmosphere(
-            theme = theme,
-            seed = seed,
-            intensity = AtmosphereIntensity.CARD,
-            modifier = Modifier.fillMaxSize(),
-        )
+        // 竖排标题居中
         Column(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 14.dp),
+                .padding(bottom = 48.dp),
             verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(label, style = MoyunType.cardTitle)
-            if (motifText.isNotBlank()) {
-                Text(
-                    text = motifText,
-                    style = MoyunType.motif,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-            }
+            VerticalLabel(text = label)
+        }
+
+        if (motifText.isNotBlank()) {
             Text(
-                text = if (count > 0) "得 $count 篇" else "暂无",
-                style = MoyunType.meta,
-                modifier = Modifier.padding(top = 2.dp),
+                text = motifText,
+                style = MoyunType.imageryGateMotif,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 7.dp, end = 7.dp, bottom = 30.dp)
+                    .fillMaxWidth(),
+            )
+        }
+
+        if (count > 0) {
+            Text(
+                text = "得 $count 篇",
+                style = MoyunType.imageryGateCount,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 9.dp, bottom = 9.dp),
+            )
+        }
+    }
+}
+
+/** 模拟 writing-mode: vertical-rl —— 逐字自上而下 */
+@Composable
+private fun VerticalLabel(text: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        text.forEach { ch ->
+            Text(
+                text = ch.toString(),
+                style = MoyunType.imageryGateLabel,
             )
         }
     }

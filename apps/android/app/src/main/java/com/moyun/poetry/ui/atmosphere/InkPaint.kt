@@ -12,6 +12,9 @@ import kotlin.math.min
 /**
  * 水墨柔边工具：用径向/椭圆渐变模拟 blur，避免依赖硬件加速下不可靠的 MaskFilter。
  * 观感对齐 Web 的 `filter: blur` 空蒙，而非硬边几何。
+ *
+ * 全屏光斑/岚气必须走 [softOval] / [softBand] 多 stop；
+ * **禁止** `radialGradient(colors = [c, Transparent])` 两停实盘（会叠成第二层天）。
  */
 object InkPaint {
 
@@ -21,8 +24,9 @@ object InkPaint {
     }
 
     fun vignetteAlpha(intensity: AtmosphereIntensity): Float = when (intensity) {
-        AtmosphereIntensity.FULL -> 0.48f
-        AtmosphereIntensity.CARD -> 0.28f
+        // 过重会中心亮、四周暗，读成「第二层天」；收束即可
+        AtmosphereIntensity.FULL -> 0.22f
+        AtmosphereIntensity.CARD -> 0.16f
     }
 
     /**
