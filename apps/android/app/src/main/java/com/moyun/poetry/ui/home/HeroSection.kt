@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.moyun.poetry.data.model.Poem
+import com.moyun.poetry.domain.PoemLines
 import com.moyun.poetry.ui.atmosphere.ThemeMap
 import com.moyun.poetry.ui.components.TextLinkElegant
 import com.moyun.poetry.ui.theme.MoyunTokens
@@ -107,12 +108,19 @@ fun HeroSection(
                     .alpha(linesA.value)
                     .graphicsLayer { translationY = (1f - linesA.value) * 10f },
             ) {
-                poem.content.take(4).forEach { line ->
+                val displayLines = remember(poem.id, poem.content) {
+                    PoemLines.toDisplayLines(poem.content).take(4)
+                }
+                displayLines.forEachIndexed { i, line ->
+                    val bottom = PoemLines.lineSpacingBottomDp(
+                        line.breakType,
+                        isLast = i == displayLines.lastIndex,
+                    )
                     Text(
-                        text = line,
+                        text = line.text,
                         style = MoyunType.poemBody,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(vertical = 4.dp),
+                        modifier = Modifier.padding(bottom = bottom.dp),
                     )
                 }
             }

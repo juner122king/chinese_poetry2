@@ -3,9 +3,6 @@ package com.moyun.poetry.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /** 强制墨底体系，不跟随系统浅色（对齐 Web body）。 */
@@ -29,12 +26,7 @@ private val InkTypography = androidx.compose.material3.Typography(
     displayLarge = MoyunType.display,
     headlineMedium = MoyunType.poemTitle(6),
     titleLarge = MoyunType.cardTitle,
-    titleMedium = TextStyle(
-        fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        color = MoyunTokens.TypePrimary,
-    ),
+    titleMedium = MoyunType.cardTitle.copy(fontSize = 16.sp, lineHeight = 24.sp),
     bodyLarge = MoyunType.poemBody,
     bodyMedium = MoyunType.cardExcerpt,
     bodySmall = MoyunType.meta,

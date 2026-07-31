@@ -39,6 +39,7 @@ import com.moyun.poetry.data.local.AtmospherePrefs
 import com.moyun.poetry.data.local.ShelfDataStore
 import com.moyun.poetry.data.model.RelatedKind
 import com.moyun.poetry.data.repo.PoetryRepository
+import com.moyun.poetry.domain.PoemLines
 import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
 import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.atmosphere.ThemeMap
@@ -197,14 +198,21 @@ fun ReaderScreen(
                     Text(poem.rhythmic.orEmpty(), style = MoyunType.meta)
                 }
                 Spacer(Modifier.height(40.dp))
-                poem.content.forEach { line ->
+                val displayLines = remember(poem.id, poem.content) {
+                    PoemLines.toDisplayLines(poem.content)
+                }
+                displayLines.forEachIndexed { i, line ->
+                    val bottom = PoemLines.lineSpacingBottomDp(
+                        line.breakType,
+                        isLast = i == displayLines.lastIndex,
+                    )
                     Text(
-                        text = line,
+                        text = line.text,
                         style = MoyunType.poemBody,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 6.dp),
+                            .padding(bottom = bottom.dp),
                     )
                 }
                 val motifs = poem.motifs.filter { it.isNotBlank() }

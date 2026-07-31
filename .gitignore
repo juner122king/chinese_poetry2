@@ -49,3 +49,7 @@ next-env.d.ts
 .dev.vars*
 !.dev.vars.example
 
+# Android 嵌入字体（本地 sync-fonts.ps1 拉取，勿提交大二进制）
+/apps/android/app/src/main/res/font/*.ttf
+/apps/android/app/src/main/res/font/*.otf
+

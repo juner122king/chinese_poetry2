@@ -1,5 +1,6 @@
 package com.moyun.poetry.data.model
 
+import com.moyun.poetry.domain.PoemLines
 import kotlinx.serialization.Serializable
 
 /** 对齐 Web `lib/types.ts` 的 Poem */
@@ -28,15 +29,12 @@ data class Poem(
     fun openingQuote(maxLines: Int = 2): String =
         resolveOpeningLines(maxLines).joinToString("  ")
 
-    /** 摘句分行（卡片两行槽） */
-    fun resolveOpeningLines(maxLines: Int = 2): List<String> {
-        val indices = openingQuoteLines?.takeIf { it.isNotEmpty() }
-        if (indices != null) {
-            val lines = indices.mapNotNull { i -> content.getOrNull(i) }
-            if (lines.isNotEmpty()) return lines.take(maxLines)
-        }
-        return content.take(maxLines)
-    }
+    /**
+     * 摘句分行（卡片两行槽）。
+     * 对齐 Web `resolveOpeningDisplayLines`：去句末标点、pause 粘合、种子下标前后延伸。
+     */
+    fun resolveOpeningLines(maxLines: Int = 2): List<String> =
+        PoemLines.resolveOpeningDisplayLines(content, openingQuoteLines, maxLines)
 }
 
 /** 对齐 Web `lib/types.ts` 的 Author */

@@ -26,13 +26,35 @@ npm run data:build:local
 pwsh -File apps/android/scripts/sync-data.ps1
 ```
 
+## 同步字体
+
+字体二进制 **不进 git**（见根 `.gitignore`），clone 后须本地拉取：
+
+```powershell
+pwsh -File apps/android/scripts/sync-fonts.ps1
+# 强制重下：
+pwsh -File apps/android/scripts/sync-fonts.ps1 -Force
+```
+
+写入 `app/src/main/res/font/`：
+
+| 文件 | 用途 |
+|------|------|
+| `lxgw_wenkai_tc_{light,regular}.ttf` | 诗句 / 诗题（霞鹜文楷 TC） |
+| `noto_serif_sc.ttf` | 展示 / 摘句（Noto Serif SC 可变字重） |
+| `noto_sans_sc.ttf` | 导航 / 筛选 / meta（Noto Sans SC） |
+
+全量 CJK 约数十 MB，APK 会明显变大（内测可接受）。未同步时 `R.font.*` 编译失败。
+
 ## 构建与安装
 
 ```powershell
+# 首次：sync-data + sync-fonts
 cd apps/android
 .\gradlew.bat assembleDebug
 # APK: app\build\outputs\apk\debug\app-debug.apk
 .\gradlew.bat installDebug
+.\gradlew.bat testDebugUnitTest
 ```
 
 ## 功能与 UI 1:1 进度
@@ -51,9 +73,10 @@ cd apps/android
 | 筛选 chip / ink-rule | 对齐 Web 语法 |
 | 读诗文楷字阶 + 题长分档 | `MoyunType.poemTitle` |
 | 意境氛围 22 套 | `ThemeAtmosphere` + theme-map |
+| 嵌入 Noto / LXGW 字体 | `sync-fonts.ps1` + `MoyunType`（Noto SC + 文楷 TC） |
+| 正文句读展示（去标点 + pause/stop 行距） | `PoemLines` → Reader / Hero / 卡片摘句 |
 | 诗卷热门 tag 横滑 | 待补 |
 | 作者 scroll hero | 待补 |
-| 嵌入 Noto / LXGW 字体文件 | 待补（现用系统 Serif/Sans + 字距） |
 | 简繁切换 | 未做 |
 
 ### 意境实现要点

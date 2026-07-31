@@ -1,19 +1,49 @@
 package com.moyun.poetry.ui.theme
 
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.moyun.poetry.R
 
 /**
- * 对齐 Web type-* 类。字体：Serif=展示/卡片题，Sans=UI，Cursive/Serif=诗面（文楷近似）。
- * 正式嵌入 Noto / LXGW 后替换 FontFamily 即可，字号字距保持不变。
+ * 对齐 Web type-* 类。
+ * 字体：serif=展示/卡片题，sans=UI，wenkai=诗面（霞鹜文楷）。
+ * 需先运行 `pwsh -File apps/android/scripts/sync-fonts.ps1`。
  */
+@OptIn(ExperimentalTextApi::class)
 object MoyunType {
-    private val serif = FontFamily.Serif
-    private val sans = FontFamily.SansSerif
-    /** 诗正文：优先楷感 */
-    private val wenkai = FontFamily.Serif
+    /** Noto Serif SC 可变字体：Light / Regular */
+    private val serif = FontFamily(
+        Font(
+            R.font.noto_serif_sc,
+            weight = FontWeight.Light,
+            variationSettings = FontVariation.Settings(FontVariation.weight(300)),
+        ),
+        Font(
+            R.font.noto_serif_sc,
+            weight = FontWeight.Normal,
+            variationSettings = FontVariation.Settings(FontVariation.weight(400)),
+        ),
+    )
+
+    /** Noto Sans SC 可变字体：Regular */
+    private val sans = FontFamily(
+        Font(
+            R.font.noto_sans_sc,
+            weight = FontWeight.Normal,
+            variationSettings = FontVariation.Settings(FontVariation.weight(400)),
+        ),
+    )
+
+    /** 霞鹜文楷 TC：诗正文 / 诗题 */
+    private val wenkai = FontFamily(
+        Font(R.font.lxgw_wenkai_tc_light, FontWeight.Light),
+        Font(R.font.lxgw_wenkai_tc_regular, FontWeight.Normal),
+    )
 
     val brand = TextStyle(
         fontFamily = sans,
