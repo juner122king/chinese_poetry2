@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  /* 背景墨色（略提亮；正文色阶不动） */
-  --ink: #1a1a1a;
+  /* 背景墨色（再提亮约 20%；正文色阶不动） */
+  --ink: #1f1f1f;
   --xuan: #f5efe2;
   --cinnabar: #b23a48;
   --qingdai: #34495e;
@@ -16,7 +16,7 @@
    * 用 --qingdai 的提亮调而非原色叠 alpha：#34495e 亮度与墨底相近，
    * 直接压 alpha 会糊进背景，提亮后才在墨底上读得出线。
    *
-   * 浓度刻度（贴墨底 #1a1a1a，避免大面积冷灰「跳出」）：
+   * 浓度刻度（贴墨底 #1f1f1f，避免大面积冷灰「跳出」）：
    * line 主框·版心竖线 | faint 细边·分隔·栏间 | wash 卡片/版心淡洗
    */
   --rule-line: rgba(104, 130, 156, 0.34);
@@ -48,7 +48,7 @@
 }
 
 @theme inline {
-  --color-ink: #1a1a1a;
+  --color-ink: #1f1f1f;
   --color-xuan: #f5efe2;
   --color-cinnabar: #b23a48;
   --color-qingdai: #34495e;
@@ -105,8 +105,8 @@ body {
   height: 5.5rem;
   background: linear-gradient(
     to bottom,
-    rgba(26, 26, 26, 0.78) 0%,
-    rgba(26, 26, 26, 0.36) 48%,
+    rgba(31, 31, 31, 0.78) 0%,
+    rgba(31, 31, 31, 0.36) 48%,
     transparent 100%
   );
 }

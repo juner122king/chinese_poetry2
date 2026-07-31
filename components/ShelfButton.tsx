@@ -41,7 +41,7 @@ export default function ShelfButton({ poemId, className = "" }: Props) {
       aria-pressed={saved}
       aria-label={saved ? t("移出诗笺") : t("收入诗笺")}
       title={saved ? t("移出诗笺") : t("收入诗笺")}
-      className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] transition-opacity duration-500 [text-shadow:0_0_9px_rgba(26,26,26,0.9)] md:bottom-4 md:right-4 ${
+      className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] transition-opacity duration-500 [text-shadow:0_0_9px_rgba(31,31,31,0.9)] md:bottom-4 md:right-4 ${
         saved
           ? "text-cinnabar opacity-100"
           : "text-xuan opacity-35 hover:opacity-90"

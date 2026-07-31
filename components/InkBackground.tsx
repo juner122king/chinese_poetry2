@@ -554,7 +554,7 @@ export default function InkBackground({
               className="absolute bottom-0 left-0 right-0 h-[38%]"
               style={{
                 background:
-                  "linear-gradient(to top, var(--ink) 0%, rgba(26,26,26,0.55) 35%, transparent 100%)",
+                  "linear-gradient(to top, var(--ink) 0%, rgba(31,31,31,0.55) 35%, transparent 100%)",
               }}
             />
           )}
@@ -972,7 +972,7 @@ export default function InkBackground({
             className="absolute left-1/2 top-[16%] h-[58%] w-[min(44%,440px)] -translate-x-1/2"
             style={{
               background:
-                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(26,26,26,0.2) 0%, transparent 72%)",
+                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(31,31,31,0.2) 0%, transparent 72%)",
             }}
           />
         </div>
@@ -1048,7 +1048,7 @@ export default function InkBackground({
             className="absolute left-1/2 top-[16%] h-[56%] w-[min(40%,400px)] -translate-x-1/2"
             style={{
               background:
-                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(26,26,26,0.12) 0%, transparent 72%)",
+                "radial-gradient(ellipse 55% 70% at 50% 45%, rgba(31,31,31,0.12) 0%, transparent 72%)",
             }}
           />
         </div>
