@@ -19,13 +19,19 @@ object SceneSeed {
         return 4294967296L * (2097151L and h2) + (h1 and 0xffffffffL)
     }
 
+    /**
+     * mulberry32：返回 [0, 1)。
+     * 对齐 Web `>>> 0` 无符号化；Kotlin 里 `ushr 0` 无效，负 Int 直接除会得到 (-1,0]，
+     * 导致粒子 range 偏左、萤火 coerceIn 钉死左缘。
+     */
     fun makeRng(seed: String): () -> Float {
         var a = (hashSeed(seed) and 0xffffffffL).toInt()
         return {
-            a = a + 0x6d2b79f5
+            a += 0x6d2b79f5 // Int 溢出环绕，对齐 JS `| 0`
             var t = imul32(a xor (a ushr 15), 1 or a)
             t = (t + imul32(t xor (t ushr 7), 61 or t)) xor t
-            ((t xor (t ushr 14)) ushr 0) / 4294967296f
+            val bits = (t xor (t ushr 14)).toLong() and 0xffffffffL
+            bits / 4294967296f
         }
     }
 

@@ -9,10 +9,8 @@ import kotlin.math.min
 import kotlin.math.sin
 
 /**
- * 夜星 / 边塞星：对齐 Web ParticleBackground stars 模型。
- *
- * 固定锚点 + 微纵 sway + soft blink + 单层柔边圆。
- * 禁止线性 t 位移（Restart 时钟会瞬移）、硬十字、多层 dust 叠乘。
+ * 夜星 / 边塞星：固定锚点 + 微纵 sway + soft blink + 单层柔边圆。
+ * 全宽天空带；护字只略压中心亮度，不挖空成边条。
  */
 data class Star(
     val homeX: Float,
@@ -35,23 +33,23 @@ fun spawnStars(
     }
     val rng = SceneSeed.makeRng("$seed:stars")
     val frontier = mode == ParticleMode.STARS_FRONTIER
-    val base = if (frontier) 32 else 90
-    val n = (base * density.coerceAtLeast(0.05f)).toInt().coerceIn(8, 100)
+    val base = if (frontier) 36 else 96
+    val n = (base * density.coerceAtLeast(0.05f)).toInt().coerceIn(12, 110)
     val mainRatio = if (frontier) 0.22f else 0.20f
     val mainCount = (n * mainRatio).toInt().coerceAtLeast(1)
-    // 天空带（已留 sway margin，运动不再二次裁切）
-    val y0 = 0.06f
-    val y1 = if (frontier) 0.40f else 0.52f
+    // 天空带靠上：夜月约上半 48%，边塞更贴天顶
+    val y0 = 0.02f
+    val y1 = if (frontier) 0.42f else 0.48f
 
     return List(n) { i ->
         val main = i < mainCount
         Star(
-            homeX = SceneSeed.range(rng, 0.03f, 0.97f),
+            homeX = SceneSeed.range(rng, 0.02f, 0.98f),
             homeY = SceneSeed.range(rng, y0, y1),
             size = if (main) {
                 SceneSeed.range(rng, 0.95f, 1.35f)
             } else {
-                SceneSeed.range(rng, 0.55f, 1.0f)
+                SceneSeed.range(rng, 0.55f, 1.05f)
             },
             phase = SceneSeed.range(rng, 0f, 1f),
             speed = SceneSeed.range(rng, 0.35f, 1.0f),
@@ -62,7 +60,7 @@ fun spawnStars(
 
 /**
  * @param t particle 时钟 0–1（Restart 安全：仅 sin 依赖）
- * @param safeCenter 中央护字软 mask
+ * @param safeCenter 中央护字轻 mask
  */
 fun DrawScope.drawStars(
     stars: List<Star>,
@@ -77,25 +75,21 @@ fun DrawScope.drawStars(
     val frontier = mode == ParticleMode.STARS_FRONTIER
     val sway = if (frontier) 0.006f else 0.010f
     val tau = (t * 2.0 * PI).toFloat()
-
-    // 基准晕：约 2.5–4px 核区观感（高 DPI 用 short 比例）
     val unit = maxOf(4f, short * 0.0075f)
 
     for (star in stars) {
         val ph = star.phase * (2f * PI.toFloat())
-        // 位置：锚点固定，仅微纵移（Web homeY + sin）
         val x = star.homeX
         val y = star.homeY + sin(tau * 0.15f + ph) * sway
 
         val mask = starSafeMask(x, y, safeCenter)
-        if (mask < 0.04f) continue
 
-        // soft blink（Web: main 0.88±0.09, dim 0.42±0.09）
+        // soft blink；辅星勿压过暗
         val wave = sin(tau * (0.4f + star.speed * 0.25f) + ph) * 0.5f + 0.5f
-        val blink = if (star.main) 0.88f + wave * 0.18f else 0.42f + wave * 0.18f
-        val role = if (star.main) 0.92f else 0.72f
+        val blink = if (star.main) 0.88f + wave * 0.18f else 0.55f + wave * 0.22f
+        val role = if (star.main) 0.95f else 0.85f
         val a = (blink * role * mask).coerceIn(0f, 1f)
-        if (a < 0.03f) continue
+        if (a < 0.04f) continue
 
         val color = when {
             frontier && star.main -> Color(0xFFE8D4A8)
@@ -108,7 +102,6 @@ fun DrawScope.drawStars(
     }
 }
 
-/** 单层主晕 + 极弱内点，无硬核 */
 private fun DrawScope.drawStarSoft(
     center: Offset,
     rHalo: Float,
@@ -132,12 +125,13 @@ private fun DrawScope.drawStarSoft(
     )
 }
 
-/** 与 ThemeAtmosphere 中央护字一致：ellipse 38%×30% @50% 48% */
+/** 与 ThemeAtmosphere.particleSafeMask 同语义：中心地板 0.42 */
 private fun starSafeMask(x: Float, y: Float, enabled: Boolean): Float {
     if (!enabled) return 1f
-    val nx = (x - 0.5f) / 0.19f
-    val ny = (y - 0.48f) / 0.15f
+    val nx = (x - 0.5f) / 0.22f
+    val ny = (y - 0.46f) / 0.18f
     val r = kotlin.math.sqrt(nx * nx + ny * ny)
-    val t = ((r - 0.28f) / (1f - 0.28f)).coerceIn(0f, 1f)
-    return t * t * (3f - 2f * t)
+    val t = ((r - 0f) / (1f - 0f)).coerceIn(0f, 1f)
+    val s = t * t * (3f - 2f * t)
+    return 0.42f + 0.58f * s
 }

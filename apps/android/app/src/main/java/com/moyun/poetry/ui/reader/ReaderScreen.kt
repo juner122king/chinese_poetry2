@@ -90,12 +90,15 @@ fun ReaderScreen(
             label = "atmosphere",
             modifier = Modifier.fillMaxSize(),
         ) { (id, theme) ->
-            ThemeAtmosphere(
-                theme = theme,
-                seed = id,
-                intensity = AtmosphereIntensity.FULL,
-                modifier = Modifier.fillMaxSize(),
-            )
+            // 包一层 Box，避免个别机型上 AnimatedContent 子项测量过窄
+            Box(Modifier.fillMaxSize()) {
+                ThemeAtmosphere(
+                    theme = theme,
+                    seed = id,
+                    intensity = AtmosphereIntensity.FULL,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
 
         // 轻 scrim，让意境透出（对齐 Web 阅读页不厚罩）

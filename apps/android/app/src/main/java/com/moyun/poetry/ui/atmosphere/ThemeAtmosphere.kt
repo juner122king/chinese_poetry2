@@ -844,16 +844,14 @@ private fun DrawScope.drawRain(
     val count = 60
     repeat(count) {
         val x0 = SceneSeed.range(rng, 0f, 1f)
-        val yNorm = SceneSeed.range(rng, 0f, 1f)
-        val mask = particleSafeMask(x0, yNorm, safeCenter)
-        if (mask < 0.08f) return@repeat
-        val len = SceneSeed.range(rng, 18f, 40f)
-        val speed = SceneSeed.range(rng, 0.65f, 1.25f)
         val phase = SceneSeed.range(rng, 0f, 1f)
         val near = it > count * 0.5f
         // 整数圈下落，避免 particleT Restart 时雨丝瞬移
         val cycles = if (near) 2f else 1f
-        val y = wrap01(phase + t * cycles, span = 1f) * h
+        val yNorm = wrap01(phase + t * cycles, span = 1f)
+        val mask = particleSafeMask(x0, yNorm, safeCenter)
+        val len = SceneSeed.range(rng, 18f, 40f)
+        val y = yNorm * h
         val x = x0 * w + (y * 0.07f)
         val baseA = if (near) 0.34f else 0.18f
         drawLine(
@@ -899,13 +897,18 @@ private data class P(
     val wind: Float = 0f,
 )
 
-/** 对齐 Web 手机 `.particle-safe-center`：ellipse 38%×30% @50% 48%，中心软隐 */
+/**
+ * 中央护字：中心略淡、四周满亮（地板 0.42，禁止挖成只剩边条）。
+ * 对齐「改粒子前」全屏场观感；比 Web CSS 硬 mask 更轻。
+ */
 private fun particleSafeMask(x: Float, y: Float, enabled: Boolean): Float {
     if (!enabled) return 1f
-    val nx = (x - 0.5f) / 0.19f
-    val ny = (y - 0.48f) / 0.15f
+    // 半轴约 22%×18%，小于旧版硬矩形挖洞
+    val nx = (x - 0.5f) / 0.22f
+    val ny = (y - 0.46f) / 0.18f
     val r = kotlin.math.sqrt(nx * nx + ny * ny)
-    return smoothstep(0.28f, 1f, r)
+    val t = smoothstep(0f, 1f, r)
+    return 0.42f + 0.58f * t
 }
 
 private fun smoothstep(edge0: Float, edge1: Float, x: Float): Float {
@@ -940,10 +943,6 @@ private fun spawnParticles(visual: ThemeVisual, seed: String): List<P> {
     }
 
     return List(n) {
-        val (y0, y1) = when (mode) {
-            ParticleMode.FIREFLY -> 0.48f to 0.96f // 近草泽
-            else -> 0f to 1f
-        }
         val spinSign = if (SceneSeed.bool(rng)) 1f else -1f
         when (mode) {
             ParticleMode.STARS, ParticleMode.STARS_FRONTIER ->
@@ -951,41 +950,43 @@ private fun spawnParticles(visual: ThemeVisual, seed: String): List<P> {
             ParticleMode.PETALS -> P(
                 x = SceneSeed.range(rng, 0f, 1f),
                 y = SceneSeed.range(rng, 0f, 1f),
-                vx = SceneSeed.range(rng, 0.7f, 1.3f), // 摆幅倍率
-                vy = SceneSeed.range(rng, 0.07f, 0.13f), // 慢落
+                vx = SceneSeed.range(rng, 0.7f, 1.3f),
+                vy = SceneSeed.range(rng, 0.07f, 0.13f),
                 size = SceneSeed.range(rng, 0.7f, 1.25f),
                 alpha = SceneSeed.range(rng, 0.5f, 0.88f),
                 phase = SceneSeed.range(rng, 0f, 1f),
-                spin = (0.25f + SceneSeed.range(rng, 0f, 0.45f)) * spinSign, // 慢转
+                spin = (0.25f + SceneSeed.range(rng, 0f, 0.45f)) * spinSign,
             )
             ParticleMode.LEAVES -> P(
                 x = SceneSeed.range(rng, 0f, 1f),
                 y = SceneSeed.range(rng, 0f, 1f),
-                vx = SceneSeed.range(rng, 0.04f, 0.10f), // 斜移强度
-                vy = SceneSeed.range(rng, 0.14f, 0.24f), // 快落
+                vx = SceneSeed.range(rng, 0.04f, 0.10f),
+                vy = SceneSeed.range(rng, 0.14f, 0.24f),
                 size = SceneSeed.range(rng, 0.65f, 1.2f),
                 alpha = SceneSeed.range(rng, 0.55f, 0.9f),
                 phase = SceneSeed.range(rng, 0f, 1f),
-                spin = (0.9f + SceneSeed.range(rng, 0f, 1.2f)) * spinSign, // 快翻
+                spin = (0.9f + SceneSeed.range(rng, 0f, 1.2f)) * spinSign,
                 wind = leafWind,
             )
             ParticleMode.SNOW -> P(
                 x = SceneSeed.range(rng, 0f, 1f),
                 y = SceneSeed.range(rng, 0f, 1f),
                 vx = SceneSeed.range(rng, -0.008f, 0.008f),
-                vy = SceneSeed.range(rng, 0.09f, 0.16f), // 匀速直落
-                size = SceneSeed.range(rng, 0.35f, 0.85f), // 细
+                vy = SceneSeed.range(rng, 0.09f, 0.16f),
+                size = SceneSeed.range(rng, 0.35f, 0.85f),
                 alpha = SceneSeed.range(rng, 0.4f, 0.75f),
                 phase = SceneSeed.range(rng, 0f, 1f),
             )
+            // 下半场全宽；size 收窄，闪烁只改 alpha 不改尺寸
             ParticleMode.FIREFLY -> P(
-                x = SceneSeed.range(rng, 0.08f, 0.92f),
-                y = SceneSeed.range(rng, y0, y1),
-                vx = SceneSeed.range(rng, 0.02f, 0.05f), // 游荡半径
-                vy = SceneSeed.range(rng, 0.015f, 0.04f),
-                size = SceneSeed.range(rng, 0.7f, 1.35f),
-                alpha = SceneSeed.range(rng, 0.5f, 0.92f),
+                x = SceneSeed.range(rng, 0.03f, 0.97f),
+                y = SceneSeed.range(rng, 0.55f, 0.96f),
+                vx = SceneSeed.range(rng, 0.025f, 0.055f), // 游荡 x 幅
+                vy = SceneSeed.range(rng, 0.35f, 1.0f), // blink speed 因子
+                size = SceneSeed.range(rng, 0.9f, 1.1f),
+                alpha = SceneSeed.range(rng, 0.65f, 0.98f),
                 phase = SceneSeed.range(rng, 0f, 1f),
+                spin = SceneSeed.range(rng, 0.02f, 0.04f), // 游荡 y 幅（小，锁下方）
             )
             ParticleMode.NONE -> P(0f, 0f, 0f, 0f, 0f, 0f, 0f)
         }
@@ -1116,17 +1117,19 @@ private fun DrawScope.drawParticles(
                 wrap01(p.x + micro, span = 1f) to fall
             }
             ParticleMode.FIREFLY -> {
-                val ang = tau * 0.85f + p.phase * 6.28f
-                val ox = cos(ang) * p.vx * 0.55f
-                val oy = sin(ang * 1.3f) * p.vy * 0.45f
-                (p.x + ox).coerceIn(0.04f, 0.96f) to
-                    (p.y + oy).coerceIn(0.45f, 0.98f)
+                // 下半轻游荡：x 全宽 wrap；y 钳在下方，不上天
+                val ang = tau * 0.7f + p.phase * 6.28f
+                val ox = cos(ang) * p.vx * 0.9f
+                val oy = sin(ang * 1.15f) * p.spin * 0.9f
+                val x = wrap01(p.x + ox, span = 1f)
+                val y = (p.y + oy).coerceIn(0.52f, 0.98f)
+                x to y
             }
             ParticleMode.NONE -> p.x to p.y
         }
 
+        // 护字只乘 alpha，不再丢弃粒子（避免挤成边条）
         val mask = particleSafeMask(x, y, safe)
-        if (mask < 0.03f) continue
 
         val px = x * w
         val py = y * h
@@ -1178,20 +1181,27 @@ private fun DrawScope.drawParticles(
                 )
             }
             ParticleMode.FIREFLY -> {
-                // 硬闪 + 大晕游荡；色可跟 accent
-                val s = sin(tau * 1.1f + p.phase * 8f).coerceAtLeast(0f)
-                val blink = s * s
-                val a = (p.alpha * (0.22f + 0.78f * blink) * mask).coerceIn(0f, 1f)
+                // hard blink 只变亮度；尺寸固定，避免忽大忽小
+                val ph = p.phase * (2f * PI.toFloat())
+                val sp = p.vy
+                val wave = sin(tau * (2.8f + sp * 1.6f) + ph)
+                val shaped = if (wave > 0f) {
+                    val w = wave
+                    w * w * kotlin.math.sqrt(w)
+                } else {
+                    0f
+                }
+                val mul = 0.05f + shaped * 0.95f
+                val a = (p.alpha * mul * mask).coerceIn(0f, 1f)
                 val halo = maxOf(11f, short * 0.02f) * p.size
-                val core = maxOf(2.0f, short * 0.004f) * p.size
+                val core = maxOf(2.0f, short * 0.0042f) * p.size
                 val glow = if (visual.id == "wine") Color(0xFFE8B060) else Color(0xFFEBCA5A)
-                // 略混主题 accent
                 val tint = Color(
                     red = (glow.red * 0.75f + visual.accent.red * 0.25f),
                     green = (glow.green * 0.75f + visual.accent.green * 0.25f),
                     blue = (glow.blue * 0.75f + visual.accent.blue * 0.25f),
                 )
-                drawSoftGlow(Offset(px, py), halo, core, tint, a)
+                drawSoftGlow(Offset(px, py), halo, core, tint, a.coerceAtLeast(0.02f))
             }
             ParticleMode.NONE -> Unit
         }
