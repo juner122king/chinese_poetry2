@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 冷启动唯一启动屏：系统 Splash 挂到诗库 Ready/Error -->
+    <style name="Theme.Moyun.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ink</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_seal</item>
+        <item name="postSplashScreenTheme">@style/Theme.Moyun</item>
+    </style>
+
     <style name="Theme.Moyun" parent="android:Theme.Material.NoActionBar">
         <!-- 透明系统栏：意境铺到屏边；图标浅色由 MainActivity 控制 -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:navigationBarDividerColor">@android:color/transparent</item>
-        <item name="android:windowBackground">#FF1A1A1A</item>
-        <item name="android:colorBackground">#FF1A1A1A</item>
+        <item name="android:windowBackground">@color/ink</item>
+        <item name="android:colorBackground">@color/ink</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  legacy archive — 主站竖章统一前（粗略 splash 竖章）
+  不参与 Theme.Moyun.Splash 引用；仅留档对照与回退。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <!-- 外框：约 32×38 比例，居中 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M108,92h72v104h-72z"
+        android:strokeWidth="6"
+        android:strokeColor="@color/paper" />
+    <!-- 内框朱砂 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M124,112h40v64h-40z"
+        android:strokeWidth="3"
+        android:strokeColor="@color/cinnabar" />
+</vector>

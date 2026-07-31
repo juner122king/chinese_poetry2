@@ -1,9 +1,5 @@
 package com.moyun.poetry.ui
 
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -59,6 +54,7 @@ fun MoyunRoot(container: AppContainer) {
     )
     val loadState by rootVm.loadState.collectAsStateWithLifecycle()
 
+    // 幂等：Application 已预加载；此处兜底（配置变更等）
     LaunchedEffect(Unit) {
         rootVm.load()
     }
@@ -69,9 +65,8 @@ fun MoyunRoot(container: AppContainer) {
             .background(MoyunTokens.Ink),
     ) {
         when (val state = loadState) {
-            is LoadState.Idle, LoadState.Loading -> {
-                InkLoadingMark()
-            }
+            // 冷启动由系统 Splash 覆盖；此处仅墨底兜底，避免第二套品牌动画
+            is LoadState.Idle, LoadState.Loading -> Unit
 
             is LoadState.Error -> {
                 Box(
@@ -93,34 +88,6 @@ fun MoyunRoot(container: AppContainer) {
                 MoyunNavHost(container = container)
             }
         }
-    }
-}
-
-/** 墨韵加载：品牌字极淡呼吸，取代 Material 圆环。 */
-@Composable
-private fun InkLoadingMark() {
-    val reduce = rememberReducedMotion()
-    val alpha = if (reduce) {
-        0.72f
-    } else {
-        val infinite = rememberInfiniteTransition(label = "load")
-        infinite.animateFloat(
-            initialValue = 0.38f,
-            targetValue = 0.82f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(1600, easing = MoyunMotion.EaseElegant),
-                repeatMode = RepeatMode.Reverse,
-            ),
-            label = "loadAlpha",
-        ).value
-    }
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(
-            text = "墨韵",
-            style = MoyunType.brand,
-            color = MoyunTokens.TypePrimary,
-            modifier = Modifier.alpha(alpha),
-        )
     }
 }
 

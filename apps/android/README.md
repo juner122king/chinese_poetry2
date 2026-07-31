@@ -76,6 +76,8 @@ cd apps/android
 | 嵌入 Noto / LXGW 字体 | `sync-fonts.ps1` + `MoyunType`（Noto SC + 文楷 TC） |
 | 正文句读展示（去标点 + pause/stop 行距） | `PoemLines` → Reader / Hero / 卡片摘句 |
 | 沉浸过渡（系统栏/路由淡入/读诗落版/Hero 段 stagger） | 本轮已做 |
+| 冷启动单屏（SplashScreen keep 至诗库 Ready） | `Theme.Moyun.Splash` + `installSplashScreen`；已去掉第二层「墨韵」呼吸屏 |
+| 桌面/Splash 图标主站竖章 | `ic_logo_seal`（LogoMark）；旧墨点/粗 splash 见 `*_legacy*` 留档 |
 | 诗卷热门 tag 横滑 | 待补 |
 | 作者 scroll hero | 待补 |
 | 简繁切换 | 未做 |
