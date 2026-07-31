@@ -53,7 +53,11 @@ cd apps/android
 ### 意境实现要点
 
 - 配置：`ui/atmosphere/ThemeMap.kt`（与 Web `themeMap` 同 id / 签名原则）
-- 渲染：`ThemeAtmosphere` Compose Canvas 分层
+- 渲染：`ThemeAtmosphere` Compose Canvas 分层水墨语汇
+  - `MountainForms`：移植 Web 贝塞尔远/中/近山脊 + 山脚 haze
+  - `InkPaint`：径向柔边椭圆模拟 blur（云/雾/水际/暗角）
+  - CARD ≈ Web `intensity=card`（远山/雾/天体静帧，无粒子）
+  - FULL：粒子 + 雨丝 + 极慢云雾漂移 + 酒焰/灯笼签名
 - 驱动字段：每首诗的 `theme`（非 tags）；题跋仍用 `motifs`
 - 构图种子：`poem.id` → 确定性 RNG（对齐 `scene-seed.ts`）
 

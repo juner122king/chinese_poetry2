@@ -69,90 +69,104 @@ fun HomeScreen(
     val counts = remember { repository.countByTag() }
     val scope = rememberCoroutineScope()
 
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 48.dp),
-    ) {
-        item {
-            HeroSection(
-                poem = hero,
-                onOpenPoem = { onOpenPoem(hero.id) },
-                onScrollFeatured = {
-                    scope.launch { listState.animateScrollToItem(1) }
-                },
-            )
-        }
+    // 意境固定铺满主页视口；列表只滚内容（无 Hero 高度/底边露缝问题）
+    Box(Modifier.fillMaxSize()) {
+        ThemeAtmosphere(
+            theme = hero.theme,
+            seed = hero.id,
+            intensity = AtmosphereIntensity.FULL,
+            modifier = Modifier.fillMaxSize(),
+        )
 
-        item { SectionHeader(title = "精 选 诗 卷") }
-        items(featured, key = { it.id }) { poem ->
-            PoemCard(
-                poem = poem,
-                onClick = { onOpenPoem(poem.id) },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-            )
-        }
-        item {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                TextLinkElegant(text = "遍览诗卷", onClick = onOpenPoems)
-            }
-        }
-
-        item { SectionHeader(title = "意 境 入 门") }
-        items(GATE_TAGS, key = { it.first }) { (tag, theme) ->
-            GateRow(
-                label = ImageryTaxonomy.labelOf(tag),
-                count = counts[tag] ?: 0,
-                theme = theme,
-                seed = "gate:$tag",
-                onClick = { onOpenPoemsWithTag(tag) },
-            )
-        }
-        item {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                TextLinkElegant(text = "意境图鉴", onClick = onOpenImagery)
-            }
-        }
-
-        item { SectionHeader(title = "精 选 名 家") }
-        items(authors, key = { it.slug }) { author ->
-            AuthorCard(
-                author = author,
-                onClick = { onOpenAuthor(author.slug) },
-                modifier = Modifier.padding(horizontal = 8.dp),
-            )
-        }
-        item {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                TextLinkElegant(text = "全部名家", onClick = onOpenAuthors)
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = "馆藏 ${meta.poemCount} 首 · 诗人 ${meta.authorCount} · 唐 ${meta.tang} · 词 ${meta.ci}",
-                    style = MoyunType.meta,
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "关于墨韵",
-                    style = MoyunType.nav.copy(color = MoyunTokens.TypeQuiet),
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 48.dp),
+        ) {
+            item {
+                HeroSection(
+                    poem = hero,
+                    onOpenPoem = { onOpenPoem(hero.id) },
+                    onScrollFeatured = {
+                        scope.launch { listState.animateScrollToItem(1) }
+                    },
+                    // 仅占首屏文案槽；背景来自上方固定层
                     modifier = Modifier
-                        .clickable(onClick = onOpenAbout)
-                        .padding(8.dp),
+                        .fillMaxWidth()
+                        .fillParentMaxHeight(),
                 )
+            }
+
+            item { SectionHeader(title = "精 选 诗 卷") }
+            items(featured, key = { it.id }) { poem ->
+                PoemCard(
+                    poem = poem,
+                    onClick = { onOpenPoem(poem.id) },
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                )
+            }
+            item {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    TextLinkElegant(text = "遍览诗卷", onClick = onOpenPoems)
+                }
+            }
+
+            item { SectionHeader(title = "意 境 入 门") }
+            items(GATE_TAGS, key = { it.first }) { (tag, theme) ->
+                GateRow(
+                    label = ImageryTaxonomy.labelOf(tag),
+                    count = counts[tag] ?: 0,
+                    theme = theme,
+                    seed = "gate:$tag",
+                    onClick = { onOpenPoemsWithTag(tag) },
+                )
+            }
+            item {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    TextLinkElegant(text = "意境图鉴", onClick = onOpenImagery)
+                }
+            }
+
+            item { SectionHeader(title = "精 选 名 家") }
+            items(authors, key = { it.slug }) { author ->
+                AuthorCard(
+                    author = author,
+                    onClick = { onOpenAuthor(author.slug) },
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                )
+            }
+            item {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    TextLinkElegant(text = "全部名家", onClick = onOpenAuthors)
+                    Spacer(Modifier.height(24.dp))
+                    Text(
+                        text = "馆藏 ${meta.poemCount} 首 · 诗人 ${meta.authorCount} · 唐 ${meta.tang} · 词 ${meta.ci}",
+                        style = MoyunType.meta,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "关于墨韵",
+                        style = MoyunType.nav.copy(color = MoyunTokens.TypeQuiet),
+                        modifier = Modifier
+                            .clickable(onClick = onOpenAbout)
+                            .padding(8.dp),
+                    )
+                }
             }
         }
     }

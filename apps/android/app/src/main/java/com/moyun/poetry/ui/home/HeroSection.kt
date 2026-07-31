@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,8 +26,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.moyun.poetry.data.model.Poem
-import com.moyun.poetry.ui.atmosphere.AtmosphereIntensity
-import com.moyun.poetry.ui.atmosphere.ThemeAtmosphere
 import com.moyun.poetry.ui.atmosphere.ThemeMap
 import com.moyun.poetry.ui.components.TextLinkElegant
 import com.moyun.poetry.ui.theme.MoyunTokens
@@ -32,7 +34,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * 对齐 Web HeroSection 信息结构与分段入场（时序略压缩）。
+ * Hero 文案层：意境背景由 HomeScreen 固定绘制，此处只占首屏槽位 + 入场动画。
  */
 @Composable
 fun HeroSection(
@@ -70,31 +72,16 @@ fun HeroSection(
         }
     }
 
-    Box(
-        modifier
-            .fillMaxWidth()
-            .height(560.dp),
-    ) {
-        ThemeAtmosphere(
-            theme = poem.theme,
-            seed = poem.id,
-            intensity = AtmosphereIntensity.FULL,
-            modifier = Modifier.fillMaxSize(),
-        )
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(0.dp)
-                .then(
-                    Modifier, // ink veil for type
-                ),
-        )
-
+    // 高度由 fillParentMaxHeight 提供；背景透出 Home 固定意境
+    Box(modifier.fillMaxWidth()) {
         Column(
             Modifier
                 .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(top = 72.dp)
+                .windowInsetsPadding(WindowInsets.navigationBars)
                 .padding(horizontal = 28.dp)
-                .padding(top = 100.dp, bottom = 40.dp),
+                .padding(bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
