@@ -1,11 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
+/**
+ * 路由焦点复位 + 轻量入场。
+ * 不用 motion/transform 包一层：transform 祖先会让子树 position:fixed
+ * 相对该层定位，从而 Hero 意境「钉视口」失效。
+ */
 export default function PageTransition({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
   const pathname = usePathname();
@@ -23,12 +26,8 @@ export default function PageTransition({ children }: { children: ReactNode }) {
   if (reduce) return <>{children}</>;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.7, ease }}
-    >
+    <div key={`${pathname}?${qs}`} className="page-enter">
       {children}
-    </motion.div>
+    </div>
   );
 }

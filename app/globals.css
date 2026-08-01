@@ -972,20 +972,36 @@ body {
 
 /* ========== Hero layout ========== */
 
+/* 路由入场：仅 opacity，避免 transform 打断子树 fixed */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.55s var(--ease-elegant) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
 .hero-section {
   position: relative;
   min-height: 100svh;
   min-height: 100dvh;
   overflow: hidden;
-  background: var(--ink);
+  /* 勿设不透明 background：会盖住 ThemeScene（fixed -z-10）只剩纯墨色；底色靠 body.bg-ink */
   color: var(--xuan);
 }
 
-.hero-scene {
-  position: absolute;
-  inset: -5% 0 -2%;
-}
-
+/* 意境由 ThemeScene（fixed inset-0 -z-10）负责，与读诗页一致 */
 .hero-content {
   position: relative;
   z-index: 12;

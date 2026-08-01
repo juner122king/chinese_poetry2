@@ -71,7 +71,8 @@ type ModeConfig = {
 
 const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
   stars: {
-    countDesktop: 280,
+    // 主页 Hero 常驻：略减密度，滚动时更让得出 GPU
+    countDesktop: 150,
     size: 0.028,
     targetPx: 2.6,
     rgb: [0.98, 0.99, 1.0],
@@ -138,7 +139,7 @@ const MODE_CONFIG: Record<Exclude<ParticleMode, "none">, ModeConfig> = {
     flakeAspect: 2.15,
   },
   snow: {
-    countDesktop: 90,
+    countDesktop: 64,
     size: 0.02,
     targetPx: 0.95,
     rgb: [0.93, 0.95, 0.98],
@@ -673,6 +674,19 @@ function getReducedMotionServerSnapshot() {
   return false;
 }
 
+function subscribePageVisible(onStoreChange: () => void) {
+  document.addEventListener("visibilitychange", onStoreChange);
+  return () => document.removeEventListener("visibilitychange", onStoreChange);
+}
+
+function getPageVisibleSnapshot() {
+  return document.visibilityState === "visible";
+}
+
+function getPageVisibleServerSnapshot() {
+  return true;
+}
+
 export default function ParticleBackground({
   mode = "stars",
   className = "",
@@ -686,6 +700,11 @@ export default function ParticleBackground({
     subscribeReducedMotion,
     getReducedMotionSnapshot,
     getReducedMotionServerSnapshot,
+  );
+  const pageVisible = useSyncExternalStore(
+    subscribePageVisible,
+    getPageVisibleSnapshot,
+    getPageVisibleServerSnapshot,
   );
 
   useEffect(() => {
@@ -703,9 +722,10 @@ export default function ParticleBackground({
     const ro = new ResizeObserver(measure);
     ro.observe(el);
 
+    // 零 margin：滚出视口立刻卸，不拖着跑到精选区
     const io = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: "10% 0px", threshold: 0.01 },
+      { rootMargin: "0px", threshold: 0.01 },
     );
     io.observe(el);
 
@@ -721,11 +741,14 @@ export default function ParticleBackground({
   const d = Number.isFinite(density) && density > 0 ? density : 1;
   const area = (box.w || 1) * (box.h || 1);
   const areaScale = Math.min(1, Math.max(0.15, area / REF_AREA));
+  const mobileScale = box.w > 0 && box.w < 768 ? 0.5 : 1;
   const count =
     box.w > 0
-      ? Math.max(8, Math.round(cfg.countDesktop * d * areaScale))
+      ? Math.max(8, Math.round(cfg.countDesktop * d * areaScale * mobileScale))
       : 0;
-  const show = !reduce && inView && count > 0;
+  // 滚动中不停动画；仅离屏 / 减动态 / 后台 Tab 时不挂 Canvas
+  const show = !reduce && inView && count > 0 && pageVisible;
+  const dpr: number | [number, number] = box.w > 0 && box.w < 768 ? 1 : [1, 1.5];
 
   return (
     <div
@@ -735,7 +758,7 @@ export default function ParticleBackground({
     >
       {show ? (
         <Canvas
-          dpr={[1, 1.5]}
+          dpr={dpr}
           camera={{ position: [0, 0, CAM_Z], fov: 50 }}
           gl={{ alpha: true, antialias: false, powerPreference: "low-power" }}
           style={{ background: "transparent", pointerEvents: "none" }}

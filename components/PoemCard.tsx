@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { Poem } from "@/lib/types";
@@ -13,15 +13,29 @@ type Props = {
   poem: Poem;
   index?: number;
   className?: string;
+  /**
+   * 入视口动画：
+   * - full：位移 + fade（目录瀑布流）
+   * - fade：仅短 fade（主页精选，减滚动扎堆）
+   * - none：无入场
+   */
+  reveal?: "full" | "fade" | "none";
 };
 
 const CARD_MOTIF_MAX = 3;
+/** 滚动掠过时延迟挂氛围，避免主页快滚 mount Ink */
+const HOVER_ENTER_MS = 100;
 
-export default function PoemCard({ poem, index = 0, className = "" }: Props) {
+export default function PoemCard({
+  poem,
+  index = 0,
+  className = "",
+  reveal = "full",
+}: Props) {
   const { t, tPoem } = useScript();
   const display = tPoem(poem);
   const reduce = useReducedMotion();
-  const enterDelay = Math.min(index, 8) * 0.05;
+  const enterDelay = Math.min(index, 8) * 0.04;
   // 下标以原文 content 为准；粘合后整行做繁简
   const excerpts = resolveOpeningDisplayLines(poem).map((line) => t(line));
   const cardMotifs = (display.motifs ?? []).filter(Boolean).slice(0, CARD_MOTIF_MAX);
@@ -29,11 +43,37 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
 
   const hoveredRef = useRef(false);
   const focusedRef = useRef(false);
+  const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [active, setActive] = useState(false);
 
-  const syncActive = useCallback(() => {
-    setActive(hoveredRef.current || focusedRef.current);
+  const clearEnterTimer = useCallback(() => {
+    if (enterTimerRef.current != null) {
+      clearTimeout(enterTimerRef.current);
+      enterTimerRef.current = null;
+    }
   }, []);
+
+  const syncActive = useCallback(() => {
+    const on = hoveredRef.current || focusedRef.current;
+    if (!on) {
+      clearEnterTimer();
+      setActive(false);
+      return;
+    }
+    // 键盘焦点立即开；指针悬停防抖
+    if (focusedRef.current) {
+      clearEnterTimer();
+      setActive(true);
+      return;
+    }
+    clearEnterTimer();
+    enterTimerRef.current = setTimeout(() => {
+      enterTimerRef.current = null;
+      if (hoveredRef.current || focusedRef.current) setActive(true);
+    }, HOVER_ENTER_MS);
+  }, [clearEnterTimer]);
+
+  useEffect(() => () => clearEnterTimer(), [clearEnterTimer]);
 
   const onPointerEnter = useCallback(() => {
     hoveredRef.current = true;
@@ -55,17 +95,35 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
     syncActive();
   }, [syncActive]);
 
+  const motionProps =
+    reduce || reveal === "none"
+      ? {}
+      : reveal === "fade"
+        ? {
+            initial: { opacity: 0 } as const,
+            whileInView: { opacity: 1 },
+            viewport: { once: true, margin: "-5%" as const },
+            transition: {
+              duration: 0.35,
+              delay: enterDelay,
+              ease: [0.22, 1, 0.36, 1] as const,
+            },
+          }
+        : {
+            initial: { opacity: 0, y: 12 } as const,
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true, margin: "-5%" as const },
+            transition: {
+              duration: 0.45,
+              delay: enterDelay,
+              ease: [0.22, 1, 0.36, 1] as const,
+            },
+          };
+
   return (
     <motion.article
       className={`group flex break-inside-avoid mb-6 flex-col ${className}`}
-      initial={reduce ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-5%" }}
-      transition={{
-        duration: 0.85,
-        delay: reduce ? 0 : enterDelay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      {...motionProps}
     >
       <Link
         href={`/poem/${poem.id}`}
@@ -76,7 +134,7 @@ export default function PoemCard({ poem, index = 0, className = "" }: Props) {
         onBlur={onBlur}
       >
         <div
-          className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 backdrop-blur-[2px] transition-[border-color,background-color,transform,box-shadow] duration-[1.15s] ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
+          className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 transition-[border-color,background-color,transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
           style={
             (active
               ? {

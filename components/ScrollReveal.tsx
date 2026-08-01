@@ -7,7 +7,10 @@ type Props = {
   children: ReactNode;
   className?: string;
   delay?: number;
+  /** 入场纵向位移；主页滚动路径建议 0，仅 opacity */
   y?: number;
+  /** 入场时长（秒） */
+  duration?: number;
   once?: boolean;
   as?: "div" | "section" | "li" | "article" | "p" | "h2" | "h3" | "span";
 };
@@ -18,7 +21,8 @@ export default function ScrollReveal({
   children,
   className,
   delay = 0,
-  y = 28,
+  y = 12,
+  duration = 0.45,
   once = true,
   as = "div",
 }: Props) {
@@ -37,7 +41,7 @@ export default function ScrollReveal({
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: "-8% 0px -8% 0px" }}
-      transition={{ duration: 0.9, delay, ease }}
+      transition={{ duration, delay, ease }}
     >
       {children}
     </MotionTag>

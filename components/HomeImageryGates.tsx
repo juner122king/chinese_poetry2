@@ -51,7 +51,7 @@ function GateCard({
   const visual = getThemeVisual(meta.defaultTheme);
   const motifs = meta.motifPool.slice(0, 2);
   const { active, onPointerEnter, onPointerLeave, onFocus, onBlur } =
-    useHoverFocusActive();
+    useHoverFocusActive({ enterDelayMs: 100 });
 
   const shellStyle = {
     ...(active
@@ -75,10 +75,10 @@ function GateCard({
         onPointerLeave={onPointerLeave}
         onFocus={onFocus}
         onBlur={onBlur}
-        initial={reduce ? false : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={reduce ? false : { opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={VIEWPORT}
-        transition={{ duration: reduce ? 0 : 0.8, delay, ease }}
+        transition={{ duration: reduce ? 0 : 0.35, delay, ease }}
       >
         <PoemCardAtmosphere
           theme={meta.defaultTheme}
@@ -88,19 +88,7 @@ function GateCard({
           enterDuration={ATMOS_ENTER}
           exitDuration={ATMOS_EXIT}
         />
-        <motion.span
-          className="imagery-band__label"
-          initial={reduce ? false : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={VIEWPORT}
-          transition={{
-            duration: reduce ? 0 : 0.6,
-            delay: reduce ? 0 : delay + 0.12,
-            ease,
-          }}
-        >
-          {t(getTagLabel(tag))}
-        </motion.span>
+        <span className="imagery-band__label">{t(getTagLabel(tag))}</span>
         {motifs.length > 0 ? (
           <p
             className="imagery-band__motifs"
@@ -143,7 +131,7 @@ export default function HomeImageryGates({ counts }: Props) {
   return (
     <section className="relative px-6 pb-24 pt-20 md:px-10 md:pb-28 md:pt-24">
       <div className="relative z-10 mx-auto max-w-5xl">
-        <ScrollReveal>
+        <ScrollReveal y={0} duration={0.4}>
           <div className="mb-14 flex flex-col items-center md:mb-16">
             <span className="ink-rule mb-8" aria-hidden />
             <h2 className="type-group-label tracking-[0.55em]">
@@ -158,14 +146,14 @@ export default function HomeImageryGates({ counts }: Props) {
               key={tag}
               tag={tag}
               count={counts[tag] ?? 0}
-              delay={i * 0.07}
+              delay={Math.min(i, 3) * 0.04}
               reduce={reduce}
               t={t}
             />
           ))}
         </ul>
 
-        <ScrollReveal className="mt-12 text-center" delay={0.1}>
+        <ScrollReveal className="mt-12 text-center" delay={0.05} y={0} duration={0.35}>
           <Link href="/imagery" className="text-link-elegant">
             {t("遍览意境")}
           </Link>

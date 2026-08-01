@@ -1,8 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   useEffect,
   useLayoutEffect,
@@ -12,15 +11,10 @@ import {
   type CSSProperties,
   type MouseEvent,
 } from "react";
-import InkBackground from "./InkBackground";
+import ThemeScene from "./ThemeScene";
 import { useScript } from "./ScriptProvider";
 import type { Poem } from "@/lib/types";
 import { toDisplayLines, type DisplayLine } from "@/lib/poem-lines";
-import { getThemeVisual } from "@/lib/theme-map";
-
-const ParticleBackground = dynamic(() => import("./ParticleBackground"), {
-  ssr: false,
-});
 
 type Props = {
   poem: Poem;
@@ -42,9 +36,8 @@ const HERO_CHOREO = {
   lines: {
     /** 隔行段之间的起拍间隔（用户指定） */
     segmentStagger: 1.35,
-    /** 单段 fade + blur */
+    /** 单段 fade；不用 filter blur（滚动/入场时 GPU 压力大） */
     duration: 1.15,
-    blur: 6,
     y: 10,
   },
   actions: {
@@ -265,13 +258,6 @@ export default function HeroSection({ poem }: Props) {
   const reduce = useReducedMotion();
   const { t, tPoem, mode } = useScript();
   const display = tPoem(poem);
-  const visual = getThemeVisual(poem.theme);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const sceneY = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
   /** 稳定 key：避免 tPoem 每次新数组引用触发 effect 死循环 */
   const contentKey = `${poem.id}:${mode}:${poem.content.join("\u0001")}`;
@@ -463,8 +449,6 @@ export default function HeroSection({ poem }: Props) {
     return style;
   }, [clipLayout]);
 
-  const useBlur = !reduce && HERO_CHOREO.lines.blur > 0;
-  const blurPx = HERO_CHOREO.lines.blur;
   const lineY = HERO_CHOREO.lines.y;
 
   function handleScrollCue(e: MouseEvent<HTMLAnchorElement>) {
@@ -482,24 +466,10 @@ export default function HeroSection({ poem }: Props) {
 
   return (
     <section ref={ref} className="hero-section noise-overlay">
-      <motion.div
-        className="hero-scene"
-        style={reduce ? undefined : { y: sceneY }}
-      >
-        <InkBackground theme={poem.theme} seed={poem.id} />
-        {visual.particles !== "none" && (
-          <ParticleBackground
-            mode={visual.particles}
-            safeCenter={visual.particleSafeCenter}
-            density={visual.particleDensity}
-          />
-        )}
-      </motion.div>
+      {/* 与读诗页相同：ThemeScene fixed 钉视口，仅意境背景；正文文档流滚动 */}
+      <ThemeScene theme={poem.theme} seed={poem.id} />
 
-      <motion.div
-        className="hero-content"
-        style={reduce ? undefined : { y: textY }}
-      >
+      <div className="hero-content">
         <div className="hero-poem" style={poemStyle}>
           <motion.h1
             key={`hero-title-${contentKey}`}
@@ -545,22 +515,8 @@ export default function HeroSection({ poem }: Props) {
                   <motion.p
                     key={`${display.id}-${lineIndex}-${line.raw}`}
                     className={heroColumnGapClass(line.break, isLast)}
-                    initial={
-                      reduce
-                        ? false
-                        : useBlur
-                          ? {
-                              opacity: 0,
-                              filter: `blur(${blurPx}px)`,
-                              y: lineY,
-                            }
-                          : { opacity: 0, y: lineY }
-                    }
-                    animate={
-                      useBlur
-                        ? { opacity: 1, filter: "blur(0px)", y: 0 }
-                        : { opacity: 1, y: 0 }
-                    }
+                    initial={reduce ? false : { opacity: 0, y: lineY }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{
                       delay,
                       duration: HERO_CHOREO.lines.duration,
@@ -612,7 +568,7 @@ export default function HeroSection({ poem }: Props) {
             </Link>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
       <motion.a
         className="scroll-cue"

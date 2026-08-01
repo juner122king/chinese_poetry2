@@ -5,7 +5,6 @@ import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
 import HomeImageryGates from "@/components/HomeImageryGates";
 import ScrollReveal from "@/components/ScrollReveal";
-import InkBackground from "@/components/InkBackground";
 import T from "@/components/T";
 import { getFeaturedAuthors } from "@/data/authors";
 import {
@@ -46,14 +45,21 @@ export default function HomePage() {
     <>
       <HeroSection key={heroPoem.id} poem={heroPoem} />
 
-      {/* Featured poems */}
+      {/* Featured poems — 轻量底，避免与 Hero 双开 Ink 场景 */}
       <section
         id="featured"
         className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36"
       >
-        <InkBackground theme="landscape" intensity="soft" />
+        <div
+          className="pointer-events-none absolute inset-0"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(104, 130, 156, 0.07), transparent 70%)",
+          }}
+        />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <ScrollReveal>
+          <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />
               <T as="h2" className="type-group-label tracking-[0.55em]">
@@ -69,12 +75,13 @@ export default function HomePage() {
                 key={poem.id}
                 poem={poem}
                 index={i}
+                reveal="fade"
                 className="!mb-0 h-full"
               />
             ))}
           </div>
 
-          <ScrollReveal className="mt-16 text-center" delay={0.1}>
+          <ScrollReveal className="mt-16 text-center" delay={0.05} y={0} duration={0.35}>
             <Link href="/poems" className="text-link-elegant">
               <T>遍览诗卷</T>
             </Link>
@@ -87,7 +94,7 @@ export default function HomePage() {
       {/* Featured authors —— 与上方意境带长短相间，不再用水平灰线分区 */}
       <section className="relative px-6 py-28 md:px-10 md:py-40">
         <div className="relative z-10 mx-auto max-w-6xl">
-          <ScrollReveal>
+          <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />
               <T as="h2" className="type-group-label tracking-[0.55em]">
@@ -108,7 +115,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <ScrollReveal className="mt-16 text-center" delay={0.1}>
+          <ScrollReveal className="mt-16 text-center" delay={0.05} y={0} duration={0.35}>
             <Link href="/authors" className="text-link-elegant">
               <T>遍览名家</T>
             </Link>
