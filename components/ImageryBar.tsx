@@ -24,7 +24,8 @@ type Props = {
 /** 与全站 --ease-elegant 一致 */
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const VIEWPORT = { once: true, margin: "-8% 0px -8% 0px" } as const;
+/** 放宽入视口：避免首屏卡要滚很深才淡入、像点了没反应 */
+const VIEWPORT = { once: true, amount: 0.05, margin: "0px 0px -5% 0px" } as const;
 
 /**
  * 意境卡 —— hover/focus 动效与诗卷/首页入口一致（壳体 + PoemCardAtmosphere）。
@@ -123,10 +124,11 @@ export default function ImageryBar({
 
   return (
     <motion.li
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={VIEWPORT}
-      transition={{ duration: 0.75, delay, ease }}
+      transition={{ duration: 0.45, delay: Math.min(delay, 0.28), ease }}
+      style={{ pointerEvents: "auto" }}
     >
       {body}
     </motion.li>

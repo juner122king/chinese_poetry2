@@ -1988,6 +1988,37 @@ body {
   transform: translateX(-50%);
 }
 
+/* 主页多段 ↓：钉视口底，离开 Hero 后仍可点 */
+.scroll-cue--fixed {
+  position: fixed;
+  z-index: 30;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scroll-cue--hidden {
+  pointer-events: none;
+}
+
+/**
+ * 主页内容核锚点：原生 #hash 兜底留顶栏；
+ * 主路径由 scrollToHomeAnchor 自适应居中/顶对齐。
+ */
+.home-anchor,
+#hero,
+#featured,
+#imagery-gates,
+#authors-featured {
+  scroll-margin-top: 5.5rem;
+}
+
+/* 子层默认 pointer-events:auto 会穿透 none 父级抢点击；场景一律不接事件 */
+.ink-scene,
+.ink-scene * {
+  pointer-events: none !important;
+}
+
 .scroll-cue:focus-visible {
   outline: 1px solid rgba(178, 58, 72, 0.55);
   outline-offset: 3px;

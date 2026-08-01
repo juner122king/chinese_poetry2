@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
 import HomeImageryGates from "@/components/HomeImageryGates";
+import HomeScrollCue from "@/components/HomeScrollCue";
 import ScrollReveal from "@/components/ScrollReveal";
 import T from "@/components/T";
 import { getFeaturedAuthors } from "@/data/authors";
@@ -44,12 +45,11 @@ export default function HomePage() {
   return (
     <>
       <HeroSection key={heroPoem.id} poem={heroPoem} />
+      {/* 固定 ↓：按内容区锚点 hero → featured → imagery-gates → authors-featured */}
+      <HomeScrollCue />
 
-      {/* Featured poems — 轻量底，避免与 Hero 双开 Ink 场景 */}
-      <section
-        id="featured"
-        className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36"
-      >
+      {/* Featured poems — 锚点挂内容核，避免 section 大 padding 顶对齐裁掉下半 */}
+      <section className="relative overflow-hidden px-6 py-28 md:px-10 md:py-36">
         <div
           className="pointer-events-none absolute inset-0"
           aria-hidden
@@ -58,7 +58,10 @@ export default function HomePage() {
               "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(104, 130, 156, 0.07), transparent 70%)",
           }}
         />
-        <div className="relative z-10 mx-auto max-w-6xl">
+        <div
+          id="featured"
+          className="home-anchor relative z-10 mx-auto max-w-6xl"
+        >
           <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />
@@ -91,9 +94,12 @@ export default function HomePage() {
 
       <HomeImageryGates counts={gateCounts} />
 
-      {/* Featured authors —— 与上方意境带长短相间，不再用水平灰线分区 */}
-      <section className="relative px-6 py-28 md:px-10 md:py-40">
-        <div className="relative z-10 mx-auto max-w-6xl">
+      {/* Featured authors —— 锚点挂内容核；底 padding 保证滚得动露全 */}
+      <section className="relative px-6 py-28 pb-36 md:px-10 md:py-40 md:pb-44">
+        <div
+          id="authors-featured"
+          className="home-anchor relative z-10 mx-auto max-w-6xl"
+        >
           <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />

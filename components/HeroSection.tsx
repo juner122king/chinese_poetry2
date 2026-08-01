@@ -9,7 +9,6 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type MouseEvent,
 } from "react";
 import ThemeScene from "./ThemeScene";
 import { useScript } from "./ScriptProvider";
@@ -25,7 +24,8 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
  * Hero text entrance timeline.
- * 诗题 → (+beat) → 作者区 → (+beat) → 诗句 → CTA → scroll-cue（最后呈现）
+ * 诗题 → (+beat) → 作者区 → (+beat) → 诗句 → CTA
+ * （主页 ↓ 由 HomeScrollCue fixed 多段跳转，不在此渲染）
  * 「段」= 遇 stop（。！？）或文末收束的一组换行句；段内同时浮现，段间 0.7s。
  * 一字一 span 仅布局，不逐字动画。
  */
@@ -48,8 +48,6 @@ const HERO_CHOREO = {
     duration: 1.05,
     childStagger: 0.1,
   },
-  /** 下箭头：CTA 入场完全结束后再出，作为整段入场的收束 */
-  scrollCue: { afterActions: 2.15, duration: 0.9 },
 } as const;
 
 const titleDelay = HERO_CHOREO.title.delay;
@@ -281,15 +279,11 @@ export default function HeroSection({ poem }: Props) {
   /** CTA 绝对时刻（秒，mount 起算）；null = 尚未量完 clip */
   const [ctaAtSec, setCtaAtSec] = useState<number | null>(null);
   const [ctaShow, setCtaShow] = useState(false);
-  const [cueShow, setCueShow] = useState(false);
-  const mountAtRef = useRef(
-    typeof performance !== "undefined" ? performance.now() : 0,
-  );
+  const mountAtRef = useRef(0);
 
   useLayoutEffect(() => {
     mountAtRef.current = performance.now();
     setCtaShow(!!reduce);
-    setCueShow(!!reduce);
     setCtaAtSec(null);
   }, [contentKey, reduce]);
 
@@ -402,20 +396,6 @@ export default function HeroSection({ poem }: Props) {
     return () => window.clearTimeout(id);
   }, [ctaAtSec, reduce, contentKey]);
 
-  // scroll-cue：等 CTA 入场动画全部结束后再出（最后一拍）
-  useEffect(() => {
-    if (reduce) {
-      setCueShow(true);
-      return;
-    }
-    if (!ctaShow) return;
-    const wait =
-      (HERO_CHOREO.actions.duration + HERO_CHOREO.scrollCue.afterActions) *
-      1000;
-    const id = window.setTimeout(() => setCueShow(true), wait);
-    return () => window.clearTimeout(id);
-  }, [ctaShow, reduce, contentKey]);
-
   const layoutT = layoutTFrom(
     displayLines.length,
     clipLayout.overflowing,
@@ -451,21 +431,9 @@ export default function HeroSection({ poem }: Props) {
 
   const lineY = HERO_CHOREO.lines.y;
 
-  function handleScrollCue(e: MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    const el = ref.current;
-    const featured = document.getElementById("featured");
-    const y = el
-      ? el.offsetTop + el.offsetHeight
-      : (featured?.offsetTop ?? 0);
-    window.scrollTo({
-      top: y,
-      behavior: reduce ? "auto" : "smooth",
-    });
-  }
-
   return (
-    <section ref={ref} className="hero-section noise-overlay">
+    // 纸纹仅 ThemeScene 一层；↓ 由 HomeScrollCue 按锚点跳转
+    <section ref={ref} id="hero" className="hero-section home-anchor">
       {/* 与读诗页相同：ThemeScene fixed 钉视口，仅意境背景；正文文档流滚动 */}
       <ThemeScene theme={poem.theme} seed={poem.id} />
 
@@ -569,50 +537,6 @@ export default function HeroSection({ poem }: Props) {
           </motion.div>
         </motion.div>
       </div>
-
-      <motion.a
-        className="scroll-cue"
-        href="#featured"
-        aria-label={t("继续浏览")}
-        onClick={handleScrollCue}
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: cueShow || reduce ? 1 : 0 }}
-        transition={{
-          duration: HERO_CHOREO.scrollCue.duration,
-          ease: EASE,
-        }}
-      >
-        <motion.span
-          aria-hidden="true"
-          style={{ display: "grid", placeItems: "center" }}
-          animate={
-            reduce || !cueShow ? undefined : { y: [0, 7, 0] }
-          }
-          transition={
-            reduce || !cueShow
-              ? undefined
-              : {
-                  repeat: Infinity,
-                  duration: 2.2,
-                  ease: "easeInOut",
-                }
-          }
-        >
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5v14" />
-            <path d="m19 12-7 7-7-7" />
-          </svg>
-        </motion.span>
-      </motion.a>
     </section>
   );
 }

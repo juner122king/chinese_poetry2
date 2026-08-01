@@ -8,14 +8,13 @@ import {
   Noto_Serif_TC,
 } from "next/font/google";
 import NavBar from "@/components/NavBar";
-import ScrollReveal from "@/components/ScrollReveal";
 import ScriptToggle from "@/components/ScriptToggle";
 import TopVeil from "@/components/TopVeil";
-import T from "@/components/T";
 import { ScriptProvider } from "@/components/ScriptProvider";
 import { authors } from "@/data/authors";
 import { poems } from "@/data/poems";
 import meta from "@/data/generated/meta.json";
+import { convertText } from "@/lib/script/convert";
 import {
   DEFAULT_SCRIPT,
   parseScriptMode,
@@ -108,6 +107,13 @@ export default async function RootLayout({
       ? `${notoSerifTC.variable} ${notoSansTC.variable}`
       : `${notoSerifSC.variable} ${notoSansSC.variable}`;
 
+  // 页脚在服务端按 cookie 简繁输出，避免客户端 T / 入场动画再隐去
+  const footerStats = convertText(
+    `收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`,
+    mode,
+  );
+  const footerBrand = convertText("墨韵 · 东方诗词视觉体验", mode);
+
   return (
     <html
       lang={scriptLang(mode)}
@@ -124,20 +130,18 @@ export default async function RootLayout({
         <ScriptProvider initialMode={mode}>
           <NavBar />
           <TopVeil />
-          <main id="main" tabIndex={-1} className="relative flex-1">
+          <main id="main" tabIndex={-1} className="relative z-0 flex-1">
             {children}
           </main>
-          <footer className="border-t border-rule-faint px-6 py-12 text-center md:py-14">
-            <ScrollReveal>
-              <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
-                <T>
-                  {`收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`}
-                </T>
-              </p>
-            </ScrollReveal>
-            <T as="p" className="type-quiet mt-6 tracking-[0.35em]">
-              墨韵 · 东方诗词视觉体验
-            </T>
+          {/*
+            背景完全透明，透出主页 fixed 意境；z-20 保证字在层上。
+            文案服务端直出，不用 ScrollReveal / client T。
+          */}
+          <footer className="relative z-20 mt-auto border-t border-rule-faint bg-transparent px-6 py-12 text-center md:py-14">
+            <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-secondary)] md:text-[13px]">
+              {footerStats}
+            </p>
+            <p className="type-meta mt-6 tracking-[0.35em]">{footerBrand}</p>
           </footer>
           <ScriptToggle />
         </ScriptProvider>

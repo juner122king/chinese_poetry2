@@ -130,7 +130,10 @@ export default function HomeImageryGates({ counts }: Props) {
 
   return (
     <section className="relative px-6 pb-24 pt-20 md:px-10 md:pb-28 md:pt-24">
-      <div className="relative z-10 mx-auto max-w-5xl">
+      <div
+        id="imagery-gates"
+        className="home-anchor relative z-10 mx-auto max-w-5xl"
+      >
         <ScrollReveal y={0} duration={0.4}>
           <div className="mb-14 flex flex-col items-center md:mb-16">
             <span className="ink-rule mb-8" aria-hidden />
