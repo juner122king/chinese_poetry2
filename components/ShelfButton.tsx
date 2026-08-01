@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   getShelfServerSnapshot,
@@ -23,6 +23,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export default function ShelfButton({ poemId, className = "" }: Props) {
   const { t } = useScript();
   const reduce = useReducedMotion();
+  const [live, setLive] = useState("");
   const shelf = useSyncExternalStore(
     subscribeShelf,
     getShelfSnapshot,
@@ -31,42 +32,49 @@ export default function ShelfButton({ poemId, className = "" }: Props) {
   const saved = isOnShelf(poemId, shelf);
 
   const onToggle = useCallback(() => {
+    // 播报切换前状态所对应的结果
+    setLive(saved ? t("已移出诗笺") : t("已收入诗笺"));
     toggleShelf(poemId);
-  }, [poemId]);
+  }, [poemId, saved, t]);
 
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={saved}
-      aria-label={saved ? t("移出诗笺") : t("收入诗笺")}
-      title={saved ? t("移出诗笺") : t("收入诗笺")}
-      className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] transition-opacity duration-500 [text-shadow:0_0_9px_rgba(31,31,31,0.9)] md:bottom-4 md:right-4 ${
-        saved
-          ? "text-cinnabar opacity-100"
-          : "text-xuan opacity-35 hover:opacity-90"
-      } ${className}`}
-    >
-      <span className="relative inline-grid place-items-center">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={saved ? "on" : "off"}
-            initial={
-              reduce ? false : { opacity: 0, y: 5, filter: "blur(3px)" }
-            }
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={
-              reduce
-                ? undefined
-                : { opacity: 0, y: -5, filter: "blur(3px)" }
-            }
-            transition={{ duration: reduce ? 0 : 0.45, ease }}
-            className="col-start-1 row-start-1"
-          >
-            {t("笺")}
-          </motion.span>
-        </AnimatePresence>
+    <>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={saved}
+        aria-label={saved ? t("移出诗笺") : t("收入诗笺")}
+        title={saved ? t("移出诗笺") : t("收入诗笺")}
+        className={`fixed bottom-3 right-3 z-50 flex h-10 w-10 items-center justify-center font-sans text-sm tracking-[0.35em] transition-opacity duration-500 [text-shadow:0_0_9px_rgba(31,31,31,0.9)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 md:bottom-4 md:right-4 ${
+          saved
+            ? "text-cinnabar opacity-100"
+            : "text-xuan opacity-35 hover:opacity-90 focus-visible:opacity-90"
+        } ${className}`}
+      >
+        <span className="relative inline-grid place-items-center">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={saved ? "on" : "off"}
+              initial={
+                reduce ? false : { opacity: 0, y: 5, filter: "blur(3px)" }
+              }
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={
+                reduce
+                  ? undefined
+                  : { opacity: 0, y: -5, filter: "blur(3px)" }
+              }
+              transition={{ duration: reduce ? 0 : 0.45, ease }}
+              className="col-start-1 row-start-1"
+            >
+              {t("笺")}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      </button>
+      <span className="sr-only" role="status" aria-live="polite">
+        {live}
       </span>
-    </button>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   useEffect,
   useId,
+  useRef,
   useState,
   type FormEvent,
 } from "react";
@@ -57,6 +58,7 @@ export default function PoemsToolbar({
   const router = useRouter();
   const reduce = useReducedMotion();
   const searchPanelId = useId();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(filters.q ?? "");
   const [searchOpen, setSearchOpen] = useState(Boolean(filters.q));
   const active = hasActivePoemFilters(filters);
@@ -79,6 +81,11 @@ export default function PoemsToolbar({
     if (filters.q) setSearchOpen(true);
     setQuery(filters.q ?? "");
   }, [filters.q]);
+
+  // 面板打开时聚焦（含 ?q= 刷新后面板已开的情况）
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
 
   function submitSearch(e: FormEvent) {
     e.preventDefault();
@@ -171,7 +178,9 @@ export default function PoemsToolbar({
           </>
         )}
 
-        <p className="type-meta text-[11px]">{t(`得 ${resultCount} 篇`)}</p>
+        <p className="type-meta text-[11px]" role="status">
+          {t(`得 ${resultCount} 篇`)}
+        </p>
 
         {active && (
           <>
@@ -231,17 +240,17 @@ export default function PoemsToolbar({
             <label className="min-w-0 flex-1">
               <span className="sr-only">{t("检索题名或作者")}</span>
               <input
+                ref={searchInputRef}
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t("题名 · 作者")}
-                autoFocus={!filters.q}
                 className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-1.5 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
               />
             </label>
             <button
               type="submit"
-              className="type-meta shrink-0 pb-1.5 text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+              className="type-meta shrink-0 pb-1.5 text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
             >
               {t("寻")}
             </button>

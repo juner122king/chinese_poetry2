@@ -66,7 +66,7 @@ export default async function AuthorsPage({ searchParams }: Props) {
           />
 
           {total === 0 ? (
-            <p className="type-meta py-20 text-center text-sm">
+            <p className="type-meta py-20 text-center text-sm" role="status">
               <T>未得名家，可改筛选或清除后再寻。</T>
             </p>
           ) : (

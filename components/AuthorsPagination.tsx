@@ -46,7 +46,7 @@ export default function AuthorsPagination({ filters, totalPages }: Props) {
         </span>
       )}
 
-      <span className="banxin-num">
+      <span className="banxin-num" aria-current="page">
         <span className="sr-only">
           {t(`第 ${page} 页，共 ${totalPages} 页`)}
         </span>

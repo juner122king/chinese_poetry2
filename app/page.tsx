@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
 import PoemCard from "@/components/PoemCard";
@@ -11,10 +12,13 @@ import {
   countPoemsByTag,
   getFeaturedPoems,
   getRandomFeaturedPoem,
-  poems,
 } from "@/data/poems";
 import type { PoemTag } from "@/lib/types";
-import meta from "@/data/generated/meta.json";
+
+export const metadata: Metadata = {
+  title: "墨韵 · 东方诗词视觉体验",
+  description: "静观诗意，如入画境。精选唐诗宋词，配以水墨意境画卷。",
+};
 
 /** 每次刷新随机 Hero 诗；静态预渲染会冻死随机结果 */
 export const dynamic = "force-dynamic";
@@ -37,11 +41,6 @@ export default function HomePage() {
   for (const tag of gateTags) {
     gateCounts[tag] = tagCounts.get(tag) ?? 0;
   }
-
-  const poemCount = meta.poemCount ?? poems.length;
-  const authorCount = meta.authorCount ?? authors.length;
-  const tang = meta.tang ?? 0;
-  const ci = meta.ci ?? 0;
 
   return (
     <>
@@ -116,22 +115,6 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-
-      <footer className="border-t border-rule-faint px-6 py-12 text-center md:py-14">
-        <ScrollReveal>
-          <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-meta)] md:text-[13px]">
-            <T>
-              {`收唐诗 ${tang} · 宋词 ${ci} · 凡 ${poemCount} 篇 · ${authorCount} 家`}
-            </T>
-          </p>
-        </ScrollReveal>
-        <T
-          as="p"
-          className="type-quiet mt-6 tracking-[0.35em]"
-        >
-          墨韵 · 东方诗词视觉体验
-        </T>
-      </footer>
     </>
   );
 }

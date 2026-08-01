@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import type { Poem, PoemTag } from "@/lib/types";
 import { getTagLabel } from "@/lib/imagery-taxonomy";
@@ -29,6 +29,7 @@ export default function AuthorWorksList({
   tagStats = [],
 }: Props) {
   const { t } = useScript();
+  const listId = useId();
   const [expanded, setExpanded] = useState(false);
   const needsCollapse = works.length > AUTHOR_WORKS_PREVIEW;
   const visible =
@@ -75,7 +76,7 @@ export default function AuthorWorksList({
                     )}
                     <Link
                       href={buildPoemsHref({ tag, author: authorSlug })}
-                      className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+                      className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
                       title={t(`得 ${count} 篇`)}
                     >
                       {t(getTagLabel(tag))}
@@ -92,7 +93,7 @@ export default function AuthorWorksList({
             {t("本站暂未收录作品。")}
           </p>
         ) : (
-          <div className="columns-1 gap-6 sm:columns-2">
+          <div id={listId} className="columns-1 gap-6 sm:columns-2">
             {visible.map((poem, i) => (
               <PoemCard key={poem.id} poem={poem} index={i} />
             ))}
@@ -106,6 +107,8 @@ export default function AuthorWorksList({
               <button
                 type="button"
                 onClick={() => setExpanded(true)}
+                aria-expanded={false}
+                aria-controls={listId}
                 className="text-link-elegant text-[11px]"
               >
                 {t(`展开余下 ${hiddenCount} 篇`)}
@@ -114,7 +117,9 @@ export default function AuthorWorksList({
               <button
                 type="button"
                 onClick={() => setExpanded(false)}
-                className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+                aria-expanded={true}
+                aria-controls={listId}
+                className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
               >
                 {t("收起")}
               </button>

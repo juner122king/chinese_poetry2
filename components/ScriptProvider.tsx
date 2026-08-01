@@ -33,6 +33,9 @@ type ScriptContextValue = {
 
 const ScriptContext = createContext<ScriptContextValue | null>(null);
 
+/** 简繁切换 reload 前暂存滚动位置，避免长页弹回顶部 */
+const SCRIPT_SCROLL_KEY = "moyun-script-scroll";
+
 function persistMode(mode: ScriptMode) {
   try {
     localStorage.setItem(SCRIPT_STORAGE_KEY, mode);
@@ -59,6 +62,20 @@ export function ScriptProvider({
   const [mode, setModeState] = useState<ScriptMode>(initialMode);
 
   useEffect(() => {
+    // 恢复简繁切换前的滚动位置
+    try {
+      const raw = sessionStorage.getItem(SCRIPT_SCROLL_KEY);
+      if (raw != null) {
+        sessionStorage.removeItem(SCRIPT_SCROLL_KEY);
+        const top = Number(raw);
+        if (Number.isFinite(top) && top > 0) {
+          window.scrollTo(0, top);
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+
     let preferred: ScriptMode | null = null;
     try {
       const stored = localStorage.getItem(SCRIPT_STORAGE_KEY);
@@ -79,6 +96,11 @@ export function ScriptProvider({
   const setMode = useCallback((next: ScriptMode) => {
     if (next === mode) return;
     // 先落盘再整页刷新，让 layout 按 cookie 只挂对应 sc/tc 字体
+    try {
+      sessionStorage.setItem(SCRIPT_SCROLL_KEY, String(window.scrollY));
+    } catch {
+      /* ignore */
+    }
     persistMode(next);
     applyDocumentScript(next);
     setModeState(next);

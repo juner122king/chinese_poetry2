@@ -50,7 +50,7 @@ export default function NavBar() {
           href="/"
           onClick={handleLogoClick}
           aria-label={t("墨韵")}
-          className="inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
+          className="inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
         >
           {/* +0.5px：光学对齐中文 em 盒，几何居中时 mark 易略偏上 */}
           <LogoMark size={18} className="block shrink-0 translate-y-[0.5px]" />
@@ -69,6 +69,7 @@ export default function NavBar() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    aria-current={active ? "page" : undefined}
                     className={`type-nav ${active ? "type-nav--active" : ""}`}
                   >
                     {t(link.label)}
@@ -80,8 +81,10 @@ export default function NavBar() {
 
           <button
             type="button"
-            className="text-[color:var(--type-secondary)] md:hidden"
+            className="text-[color:var(--type-secondary)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 md:hidden"
             aria-label={t("菜单")}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
           >
             <span className="block h-px w-5 bg-current" />
@@ -93,6 +96,7 @@ export default function NavBar() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -106,6 +110,7 @@ export default function NavBar() {
                     <Link
                       href={link.href}
                       onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
                       className={`type-nav ${active ? "type-nav--active" : ""}`}
                     >
                       {t(link.label)}

@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import T from "@/components/T";
+
+export const metadata: Metadata = {
+  title: "页不存在 · 墨韵",
+};
 
 export default function NotFound() {
   return (

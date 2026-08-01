@@ -29,7 +29,7 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
         {prev && prevDisplay ? (
           <Link
             href={`/poem/${prev.id}`}
-            className="group block text-left"
+            className="group block rounded-sm text-left focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
             title={prevDisplay.title}
           >
             <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">
@@ -52,7 +52,7 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
         {next && nextDisplay ? (
           <Link
             href={`/poem/${next.id}`}
-            className="group block text-right"
+            className="group block rounded-sm text-right focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
             title={nextDisplay.title}
           >
             <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">

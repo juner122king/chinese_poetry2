@@ -158,6 +158,8 @@ export default function Banxin({
       } px-6 pt-24 pb-28 md:px-10 md:pt-32`}
     >
       <div className="min-w-0 flex-1 md:pr-10">
+        {/* 目录四页补标题层级；卷名视觉仍由版心/书眉承担 */}
+        <h1 className="sr-only">{t(`${volume} · 墨韵`)}</h1>
         <div className="banxin-eave md:hidden">
           <motion.span
             className="banxin-eave-rule"
@@ -191,7 +193,9 @@ export default function Banxin({
             animate={{ opacity: 1 }}
             transition={{ ...LAY.folio, ease }}
           >
-            <span className="sr-only">{t(spoken)}</span>
+            <span className="sr-only" aria-current={folio ? "page" : undefined}>
+              {t(spoken)}
+            </span>
             {folio ? (
               <>
                 {rollBox("")}
@@ -249,7 +253,9 @@ export default function Banxin({
             animate={{ opacity: 1 }}
             transition={{ ...LAY.folio, ease }}
           >
-            <span className="sr-only">{t(spoken)}</span>
+            <span className="sr-only" aria-current={folio ? "page" : undefined}>
+              {t(spoken)}
+            </span>
             {folio ? (
               <>
                 {rollBox("banxin-folio")}

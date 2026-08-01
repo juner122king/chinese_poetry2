@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { getPoemById } from "@/data/poems";
 import { toHanNumeral } from "@/lib/han-numeral";
 import type { Poem } from "@/lib/types";
@@ -36,6 +36,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export default function ShelfView() {
   const { t } = useScript();
   const reduce = useReducedMotion();
+  const [armed, setArmed] = useState(false);
+  const [live, setLive] = useState("");
   const state = useSyncExternalStore(
     subscribeShelf,
     getShelfSnapshot,
@@ -51,11 +53,37 @@ export default function ShelfView() {
     return list;
   }, [state.ids]);
 
+  // 武装态超时自动解除，避免误触后长期停留在确认态
+  useEffect(() => {
+    if (!armed) return;
+    const id = window.setTimeout(() => setArmed(false), 4000);
+    return () => window.clearTimeout(id);
+  }, [armed]);
+
+  function removeOne(id: string) {
+    const remaining = state.ids.filter((x) => x !== id).length;
+    removeFromShelf(id);
+    setLive(t(`已移出 · 余 ${remaining} 篇`));
+  }
+
+  function onClearClick() {
+    if (!armed) {
+      setArmed(true);
+      return;
+    }
+    clearShelf();
+    setArmed(false);
+    setLive(t("已全部移出"));
+  }
+
   return (
     <Banxin
       volume="诗笺"
       extent={{ count: items.length, unit: "篇" }}
     >
+      <span className="sr-only" role="status" aria-live="polite">
+        {live}
+      </span>
       <AnimatePresence mode="wait" initial={false}>
         {items.length === 0 ? (
           <motion.div
@@ -87,10 +115,15 @@ export default function ShelfView() {
             <div className="mb-10 flex justify-end">
               <button
                 type="button"
-                onClick={() => clearShelf()}
-                className="type-meta text-xs transition-colors duration-300 hover:text-[color:var(--type-active)]"
+                onClick={onClearClick}
+                onBlur={() => setArmed(false)}
+                className={`type-meta text-xs transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 ${
+                  armed
+                    ? "text-cinnabar"
+                    : "hover:text-[color:var(--type-active)]"
+                }`}
               >
-                {t("全部移出")}
+                {armed ? t("确 定？") : t("全部移出")}
               </button>
             </div>
 
@@ -116,7 +149,7 @@ export default function ShelfView() {
                     */}
                     <button
                       type="button"
-                      onClick={() => removeFromShelf(poem.id)}
+                      onClick={() => removeOne(poem.id)}
                       aria-label={t("移出")}
                       title={t("移出")}
                       className="jian-seal"
