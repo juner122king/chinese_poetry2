@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AuthorCard from "@/components/AuthorCard";
@@ -19,6 +20,12 @@ import {
   isPlaceholderBio,
   formatCardBio,
 } from "@/lib/author-display";
+import {
+  absoluteUrl,
+  jsonLdScript,
+  SITE_NAME,
+  truncateDescription,
+} from "@/lib/seo";
 
 type Props = {
   params: Promise<{ name: string }>;
@@ -28,13 +35,36 @@ export function generateStaticParams() {
   return authors.map((a) => ({ name: a.slug }));
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { name } = await params;
   const author = getAuthorBySlug(name);
-  if (!author) return { title: "名家 · 墨韵" };
+  if (!author) return { title: "名家" };
+
+  const title = `${author.name} · 名家`;
+  const description = truncateDescription(
+    author.bio || `${author.dynasty}代诗人${author.name}，收录于墨韵。`,
+  );
+  const url = absoluteUrl(`/author/${author.slug}`);
+
   return {
-    title: `${author.name} · 名家 · 墨韵`,
-    description: author.bio,
+    title,
+    description,
+    alternates: {
+      canonical: `/author/${author.slug}`,
+    },
+    openGraph: {
+      title: `${title} · ${SITE_NAME}`,
+      description,
+      url,
+      type: "website",
+      locale: "zh_CN",
+      siteName: SITE_NAME,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} · ${SITE_NAME}`,
+      description,
+    },
   };
 }
 
@@ -55,9 +85,56 @@ export default async function AuthorPage({ params }: Props) {
   const hasLife = !isPlaceholderBio(formatCardBio(author.bio));
   /** 与开卷代表作同源意境；无作品时回退山水 */
   const bgTheme = opening?.poem.theme ?? "landscape";
+  const pageUrl = absoluteUrl(`/author/${author.slug}`);
+  const bio =
+    author.bio || `${author.dynasty}代诗人${author.name}，收录于墨韵。`;
+
+  const personDescription = truncateDescription(
+    author.years ? `${bio}（${author.years}）` : bio,
+    200,
+  );
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: author.name,
+      description: personDescription,
+      url: pageUrl,
+      mainEntityOfPage: pageUrl,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "首页",
+          item: absoluteUrl("/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "名家",
+          item: absoluteUrl("/authors"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: author.name,
+          item: pageUrl,
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="relative min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
+      />
       <ThemeScene theme={bgTheme} seed={`author:${author.slug}`} />
       <div className="relative z-10">
         <AuthorScrollHero

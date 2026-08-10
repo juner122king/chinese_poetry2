@@ -22,6 +22,12 @@ import {
   scriptClass,
   scriptLang,
 } from "@/lib/script/types";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE_DEFAULT,
+  SITE_URL,
+} from "@/lib/seo";
 import "./globals.css";
 
 /** next/font 须在 module scope 声明；实际挂载按 cookie 只选 sc 或 tc 一套 */
@@ -65,20 +71,29 @@ const notoSansTC = Noto_Sans_TC({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://inkpoetry.xyz"),
-  title: "墨韵 · 东方诗词视觉体验",
-  description:
-    "高品质、沉浸式、具有东方美学的诗词展示网站。静观诗意，如入画境。",
-  alternates: {
-    canonical: "/",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE_DEFAULT,
+    template: `%s · ${SITE_NAME}`,
   },
+  description: SITE_DESCRIPTION,
+  // 不在 root 写死 canonical：否则子路由会错误指向首页
   openGraph: {
-    title: "墨韵 · 东方诗词视觉体验",
-    description: "静观诗意，如入画境。",
-    url: "https://inkpoetry.xyz",
-    siteName: "墨韵",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     locale: "zh_CN",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

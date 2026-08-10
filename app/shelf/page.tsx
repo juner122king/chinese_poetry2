@@ -3,8 +3,12 @@ import InkBackground from "@/components/InkBackground";
 import ShelfView from "@/components/ShelfView";
 
 export const metadata: Metadata = {
-  title: "诗笺 · 墨韵",
+  title: "诗笺",
   description: "本地收藏的诗词，仅存于本机。",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ShelfPage() {

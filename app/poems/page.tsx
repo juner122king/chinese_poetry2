@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import InkBackground from "@/components/InkBackground";
 import Banxin from "@/components/Banxin";
 import PoemCard from "@/components/PoemCard";
@@ -13,10 +14,29 @@ import {
   parsePoemListFilters,
   topTagsFromPoems,
 } from "@/lib/poems-filter";
+import { absoluteUrl, SITE_NAME } from "@/lib/seo";
 
-export const metadata = {
-  title: "诗词 · 墨韵",
-  description: "浏览经典诗词，沉浸东方美学。",
+const poemsDescription = "浏览经典唐诗宋词，按朝代与意境筛选，沉浸东方美学。";
+
+export const metadata: Metadata = {
+  title: "诗词",
+  description: poemsDescription,
+  alternates: {
+    canonical: "/poems",
+  },
+  openGraph: {
+    title: `诗词 · ${SITE_NAME}`,
+    description: poemsDescription,
+    url: absoluteUrl("/poems"),
+    type: "website",
+    locale: "zh_CN",
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `诗词 · ${SITE_NAME}`,
+    description: poemsDescription,
+  },
 };
 
 type Props = {

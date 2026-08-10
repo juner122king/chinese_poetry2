@@ -95,13 +95,19 @@ export function getFeaturedPoems(limit = 6): Poem[] {
   return out;
 }
 
-/** 每次请求随机一首 featured，避免主页长期固定同一首 */
-export function getRandomFeaturedPoem(): Poem {
+/** 首页 Hero 候选池（featured 优先；供 SSG + 客户端随机） */
+export function getFeaturedPoemPool(): Poem[] {
   const featured = poems.filter((p) => p.featured);
-  const pool = featured.length > 0 ? featured : poems;
-  if (pool.length === 0) {
+  if (featured.length > 0) return featured;
+  if (poems.length === 0) {
     throw new Error("No poems available");
   }
+  return poems;
+}
+
+/** @deprecated 首页已改客户端随机；保留给可能的脚本调用 */
+export function getRandomFeaturedPoem(): Poem {
+  const pool = getFeaturedPoemPool();
   const index = Math.floor(Math.random() * pool.length);
   return pool[index];
 }

@@ -9,11 +9,31 @@ import {
   type TagGroup,
 } from "@/lib/imagery-taxonomy";
 import { buildPoemsHref } from "@/lib/poems-filter";
+import { absoluteUrl, SITE_NAME } from "@/lib/seo";
 import { getThemeVisual } from "@/lib/theme-map";
 
+const imageryDescription =
+  "按意境归集浏览诗词：四季、山水、花木、人事与行旅器物…";
+
 export const metadata: Metadata = {
-  title: "意境 · 墨韵",
-  description: "按意境归集浏览诗词：四季、山水、花木、人事…",
+  title: "意境",
+  description: imageryDescription,
+  alternates: {
+    canonical: "/imagery",
+  },
+  openGraph: {
+    title: `意境 · ${SITE_NAME}`,
+    description: imageryDescription,
+    url: absoluteUrl("/imagery"),
+    type: "website",
+    locale: "zh_CN",
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `意境 · ${SITE_NAME}`,
+    description: imageryDescription,
+  },
 };
 
 const GROUP_ORDER: TagGroup[] = [

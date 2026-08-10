@@ -1,30 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import HeroSection from "@/components/HeroSection";
-import PoemCard from "@/components/PoemCard";
 import AuthorCard from "@/components/AuthorCard";
+import HomeHero from "@/components/HomeHero";
 import HomeImageryGates from "@/components/HomeImageryGates";
 import HomeScrollCue from "@/components/HomeScrollCue";
+import PoemCard from "@/components/PoemCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import T from "@/components/T";
 import { getFeaturedAuthors } from "@/data/authors";
 import {
   countPoemsByTag,
+  getFeaturedPoemPool,
   getFeaturedPoems,
-  getRandomFeaturedPoem,
 } from "@/data/poems";
+import {
+  jsonLdScript,
+  SITE_DESCRIPTION_SHORT,
+  SITE_NAME,
+  SITE_TITLE_DEFAULT,
+  SITE_URL,
+} from "@/lib/seo";
 import type { PoemTag } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "墨韵 · 东方诗词视觉体验",
-  description: "静观诗意，如入画境。精选唐诗宋词，配以水墨意境画卷。",
+  title: {
+    absolute: SITE_TITLE_DEFAULT,
+  },
+  description: SITE_DESCRIPTION_SHORT,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION_SHORT,
+    url: SITE_URL,
+    type: "website",
+    locale: "zh_CN",
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE_DEFAULT,
+    description: SITE_DESCRIPTION_SHORT,
+  },
 };
 
-/** 每次刷新随机 Hero 诗；静态预渲染会冻死随机结果 */
-export const dynamic = "force-dynamic";
-
 export default function HomePage() {
-  const heroPoem = getRandomFeaturedPoem();
+  const heroPool = getFeaturedPoemPool();
   const gridPoems = getFeaturedPoems(6);
   const authors = getFeaturedAuthors(6);
 
@@ -42,9 +64,23 @@ export default function HomePage() {
     gateCounts[tag] = tagCounts.get(tag) ?? 0;
   }
 
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    alternateName: SITE_TITLE_DEFAULT,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION_SHORT,
+    inLanguage: "zh-CN",
+  };
+
   return (
     <>
-      <HeroSection key={heroPoem.id} poem={heroPoem} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteLd) }}
+      />
+      <HomeHero pool={heroPool} />
       {/* 固定 ↓：按内容区锚点 hero → featured → imagery-gates → authors-featured */}
       <HomeScrollCue />
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import InkBackground from "@/components/InkBackground";
 import AuthorCard from "@/components/AuthorCard";
 import AuthorsPagination from "@/components/AuthorsPagination";
@@ -14,10 +15,29 @@ import {
   paginateAuthors,
   parseAuthorListFilters,
 } from "@/lib/authors-filter";
+import { absoluteUrl, SITE_NAME } from "@/lib/seo";
 
-export const metadata = {
-  title: "名家 · 墨韵",
-  description: "浏览历代名家，沉浸东方美学。",
+const authorsDescription = "浏览历代诗词名家，按朝代检索，沉浸东方美学。";
+
+export const metadata: Metadata = {
+  title: "名家",
+  description: authorsDescription,
+  alternates: {
+    canonical: "/authors",
+  },
+  openGraph: {
+    title: `名家 · ${SITE_NAME}`,
+    description: authorsDescription,
+    url: absoluteUrl("/authors"),
+    type: "website",
+    locale: "zh_CN",
+    siteName: SITE_NAME,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `名家 · ${SITE_NAME}`,
+    description: authorsDescription,
+  },
 };
 
 type Props = {

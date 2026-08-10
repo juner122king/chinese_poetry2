@@ -3,7 +3,11 @@ import Link from "next/link";
 import T from "@/components/T";
 
 export const metadata: Metadata = {
-  title: "页不存在 · 墨韵",
+  title: "页不存在",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function NotFound() {
