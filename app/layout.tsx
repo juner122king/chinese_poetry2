@@ -72,7 +72,9 @@ const notoSansTC = Noto_Sans_TC({
 
 /** 搜索站长平台验证码（方案 C）；未配置时不输出对应 meta */
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
-const baiduSiteVerification = process.env.BAIDU_SITE_VERIFICATION?.trim();
+/** 百度 HTML 标签验证；可用 env 覆盖 */
+const baiduSiteVerification =
+  process.env.BAIDU_SITE_VERIFICATION?.trim() || "codeva-rUplpuN8CO";
 const bingSiteVerification = process.env.BING_SITE_VERIFICATION?.trim();
 
 const siteVerification: Metadata["verification"] = {
