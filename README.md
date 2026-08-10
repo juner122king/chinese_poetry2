@@ -96,6 +96,54 @@ motifs[3]  诗意题跋「春晓 · 啼鸟 · 风雨」     → 详情与卡片�
 npm run enrich:motifs
 ```
 
+## 搜索流量统计（方案 C）
+
+站内无前端埋点；用搜索站长平台看 **展示 / 点击 / 关键词 / 索引**。技术前提已具备：
+
+| 资源 | URL |
+|------|-----|
+| Sitemap | https://inkpoetry.xyz/sitemap.xml |
+| Robots | https://inkpoetry.xyz/robots.txt |
+
+### Google Search Console
+
+1. 打开 [Search Console](https://search.google.com/search-console) → 添加资源 → **网址前缀** `https://inkpoetry.xyz`
+2. 验证任选其一：
+   - **HTML 标签**：把 content 写入服务器环境变量 `GOOGLE_SITE_VERIFICATION`，重新部署
+   - **HTML 文件**：下载验证文件放到仓库 `public/` 后部署
+   - **域名 DNS**（若你管理域名解析）
+3. 验证通过后：**索引 → 站点地图 → 添加** `https://inkpoetry.xyz/sitemap.xml`
+4. 数日后在「效果」查看点击、展示、查询词与热门页面
+
+### 百度搜索资源平台
+
+1. 打开 [百度搜索资源平台](https://ziyuan.baidu.com/) → 用户中心 → 站点管理 → 添加 `https://inkpoetry.xyz`
+2. 验证：HTML 标签对应环境变量 `BAIDU_SITE_VERIFICATION`，或 HTML 文件放入 `public/`
+3. 数据引入中提交 sitemap：`https://inkpoetry.xyz/sitemap.xml`
+4. 可选：用「普通收录」抽查若干 `/poem/*`、`/author/*` 链接
+
+### 必应 Webmaster（可选）
+
+1. [Bing Webmaster](https://www.bing.com/webmasters) 添加站点
+2. 验证码环境变量：`BING_SITE_VERIFICATION`（meta `msvalidate.01`）
+3. 提交同一 sitemap；也可在 GSC 绑定后尝试导入
+
+### 环境变量（PM2）
+
+在 `deploy/ecosystem.config.cjs` 的 `env` 中按需增加（验证通过后可长期保留）：
+
+```js
+GOOGLE_SITE_VERIFICATION: "控制台给出的 content",
+BAIDU_SITE_VERIFICATION: "控制台给出的 content",
+BING_SITE_VERIFICATION: "控制台给出的 content",
+```
+
+改完后执行 `npm run deploy:pas-hk`；若仅改服务器上的 env，可在机上 `pm2 reload ecosystem.config.cjs --update-env`（需进程能读到新变量；Next 的 `metadata` 在 Node 进程启动时读取 env）。
+
+> 搜索数据通常有 **1–3 天** 延迟；新站索引爬升需要时间，数字与 Nginx 实时日志不是同一套口径。
+
+---
+
 ## 部署（自托管 · SSH pas-hy / pas-hk）
 
 生产路径之一：本机构建 → 上传到阿里云，用 **Next standalone + PM2 + Nginx** 运行。

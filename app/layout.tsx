@@ -70,6 +70,31 @@ const notoSansTC = Noto_Sans_TC({
   preload: false,
 });
 
+/** 搜索站长平台验证码（方案 C）；未配置时不输出对应 meta */
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
+const baiduSiteVerification = process.env.BAIDU_SITE_VERIFICATION?.trim();
+const bingSiteVerification = process.env.BING_SITE_VERIFICATION?.trim();
+
+const siteVerification: Metadata["verification"] = {
+  ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+  other: {
+    ...(baiduSiteVerification
+      ? { "baidu-site-verification": baiduSiteVerification }
+      : {}),
+    ...(bingSiteVerification ? { "msvalidate.01": bingSiteVerification } : {}),
+  },
+};
+if (
+  siteVerification &&
+  siteVerification.other &&
+  Object.keys(siteVerification.other).length === 0
+) {
+  delete siteVerification.other;
+}
+const hasSiteVerification = Boolean(
+  googleSiteVerification || baiduSiteVerification || bingSiteVerification,
+);
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -95,6 +120,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  ...(hasSiteVerification && siteVerification
+    ? { verification: siteVerification }
+    : {}),
 };
 
 /** 站点为墨色单主题，浏览器 chrome 与原生控件随墨底走暗色 */
