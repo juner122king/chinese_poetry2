@@ -42,10 +42,7 @@ export default function AuthorLifeSection({ author, tagStats }: Props) {
               className="ink-rule mb-8"
               aria-hidden
             />
-            <h2
-              id="author-life-heading"
-              className="type-group-label tracking-[0.55em]"
-            >
+            <h2 id="author-life-heading" className="type-group-label">
               {t("生 平")}
             </h2>
           </div>
@@ -75,7 +72,7 @@ export default function AuthorLifeSection({ author, tagStats }: Props) {
                   )}
                   <Link
                     href={buildPoemsHref({ tag, author: author.slug })}
-                    className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)]"
+                    className="type-tag-link focus-ring"
                     title={t(`得 ${count} 篇`)}
                   >
                     {t(getTagLabel(tag))}

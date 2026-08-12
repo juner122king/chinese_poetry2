@@ -81,7 +81,7 @@ export default function AuthorScrollHero({
       <div className="flex w-full max-w-lg flex-col items-center text-center">
         {/* 朝代 · 时代感（单字朝名补「代」：唐→唐代） */}
         <motion.p
-          className="type-dynasty mb-8 text-[11px] tracking-[0.55em] md:mb-10"
+          className="type-dynasty mb-8 tracking-[0.55em] md:mb-10"
           {...fade(0.15, 10)}
         >
           {display.dynasty.length === 1
@@ -91,7 +91,7 @@ export default function AuthorScrollHero({
 
         {/* 人名 */}
         <motion.h1
-          className="type-display mb-6 text-[2.35rem] leading-none tracking-[0.35em] md:mb-7 md:text-5xl md:tracking-[0.42em]"
+          className="type-author-hero mb-6 text-[2.35rem] md:mb-7 md:text-5xl"
           {...fade(0.35, 14)}
         >
           {nameSpaced}
@@ -99,10 +99,7 @@ export default function AuthorScrollHero({
 
         {/* 生卒 */}
         {yearsLabel && (
-          <motion.p
-            className="type-meta mb-5 text-[11px] tracking-[0.32em] md:mb-6"
-            {...fade(0.55, 10)}
-          >
+          <motion.p className="type-meta mb-5 md:mb-6" {...fade(0.55, 10)}>
             {yearsLabel}
           </motion.p>
         )}
@@ -114,7 +111,7 @@ export default function AuthorScrollHero({
             {...fade(0.7, 10)}
           >
             {courtesy && (
-              <p className="font-wenkai text-sm tracking-[0.45em] text-[color:var(--type-secondary)] md:text-[0.95rem]">
+              <p className="type-courtesy">
                 {t("字")}
                 <span className="mx-[0.15em]" aria-hidden>
                   {" "}
@@ -123,7 +120,7 @@ export default function AuthorScrollHero({
               </p>
             )}
             {artName && (
-              <p className="font-wenkai text-xs tracking-[0.4em] text-[color:var(--type-meta)] md:text-[0.8rem]">
+              <p className="type-courtesy type-courtesy--art">
                 {t("号")}
                 <span className="mx-[0.15em]" aria-hidden>
                   {" "}
@@ -151,15 +148,10 @@ export default function AuthorScrollHero({
               href={`/poem/${opening.poem.id}`}
               className="group focus-ring flex flex-col items-center rounded-sm"
             >
-              <p className="mb-5 font-wenkai text-xs tracking-[0.42em] text-[color:var(--type-quiet)] transition-colors duration-500 group-hover:text-[color:var(--type-meta)] md:mb-6 md:text-[0.8rem]">
-                {openingTitle}
-              </p>
+              <p className="type-opening-title mb-5 md:mb-6">{openingTitle}</p>
               <div className="space-y-3 md:space-y-3.5">
                 {openingLines.map((line) => (
-                  <p
-                    key={line}
-                    className="font-wenkai text-base leading-[1.9] tracking-[0.28em] text-[color:var(--type-primary)] transition-colors duration-500 group-hover:text-cinnabar/90 md:text-lg md:tracking-[0.32em]"
-                  >
+                  <p key={line} className="type-opening-line">
                     {line}
                   </p>
                 ))}
@@ -183,10 +175,7 @@ export default function AuthorScrollHero({
               transition: { duration: 0.9, delay: 1.85, ease: EASE },
             })}
       >
-        <span
-          className="block text-[11px] tracking-[0.35em] text-[color:var(--type-faint)]"
-          aria-hidden
-        >
+        <span className="type-meta block text-[color:var(--type-faint)]" aria-hidden>
           ↓
         </span>
       </motion.a>

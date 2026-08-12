@@ -17,10 +17,7 @@ export default function MotifTags({ motifs, className = "" }: Props) {
   if (!list.length) return null;
 
   return (
-    <p
-      className={`font-wenkai text-sm tracking-[0.35em] text-[color:var(--type-secondary)] md:text-[15px] md:tracking-[0.4em] ${className}`}
-      aria-label={t("意象")}
-    >
+    <p className={`type-motif ${className}`} aria-label={t("意象")}>
       {list.map((motif, i) => (
         <span key={`${motif}-${i}`} className="inline">
           {i > 0 && (

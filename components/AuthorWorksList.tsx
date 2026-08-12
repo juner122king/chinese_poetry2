@@ -48,16 +48,11 @@ export default function AuthorWorksList({
         <ScrollReveal>
           <div className="mb-14 flex flex-col items-center md:mb-16">
             <span className="ink-rule mb-8" aria-hidden />
-            <h2
-              id="author-works-heading"
-              className="type-group-label tracking-[0.55em]"
-            >
+            <h2 id="author-works-heading" className="type-group-label">
               {t("诗 作")}
             </h2>
             {works.length > 0 && (
-              <p className="mt-5 type-meta tracking-[0.28em]">
-                {t(`收 ${works.length} 篇`)}
-              </p>
+              <p className="type-meta mt-5">{t(`收 ${works.length} 篇`)}</p>
             )}
             {authorSlug && tagStats.length > 0 && (
               <ul
@@ -76,7 +71,7 @@ export default function AuthorWorksList({
                     )}
                     <Link
                       href={buildPoemsHref({ tag, author: authorSlug })}
-                      className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-ring"
+                      className="type-tag-link focus-ring"
                       title={t(`得 ${count} 篇`)}
                     >
                       {t(getTagLabel(tag))}
@@ -119,7 +114,7 @@ export default function AuthorWorksList({
                 onClick={() => setExpanded(false)}
                 aria-expanded={true}
                 aria-controls={listId}
-                className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-ring"
+                className="toolbar-meta-action focus-ring"
               >
                 {t("收起")}
               </button>
