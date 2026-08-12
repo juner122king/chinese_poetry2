@@ -1427,11 +1427,11 @@ body {
   outline-offset: 4px;
 }
 
-/* 列表分组标题（唐/宋）：降朱砂密度，用 meta 提亮即可 */
+/* 列表分组标题（唐/宋 · 生平 · 诗作 · 同境）：meta 提亮，字距内聚 */
 .type-group-label {
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.55em;
   color: var(--type-meta);
 }
 
@@ -2001,6 +2001,114 @@ body {
   letter-spacing: 0.2em;
   color: rgba(178, 58, 72, 0.8);
   transition: color var(--duration-color) ease;
+}
+
+/* 诗意题跋（详情 motifs，不可点） */
+.type-motif {
+  font-family: var(--font-wenkai);
+  font-size: 0.875rem;
+  letter-spacing: 0.35em;
+  color: var(--type-secondary);
+}
+
+@media (min-width: 768px) {
+  .type-motif {
+    font-size: 0.9375rem;
+    letter-spacing: 0.4em;
+  }
+}
+
+/* 名家开卷：字 / 号 */
+.type-courtesy {
+  font-family: var(--font-wenkai);
+  font-size: 0.875rem;
+  letter-spacing: 0.45em;
+  color: var(--type-secondary);
+}
+
+.type-courtesy--art {
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  color: var(--type-meta);
+}
+
+@media (min-width: 768px) {
+  .type-courtesy {
+    font-size: 0.95rem;
+  }
+  .type-courtesy--art {
+    font-size: 0.8rem;
+  }
+}
+
+/* 名家开卷引文题（诗题小字） */
+.type-opening-title {
+  font-family: var(--font-wenkai);
+  font-size: 0.75rem;
+  letter-spacing: 0.42em;
+  color: var(--type-quiet);
+  transition: color 500ms var(--ease-elegant);
+}
+
+.group:hover .type-opening-title,
+.group:focus-within .type-opening-title {
+  color: var(--type-meta);
+}
+
+@media (min-width: 768px) {
+  .type-opening-title {
+    font-size: 0.8rem;
+  }
+}
+
+/* 名家开卷引文句 */
+.type-opening-line {
+  font-family: var(--font-wenkai);
+  font-size: 1rem;
+  line-height: 1.9;
+  letter-spacing: 0.28em;
+  color: var(--type-primary);
+  transition: color 500ms var(--ease-elegant);
+}
+
+.group:hover .type-opening-line,
+.group:focus-within .type-opening-line {
+  color: rgba(178, 58, 72, 0.9);
+}
+
+@media (min-width: 768px) {
+  .type-opening-line {
+    font-size: 1.125rem;
+    letter-spacing: 0.32em;
+  }
+}
+
+/* 名家开卷大题字距（字号仍由组件 clamp） */
+.type-author-hero {
+  font-family: var(--font-wenkai);
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--type-primary);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .type-author-hero {
+    letter-spacing: 0.42em;
+  }
+}
+
+/* 意境 / 标签链：type-meta + 略宽字距 + hover 朱砂 */
+.type-tag-link {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--type-meta);
+  transition: color var(--duration-color) ease;
+}
+
+.type-tag-link:hover {
+  color: var(--type-active);
 }
 
 /*
