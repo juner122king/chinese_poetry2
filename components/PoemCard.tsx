@@ -185,7 +185,7 @@ export default function PoemCard({
           <div className="relative z-[1] mt-5 min-h-[1.25rem] opacity-55 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 md:min-h-[1.35rem]">
             {cardMotifs.length > 0 ? (
               <p
-                className="flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1 font-wenkai text-[11px] tracking-[0.22em] text-[color:var(--type-quiet)] md:text-xs"
+                className="type-motif--quiet flex min-w-0 flex-wrap items-center justify-end gap-x-1.5 gap-y-1"
                 aria-label={t("意象")}
               >
                 {cardMotifs.map((motif, i) => (

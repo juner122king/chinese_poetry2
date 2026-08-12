@@ -2018,6 +2018,20 @@ body {
   }
 }
 
+/* 诗卷卡底栏意象：同族更淡更小 */
+.type-motif--quiet {
+  font-family: var(--font-wenkai);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--type-quiet);
+}
+
+@media (min-width: 768px) {
+  .type-motif--quiet {
+    font-size: 0.75rem;
+  }
+}
+
 /* 名家开卷：字 / 号 */
 .type-courtesy {
   font-family: var(--font-wenkai);
