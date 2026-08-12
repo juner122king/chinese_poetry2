@@ -119,7 +119,7 @@ export default function AuthorsToolbar({
 
         <button
           type="button"
-          className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+          className="toolbar-meta-action focus-ring"
           aria-expanded={searchOpen}
           aria-controls={searchPanelId}
           onClick={() => setSearchOpen((o) => !o)}
@@ -153,7 +153,7 @@ export default function AuthorsToolbar({
             id={searchPanelId}
             key="search-panel"
             onSubmit={submitSearch}
-            className="mt-3 flex w-full max-w-xs items-end gap-3 overflow-hidden"
+            className="mt-4 flex w-full max-w-xs items-end gap-3 overflow-hidden"
             initial={
               reduce ? { opacity: 1 } : { opacity: 0, height: 0, y: -4 }
             }
@@ -171,12 +171,12 @@ export default function AuthorsToolbar({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t("姓名")}
-                className="w-full border-0 border-b border-xuan/20 bg-transparent px-0 py-1.5 font-sans text-xs tracking-[0.2em] text-[color:var(--type-primary)] placeholder:text-[color:var(--type-quiet)] transition-[border-color] duration-300 focus:border-cinnabar/50 focus:outline-none"
+                className="toolbar-search-input"
               />
             </label>
             <button
               type="submit"
-              className="type-meta shrink-0 pb-1.5 text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+              className="toolbar-meta-action shrink-0 focus-ring"
             >
               {t("寻")}
             </button>
