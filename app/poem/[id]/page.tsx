@@ -127,8 +127,23 @@ export default async function PoemDetailPage({ params }: Props) {
       />
       <ThemeScene theme={poem.theme} seed={poem.id} />
       <PoemReadingView poem={poem} />
-      <PoemRelated items={related} />
-      <PoemAdjacentNav prev={prev} next={next} />
+      {/* 读区 → 余韵：极淡顶洗 + 青黛细线，不盖死 ThemeScene */}
+      <div className="relative z-10">
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-32 md:h-40"
+          aria-hidden
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 100% at 50% 0%, rgba(104, 130, 156, 0.06), transparent 70%)",
+          }}
+        />
+        <div
+          className="pointer-events-none mx-auto max-w-6xl border-t border-rule-faint"
+          aria-hidden
+        />
+        <PoemRelated items={related} />
+        <PoemAdjacentNav prev={prev} next={next} />
+      </div>
       <PoemKeyboardNav
         prevId={prev?.id ?? null}
         nextId={next?.id ?? null}

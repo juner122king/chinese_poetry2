@@ -24,12 +24,15 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
   const nextDisplay = next ? tPoem(next) : null;
 
   return (
-    <nav className="relative z-10 mx-auto grid max-w-3xl grid-cols-3 items-center gap-3 px-6 pb-20 pt-4">
+    <nav
+      className="relative z-10 mx-auto grid max-w-3xl grid-cols-3 items-center gap-4 px-6 pb-24 pt-8 md:gap-6 md:pb-28 md:pt-10"
+      aria-label={t("前后篇")}
+    >
       <div className="min-w-0 justify-self-start">
         {prev && prevDisplay ? (
           <Link
             href={`/poem/${prev.id}`}
-            className="group block rounded-sm text-left focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+            className="group focus-ring block rounded-sm text-left"
             title={prevDisplay.title}
           >
             <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">
@@ -52,7 +55,7 @@ export default function PoemAdjacentNav({ prev, next }: Props) {
         {next && nextDisplay ? (
           <Link
             href={`/poem/${next.id}`}
-            className="group block rounded-sm text-right focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+            className="group focus-ring block rounded-sm text-right"
             title={nextDisplay.title}
           >
             <span className="type-quiet block transition-colors duration-300 group-hover:text-[color:var(--type-secondary)]">

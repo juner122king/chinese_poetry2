@@ -17,11 +17,11 @@ export default function PoemRelated({ items }: Props) {
 
   return (
     <section
-      className="relative z-10 mx-auto max-w-6xl px-6 pb-8 pt-8 md:px-10"
+      className="relative z-10 mx-auto max-w-6xl px-6 pb-12 pt-16 md:px-10 md:pb-16 md:pt-20"
       aria-labelledby="related-heading"
     >
       <ScrollReveal>
-        <div className="mb-10 flex flex-col items-center">
+        <div className="mb-12 flex flex-col items-center md:mb-14">
           <span className="ink-rule mb-8" aria-hidden />
           <h2
             id="related-heading"

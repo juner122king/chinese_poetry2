@@ -69,7 +69,7 @@ export default function PoemDisplay({
     showAuthorLink && author ? (
       <Link
         href={`/author/${author.slug}`}
-        className="inline-flex flex-wrap items-baseline justify-center gap-x-2.5 transition-colors hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+        className="focus-ring inline-flex flex-wrap items-baseline justify-center gap-x-2.5 transition-colors hover:text-[color:var(--type-active)]"
       >
         <span className="type-dynasty">{display.dynasty}</span>
         <span className="type-author text-xs md:text-sm">{display.author}</span>
@@ -147,17 +147,20 @@ export default function PoemDisplay({
           </div>
         </div>
 
-        {(display.motifs?.length ?? 0) > 0 && (
-          <div className="mt-14 flex flex-col items-center px-6 text-center">
-            <MotifTags motifs={display.motifs} />
-          </div>
-        )}
+        <div className="mt-14 flex flex-col items-center px-6 text-center md:mt-16">
+          <span className="ink-rule" aria-hidden />
+          {(display.motifs?.length ?? 0) > 0 ? (
+            <div className="mt-10">
+              <MotifTags motifs={display.motifs} />
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative z-10 mx-auto flex min-h-[80vh] max-w-2xl flex-col items-center justify-center px-6 py-28 text-center">
+    <div className="relative z-10 mx-auto flex min-h-[80vh] max-w-2xl flex-col items-center justify-center px-6 pb-20 pt-28 text-center md:pb-28 md:pt-32">
       <ScrollReveal delay={0.1}>
         <p className="mb-12">{authorNode}</p>
       </ScrollReveal>
@@ -182,11 +185,15 @@ export default function PoemDisplay({
         ))}
       </div>
 
-      {(display.motifs?.length ?? 0) > 0 && (
-        <ScrollReveal delay={0.2} className="mt-16">
-          <MotifTags motifs={display.motifs} />
-        </ScrollReveal>
-      )}
+      {/* 读毕收束：梭形线 → 题跋，再落入相关区 */}
+      <ScrollReveal delay={0.15} className="mt-16 flex w-full flex-col items-center md:mt-20">
+        <span className="ink-rule" aria-hidden />
+        {(display.motifs?.length ?? 0) > 0 ? (
+          <div className="mt-10">
+            <MotifTags motifs={display.motifs} />
+          </div>
+        ) : null}
+      </ScrollReveal>
     </div>
   );
 }
