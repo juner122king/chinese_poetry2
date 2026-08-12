@@ -76,8 +76,8 @@ export default function AuthorCard({
             as="h3"
             className={`type-display max-w-full truncate px-0.5 transition-colors duration-500 group-hover:text-[color:var(--type-active)] ${
               compact
-                ? "mb-0.5 text-base tracking-[0.22em] md:text-lg"
-                : "mb-1 text-lg tracking-[0.3em]"
+                ? "mb-0.5 text-base tracking-[var(--track-card-author)] md:text-lg"
+                : "mb-1 text-lg tracking-[var(--track-display)]"
             }`}
           >
             {author.name}
@@ -92,7 +92,7 @@ export default function AuthorCard({
           )}
           {yearsLabel && (
             <p
-              className={`type-meta tracking-[0.2em] ${
+              className={`type-meta ${
                 hideDynasty ? "mt-1" : "mt-0.5"
               } ${compact ? "text-[10px]" : "text-[11px]"}`}
             >

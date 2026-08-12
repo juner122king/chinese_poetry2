@@ -34,7 +34,7 @@ export default function ImageryTags({ tags, className = "" }: Props) {
           )}
           <Link
             href={buildPoemsHref({ tag })}
-            className="type-meta tracking-[0.35em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-ring"
+            className="type-tag-link focus-ring"
           >
             {t(getTagLabel(tag))}
           </Link>
