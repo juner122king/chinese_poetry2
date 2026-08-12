@@ -22,13 +22,11 @@ export default function Error({
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
       <span className="ink-rule mb-8" aria-hidden />
-      <p className="type-meta mb-4 tracking-[0.4em]" aria-hidden>
+      <p className="type-meta mb-4" aria-hidden>
         卷 有 阙
       </p>
-      <h1 className="type-display mb-6 text-2xl tracking-[0.35em]">
-        此卷暂阙
-      </h1>
-      <p className="mb-10 max-w-sm font-serif text-sm tracking-[0.2em] text-[color:var(--type-meta)]">
+      <h1 className="type-display mb-6 text-2xl">此卷暂阙</h1>
+      <p className="mb-10 max-w-sm font-serif text-sm leading-relaxed text-[color:var(--type-meta)]">
         加载时出了岔子。可重试一次，或稍后再来。
       </p>
       <button

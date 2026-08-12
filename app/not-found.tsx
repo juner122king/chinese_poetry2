@@ -17,13 +17,13 @@ export default function NotFound() {
       <InkBackground theme="landscape" intensity="soft" />
       <div className="relative z-10 flex flex-col items-center">
         <span className="ink-rule mb-8" aria-hidden />
-        <p className="type-meta mb-4 tracking-[0.4em]">404</p>
-        <T as="h1" className="type-display mb-6 text-2xl tracking-[0.35em]">
+        <p className="type-meta mb-4">404</p>
+        <T as="h1" className="type-display mb-6 text-2xl">
           页不存在
         </T>
         <T
           as="p"
-          className="mb-10 max-w-sm font-serif text-sm tracking-[0.2em] text-[color:var(--type-meta)]"
+          className="mb-10 max-w-sm font-serif text-sm leading-relaxed text-[color:var(--type-meta)]"
         >
           此卷已佚，或尚待编纂。
         </T>

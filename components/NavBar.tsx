@@ -50,7 +50,7 @@ export default function NavBar() {
           href="/"
           onClick={handleLogoClick}
           aria-label={t("墨韵")}
-          className="focus-ring inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
+          className="focus-ring inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[var(--track-ui)] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
         >
           {/* +0.5px：光学对齐中文 em 盒，几何居中时 mark 易略偏上 */}
           <LogoMark size={18} className="block shrink-0 translate-y-[0.5px]" />

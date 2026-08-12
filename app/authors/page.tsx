@@ -86,9 +86,21 @@ export default async function AuthorsPage({ searchParams }: Props) {
           />
 
           {total === 0 ? (
-            <p className="type-meta py-20 text-center text-sm" role="status">
-              <T>未得名家，可改筛选或清除后再寻。</T>
-            </p>
+            <div
+              className="flex flex-col items-center gap-10 py-16"
+              role="status"
+            >
+              <div className="empty-jian">
+                <div className="flex flex-row-reverse items-start gap-6">
+                  <span className="empty-jian__line">
+                    <T>未得名家</T>
+                  </span>
+                  <span className="empty-jian__note">
+                    <T>可改筛选或清除后再寻</T>
+                  </span>
+                </div>
+              </div>
+            </div>
           ) : (
             dynastiesOnPage.map((dynasty) => {
               const group = pageItems.filter((a) => a.dynasty === dynasty);

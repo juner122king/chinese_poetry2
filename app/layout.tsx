@@ -168,7 +168,7 @@ export default async function RootLayout({
         {/* 跳至正文：全站键盘走查的起点；焦点态朱砂描边与其余交互一致 */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:bg-ink focus:px-4 focus:py-2 focus:font-sans focus:text-xs focus:tracking-[0.3em] focus:text-xuan focus:outline focus:outline-1 focus:outline-offset-2 focus:outline-[color:var(--focus-ring-strong)]"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:bg-ink focus:px-4 focus:py-2 focus:font-sans focus:text-xs focus:tracking-[var(--track-ui)] focus:text-xuan focus:outline focus:outline-1 focus:outline-offset-2 focus:outline-[color:var(--focus-ring-strong)]"
         >
           跳至正文
         </a>
@@ -186,7 +186,7 @@ export default async function RootLayout({
             <p className="mx-auto max-w-2xl font-serif text-xs leading-relaxed tracking-[0.22em] text-[color:var(--type-secondary)] md:text-[13px]">
               {footerStats}
             </p>
-            <p className="type-meta mt-6 tracking-[0.35em]">{footerBrand}</p>
+            <p className="type-meta mt-6">{footerBrand}</p>
           </footer>
           <ScriptToggle />
         </ScriptProvider>

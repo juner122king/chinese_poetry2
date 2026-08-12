@@ -20,9 +20,7 @@ export default function Loading() {
         />
         <span className="h-2 w-2 animate-pulse rounded-sm bg-cinnabar/50" />
       </span>
-      <span className="type-meta tracking-[0.4em] text-[color:var(--type-quiet)]">
-        展 卷
-      </span>
+      <span className="type-meta text-[color:var(--type-quiet)]">展 卷</span>
     </div>
   );
 }
