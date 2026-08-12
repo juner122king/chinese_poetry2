@@ -25,7 +25,7 @@ export default function PoemRelated({ items }: Props) {
           <span className="ink-rule mb-8" aria-hidden />
           <h2
             id="related-heading"
-            className="type-group-label tracking-[0.55em]"
+            className="type-group-label"
           >
             {t("同 境 相 逢")}
           </h2>

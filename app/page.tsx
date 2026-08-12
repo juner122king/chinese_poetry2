@@ -101,7 +101,7 @@ export default function HomePage() {
           <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />
-              <T as="h2" className="type-group-label tracking-[0.55em]">
+              <T as="h2" className="type-group-label">
                 精 选 诗 卷
               </T>
             </div>
@@ -139,7 +139,7 @@ export default function HomePage() {
           <ScrollReveal y={0} duration={0.4}>
             <div className="mb-16 flex flex-col items-center md:mb-20">
               <span className="ink-rule mb-8" aria-hidden />
-              <T as="h2" className="type-group-label tracking-[0.55em]">
+              <T as="h2" className="type-group-label">
                 精 选 名 家
               </T>
             </div>

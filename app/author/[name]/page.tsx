@@ -162,7 +162,7 @@ export default async function AuthorPage({ params }: Props) {
                   />
                   <T
                     as="h2"
-                    className="type-group-label tracking-[0.55em]"
+                    className="type-group-label"
                   >
                     同 朝
                   </T>

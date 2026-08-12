@@ -137,7 +137,7 @@ export default function HomeImageryGates({ counts }: Props) {
         <ScrollReveal y={0} duration={0.4}>
           <div className="mb-14 flex flex-col items-center md:mb-16">
             <span className="ink-rule mb-8" aria-hidden />
-            <h2 className="type-group-label tracking-[0.55em]">
+            <h2 className="type-group-label">
               {t("按 意 境 入 门")}
             </h2>
           </div>
