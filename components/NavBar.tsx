@@ -50,7 +50,7 @@ export default function NavBar() {
           href="/"
           onClick={handleLogoClick}
           aria-label={t("墨韵")}
-          className="inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+          className="focus-ring inline-flex items-center gap-2.5 font-sans text-sm leading-none tracking-[0.3em] text-[color:var(--type-primary)] transition-opacity duration-300 hover:opacity-70"
         >
           {/* +0.5px：光学对齐中文 em 盒，几何居中时 mark 易略偏上 */}
           <LogoMark size={18} className="block shrink-0 translate-y-[0.5px]" />
@@ -81,14 +81,16 @@ export default function NavBar() {
 
           <button
             type="button"
-            className="text-[color:var(--type-secondary)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 md:hidden"
+            className="focus-ring flex h-11 w-11 items-center justify-center text-[color:var(--type-secondary)] md:hidden"
             aria-label={t("菜单")}
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="block h-px w-5 bg-current" />
-            <span className="mt-1.5 block h-px w-5 bg-current" />
+            <span className="flex w-5 flex-col gap-1.5" aria-hidden>
+              <span className="block h-px w-full bg-current transition-transform duration-300" />
+              <span className="block h-px w-full bg-current transition-transform duration-300" />
+            </span>
           </button>
         </div>
       </nav>
@@ -100,9 +102,10 @@ export default function NavBar() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="border-t border-xuan/10 bg-ink/95 backdrop-blur-md md:hidden"
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="border-t border-[color:var(--rule-faint)] bg-[color:var(--surface-2)] backdrop-blur-md md:hidden"
           >
-            <ul className="flex flex-col gap-5 px-6 py-6">
+            <ul className="flex flex-col gap-1 px-6 py-5">
               {links.map((link) => {
                 const active = link.match(pathname);
                 return (
@@ -111,7 +114,7 @@ export default function NavBar() {
                       href={link.href}
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
-                      className={`type-nav ${active ? "type-nav--active" : ""}`}
+                      className={`type-nav flex min-h-11 items-center ${active ? "type-nav--active" : ""}`}
                     >
                       {t(link.label)}
                     </Link>

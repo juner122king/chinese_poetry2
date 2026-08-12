@@ -149,7 +149,7 @@ export default function AuthorScrollHero({
           >
             <Link
               href={`/poem/${opening.poem.id}`}
-              className="group flex flex-col items-center rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-6 focus-visible:outline-cinnabar/50"
+              className="group focus-ring flex flex-col items-center rounded-sm"
             >
               <p className="mb-5 font-wenkai text-xs tracking-[0.42em] text-[color:var(--type-quiet)] transition-colors duration-500 group-hover:text-[color:var(--type-meta)] md:mb-6 md:text-[0.8rem]">
                 {openingTitle}

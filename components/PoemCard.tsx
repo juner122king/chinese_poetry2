@@ -127,14 +127,14 @@ export default function PoemCard({
     >
       <Link
         href={`/poem/${poem.id}`}
-        className="flex h-full min-h-0 flex-col rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+        className="flex h-full min-h-0 flex-col rounded-sm focus-ring"
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
         onFocus={onFocus}
         onBlur={onBlur}
       >
         <div
-          className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-rule-faint bg-rule-wash px-6 pb-7 pt-7 transition-[border-color,background-color,transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:px-7 md:pb-8 md:pt-8"
+          className="card-shell relative flex h-full min-h-0 flex-col px-6 pb-7 pt-7 md:px-7 md:pb-8 md:pt-8"
           style={
             (active
               ? {

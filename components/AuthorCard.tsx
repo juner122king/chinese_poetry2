@@ -45,7 +45,7 @@ export default function AuthorCard({
       <Link
         href={`/author/${author.slug}`}
         aria-label={ariaBits.join(" · ")}
-        className={`group flex h-full flex-col items-center rounded-sm border border-transparent text-center transition-all duration-500 hover:border-xuan/10 hover:bg-xuan/[0.03] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 ${
+        className={`card-shell card-shell--interactive group flex h-full flex-col items-center text-center focus-ring ${
           compact
             ? "gap-3 px-3 py-5 md:gap-3.5 md:px-4 md:py-6"
             : "gap-5 px-5 py-7 md:px-6 md:py-8"
@@ -59,11 +59,11 @@ export default function AuthorCard({
           aria-hidden
         >
           <span
-            className="absolute inset-0 rounded-full border border-xuan/25 transition-[border-color,transform] duration-700 group-hover:scale-105 group-hover:border-cinnabar/55"
+            className="absolute inset-0 rounded-full border border-[color:var(--type-quiet)] transition-[border-color,transform] duration-700 group-hover:scale-105 group-hover:border-cinnabar/55"
             style={{ borderRadius: "42% 58% 50% 50% / 48% 48% 52% 52%" }}
           />
           <span
-            className={`font-wenkai tracking-widest text-cinnabar/80 transition-colors duration-500 group-hover:text-cinnabar ${
+            className={`type-seal group-hover:text-cinnabar ${
               compact ? "text-xl" : "text-2xl"
             }`}
           >

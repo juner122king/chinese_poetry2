@@ -8,12 +8,21 @@ export default function Loading() {
     <div
       role="status"
       aria-label="正在展开"
-      className="flex min-h-[60vh] items-center justify-center"
+      className="flex min-h-[60vh] flex-col items-center justify-center gap-6"
     >
       <span
         aria-hidden
-        className="h-3 w-3 animate-pulse border border-rule-line bg-cinnabar/20"
-      />
+        className="relative flex h-8 w-8 items-center justify-center"
+      >
+        <span
+          className="absolute inset-0 rounded-full border border-cinnabar/35 opacity-70"
+          style={{ borderRadius: "42% 58% 50% 50% / 48% 48% 52% 52%" }}
+        />
+        <span className="h-2 w-2 animate-pulse rounded-sm bg-cinnabar/50" />
+      </span>
+      <span className="type-meta tracking-[0.4em] text-[color:var(--type-quiet)]">
+        展 卷
+      </span>
     </div>
   );
 }

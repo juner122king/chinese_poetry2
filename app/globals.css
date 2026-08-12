@@ -44,7 +44,25 @@
   --track-eyebrow: 0.45em;
 
   --duration-color: 300ms;
+  --duration-micro: 200ms;
   --duration-reveal: 0.55s;
+  /* 与 lib/atmosphere-timing.ts 对齐（秒→ms） */
+  --duration-atmosphere-enter: 450ms;
+  --duration-atmosphere-exit: 1150ms;
+
+  /*
+   * Surface / elevation —— 卡片、浮层、菜单共用
+   * 0 页底 | 1 静置卡洗 | 2 浮层面板 | hover 交互抬升底
+   */
+  --surface-0: var(--ink);
+  --surface-1: var(--rule-wash);
+  --surface-2: rgba(31, 31, 31, 0.94);
+  --surface-hover: rgba(245, 239, 226, 0.03);
+  --elev-1: 0 10px 32px -18px rgba(0, 0, 0, 0.45);
+  --elev-2: 0 14px 44px -22px rgba(0, 0, 0, 0.55);
+  --focus-ring: rgba(178, 58, 72, 0.5);
+  --focus-ring-strong: rgba(178, 58, 72, 0.6);
+  --scrim: rgba(31, 31, 31, 0.55);
 }
 
 @theme inline {
@@ -58,6 +76,10 @@
   --color-rule: var(--rule-line);
   --color-rule-faint: var(--rule-faint);
   --color-rule-wash: var(--rule-wash);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-hover: var(--surface-hover);
+  --color-focus-ring: var(--focus-ring);
   --font-serif-sc: var(--font-noto-serif-sc), "Noto Serif SC", "Songti SC",
     "SimSun", serif;
   --font-serif-tc: var(--font-noto-serif-tc), "Noto Serif TC", "Songti TC",
@@ -1231,7 +1253,7 @@ body {
 }
 
 .hero-action-primary:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.5);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 4px;
   animation-play-state: paused;
   opacity: 0.95;
@@ -1401,7 +1423,7 @@ body {
 
 .type-nav:focus-visible,
 .poem-filter-chip:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.5);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 4px;
 }
 
@@ -1561,7 +1583,7 @@ body {
 }
 
 .banxin-turn:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 4px;
 }
 
@@ -1711,7 +1733,7 @@ body {
 }
 
 .imagery-bar:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -1794,7 +1816,7 @@ body {
 }
 
 .jian-seal:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -1928,8 +1950,101 @@ body {
 }
 
 .imagery-band__gate:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 3px;
+}
+
+/*
+ * 焦点环 —— 全站交互控件共用
+ * 用法：className="… focus-ring" 或 focus-visible: 变体已含于 utility
+ */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 1px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+/* 卡片壳：诗卷 / 名家 / 意境 共用表面语言（内容区各自叠字） */
+.card-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.125rem;
+  border: 1px solid var(--rule-faint);
+  background: var(--surface-1);
+  transition:
+    border-color 500ms var(--ease-elegant),
+    background-color 500ms var(--ease-elegant),
+    box-shadow 500ms var(--ease-elegant),
+    transform 500ms var(--ease-elegant);
+}
+
+.card-shell--interactive:hover,
+.card-shell--interactive:focus-within {
+  border-color: rgba(245, 239, 226, 0.12);
+  background: var(--surface-hover);
+}
+
+/* 长文：作者生平、说明 */
+.type-body-prose {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 2.15;
+  letter-spacing: 0.14em;
+  color: var(--type-secondary);
+}
+
+/* 印玺字：名家卡中央一字 */
+.type-seal {
+  font-family: var(--font-wenkai);
+  letter-spacing: 0.2em;
+  color: rgba(178, 58, 72, 0.8);
+  transition: color var(--duration-color) ease;
+}
+
+/*
+ * 列表工具条 —— 检索输入 / 旁侧 meta 动作
+ * 诗卷 · 名家共用，避免 border-xuan/* 硬编码分叉
+ */
+.toolbar-search-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--rule-faint);
+  background: transparent;
+  padding: 0.5rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: var(--track-ui);
+  color: var(--type-primary);
+  transition: border-color var(--duration-color) ease;
+}
+
+.toolbar-search-input::placeholder {
+  color: var(--type-quiet);
+}
+
+.toolbar-search-input:focus {
+  outline: none;
+  border-bottom-color: rgba(178, 58, 72, 0.5);
+}
+
+/* 检索 / 寻 / 收起：可点区域 ≥44px，视觉仍紧凑 */
+.toolbar-meta-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding-inline: 0.15rem;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: var(--track-ui);
+  color: var(--type-meta);
+  transition: color var(--duration-color) ease;
+}
+
+.toolbar-meta-action:hover {
+  color: var(--type-active);
 }
 
 /* 次级文字链：遍览 / 归卷首 / 回诗卷 */
@@ -1937,7 +2052,7 @@ body {
   position: relative;
   display: inline-block;
   padding-bottom: 4px;
-  color: rgba(245, 239, 226, 0.45);
+  color: var(--type-meta);
   font-family: var(--font-sans);
   font-size: 12px;
   letter-spacing: 0.35em;
@@ -1971,7 +2086,7 @@ body {
 }
 
 .text-link-elegant:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -2020,7 +2135,7 @@ body {
 }
 
 .scroll-cue:focus-visible {
-  outline: 1px solid rgba(178, 58, 72, 0.55);
+  outline: 1px solid var(--focus-ring);
   outline-offset: 3px;
 }
 

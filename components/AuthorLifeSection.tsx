@@ -52,7 +52,7 @@ export default function AuthorLifeSection({ author, tagStats }: Props) {
         </ScrollReveal>
 
         <ScrollReveal delay={0.08}>
-          <p className="text-center font-serif text-[0.95rem] leading-[2.15] tracking-[0.14em] text-[color:var(--type-secondary)] md:text-base md:leading-[2.25] md:tracking-[0.16em]">
+          <p className="type-body-prose text-center md:text-base md:leading-[2.25] md:tracking-[0.16em]">
             {bio}
           </p>
         </ScrollReveal>

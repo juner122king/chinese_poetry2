@@ -76,7 +76,7 @@ export default function AuthorWorksList({
                     )}
                     <Link
                       href={buildPoemsHref({ tag, author: authorSlug })}
-                      className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+                      className="type-meta tracking-[0.32em] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-ring"
                       title={t(`得 ${count} 篇`)}
                     >
                       {t(getTagLabel(tag))}
@@ -119,7 +119,7 @@ export default function AuthorWorksList({
                 onClick={() => setExpanded(false)}
                 aria-expanded={true}
                 aria-controls={listId}
-                className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50"
+                className="type-meta text-[11px] transition-colors duration-300 hover:text-[color:var(--type-active)] focus-ring"
               >
                 {t("收起")}
               </button>

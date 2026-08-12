@@ -117,7 +117,7 @@ export default function ShelfView() {
                 type="button"
                 onClick={onClearClick}
                 onBlur={() => setArmed(false)}
-                className={`type-meta text-xs transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cinnabar/50 ${
+                className={`type-meta text-xs transition-colors duration-300 focus-ring ${
                   armed
                     ? "text-cinnabar"
                     : "hover:text-[color:var(--type-active)]"

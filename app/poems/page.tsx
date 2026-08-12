@@ -83,9 +83,21 @@ export default async function PoemsPage({ searchParams }: Props) {
           />
 
           {total === 0 ? (
-            <p className="type-meta py-20 text-center text-sm" role="status">
-              <T>未得篇章，可改筛选或清除后再寻。</T>
-            </p>
+            <div
+              className="flex flex-col items-center gap-10 py-16"
+              role="status"
+            >
+              <div className="empty-jian">
+                <div className="flex flex-row-reverse items-start gap-6">
+                  <span className="empty-jian__line">
+                    <T>未得篇章</T>
+                  </span>
+                  <span className="empty-jian__note">
+                    <T>可改筛选或清除后再寻</T>
+                  </span>
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="columns-1 gap-6 sm:columns-2">
               {pageItems.map((poem, i) => (
